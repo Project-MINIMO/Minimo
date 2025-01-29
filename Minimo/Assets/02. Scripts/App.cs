@@ -36,7 +36,15 @@ public class App : Singleton<App>
     private void ConfigureServices()
     {
         var services = new ServiceCollection();
-        services.AddSingleton(new GameClient("http://localhost:5093"));
+        
+#if UNITY_EDITOR
+        var hostAddress = "http://localhost:5093";
+#elif UNITY_IOS || UNITY_ANDROID
+        var hostAddress = "http://34.30.240.21:5093";
+#else
+        var hostAddress = "http://localhost:5093";
+#endif
+        services.AddSingleton(new GameClient(hostAddress));
         Services = services.BuildServiceProvider();
         Debug.LogWarning("Services configured.");
     }

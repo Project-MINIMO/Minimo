@@ -94,6 +94,9 @@ public class LoginManager : ManagerBase
         else
         {
             Debug.LogWarning($"Login Failed: {result.Message}");
+            // delete token
+            PlayerPrefs.DeleteKey("JwtToken");
+            PlayerPrefs.Save();
             return result;
         }
     }

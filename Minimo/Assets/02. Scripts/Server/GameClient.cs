@@ -19,6 +19,16 @@ public class GameClient
     {
         _baseUrl = baseUrl;
     }
+    
+    
+    // private class BypassCertificateHandler : CertificateHandler
+    // {
+    //     protected override bool ValidateCertificate(byte[] certificateData)
+    //     {
+    //         return true; // 모든 인증서 허용 (배포용에선 제거)
+    //     }
+    // }
+
 
     private void AddAuthorizationHeader(UnityWebRequest request)
     {
@@ -143,3 +153,5 @@ public class GameClient
         }
     }
 }
+
+
