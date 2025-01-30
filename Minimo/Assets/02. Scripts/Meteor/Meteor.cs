@@ -49,7 +49,12 @@ public class Meteor : InteractObject
         //{
         //    Debug.LogWarning("Failed to pick meteor");
         //}
-
+        
+        if (_pickMeteorPanel == null)
+        {
+            Debug.LogWarning("PickMeteorPanel is null");
+            return;
+        }
         _pickMeteorPanel.OpenPanel(_index);
         gameObject.SetActive(false);
     }

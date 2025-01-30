@@ -38,7 +38,7 @@ public class App : Singleton<App>
         var services = new ServiceCollection();
         
 #if UNITY_EDITOR
-        var hostAddress = "http://localhost:5093";
+        var hostAddress = "http://34.30.240.21:5093";
 #elif UNITY_IOS || UNITY_ANDROID
         var hostAddress = "http://34.30.240.21:5093";
 #else
