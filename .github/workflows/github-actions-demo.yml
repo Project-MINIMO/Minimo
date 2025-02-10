@@ -1,30 +1,23 @@
-name: Build and Run Minimo Server
+name: Remote Build & Run via Cloud Build
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
-  build-and-run:
+  cloud_build:
     runs-on: ubuntu-latest
 
     steps:
-      # 저장소 코드를 체크아웃합니다.
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      # .NET 8.0 SDK를 설정합니다.
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v1
         with:
-          dotnet-version: '8.0.x'
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
 
-      # NuGet 패키지를 복원합니다.
-      - name: Restore dependencies
-        run: dotnet restore Minimo_Server/Minimo_Server/Minimo_Server.csproj
-
-      # Release 구성으로 프로젝트를 빌드합니다.
-      - name: Build project
-        run: dotnet build Minimo_Server/Minimo_Server/Minimo_Server.csproj --configuration Release
-
-      # 서버를 실행합니다.
-      - name: Run server
-        run: dotnet run --configuration Release --project Minimo_Server/Minimo_Server/Minimo_Server.csproj
+      - name: Submit Cloud Build
+        run: |
+          gcloud builds submit --config=cloudbuild.yaml .
