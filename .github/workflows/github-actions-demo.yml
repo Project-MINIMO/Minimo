@@ -1,4 +1,4 @@
-name: Run Minimo .NET Server on .NET 9.0
+name: Run Minimo .NET Server
 
 on:
   workflow_dispatch:
@@ -6,6 +6,8 @@ on:
 jobs:
   build-and-run:
     runs-on: ubuntu-latest
+    env:
+      DOTNET_ROLL_FORWARD: "Major"
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
