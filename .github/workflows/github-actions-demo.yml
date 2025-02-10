@@ -1,27 +1,32 @@
-name: Run Minimo .NET Server
+name: Build and Run Minimo Server
 
 on:
-  workflow_dispatch:
+  workflow-dispatch:
 
 jobs:
   build-and-run:
     runs-on: ubuntu-latest
-    env:
-      DOTNET_ROLL_FORWARD: "Major"
+
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      # 저장소 코드를 체크아웃합니다.
+      - uses: actions/checkout@v3
 
-      - name: Setup .NET SDK 9.0
-        uses: actions/setup-dotnet@v1
+      # .NET 8.0 SDK를 설정합니다.
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '8.0.x'
 
-      - name: Restore Dependencies
-        run: dotnet restore ./Minimo_Server/Minimo_Server
+      # NuGet 패키지를 복원합니다.
+      - name: Restore dependencies
+        run: dotnet restore Minimo_Server/Minimo_Server/Minimo_Server.csproj
 
-      - name: Build Project
-        run: dotnet build --configuration Release ./Minimo_Server/Minimo_Server
+      # Release 구성으로 프로젝트를 빌드합니다.
+      - name: Build project
+        run: dotnet build Minimo_Server/Minimo_Server/Minimo_Server.csproj --configuration Release
 
-      - name: Run .NET Server
-        run: dotnet run --configuration Release --project ./Minimo_Server/Minimo_Server
+      # 서버를 실행합니다.
+      # (dotnet run은 서버가 종료되지 않는 한 계속 실행되므로,
+      #  만약 추가 테스트나 백그라운드 실행이 필요하다면 nohup 등으로 백그라운드 실행 후 테스트 단계를 추가할 수 있습니다.)
+      - name: Run server
+        run: dotnet run --configuration Release --project Minimo_Server/Minimo_Server/Minimo_Server.csproj
