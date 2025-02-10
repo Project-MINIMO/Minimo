@@ -1,7 +1,7 @@
 name: Build and Run Minimo Server
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build-and-run:
@@ -26,7 +26,5 @@ jobs:
         run: dotnet build Minimo_Server/Minimo_Server/Minimo_Server.csproj --configuration Release
 
       # 서버를 실행합니다.
-      # (dotnet run은 서버가 종료되지 않는 한 계속 실행되므로,
-      #  만약 추가 테스트나 백그라운드 실행이 필요하다면 nohup 등으로 백그라운드 실행 후 테스트 단계를 추가할 수 있습니다.)
       - name: Run server
         run: dotnet run --configuration Release --project Minimo_Server/Minimo_Server/Minimo_Server.csproj
