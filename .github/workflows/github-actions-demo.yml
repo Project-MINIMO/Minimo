@@ -1,0 +1,31 @@
+name: Run Minimo .NET Server on Multiple Versions
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [8.0, 9.0]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup .NET SDK (${{ matrix.dotnet-version }})
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+
+      - name: Restore Dependencies
+        run: dotnet restore ./Minimo_Server/Minimo_Server
+
+      - name: Build Project
+        run: dotnet build --configuration Release ./Minimo_Server/Minimo_Server
+
+      - name: Run .NET Server
+        run: dotnet run --configuration Release --project ./Minimo_Server/Minimo_Server
