@@ -1,10 +1,7 @@
-name: Run Minimo .NET Server on Multiple Versions
+name: Run Minimo .NET Server on Multiple Versions Manually
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build-and-run:
