@@ -7,7 +7,6 @@ env:
   PROJECT_ID: 'loyal-saga-437108-n6' # Google Cloud 프로젝트 ID
   REGION: 'asia-northeast3' # 배포할 리전
   SERVICE: 'asptest2' # Cloud Run 서비스 이름
-  PORT: '5093'
 
 jobs:
   deploy:
@@ -33,7 +32,7 @@ jobs:
         with:
           service: '${{ env.SERVICE }}'
           region: '${{ env.REGION }}'
-          flags: '--port=8080'
+          flags: '--port=5093'
           source: './Minimo_Server/Minimo_Server'
 
       - name: 'Show output'
