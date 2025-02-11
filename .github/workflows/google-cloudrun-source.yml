@@ -33,7 +33,7 @@ jobs:
         with:
           service: '${{ env.SERVICE }}'
           region: '${{ env.REGION }}'
-          port: '${{ env.PORT }}'
+          flags: '--port=8080'
           source: './Minimo_Server/Minimo_Server'
 
       - name: 'Show output'
