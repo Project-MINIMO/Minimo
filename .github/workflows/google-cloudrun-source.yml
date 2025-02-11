@@ -32,7 +32,7 @@ jobs:
         with:
           service: '${{ env.SERVICE }}'
           region: '${{ env.REGION }}'
-          project_id: '${{ env.PROJECT_ID }}'
+          project: '${{ env.PROJECT_ID }}'
           source: './Minimo_Server/Minimo_Server'
 
       - name: 'Show output'
