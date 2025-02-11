@@ -30,9 +30,7 @@
 name: 'Deploy to Cloud Run from Source'
 
 on:
-  push:
-    branches:
-      - '"Dev"'
+  workflow_dispatch:
 
 env:
   PROJECT_ID: 'loyal-saga-437108-n6' # TODO: update to your Google Cloud project ID
