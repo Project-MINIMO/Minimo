@@ -32,7 +32,6 @@ jobs:
         with:
           service: '${{ env.SERVICE }}'
           region: '${{ env.REGION }}'
-          flags: '--port=5093'
           source: './Minimo_Server/Minimo_Server'
 
       - name: 'Show output'
