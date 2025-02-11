@@ -24,15 +24,14 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v2'
         with:
+          project_id: '${{ env.PROJECT_ID }}'
           workload_identity_provider: 'projects/985439182780/locations/global/workloadIdentityPools/minimo-pool/providers/minimo-provder'
-          service_account: 'SERVICE_ACCOUNT_NAME@PROJECT_ID.iam.gserviceaccount.com'
 
       - name: 'Deploy to Cloud Run'
         uses: 'google-github-actions/deploy-cloudrun@v2'
         with:
           service: '${{ env.SERVICE }}'
           region: '${{ env.REGION }}'
-          project: '${{ env.PROJECT_ID }}'
           source: './Minimo_Server/Minimo_Server'
 
       - name: 'Show output'
