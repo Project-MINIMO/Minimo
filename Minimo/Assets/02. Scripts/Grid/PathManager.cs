@@ -52,16 +52,25 @@ public class PathManager : ManagerBase
     }
 
     #region A* Algorithm
-    public List<Vector3Int> FindPath(Vector3Int start, Vector3Int target)
+    private List<Vector3Int> FindPath(Vector3Int start, Vector3Int target)
     {
         PriorityQueue<AStarNode> openList = new();
         HashSet<Vector3Int> closedSet = new();
 
         AStarNode startNode = new(start, null, 0, GetHeuristic(start, target));
         openList.Enqueue(startNode, startNode.F);
+        
+        var maxIterations = 10000; 
+        var iterations = 0;
 
         while (openList.Count > 0)
         {
+            if (iterations++ > maxIterations)
+            {
+                Debug.LogError("FindPath: Too many iterations, exiting to prevent infinite loop.");
+                return null;
+            }
+            
             AStarNode currentNode = openList.Dequeue();
 
             if (currentNode.Position == target)
@@ -78,10 +87,15 @@ public class PathManager : ManagerBase
                     continue;
                 }
 
-                float tentativeGScore = currentNode.G + GetDistance(currentNode.Position, neighborPos);
+                var tentativeGScore = currentNode.G + GetDistance(currentNode.Position, neighborPos);
 
-                AStarNode neighborNode = new(neighborPos, currentNode, tentativeGScore, GetHeuristic(neighborPos, target));
-                openList.Enqueue(neighborNode, neighborNode.F);
+                AStarNode existingNode = openList.Find(n => n.Position == neighborPos);
+
+                if (existingNode == null || tentativeGScore < existingNode.G)
+                {
+                    AStarNode neighborNode = new(neighborPos, currentNode, tentativeGScore, GetHeuristic(neighborPos, target));
+                    openList.Enqueue(neighborNode, neighborNode.F);
+                }
             }
         }
 
