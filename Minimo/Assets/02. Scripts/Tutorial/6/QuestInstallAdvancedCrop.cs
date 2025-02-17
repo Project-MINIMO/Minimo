@@ -9,6 +9,8 @@ public class QuestInstallAdvancedCrop : QuestBase
     [SerializeField] private Transform _builidngParent;
     [SerializeField] private TextMeshProUGUI _detailText;
     
+    private BuildingObject _buildingObject;
+    
     protected override void ClearQuest()
     {
         base.ClearQuest();
@@ -18,17 +20,29 @@ public class QuestInstallAdvancedCrop : QuestBase
     
     private bool CheckClear()
     {
-        if (_builidngParent.childCount > 0)
+        if (_buildingObject == null) 
         {
-            for (var i = 0; i < _builidngParent.childCount; i++)
+            if (_builidngParent.childCount > 0)
             {
-                if (string.Equals(_builidngParent.GetChild(i).gameObject.name, "Building_CropFacility(Clone)"))
+                for (var i = 0; i < _builidngParent.childCount; i++)
                 {
-                    return true;
+                    if (string.Equals(_builidngParent.GetChild(i).gameObject.name, "Building_CropFacility(Clone)"))
+                    {
+                        _buildingObject = _builidngParent.GetChild(i).gameObject.GetComponent<BuildingObject>();
+                    }
                 }
             }
+            
+            return false;
         }
-
+        else
+        {
+            if (_buildingObject.IsPlaced) 
+            {
+                return true;
+            }
+        }
+        
         return false;
     }
 }

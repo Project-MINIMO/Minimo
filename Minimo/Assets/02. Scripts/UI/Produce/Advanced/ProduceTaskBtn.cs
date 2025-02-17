@@ -106,6 +106,13 @@ public class ProduceTaskBtn : MonoBehaviour
     
     private void SetRemainTime(int remainTime)
     {
+        if (remainTime < 0)
+        {
+            _remainTimeUpdater.SetFillAmount(1);
+            _remainTimeUpdater.SetRemainText(TaskState.Complete);
+            return;
+        }
+        
         if (_produceTask?.CurrentState is PendingState)
         {
             _remainTimeUpdater.SetFillAmount(0);

@@ -114,6 +114,7 @@ public class StringData
 public class TitleData : DataBase
 {
     public ItemSO ItemSO;
+    public bool IsFirstLogin = true;
     public Dictionary<string, int> Common { get; private set; } = new();
     public Dictionary<string, BuildingData> Building { get; private set; } = new();
     public Dictionary<string, ItemData> Item { get; private set; } = new();

@@ -21,7 +21,7 @@ public class GetItemPanel : UIBase
     
     private ItemSO _itemSO;
 
-    public bool IsComplete = false;
+    public bool IsComplete { get; private set; } = false;
 
     public override void Initialize()
     {
@@ -31,6 +31,12 @@ public class GetItemPanel : UIBase
         for (var i = 0; i < _iconImgs.Length; i++)
         {
             _startPosition[i] = _iconImgs[i].rectTransform.anchoredPosition;
+        }
+        
+        var storagePanel = App.GetManager<UIManager>().GetPanel<StoragePanel>();
+        if (storagePanel.GetActiveStorageBtnCount() > 6)
+        {
+            IsComplete = true;
         }
     }
     

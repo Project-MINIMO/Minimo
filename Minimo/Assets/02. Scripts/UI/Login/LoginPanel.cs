@@ -19,7 +19,11 @@ public class LoginPanel : MonoBehaviour
     
     private async void Start()
     {
-        _loginBtn.onClick.AddListener(() => OnLogin());
+        _loginBtn.onClick.AddListener(() =>
+        {
+            _resultText.text = string.Empty;
+            OnLogin();
+        });
         _registerBtn.onClick.AddListener(OnRegister);
         
         _loginManager = App.GetManager<LoginManager>();

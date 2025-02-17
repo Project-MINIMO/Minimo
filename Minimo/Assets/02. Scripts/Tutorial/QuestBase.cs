@@ -21,7 +21,7 @@ public abstract class QuestBase : MonoBehaviour
     
     protected virtual void ClearQuest()
     {
-        _clearBtn.gameObject.SetActive(true);
+        EndQuest();
     }
     
     private void EndQuest()
