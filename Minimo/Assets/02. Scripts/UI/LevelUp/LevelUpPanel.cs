@@ -45,7 +45,7 @@ public class LevelUpPanel : UIBase
     public override void OpenPanel()
     {
         if (Panel.activeInHierarchy) return;
-        if (App.GetManager<TimeManager>().Time - _startTime < TimeSpan.FromSeconds(2)) return;
+        if (App.GetManager<TimeManager>().Time - _startTime < TimeSpan.FromSeconds(15)) return;
         base.OpenPanel();
         
         Setup();

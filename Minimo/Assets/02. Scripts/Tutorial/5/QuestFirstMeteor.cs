@@ -9,7 +9,6 @@ public class QuestFirstMeteor : QuestBase
     [SerializeField] private Meteor _meteor;
     
     private GetItemPanel _getItemPanel;
-    private StoragePanel _storagePanel;
     
     public override void StartQuest()
     {
@@ -17,16 +16,10 @@ public class QuestFirstMeteor : QuestBase
 
         _meteor.enabled = true;
         _getItemPanel = App.GetManager<UIManager>().GetPanel<GetItemPanel>();
-        _storagePanel = App.GetManager<UIManager>().GetPanel<StoragePanel>();
     }
 
     private bool CheckClear()
     {
-        if (_storagePanel != null && _storagePanel.GetActiveStorageBtnCount() > 6) 
-        {
-            return true;
-        }
-        
         if (_getItemPanel == null) 
         {
             return false;
