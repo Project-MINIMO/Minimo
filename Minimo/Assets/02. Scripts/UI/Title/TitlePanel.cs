@@ -27,6 +27,7 @@ public class TitlePanel : MonoBehaviour
     public async UniTask ShowTitle(bool isNew = false)
     {
         Debug.Log(" ShowTitle");
+        App.GetData<TitleData>().IsFirstLogin = isNew;
         _isNew = isNew;
         _loadHandler.Setup(10);
         

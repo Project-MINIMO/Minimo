@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class QuestPlantPrimaryFruit : QuestBase
@@ -7,6 +8,8 @@ public class QuestPlantPrimaryFruit : QuestBase
 
     [SerializeField] private Transform _builidngParent;
     private ProduceObject _produceObject;
+    private StorageBtn _storageBtn;
+    
     public override void StartQuest()
     {
         base.StartQuest();
@@ -19,10 +22,17 @@ public class QuestPlantPrimaryFruit : QuestBase
                 break;
             }
         }
+
+        _storageBtn = App.GetManager<UIManager>().GetPanel<StoragePanel>().GetStorageBtn("Item_OrchardWood");
     }
 
     private bool CheckClear()
     {
+        if (_storageBtn != null && _storageBtn.CanShow)
+        {
+            return true;
+        }
+        
         if (_produceObject == null) 
         {
             return false;
