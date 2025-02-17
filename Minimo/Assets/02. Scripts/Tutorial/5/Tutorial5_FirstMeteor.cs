@@ -5,7 +5,8 @@ using DG.Tweening;
 public class Tutorial5_FirstMeteor : TutorialBase
 {
     [SerializeField] private CanvasGroup _questCanvasGroup;
-    
+    [SerializeField] private TileStateModifier _tileStateModifier;
+    [SerializeField] private BoundsInt _area;
     private SidePanel _sidePanel;
 
     private void Start()
@@ -34,6 +35,8 @@ public class Tutorial5_FirstMeteor : TutorialBase
     public override void EndTutorial()
     {
         App.GetManager<AccountInfoManager>().UpdateLevel(3);
+        _tileStateModifier.ModifyTileState(_area, TileState.Empty);
+        
         _sidePanel.Close(); 
         gameObject.SetActive(false);
     }

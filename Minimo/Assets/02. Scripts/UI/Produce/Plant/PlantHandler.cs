@@ -48,7 +48,10 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         Collider2D hit = Physics2D.OverlapPoint(worldPosition, _targetLayerMask);
         if (hit != null && hit.TryGetComponent<ProduceObject>(out var component))
         {
-            component.StartPlant(_currentOption);
+            if (component.IsPrimary)
+            {
+                component.StartPlant(_currentOption);
+            }
         }
     }
 

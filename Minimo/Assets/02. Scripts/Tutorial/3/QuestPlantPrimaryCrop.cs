@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class QuestPlantPrimaryCrop : QuestBase
@@ -9,6 +10,8 @@ public class QuestPlantPrimaryCrop : QuestBase
 
     [SerializeField] private Transform _builidngParent;
     private ProduceObject _produceObject;
+    private List<StorageBtn> _items = new List<StorageBtn>();
+    
     public override void StartQuest()
     {
         base.StartQuest();
@@ -22,10 +25,22 @@ public class QuestPlantPrimaryCrop : QuestBase
                 break;
             }
         }
+        
+        var storagePanel = App.GetManager<UIManager>().GetPanel<StoragePanel>();
+        _items.Add(storagePanel.GetStorageBtn("Item_Wheat"));
+        _items.Add(storagePanel.GetStorageBtn("Item_Corn"));
+        _items.Add(storagePanel.GetStorageBtn("Item_Pumpkin"));
+        _items.Add(storagePanel.GetStorageBtn("Item_Sugarcane"));
+        _items.Add(storagePanel.GetStorageBtn("Item_Pepper"));
     }
     
     private bool CheckClear()
     {
+        if (_items.Count > 0 && _items.Any(x => x.CanShow))
+        {
+            return true;
+        }
+        
         if (_produceObject == null) 
         {
             return false;

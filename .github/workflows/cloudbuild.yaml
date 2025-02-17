@@ -1,0 +1,17 @@
+steps:
+  # 1. GitHub에서 저장소를 클론합니다.
+  - name: 'gcr.io/cloud-builders/git'
+    args: ['clone', 'https://github.com/Project-MINIMO/Minimo.git']
+
+  # 2. csproj 파일이 위치한 디렉터리로 이동하여 빌드합니다.
+  - name: 'mcr.microsoft.com/dotnet/sdk:8.0'
+    dir: 'Minimo/Minimo_Server/Minimo_Server'
+    args: ['dotnet', 'build', 'Minimo_Server.csproj', '--configuration', 'Release']
+
+  # 3. 빌드된 프로젝트를 실행합니다.
+  - name: 'mcr.microsoft.com/dotnet/sdk:8.0'
+    dir: 'Minimo/Minimo_Server/Minimo_Server'
+    args: ['dotnet', 'run', '--project', 'Minimo_Server.csproj', '--configuration', 'Release']
+
+# (필요에 따라 전체 실행시간 제한을 설정할 수 있습니다)
+timeout: '1200s'

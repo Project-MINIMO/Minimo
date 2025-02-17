@@ -10,7 +10,7 @@ public class Tutorial2_InstallPrimary : TutorialBase
 
     private void Start()
     {
-        _sidePanel = App.GetManager<UIManager>().GetPanel<SidePanel>();
+        
     }
     
     public override void StartTutorial()
@@ -18,6 +18,8 @@ public class Tutorial2_InstallPrimary : TutorialBase
         gameObject.SetActive(true);
         _questCanvasGroup.DOFade(1, 0.5f);
 
+        _sidePanel = App.GetManager<UIManager>().GetPanel<SidePanel>();
+        
         App.GetManager<QuestManager>().StartQuest("InstallPrimary_Crop");
         App.GetManager<QuestManager>().StartQuest("InstallPrimary_Fruit");
         

@@ -1,0 +1,43 @@
+name: 'Deploy to Cloud Run from Source'
+
+on:
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: 'loyal-saga-437108-n6' # Google Cloud 프로젝트 ID
+  REGION: 'asia-northeast3' # 배포할 리전
+  SERVICE: 'asptest2' # Cloud Run 서비스 이름
+  PORT: '8080'
+  HOSTNAME: '0.0.0.0'
+
+jobs:
+  deploy:
+    runs-on: 'ubuntu-latest'
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: 'Checkout'
+        uses: 'actions/checkout@v4'
+
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: '${{ env.PROJECT_ID }}'
+          workload_identity_provider: 'projects/985439182780/locations/global/workloadIdentityPools/minimo-pool/providers/minimo-provder'
+
+      - name: 'Deploy to Cloud Run'
+        uses: 'google-github-actions/deploy-cloudrun@v2'
+        with:
+          service: '${{ env.SERVICE }}'
+          region: '${{ env.REGION }}'
+          source: './Minimo_Server/Minimo_Server'
+          flags: '--port 8080'
+      
+
+      - name: 'Show output'
+        run: |
+          echo ${{ steps.deploy.outputs.url }}

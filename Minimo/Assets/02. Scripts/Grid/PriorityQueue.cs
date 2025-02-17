@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 public class PriorityQueue<T>
@@ -26,5 +27,17 @@ public class PriorityQueue<T>
         T bestItem = _elements[bestIndex].item;
         _elements.RemoveAt(bestIndex);
         return bestItem;
+    }
+
+    public T Find(Func<T, bool> predicate)
+    {
+        foreach (var element in _elements)
+        {
+            if (predicate(element.item))
+            {
+                return element.item;
+            }
+        }
+        return default;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,9 +19,15 @@ public class TutorialManager : ManagerBase
 
     public string Wish;
     private bool _isZooming = false;
+    private DateTime _startTime;
+    private TimeManager _timeManager;
 
     private void Start()
     {
+        _timeManager = App.GetManager<TimeManager>();
+        
+        _startTime = _timeManager.Time;
+        
         _tutorials[0].StartTutorial();
     }
     
@@ -54,11 +61,15 @@ public class TutorialManager : ManagerBase
     
     private IEnumerator NextTutorialCoroutine()
     {
-        yield return new WaitForSeconds(0.5f);
+        if (_timeManager.Time - _startTime < TimeSpan.FromSeconds(1))
+            yield return null;
+        else
+            yield return new WaitForSeconds(0.5f);
         
         if (_tutorials.Count > 0)
         {
             _tutorials[0].StartTutorial();
+            _startTime = _timeManager.Time;
         }
         else
         {

@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,9 +18,13 @@ public class LevelUpPanel : UIBase
     [SerializeField] private CanvasGroup _rewardCanvasGroup;
     [SerializeField] private GameObject _level2Reward;
     [SerializeField] private GameObject _level3Reward;
+
+    private DateTime _startTime;
     
     public override void Initialize()
     {
+        _startTime = App.GetManager<TimeManager>().Time;
+        
         App.GetManager<AccountInfoManager>().Level
             .Subscribe((level) =>
             {
@@ -39,6 +44,8 @@ public class LevelUpPanel : UIBase
     
     public override void OpenPanel()
     {
+        if (Panel.activeInHierarchy) return;
+        if (App.GetManager<TimeManager>().Time - _startTime < TimeSpan.FromSeconds(15)) return;
         base.OpenPanel();
         
         Setup();
@@ -75,6 +82,11 @@ public class LevelUpPanel : UIBase
             _level2Reward.SetActive(true);
             _level3Reward.SetActive(false);
 
+            if (App.GetManager<AccountInfoManager>().BlueStar.Value > 0)
+            {
+                return;
+            }
+            
             var newCurrency = new CurrencyDTO()
             {
                 Star = 0,

@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using MinimoShared;
 
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class BuildingObject : InteractObject
 {
@@ -10,8 +11,8 @@ public class BuildingObject : InteractObject
     public BuildingData Data { get; private set; }
 
     protected int _id;
-    
-    private bool _isPlaced = false;
+
+    public bool IsPlaced { get; private set; } 
     private bool _isFlipped = false;
    
     protected BuildingManager _buildingManager;
@@ -40,7 +41,7 @@ public class BuildingObject : InteractObject
     public virtual void Initialize(BuildingDTO buildingDto)
     {
         _id = buildingDto.Id;
-        _isPlaced = true;
+        IsPlaced = true;
         
         var buildingData = App.GetData<TitleData>().Building[buildingDto.BuildingType];
         Initialize(buildingData);
@@ -81,7 +82,7 @@ public class BuildingObject : InteractObject
 
     public async UniTask<bool> Install()
     {
-        if (_isPlaced)
+        if (IsPlaced)
         {
             return await UpdateBuilding();
         }
@@ -104,7 +105,7 @@ public class BuildingObject : InteractObject
         {
             Debug.Log($"Building created: {newBuildingDto.BuildingType} (ID: {newBuildingDto.Id})");
             _id = newBuildingDto.Id;
-            _isPlaced = true;
+            IsPlaced = true;
             PreviousArea = Area;
 
             EndEdit();
@@ -143,7 +144,7 @@ public class BuildingObject : InteractObject
   
     public void Cancel()
     {
-        if (_isPlaced)
+        if (IsPlaced)
         {
             _editManager.MoveObject(PreviousArea);
             EndEdit();

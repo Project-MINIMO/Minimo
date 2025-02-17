@@ -1,0 +1,23 @@
+name: Remote Build & Run via Cloud Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  cloud_build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Submit Cloud Build
+        run: |
+          gcloud builds submit --project=${{ secrets.GCP_PROJECT_ID }} --config=.github/workflows/cloudbuild.yaml .

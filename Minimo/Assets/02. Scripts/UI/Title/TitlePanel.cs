@@ -1,3 +1,4 @@
+using System;
 using MinimoShared;
 using Cysharp.Threading.Tasks;
 
@@ -15,6 +16,7 @@ public class TitlePanel : MonoBehaviour
     [SerializeField] private TitleLoadHandler _loadHandler;
     
     [SerializeField] private Image _blackBlur;
+    [SerializeField] private Image _blackBlur2;
 
     private bool _isNew;
     
@@ -24,9 +26,15 @@ public class TitlePanel : MonoBehaviour
         _startBtn.gameObject.SetActive(false);
     }
 
+    private void Start()
+    {
+        _blackBlur2.DOFade(0, 2f).SetEase(Ease.Linear);
+    }
+
     public async UniTask ShowTitle(bool isNew = false)
     {
         Debug.Log(" ShowTitle");
+        App.GetData<TitleData>().IsFirstLogin = isNew;
         _isNew = isNew;
         _loadHandler.Setup(10);
         

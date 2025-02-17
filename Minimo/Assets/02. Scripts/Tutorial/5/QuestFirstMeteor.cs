@@ -27,4 +27,10 @@ public class QuestFirstMeteor : QuestBase
         
         return _getItemPanel.IsComplete;
     }
+    
+    protected override void ClearQuest()
+    {
+        base.ClearQuest();
+        _meteor.gameObject.SetActive(false);
+    }
 }
