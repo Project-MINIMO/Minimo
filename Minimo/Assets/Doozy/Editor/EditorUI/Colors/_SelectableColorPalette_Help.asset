@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 866e8c8661bc423691f27ec91ab289ad, type: 3}
+  m_Name: _SelectableColorPalette_Help
+  m_EditorClassIdentifier: 
+  PaletteName: Help
+  SelectableColors:
+  - ColorName: ErrorBackground
+    Normal:
+      ColorOnDark: {r: 0.29803923, g: 0.1254902, b: 0.1254902, a: 1}
+      ColorOnLight: {r: 1, g: 0.8980393, b: 0.8980393, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.23843141, g: 0.10039216, b: 0.10039216, a: 1}
+      ColorOnLight: {r: 0.8, g: 0.7184315, b: 0.7184315, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.19074513, g: 0.08031373, b: 0.08031373, a: 1}
+      ColorOnLight: {r: 0.72, g: 0.6465883, b: 0.6465883, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.21458827, g: 0.090352945, b: 0.090352945, a: 1}
+      ColorOnLight: {r: 0.82, g: 0.74658835, b: 0.74658835, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.29803923, g: 0.1254902, b: 0.1254902, a: 0.6}
+      ColorOnLight: {r: 1, g: 0.8980393, b: 0.8980393, a: 0.6}
+  - ColorName: ErrorText
+    Normal:
+      ColorOnDark: {r: 1, g: 0.20000002, b: 0.20000002, a: 1}
+      ColorOnLight: {r: 0.8000001, g: 0, b: 0, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.8, g: 0.16000006, b: 0.16000006, a: 1}
+      ColorOnLight: {r: 0.64000005, g: 0, b: 0, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.64, g: 0.12800005, b: 0.12800005, a: 1}
+      ColorOnLight: {r: 0.57600003, g: 0, b: 0, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.72, g: 0.14400005, b: 0.14400005, a: 1}
+      ColorOnLight: {r: 0.67600006, g: 0.1, b: 0.1, a: 1}
+    Disabled:
+      ColorOnDark: {r: 1, g: 0.20000002, b: 0.20000002, a: 0.6}
+      ColorOnLight: {r: 0.8000001, g: 0, b: 0, a: 0.6}
+  - ColorName: InfoBackground
+    Normal:
+      ColorOnDark: {r: 0.050980397, g: 0.14509805, b: 0.23529413, a: 1}
+      ColorOnLight: {r: 0.909804, g: 0.95294124, b: 1, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.040784307, g: 0.13416994, b: 0.18823531, a: 1}
+      ColorOnLight: {r: 0.72784317, g: 0.76993465, b: 0.8, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.032627445, g: 0.10733595, b: 0.15058824, a: 1}
+      ColorOnLight: {r: 0.65505886, g: 0.6929412, b: 0.72, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.036705878, g: 0.120752946, b: 0.16941178, a: 1}
+      ColorOnLight: {r: 0.7550588, g: 0.7929412, b: 0.82, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.050980397, g: 0.14509805, b: 0.23529413, a: 0.6}
+      ColorOnLight: {r: 0.909804, g: 0.95294124, b: 1, a: 0.6}
+  - ColorName: InfoText
+    Normal:
+      ColorOnDark: {r: 0.40784317, g: 0.6627451, b: 1, a: 1}
+      ColorOnLight: {r: 0.1764706, g: 0.427451, b: 0.70980394, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.32627448, g: 0.6026144, b: 0.8, a: 1}
+      ColorOnLight: {r: 0.14117646, g: 0.39006537, b: 0.56784314, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.2610196, g: 0.48209152, b: 0.64, a: 1}
+      ColorOnLight: {r: 0.12705882, g: 0.35105884, b: 0.5110588, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.29364702, g: 0.542353, b: 0.72, a: 1}
+      ColorOnLight: {r: 0.22705881, g: 0.45105883, b: 0.61105883, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.40784317, g: 0.6627451, b: 1, a: 0.6}
+      ColorOnLight: {r: 0.1764706, g: 0.427451, b: 0.70980394, a: 0.6}
+  - ColorName: WarningBackground
+    Normal:
+      ColorOnDark: {r: 0.29803923, g: 0.23137257, b: 0.12941177, a: 1}
+      ColorOnLight: {r: 1, g: 0.9490197, b: 0.8000001, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.23843141, g: 0.16873205, b: 0.10352943, a: 1}
+      ColorOnLight: {r: 0.8, g: 0.736, b: 0.64000005, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.19074513, g: 0.13498564, b: 0.082823545, a: 1}
+      ColorOnLight: {r: 0.72, g: 0.6624, b: 0.57600003, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.21458827, g: 0.15185884, b: 0.093176484, a: 1}
+      ColorOnLight: {r: 0.82, g: 0.76240003, b: 0.67600006, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.29803923, g: 0.23137257, b: 0.12941177, a: 0.6}
+      ColorOnLight: {r: 1, g: 0.9490197, b: 0.8000001, a: 0.6}
+  - ColorName: WarningText
+    Normal:
+      ColorOnDark: {r: 1, g: 0.6666667, b: 0, a: 1}
+      ColorOnLight: {r: 0.83921576, g: 0.31764707, b: 0.03137255, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.8, g: 0.42666665, b: 0, a: 1}
+      ColorOnLight: {r: 0.6713726, g: 0.17589545, b: 0.025098037, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.64, g: 0.34133333, b: 0, a: 1}
+      ColorOnLight: {r: 0.60423535, g: 0.15830591, b: 0.022588233, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.72, g: 0.38399997, b: 0, a: 1}
+      ColorOnLight: {r: 0.7042353, g: 0.2583059, b: 0.12258823, a: 1}
+    Disabled:
+      ColorOnDark: {r: 1, g: 0.6666667, b: 0, a: 0.6}
+      ColorOnLight: {r: 0.83921576, g: 0.31764707, b: 0.03137255, a: 0.6}

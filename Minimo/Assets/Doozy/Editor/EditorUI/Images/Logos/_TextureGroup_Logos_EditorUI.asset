@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18a32318dec4495cb166bf98e60f7c0d, type: 3}
+  m_Name: _TextureGroup_Logos_EditorUI
+  m_EditorClassIdentifier: 
+  GroupCategory: EditorUI
+  GroupName: Logos
+  RemovePrefixFromTextureName: 
+  IgnoreTextureSettings: 0
+  Textures:
+  - TextureName: Bindy
+    TextureReference: {fileID: 2800000, guid: 6e9929ec646626b409d3e2e96d70aaa1, type: 3}
+  - TextureName: EditorUI
+    TextureReference: {fileID: 2800000, guid: 215feb0ee1548e546bdb9623d8cf6013, type: 3}
+  - TextureName: Mody
+    TextureReference: {fileID: 2800000, guid: 196f304e935f66446b62f6ef61af5358, type: 3}
+  - TextureName: Nody
+    TextureReference: {fileID: 2800000, guid: d12265b6695596045970ede2d01b97f6, type: 3}
+  - TextureName: Reactor
+    TextureReference: {fileID: 2800000, guid: 14fed84c223556142b371112bc7e5ed0, type: 3}
+  - TextureName: Signals
+    TextureReference: {fileID: 2800000, guid: c0b77cb77da6b9f45b7fe647c7abdbb3, type: 3}
+  - TextureName: Soundy
+    TextureReference: {fileID: 2800000, guid: bd7f9d9b2cc38d046829e2bc09321df2, type: 3}
+  - TextureName: UIDesigner
+    TextureReference: {fileID: 2800000, guid: d043bd357d69f5a4492d640b25f24a5e, type: 3}
+  - TextureName: UIManager
+    TextureReference: {fileID: 2800000, guid: 6b34b365ceb4baf42bb8008fcf1048e5, type: 3}
+  - TextureName: UIMenu
+    TextureReference: {fileID: 2800000, guid: 90b24393e28559f4c8cb8079c4a875cb, type: 3}
