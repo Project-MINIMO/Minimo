@@ -26,7 +26,7 @@ public class InputManager : ManagerBase
     
     private void Update()
     {
-        if (EventSystem.current.IsPointerOverGameObject())
+        if (IsPointerOverUI())
         {
             ResetState();
             return;
@@ -42,6 +42,13 @@ public class InputManager : ManagerBase
         _previousState = CurrentState;
         
         Debug.Log(CurrentState);
+    }
+    
+    private bool IsPointerOverUI()
+    {
+        return Input.touchCount > 0 ? 
+            EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId) : 
+            EventSystem.current.IsPointerOverGameObject();
     }
     
     private void HandleInput()
