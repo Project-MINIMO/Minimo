@@ -14,7 +14,7 @@ public class ProduceTestEditor : Editor
         {
             foreach (var kvp in produceDatas)
             {
-                string key = kvp.Key;
+                string key = kvp.Key.ToString();
                 
                 var produceOptions = kvp.Value.ProduceOptions;
 

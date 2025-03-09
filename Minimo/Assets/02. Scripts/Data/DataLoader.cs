@@ -1,6 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
 using UnityEngine;
@@ -19,6 +20,46 @@ public class DataLoader
         }
 
         return null;
+    }
+    
+    public static T[] LoadDataWithConvert<T, U>(string dataPath) where U : struct, Enum
+    {
+        var json = Resources.Load<TextAsset>(dataPath);
+
+        if (json)
+        {
+            var stringDataList = JsonUtilityHelper.FromJsonWithConvert<T, U>(json.ToString());
+
+            return stringDataList;
+        }
+
+        return null;
+    }
+}
+
+public class JsonPreprocessor
+{
+    // Method to find the "ID" field in a JSON string and convert the string value to a numeric value of the enum.
+    public static string PreprocessJson<T>(string json) where T : struct, Enum
+    {
+        const string pattern = @"""ID"":\s*""(.*?)""";
+        
+        var processedJson = Regex.Replace(json, pattern, match =>
+        {
+            var enumString = match.Groups[1].Value;
+            if (Enum.TryParse<T>(enumString, out var enumValue))
+            {
+                var numericValue = Convert.ToInt32(enumValue);
+                return $@"""ID"": {numericValue}";
+            }
+            else
+            {
+                Debug.LogError("Enum value not found: " + enumString);
+                return match.Value;
+            }
+        });
+        
+        return processedJson;
     }
 }
 
@@ -39,6 +80,13 @@ public class JsonUtilityHelper
 
         Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(newJson);
         return wrapper.array;
+    }
+    
+    public static T[] FromJsonWithConvert<T, U>(string json) where U : struct, Enum
+    {
+        json = JsonPreprocessor.PreprocessJson<U>(json);
+
+        return FromJson<T>(json);
     }
 
     public static string ToJson<T>(T[] array)
@@ -61,6 +109,9 @@ public class DataGrouper
     public static ProduceData[] GroupData(string path)
     {
         var json = Resources.Load<TextAsset>(path).text;
+        
+        //Preprocessing JSON string: Converting string value of "ID" field to numeric value of EBuilding enum
+        json = JsonPreprocessor.PreprocessJson<EBuilding>(json);
         
         // Deserialize JSON array into a flat list of FlatData
         var rawData = JsonConvert.DeserializeObject<List<FlatProduceData>>(json);

@@ -17,7 +17,7 @@ public class BuildingBack : MonoBehaviour
     [SerializeField] private Transform _buildingBtnParent;
     [SerializeField] private GameObject _buildingBtnPrefab;
 
-    private Dictionary<string, BuildingBtn> _btnDictionary = new();
+    private Dictionary<EBuilding, BuildingBtn> _btnDictionary = new();
     private Transform _buildingObjectParent;
 
     private void Awake()

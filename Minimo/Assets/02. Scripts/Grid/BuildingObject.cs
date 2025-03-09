@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using MinimoShared;
 
@@ -42,8 +43,11 @@ public class BuildingObject : InteractObject
     {
         _id = buildingDto.Id;
         IsPlaced = true;
-        
-        var buildingData = App.GetData<TitleData>().Building[buildingDto.BuildingType];
+
+        var buildingString = buildingDto.BuildingType;
+        buildingString = buildingString.Replace("Building", "");
+        var buildingType = (EBuilding)Enum.Parse(typeof(EBuilding), buildingString);
+        var buildingData = App.GetData<TitleData>().Building[buildingType];
         Initialize(buildingData);
     }
 
@@ -94,9 +98,10 @@ public class BuildingObject : InteractObject
 
     private async UniTask<bool> CreateBuilding()
     {
+        var buildingType = "Building_" + Data.ID;
         var newBuildingRequest = new BuildingDTO
         {
-            BuildingType = Data.ID,
+            BuildingType = buildingType,
             Position = new int[] {Area.position.x, Area.position.y, Area.position.z},
         };
         
