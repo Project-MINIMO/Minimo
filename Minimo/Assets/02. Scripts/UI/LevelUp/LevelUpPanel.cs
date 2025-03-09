@@ -23,45 +23,44 @@ public class LevelUpPanel : UIBase
     
     public override void Initialize()
     {
-        _startTime = App.GetManager<TimeManager>().Time;
+        //_startTime = App.GetManager<TimeManager>().Time;
         
-        App.GetManager<AccountInfoManager>().Level
-            .Subscribe((level) =>
-            {
-                if (level <= 1) 
-                {
-                    return;
-                }
-                var prevLevel = level - 1;
-                _levelText.text = $"Lv. {prevLevel} <color=grey>>></color> <color=yellow>Lv. {level}</color>";
-                SetReward(level);
-                OpenPanel();
-            });
-        
+        //App.GetManager<AccountInfoManager>().Level
+        //    .Subscribe((level) =>
+        //    {
+        //        if (level <= 1) 
+        //        {
+        //            return;
+        //        }
+        //        var prevLevel = level - 1;
+        //        _levelText.text = $"Lv. {prevLevel} <color=grey>>></color> <color=yellow>Lv. {level}</color>";
+        //        SetReward(level);
+        //        OpenPanel();
+        //    });
         Setup();
         ClosePanel();
     }
     
     public override void OpenPanel()
     {
-        if (Panel.activeInHierarchy) return;
-        if (App.GetManager<TimeManager>().Time - _startTime < TimeSpan.FromSeconds(15)) return;
-        base.OpenPanel();
+        //if (Panel.activeInHierarchy) return;
+        //if (App.GetManager<TimeManager>().Time - _startTime < TimeSpan.FromSeconds(15)) return;
+        //base.OpenPanel();
         
-        Setup();
+        //Setup();
         
-        var seqence = DOTween.Sequence();
-        seqence.Append(_canvasGroup.DOFade(1, 0.5f))
-            .Append(_arrowImg.rectTransform.DOAnchorPosY(_arrowImg.rectTransform.rect.y - 20, 1).From())
-            .Join(_arrowImg.DOFade(1, 1))
-            .Insert(1, _arrowImg2.rectTransform.DOAnchorPosY(_arrowImg.rectTransform.rect.y - 20, 1).From())
-            .Join(_arrowImg2.DOFade(1, 1))
-            .Insert(1.5f,_levelUpText.DOFade(1, 1))
-            .Join(_levelText.DOFade(1, 1))
-            .Append(_rewardCanvasGroup.DOFade(1, 0.5f))
-            .AppendInterval(2)
-            .Append(_canvasGroup.DOFade(0, 0.5f))
-            .OnComplete(ClosePanel);
+        //var seqence = DOTween.Sequence();
+        //seqence.Append(_canvasGroup.DOFade(1, 0.5f))
+        //    .Append(_arrowImg.rectTransform.DOAnchorPosY(_arrowImg.rectTransform.rect.y - 20, 1).From())
+        //    .Join(_arrowImg.DOFade(1, 1))
+        //    .Insert(1, _arrowImg2.rectTransform.DOAnchorPosY(_arrowImg.rectTransform.rect.y - 20, 1).From())
+        //    .Join(_arrowImg2.DOFade(1, 1))
+        //    .Insert(1.5f,_levelUpText.DOFade(1, 1))
+        //    .Join(_levelText.DOFade(1, 1))
+        //    .Append(_rewardCanvasGroup.DOFade(1, 0.5f))
+        //    .AppendInterval(2)
+        //    .Append(_canvasGroup.DOFade(0, 0.5f))
+        //    .OnComplete(ClosePanel);
     }
 
     private void Setup()
@@ -100,13 +99,13 @@ public class LevelUpPanel : UIBase
             _level3Reward.SetActive(true);
             
             var buildingPanel = App.GetManager<UIManager>().GetPanel<BuildingPanel>();
-            buildingPanel.SetBuildingBtnForTutorial(new string[]
-            {
-                "Building_Farm",
-                "Building_Orchard",
-                "Building_CropFacility",
-                "Building_OrchardFacility",
-            });
+            //buildingPanel.SetBuildingBtnForTutorial(new string[]
+            //{
+            //    "Building_Farm",
+            //    "Building_Orchard",
+            //    "Building_CropFacility",
+            //    "Building_OrchardFacility",
+            //});
         }
     }
 }
