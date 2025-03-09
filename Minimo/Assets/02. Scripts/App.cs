@@ -36,7 +36,8 @@ public class App : Singleton<App>
     private void ConfigureServices()
     {
         var services = new ServiceCollection();
-        services.AddSingleton(new GameClient("http://localhost:5093"));
+        var remoteServerAddress = "https://asptest2-985439182780.asia-northeast3.run.app";
+        services.AddSingleton(new GameClient(remoteServerAddress));
         Services = services.BuildServiceProvider();
         Debug.LogWarning("Services configured.");
     }
