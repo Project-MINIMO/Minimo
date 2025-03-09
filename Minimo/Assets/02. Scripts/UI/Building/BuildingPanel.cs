@@ -79,7 +79,7 @@ public class BuildingPanel : UIBase
         }
     }
     
-    public void SetBuildingBtnForTutorial(string[] buildingNames)
+    public void SetBuildingBtnForTutorial(EBuilding[] buildingNames)
     {
         var buildingBtns = GetComponentsInChildren<BuildingBtn>(true);
         foreach (var btn in buildingBtns)

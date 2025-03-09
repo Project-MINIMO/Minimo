@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86eb1a7447ed442f8069ba8d47168b74, type: 3}
+  m_Name: Text kebab-case
+  m_EditorClassIdentifier: 
+  Enabled: 1
+  Mode: 6
+  Trim: 0
+  RemoveExtraSpaces: 0
+  RemoveDiacritics: 0
+  RemoveNonAlphanumeric: 0
+  RemoveCharacters: 0
+  CharactersToRemove: 
+  Reverse: 0
+  RemoveTabs: 0
+  RemoveNewLines: 0
+  RemoveLineBreaks: 0
+  RemoveVerticalTabs: 0
+  Truncate: 0
+  MaxLength: 10
+  TruncationIndicator: ...

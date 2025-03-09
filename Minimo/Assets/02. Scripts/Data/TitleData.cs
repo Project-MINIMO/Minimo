@@ -14,7 +14,7 @@ public class CommonData
 [Serializable]
 public class BuildingData
 {
-    public string ID;
+    public EBuilding ID;
     public int Type;
     public int SizeX;
     public int SizeY;
@@ -53,7 +53,7 @@ public class StarTreeData
 [Serializable]
 public class FlatProduceData
 {
-    public string ID;
+    public EBuilding ID;
     public string Materials;
     public string Results;
     public int Time;
@@ -63,7 +63,7 @@ public class FlatProduceData
 [Serializable]
 public class ProduceData
 {
-    public string ID;
+    public EBuilding ID;
     public ProduceOption[] ProduceOptions;
 }
 
@@ -93,7 +93,7 @@ public class ProduceResult
 [Serializable]
 public class ConstructData
 {
-    public string ID;
+    public EBuilding ID;
     public string MatCode1;
     public int MatAmount1;
     public string MatCode2;
@@ -116,11 +116,11 @@ public class TitleData : DataBase
     public ItemSO ItemSO;
     public bool IsFirstLogin = true;
     public Dictionary<string, int> Common { get; private set; } = new();
-    public Dictionary<string, BuildingData> Building { get; private set; } = new();
+    public Dictionary<EBuilding, BuildingData> Building { get; private set; } = new();
     public Dictionary<string, ItemData> Item { get; private set; } = new();
     public Dictionary<int, StarTreeData> StarTree { get; private set; } = new();
-    public Dictionary<string, ConstructData> Construct { get; private set; } = new();
-    public Dictionary<string, ProduceData> Produce { get; private set; } = new();
+    public Dictionary<EBuilding, ConstructData> Construct { get; private set; } = new();
+    public Dictionary<EBuilding, ProduceData> Produce { get; private set; } = new();
 
     private Dictionary<string, StringData> _string = new();
 
@@ -160,11 +160,11 @@ public class TitleData : DataBase
 
         var stringDataRaw = DataLoader.LoadData<StringData>(STRING_PATH);
         var commonDataRaw = DataLoader.LoadData<CommonData>(COMMON_PATH);
-        var buildingDataRaw = DataLoader.LoadData<BuildingData>(BUILDING_PATH);
+        var buildingDataRaw = DataLoader.LoadDataWithConvert<BuildingData, EBuilding>(BUILDING_PATH);
         var itemDataRaw = DataLoader.LoadData<ItemData>(ITEM_PATH);
         var starTreeDataRaw = DataLoader.LoadData<StarTreeData>(STARTREE_PATH);
         var produceDataRaw = DataGrouper.GroupData(PRODUCE_PATH);
-        var constructDataRaw = DataLoader.LoadData<ConstructData>(CONSTRUCT_PATH);
+        var constructDataRaw = DataLoader.LoadDataWithConvert<ConstructData, EBuilding>(CONSTRUCT_PATH);
 
         foreach (var data in stringDataRaw)
         {
@@ -179,7 +179,7 @@ public class TitleData : DataBase
         foreach (var data in buildingDataRaw)
         {
             Building.Add(data.ID, data);
-        }
+        } 
 
         foreach (var data in itemDataRaw)
         {
@@ -286,10 +286,4 @@ public class TitleData : DataBase
             this.Construct[data.ID] = data;
         }
     }
-    
-    public void SetProduceData(Dictionary<string, ProduceData> Produce)
-    {
-        this.Produce = Produce;
-    }
-    
 }

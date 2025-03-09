@@ -1,0 +1,368 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 866e8c8661bc423691f27ec91ab289ad, type: 3}
+  m_Name: _SelectableColorPalette_Default
+  m_EditorClassIdentifier: 
+  PaletteName: Default
+  SelectableColors:
+  - ColorName: Action
+    Normal:
+      ColorOnDark: {r: 0.84705883, g: 1, b: 0.2, a: 1}
+      ColorOnLight: {r: 0.4509804, g: 0.49803922, b: 0, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.57746404, g: 0.8, b: 0.09725495, a: 1}
+      ColorOnLight: {r: 0.3984314, g: 0.38515034, b: 0, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.46197122, g: 0.64, b: 0.077803954, a: 1}
+      ColorOnLight: {r: 0.35858825, g: 0.3466353, b: 0, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.51971763, g: 0.72, b: 0.08752945, a: 1}
+      ColorOnLight: {r: 0.45858824, g: 0.4466353, b: 0.1, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.5921569, g: 1, b: 0.12156863, a: 0.6}
+      ColorOnLight: {r: 0.4509804, g: 0.49803922, b: 0, a: 0.6}
+  - ColorName: Add
+    Normal:
+      ColorOnDark: {r: 0.41176474, g: 0.87843144, b: 0.54509807, a: 1}
+      ColorOnLight: {r: 0.19215688, g: 0.40000004, b: 0.24705884, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.32941177, g: 0.7019608, b: 0.3921569, a: 1}
+      ColorOnLight: {r: 0.15294118, g: 0.32156864, b: 0.18039216, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.2627451, g: 0.56078434, b: 0.3137255, a: 1}
+      ColorOnLight: {r: 0.13725491, g: 0.28627452, b: 0.16470589, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.29803923, g: 0.6313726, b: 0.3529412, a: 1}
+      ColorOnLight: {r: 0.2392157, g: 0.38823533, b: 0.2627451, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.41176474, g: 0.87843144, b: 0.54509807, a: 0.6}
+      ColorOnLight: {r: 0.19215688, g: 0.40000004, b: 0.24705884, a: 0.6}
+  - ColorName: AudioComponent
+    Normal:
+      ColorOnDark: {r: 0.9921569, g: 0.7490196, b: 0.03137255, a: 1}
+      ColorOnLight: {r: 0.49803925, g: 0.34901962, b: 0.019607844, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.79372555, g: 0.48627457, b: 0.025098085, a: 1}
+      ColorOnLight: {r: 0.3984314, g: 0.219817, b: 0.015686274, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.63498044, g: 0.38901967, b: 0.020078469, a: 1}
+      ColorOnLight: {r: 0.35858825, g: 0.1978353, b: 0.014117646, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.71435297, g: 0.4376471, b: 0.022588277, a: 1}
+      ColorOnLight: {r: 0.45858824, g: 0.2978353, b: 0.114117645, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.9921569, g: 0.7490196, b: 0.03137255, a: 0.6}
+      ColorOnLight: {r: 0.49803925, g: 0.34901962, b: 0.019607844, a: 0.6}
+  - ColorName: ButtonContainer
+    Normal:
+      ColorOnDark: {r: 0.15686275, g: 0.15686275, b: 0.15686275, a: 1}
+      ColorOnLight: {r: 0.94, g: 0.94, b: 0.94, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+      ColorOnLight: {r: 0.98, g: 0.98, b: 0.98, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.10039216, g: 0.10039216, b: 0.10039216, a: 1}
+      ColorOnLight: {r: 0.86, g: 0.86, b: 0.86, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.11294118, g: 0.11294118, b: 0.11294118, a: 1}
+      ColorOnLight: {r: 0.98, g: 0.98, b: 0.98, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.15686275, g: 0.15686275, b: 0.15686275, a: 0.6}
+      ColorOnLight: {r: 0.8745098, g: 0.8745098, b: 0.8745098, a: 0.6}
+  - ColorName: ButtonIcon
+    Normal:
+      ColorOnDark: {r: 0.59607846, g: 0.59607846, b: 0.59607846, a: 1}
+      ColorOnLight: {r: 0.4392157, g: 0.4392157, b: 0.4392157, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.63529414, g: 0.63529414, b: 0.63529414, a: 1}
+      ColorOnLight: {r: 0.42352945, g: 0.42352945, b: 0.42352945, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.3803922, g: 0.3803922, b: 0.3803922, a: 1}
+      ColorOnLight: {r: 0.3811765, g: 0.3811765, b: 0.3811765, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.6745098, g: 0.6745098, b: 0.6745098, a: 1}
+      ColorOnLight: {r: 0.4811765, g: 0.4811765, b: 0.4811765, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.59607846, g: 0.59607846, b: 0.59607846, a: 0.6}
+      ColorOnLight: {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 0.6}
+  - ColorName: ButtonText
+    Normal:
+      ColorOnDark: {r: 0.90196085, g: 0.90196085, b: 0.90196085, a: 1}
+      ColorOnLight: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.7215687, g: 0.7215687, b: 0.7215687, a: 1}
+      ColorOnLight: {r: 0.16, g: 0.16, b: 0.16, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.57725495, g: 0.57725495, b: 0.57725495, a: 1}
+      ColorOnLight: {r: 0.144, g: 0.144, b: 0.144, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.64941186, g: 0.64941186, b: 0.64941186, a: 1}
+      ColorOnLight: {r: 0.244, g: 0.244, b: 0.244, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.90196085, g: 0.90196085, b: 0.90196085, a: 0.6}
+      ColorOnLight: {r: 0.2, g: 0.2, b: 0.2, a: 0.6}
+  - ColorName: DataComponent
+    Normal:
+      ColorOnDark: {r: 0.54509807, g: 0.34509805, b: 1, a: 1}
+      ColorOnLight: {r: 0.3019608, g: 0.18039216, b: 0.5764706, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.3808627, g: 0.2760784, b: 0.8, a: 1}
+      ColorOnLight: {r: 0.20768628, g: 0.14431372, b: 0.46117648, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.30469018, g: 0.22086272, b: 0.64, a: 1}
+      ColorOnLight: {r: 0.18691765, g: 0.12988235, b: 0.41505882, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.34277645, g: 0.24847056, b: 0.72, a: 1}
+      ColorOnLight: {r: 0.28691766, g: 0.22988234, b: 0.5150588, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.54509807, g: 0.34509805, b: 1, a: 0.6}
+      ColorOnLight: {r: 0.3019608, g: 0.18039216, b: 0.5764706, a: 0.6}
+  - ColorName: DateTime
+    Normal:
+      ColorOnDark: {r: 0.43529415, g: 0.34509805, b: 1, a: 1}
+      ColorOnLight: {r: 0.18823531, g: 0.13333334, b: 0.5294118, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.28481042, g: 0.2760784, b: 0.8, a: 1}
+      ColorOnLight: {r: 0.1119477, g: 0.10666666, b: 0.42352945, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.22784834, g: 0.22086272, b: 0.64, a: 1}
+      ColorOnLight: {r: 0.10075293, g: 0.09599999, b: 0.3811765, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.2563294, g: 0.24847056, b: 0.72, a: 1}
+      ColorOnLight: {r: 0.20075293, g: 0.196, b: 0.4811765, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.43529415, g: 0.34509805, b: 1, a: 0.6}
+      ColorOnLight: {r: 0.18823531, g: 0.13333334, b: 0.5294118, a: 0.6}
+  - ColorName: InputComponent
+    Normal:
+      ColorOnDark: {r: 1, g: 0.5686275, b: 0, a: 1}
+      ColorOnLight: {r: 0.6, g: 0.34117648, b: 0, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.8, g: 0.33333334, b: 0, a: 1}
+      ColorOnLight: {r: 0.48000002, g: 0.20000002, b: 0, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.64, g: 0.26666668, b: 0, a: 1}
+      ColorOnLight: {r: 0.432, g: 0.18000002, b: 0, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.72, g: 0.3, b: 0, a: 1}
+      ColorOnLight: {r: 0.532, g: 0.28000003, b: 0.1, a: 1}
+    Disabled:
+      ColorOnDark: {r: 1, g: 0.5686275, b: 0, a: 0.6}
+      ColorOnLight: {r: 0.6, g: 0.34117648, b: 0, a: 0.6}
+  - ColorName: LayoutComponent
+    Normal:
+      ColorOnDark: {r: 0.56078434, g: 0.90196085, b: 0.7294118, a: 1}
+      ColorOnLight: {r: 0.30980393, g: 0.50980395, b: 0.40000004, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.44862747, g: 0.7215687, b: 0.557804, a: 1}
+      ColorOnLight: {r: 0.24784312, g: 0.4078431, b: 0.30117646, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.35890198, g: 0.57725495, b: 0.4462432, a: 1}
+      ColorOnLight: {r: 0.2230588, g: 0.3670588, b: 0.2710588, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.40376472, g: 0.64941186, b: 0.5020236, a: 1}
+      ColorOnLight: {r: 0.3230588, g: 0.4670588, b: 0.37105882, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.56078434, g: 0.90196085, b: 0.7294118, a: 0.6}
+      ColorOnLight: {r: 0.30980393, g: 0.50980395, b: 0.40000004, a: 0.6}
+  - ColorName: ListenerComponent
+    Normal:
+      ColorOnDark: {r: 0.97647065, g: 0.5372549, b: 0.9176471, a: 1}
+      ColorOnLight: {r: 0.5882353, g: 0.3254902, b: 0.5568628, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.78117645, g: 0.4298039, b: 0.7694641, a: 1}
+      ColorOnLight: {r: 0.46708497, g: 0.26039216, b: 0.4705882, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.6249412, g: 0.34384313, b: 0.61557126, a: 1}
+      ColorOnLight: {r: 0.42037648, g: 0.23435295, b: 0.4235294, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.7030588, g: 0.3868235, b: 0.69251764, a: 1}
+      ColorOnLight: {r: 0.5203765, g: 0.33435294, b: 0.5235294, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.97647065, g: 0.5372549, b: 0.9176471, a: 0.6}
+      ColorOnLight: {r: 0.5882353, g: 0.3254902, b: 0.5568628, a: 0.6}
+  - ColorName: MenuButtonBackgroundLevel0
+    Normal:
+      ColorOnDark: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+      ColorOnLight: {r: 0.7607844, g: 0.7607844, b: 0.7607844, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.10039216, g: 0.10039216, b: 0.10039216, a: 1}
+      ColorOnLight: {r: 1, g: 1, b: 1, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.08031373, g: 0.08031373, b: 0.08031373, a: 1}
+      ColorOnLight: {r: 0.8862746, g: 0.8862746, b: 0.8862746, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.090352945, g: 0.090352945, b: 0.090352945, a: 1}
+      ColorOnLight: {r: 0.64705884, g: 0.64705884, b: 0.64705884, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 0.6}
+      ColorOnLight: {r: 0.7607844, g: 0.7607844, b: 0.7607844, a: 0.6}
+  - ColorName: MenuButtonBackgroundLevel1
+    Normal:
+      ColorOnDark: {r: 0.16470589, g: 0.16470589, b: 0.16470589, a: 1}
+      ColorOnLight: {r: 0.7372549, g: 0.7372549, b: 0.7372549, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.13176471, g: 0.13176471, b: 0.13176471, a: 1}
+      ColorOnLight: {r: 0.95294124, g: 0.95294124, b: 0.95294124, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.10541177, g: 0.10541177, b: 0.10541177, a: 1}
+      ColorOnLight: {r: 0.85098046, g: 0.85098046, b: 0.85098046, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.11858824, g: 0.11858824, b: 0.11858824, a: 1}
+      ColorOnLight: {r: 0.6313726, g: 0.6313726, b: 0.6313726, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.16470589, g: 0.16470589, b: 0.16470589, a: 0.6}
+      ColorOnLight: {r: 0.7372549, g: 0.7372549, b: 0.7372549, a: 0.6}
+  - ColorName: MenuButtonBackgroundLevel2
+    Normal:
+      ColorOnDark: {r: 0.18431373, g: 0.18431373, b: 0.18431373, a: 1}
+      ColorOnLight: {r: 0.69803923, g: 0.69803923, b: 0.69803923, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.14745098, g: 0.14745098, b: 0.14745098, a: 1}
+      ColorOnLight: {r: 0.95294124, g: 0.95294124, b: 0.95294124, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.11796079, g: 0.11796079, b: 0.11796079, a: 1}
+      ColorOnLight: {r: 0.85098046, g: 0.85098046, b: 0.85098046, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.13270588, g: 0.13270588, b: 0.13270588, a: 1}
+      ColorOnLight: {r: 0.6039216, g: 0.6039216, b: 0.6039216, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.18431373, g: 0.18431373, b: 0.18431373, a: 0.6}
+      ColorOnLight: {r: 0.69803923, g: 0.69803923, b: 0.69803923, a: 0.6}
+  - ColorName: Remove
+    Normal:
+      ColorOnDark: {r: 1, g: 0.20000002, b: 0.20000002, a: 1}
+      ColorOnLight: {r: 0.48627454, g: 0.098039225, b: 0.098039225, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.8000001, g: 0.16078432, b: 0.16078432, a: 1}
+      ColorOnLight: {r: 0.38823533, g: 0.078431375, b: 0.078431375, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.6392157, g: 0.12941177, b: 0.12941177, a: 1}
+      ColorOnLight: {r: 0.34901962, g: 0.07058824, b: 0.07058824, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.72156864, g: 0.14509805, b: 0.14509805, a: 1}
+      ColorOnLight: {r: 0.45098042, g: 0.16862746, b: 0.16862746, a: 1}
+    Disabled:
+      ColorOnDark: {r: 1, g: 0.20000002, b: 0.20000002, a: 0.6}
+      ColorOnLight: {r: 0.48627454, g: 0.098039225, b: 0.098039225, a: 0.6}
+  - ColorName: SettingsComponent
+    Normal:
+      ColorOnDark: {r: 0.89019614, g: 0.64705884, b: 0, a: 1}
+      ColorOnLight: {r: 0.4901961, g: 0.35686275, b: 0, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.7121569, g: 0.42729416, b: 0, a: 1}
+      ColorOnLight: {r: 0.3921569, g: 0.23529413, b: 0, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.5697255, g: 0.34183532, b: 0, a: 1}
+      ColorOnLight: {r: 0.35294122, g: 0.21176472, b: 0, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.6409412, g: 0.38456476, b: 0, a: 1}
+      ColorOnLight: {r: 0.4529412, g: 0.31176472, b: 0.1, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.89019614, g: 0.64705884, b: 0, a: 0.6}
+      ColorOnLight: {r: 0.4901961, g: 0.35686275, b: 0, a: 0.6}
+  - ColorName: ToggleOffIcon
+    Normal:
+      ColorOnDark: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 1}
+      ColorOnLight: {r: 0.627451, g: 0.627451, b: 0.627451, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+      ColorOnLight: {r: 0.42352945, g: 0.42352945, b: 0.42352945, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.3137255, g: 0.3137255, b: 0.3137255, a: 1}
+      ColorOnLight: {r: 0.3811765, g: 0.3811765, b: 0.3811765, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.53333336, g: 0.53333336, b: 0.53333336, a: 1}
+      ColorOnLight: {r: 0.4811765, g: 0.4811765, b: 0.4811765, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.40000004, g: 0.40000004, b: 0.40000004, a: 0.6}
+      ColorOnLight: {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 0.6}
+  - ColorName: ToggleOffText
+    Normal:
+      ColorOnDark: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+      ColorOnLight: {r: 0.4, g: 0.4, b: 0.4, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.7058824, g: 0.7058824, b: 0.7058824, a: 1}
+      ColorOnLight: {r: 0.3011765, g: 0.3011765, b: 0.3011765, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.384, g: 0.384, b: 0.384, a: 1}
+      ColorOnLight: {r: 0.27105883, g: 0.27105883, b: 0.27105883, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.432, g: 0.432, b: 0.432, a: 1}
+      ColorOnLight: {r: 0.37105885, g: 0.37105885, b: 0.37105885, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.6, g: 0.6, b: 0.6, a: 0.6}
+      ColorOnLight: {r: 0.37647063, g: 0.37647063, b: 0.37647063, a: 0.6}
+  - ColorName: UIComponent
+    Normal:
+      ColorOnDark: {r: 0.3803922, g: 0.5686275, b: 0.9803922, a: 1}
+      ColorOnLight: {r: 0.23137257, g: 0.32941177, b: 0.6, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.30431375, g: 0.52831376, b: 0.7843138, a: 1}
+      ColorOnLight: {r: 0.18509807, g: 0.30305883, b: 0.48000002, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.243451, g: 0.422651, b: 0.62745106, a: 1}
+      ColorOnLight: {r: 0.16658826, g: 0.27275294, b: 0.432, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.27388236, g: 0.47548237, b: 0.70588243, a: 1}
+      ColorOnLight: {r: 0.26658827, g: 0.37275296, b: 0.532, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.3803922, g: 0.5686275, b: 0.9803922, a: 0.6}
+      ColorOnLight: {r: 0.23137257, g: 0.32941177, b: 0.6, a: 0.6}
+  - ColorName: UnityTheme
+    Normal:
+      ColorOnDark: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 1}
+      ColorOnLight: {r: 0.7607844, g: 0.7607844, b: 0.7607844, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.17568628, g: 0.17568628, b: 0.17568628, a: 1}
+      ColorOnLight: {r: 0.6086275, g: 0.6086275, b: 0.6086275, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.14054903, g: 0.14054903, b: 0.14054903, a: 1}
+      ColorOnLight: {r: 0.5477647, g: 0.5477647, b: 0.5477647, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.15811765, g: 0.15811765, b: 0.15811765, a: 1}
+      ColorOnLight: {r: 0.64776474, g: 0.64776474, b: 0.64776474, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 0.6}
+      ColorOnLight: {r: 0.7607844, g: 0.7607844, b: 0.7607844, a: 0.6}
+  - ColorName: UnityThemeInversed
+    Normal:
+      ColorOnDark: {r: 0.7607844, g: 0.7607844, b: 0.7607844, a: 1}
+      ColorOnLight: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.6086275, g: 0.6086275, b: 0.6086275, a: 1}
+      ColorOnLight: {r: 0.17568628, g: 0.17568628, b: 0.17568628, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.486902, g: 0.486902, b: 0.486902, a: 1}
+      ColorOnLight: {r: 0.15811765, g: 0.15811765, b: 0.15811765, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.5477647, g: 0.5477647, b: 0.5477647, a: 1}
+      ColorOnLight: {r: 0.25811765, g: 0.25811765, b: 0.25811765, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.7607844, g: 0.7607844, b: 0.7607844, a: 0.6}
+      ColorOnLight: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 0.6}
+  - ColorName: VisualComponent
+    Normal:
+      ColorOnDark: {r: 0.18823531, g: 0.8862746, b: 0.48627454, a: 1}
+      ColorOnLight: {r: 0.098039225, g: 0.40000004, b: 0.21960786, a: 1}
+    Highlighted:
+      ColorOnDark: {r: 0.15058823, g: 0.70901966, b: 0.30881047, a: 1}
+      ColorOnLight: {r: 0.07843138, g: 0.32000002, b: 0.14687583, a: 1}
+    Pressed:
+      ColorOnDark: {r: 0.12047058, g: 0.56721574, b: 0.24704838, a: 1}
+      ColorOnLight: {r: 0.070588246, g: 0.28800002, b: 0.13218825, a: 1}
+    Selected:
+      ColorOnDark: {r: 0.1355294, g: 0.6381177, b: 0.27792943, a: 1}
+      ColorOnLight: {r: 0.17058824, g: 0.388, b: 0.23218824, a: 1}
+    Disabled:
+      ColorOnDark: {r: 0.18823531, g: 0.8862746, b: 0.48627454, a: 0.6}
+      ColorOnLight: {r: 0.098039225, g: 0.40000004, b: 0.21960786, a: 0.6}

@@ -68,14 +68,14 @@ public class BuildingBtn : MonoBehaviour
         SetRequireItem();
         SetBuildingState();
         
-        if (data.ID is "Building_Farm" or "Building_Orchard")
-        {
-            gameObject.SetActive(true);
-        }
-        else
-        {
-            gameObject.SetActive(false);
-        }
+        //if (data.ID is "Building_Farm" or "Building_Orchard")
+        //{
+        //    gameObject.SetActive(true);
+        //}
+        //else
+        //{
+        //    gameObject.SetActive(false);
+        //}
     }
 
     private void SetString()
