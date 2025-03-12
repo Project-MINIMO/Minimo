@@ -108,7 +108,7 @@ public abstract class ProduceObject : BuildingObject
     {
         var newCompleteProduce = new BuildingCompleteProduceDTO
         {
-            BuildingId = _id,
+            BuildingId = ID,
             SlotIndex = ActiveTask.SlotIndex
         };
         await _buildingManager.CompleteProduce(newCompleteProduce);
@@ -167,7 +167,7 @@ public abstract class ProduceObject : BuildingObject
         
         var newStartProduce = new BuildingStartProduceDTO
         {
-            BuildingId = _id,
+            BuildingId = ID,
             SlotIndex = task.SlotIndex,
             RecipeId = optionIndex + 1
         };
@@ -195,7 +195,7 @@ public abstract class ProduceObject : BuildingObject
             {
                 var newHarvestProduce = new BuildingHarvestProduceDTO()
                 {
-                    BuildingId = _id,
+                    BuildingId = ID,
                     SlotIndex = task.SlotIndex
                 };
                 await _buildingManager.HarvestProduce(newHarvestProduce);
@@ -217,7 +217,7 @@ public abstract class ProduceObject : BuildingObject
         
         var newInstantProduce = new BuildingInstantProduceDTO
         {
-            BuildingId = _id,
+            BuildingId = ID,
             SlotIndex = ActiveTask.SlotIndex
         };
         await _buildingManager.InstantProduceAsync(newInstantProduce);

@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "NewBuildingData", menuName = "Building Position Data")]
 public class BuildingPositionData : ScriptableObject
