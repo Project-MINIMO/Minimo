@@ -49,7 +49,7 @@ public class BuildingObject : InteractObject
         IsPlaced = true;
 
         var buildingString = buildingDto.BuildingType;
-        buildingString = buildingString.Replace("Building", "");
+        buildingString = buildingString.Replace("Building_", "");
         var buildingType = (EBuilding)Enum.Parse(typeof(EBuilding), buildingString);
         var buildingData = App.GetData<TitleData>().Building[buildingType];
         Initialize(buildingData);
