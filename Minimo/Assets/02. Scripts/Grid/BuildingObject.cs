@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using MinimoShared;
 
@@ -63,11 +64,35 @@ public class BuildingObject : InteractObject
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
             PositionData = handle.Result;
+            SetPolygonCollider(GetComponent<PolygonCollider2D>());
             Debug.Log($"BuildingData loaded: {PositionData.Code}");
         }
         else
         {
             Debug.LogError("Failed to load BuildingData");
+        }
+    }
+    
+    private void SetPolygonCollider(PolygonCollider2D polyCollider)
+    {
+        // SO에 저장된 땅, 물 타일 상대 좌표들을 합친 집합 생성
+        HashSet<Vector2Int> tileSet = new HashSet<Vector2Int>();
+        foreach (var pos in PositionData.GroundTilePositions)
+            tileSet.Add(pos);
+        foreach (var pos in PositionData.WaterTilePositions)
+            tileSet.Add(pos);
+    
+        // 건물 로컬 좌표계에 맞게 외곽선(볼록 껍질) 생성 후, 재중심화
+        List<Vector2> polygonPoints = ColliderGenerator.GenerateIsoPolygonCentered(tileSet);
+    
+        // (필요하다면 추가로 단순화)
+        List<Vector2> simplifiedPolygon = ColliderGenerator.SimplifyPolygon(polygonPoints, 0.1f);
+    
+        if (simplifiedPolygon != null && simplifiedPolygon.Count > 0)
+        {
+            polyCollider.pathCount = 1;
+            polyCollider.SetPath(0, simplifiedPolygon.ToArray());
+            Debug.Log("Collider vertices count: " + simplifiedPolygon.Count);
         }
     }
 
