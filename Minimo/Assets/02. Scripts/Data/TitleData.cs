@@ -16,8 +16,6 @@ public class BuildingData
 {
     public EBuilding ID;
     public int Type;
-    public int SizeX;
-    public int SizeY;
     public int HPI;
     public int UnlockLevel;
     public string Icon;

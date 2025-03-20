@@ -33,7 +33,10 @@ public class EditManager : ManagerBase
             {
                 continue;
             }
-            var prefabPath = $"Building/{building.BuildingType}";
+
+            var path = building.BuildingType;
+            path = path.Replace("Building_", "");
+            var prefabPath = $"Building/{path}";
             var objectPrefab = Resources.Load<GameObject>(prefabPath);
             var position = building.Position != null
                 ? new Vector3Int(building.Position[0], building.Position[1], building.Position[2])

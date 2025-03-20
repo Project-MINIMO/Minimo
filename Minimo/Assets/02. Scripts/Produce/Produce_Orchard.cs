@@ -48,7 +48,7 @@ public class Produce_Orchard :ProducePrimary
             var produceTask = new ProduceTask(task.Data, slotIndex);
             var newStartProduce = new BuildingStartProduceDTO
             {
-                BuildingId = _id,
+                BuildingId = ID,
                 SlotIndex = produceTask.SlotIndex,
                 RecipeId = optionIndex + 1
             };

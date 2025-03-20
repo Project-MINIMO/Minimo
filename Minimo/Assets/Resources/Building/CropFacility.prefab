@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2015367041267223566
+--- !u!1 &5399740237062957690
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,7 +8,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8645692185112609208}
+  - component: {fileID: 7880403276805225519}
   m_Layer: 0
   m_Name: WorkingPosition
   m_TagString: Untagged
@@ -16,16 +16,16 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8645692185112609208
+--- !u!4 &7880403276805225519
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2015367041267223566}
+  m_GameObject: {fileID: 5399740237062957690}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.576, y: 1.542, z: 0}
+  m_LocalPosition: {x: 0.092, y: 1.562, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -57,7 +57,7 @@ Transform:
   m_GameObject: {fileID: 6314677404844064388}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.2, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -104,7 +104,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: cfdb3eaa44ac6bb45acee6716f0d9ad7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8c2fbed983db8fa4987b91ba90f2c89f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -124,10 +124,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6314677405763876296}
-  - component: {fileID: 3255308108609632142}
-  - component: {fileID: 7073628996599721739}
+  - component: {fileID: 300050482602119651}
+  - component: {fileID: 5187844719989918184}
   m_Layer: 6
-  m_Name: Building_OrchardFacility
+  m_Name: CropFacility
   m_TagString: GridObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -147,10 +147,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6314677404844064391}
-  - {fileID: 8645692185112609208}
+  - {fileID: 7880403276805225519}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!60 &3255308108609632142
+--- !u!60 &300050482602119651
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -199,7 +199,7 @@ PolygonCollider2D:
       - {x: 1.5, y: 0.75}
       - {x: 0, y: 1.5}
   m_UseDelaunayMesh: 0
---- !u!114 &7073628996599721739
+--- !u!114 &5187844719989918184
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -214,5 +214,5 @@ MonoBehaviour:
   Area:
     m_Position: {x: 0, y: 0, z: 0}
     m_Size: {x: 0, y: 0, z: 0}
-  MinimoWorkingPosition: {fileID: 8645692185112609208}
-  AnimTrigger: Fruit
+  MinimoWorkingPosition: {fileID: 7880403276805225519}
+  AnimTrigger: Crop

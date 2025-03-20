@@ -1,17 +1,21 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using MinimoShared;
 
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class BuildingObject : InteractObject
 {
     public BoundsInt Area;
     public BoundsInt PreviousArea { get; private set; }
-    public BuildingData Data { get; private set; }
+    
+    public BuildingData BuildingData { get; private set; }
+    public BuildingPositionData PositionData { get; private set; }
 
-    protected int _id;
+    protected int ID;
 
     public bool IsPlaced { get; private set; } 
     private bool _isFlipped = false;
@@ -30,9 +34,10 @@ public class BuildingObject : InteractObject
     
     public virtual void Initialize(BuildingData data)
     {
-        Data = data;
+        BuildingData = data;
+        LoadPositionData();
         
-        var size = new Vector3Int(data.SizeX, data.SizeY, 1);
+        var size = new Vector3Int(1, 1, 1/*data.SizeX, data.SizeY, 1*/);
         Area = new BoundsInt(_editManager.GetCellPosition(transform.position), size);
         PreviousArea = Area;
         
@@ -41,14 +46,54 @@ public class BuildingObject : InteractObject
     
     public virtual void Initialize(BuildingDTO buildingDto)
     {
-        _id = buildingDto.Id;
+        ID = buildingDto.Id;
         IsPlaced = true;
 
         var buildingString = buildingDto.BuildingType;
-        buildingString = buildingString.Replace("Building", "");
+        buildingString = buildingString.Replace("Building_", "");
         var buildingType = (EBuilding)Enum.Parse(typeof(EBuilding), buildingString);
         var buildingData = App.GetData<TitleData>().Building[buildingType];
         Initialize(buildingData);
+    }
+    
+    private async void LoadPositionData()
+    {
+        var path = $"Assets/09. Scriptable Objects/Building/{BuildingData.ID}.asset";
+        var handle = Addressables.LoadAssetAsync<BuildingPositionData>(path);
+        await handle.Task;
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            PositionData = handle.Result;
+            SetPolygonCollider(GetComponent<PolygonCollider2D>());
+            Debug.Log($"BuildingData loaded: {PositionData.Code}");
+        }
+        else
+        {
+            Debug.LogError("Failed to load BuildingData");
+        }
+    }
+    
+    private void SetPolygonCollider(PolygonCollider2D polyCollider)
+    {
+        // SO에 저장된 땅, 물 타일 상대 좌표들을 합친 집합 생성
+        HashSet<Vector2Int> tileSet = new HashSet<Vector2Int>();
+        foreach (var pos in PositionData.GroundTilePositions)
+            tileSet.Add(pos);
+        foreach (var pos in PositionData.WaterTilePositions)
+            tileSet.Add(pos);
+    
+        // 건물 로컬 좌표계에 맞게 외곽선(볼록 껍질) 생성 후, 재중심화
+        List<Vector2> polygonPoints = ColliderGenerator.GenerateIsoPolygonCentered(tileSet);
+    
+        // (필요하다면 추가로 단순화)
+        List<Vector2> simplifiedPolygon = ColliderGenerator.SimplifyPolygon(polygonPoints, 0.1f);
+    
+        if (simplifiedPolygon != null && simplifiedPolygon.Count > 0)
+        {
+            polyCollider.pathCount = 1;
+            polyCollider.SetPath(0, simplifiedPolygon.ToArray());
+            Debug.Log("Collider vertices count: " + simplifiedPolygon.Count);
+        }
     }
 
     public override void OnLongPress()
@@ -98,7 +143,7 @@ public class BuildingObject : InteractObject
 
     private async UniTask<bool> CreateBuilding()
     {
-        var buildingType = "Building_" + Data.ID;
+        var buildingType = "Building_" + BuildingData.ID;
         var newBuildingRequest = new BuildingDTO
         {
             BuildingType = buildingType,
@@ -109,7 +154,7 @@ public class BuildingObject : InteractObject
         if (newBuildingDto != null)
         {
             Debug.Log($"Building created: {newBuildingDto.BuildingType} (ID: {newBuildingDto.Id})");
-            _id = newBuildingDto.Id;
+            ID = newBuildingDto.Id;
             IsPlaced = true;
             PreviousArea = Area;
 
@@ -127,7 +172,7 @@ public class BuildingObject : InteractObject
     {
         var updateBuildingParameter = new UpdateBuildingParameter
         {
-            Id = _id,
+            Id = ID,
             Position = new int[] {Area.position.x, Area.position.y, Area.position.z},
         };
 

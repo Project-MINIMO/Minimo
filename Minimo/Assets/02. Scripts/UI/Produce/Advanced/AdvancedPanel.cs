@@ -26,9 +26,9 @@ public class AdvancedPanel : UIBase
                     return;
                 }
                 
-                var id = _produceManager.CurrentProduceObject.Data.ID;
-                if (string.Equals(id, "Building_Farm") 
-                    || string.Equals(id, "Building_Orchard"))
+                var id = _produceManager.CurrentProduceObject.BuildingData.ID;
+                if (string.Equals(id.ToString(), "Farm") 
+                    || string.Equals(id.ToString(), "Orchard"))
                 {
                     ClosePanel();
                 }
@@ -50,7 +50,7 @@ public class AdvancedPanel : UIBase
         base.OpenPanel();
         
         InitTaskBtns();
-        _titleTMP.text = App.GetData<TitleData>().GetString(_produceManager.CurrentProduceObject.Data.Name);
+        _titleTMP.text = App.GetData<TitleData>().GetString(_produceManager.CurrentProduceObject.BuildingData.Name);
     }
 
     private void InitTaskBtns()
