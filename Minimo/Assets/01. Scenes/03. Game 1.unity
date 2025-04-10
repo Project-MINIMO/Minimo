@@ -1525,8 +1525,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 860ef93c74b5f144eb84e4728a4cecf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilemap: {fileID: 1575397485}
-  areaCollider: {fileID: 1138184182}
+  _tilemap: {fileID: 1575397485}
+  _areaCollider: {fileID: 1138184182}
 --- !u!213 &1087963873
 Sprite:
   m_ObjectHideFlags: 0
@@ -1801,8 +1801,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -1.6}
-  m_Size: {x: 12.5, y: 4}
+  m_Offset: {x: 0.008532238, y: -2.4098175}
+  m_Size: {x: 11.050912, y: 5.6196437}
   m_Direction: 1
 --- !u!1 &1254858911
 GameObject:
