@@ -13,7 +13,7 @@ public class StoragePanel : UIBase
     [SerializeField] private StorageBack _storageBack;
 
     [Header("Buttons")]
-    [SerializeField] private BottomBtn _openBtn;
+    [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
 
     public override void Initialize()
@@ -30,14 +30,6 @@ public class StoragePanel : UIBase
 
         OnClickStorageBtn(0);
         _storageBack.FilterStorageBtns(0);
-        _openBtn.MoveBtn(true);
-    }
-    
-    public override void ClosePanel()
-    {
-        base.ClosePanel();
-        
-        _openBtn.MoveBtn(false);
     }
 
     private void SetString()
@@ -54,6 +46,7 @@ public class StoragePanel : UIBase
 
     private void SetButtonEvent()
     {
+        _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
 
         for (int i = 0; i < _storageBtns.Length; i++)
