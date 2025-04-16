@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using DG.Tweening;
 
 public class TileAlphaSystem : MonoBehaviour
 {
@@ -31,7 +32,7 @@ public class TileAlphaSystem : MonoBehaviour
         {
             if (_tilemap.HasTile(pos))
             {
-                _tilemap.SetColor(pos, _opaqueColor);
+                TweenTileAlpha(pos, 1f);
             }
         }
     }
@@ -42,7 +43,7 @@ public class TileAlphaSystem : MonoBehaviour
         {
             if (_tilemap.HasTile(pos))
             {
-                _tilemap.SetColor(pos, _opaqueColor);
+                TweenTileAlpha(pos, 1f);
             }
         }
         
@@ -56,13 +57,27 @@ public class TileAlphaSystem : MonoBehaviour
                 var tileWorldCenter = _tilemap.GetCellCenterWorld(pos);
                 if (_areaCollider.OverlapPoint(tileWorldCenter))
                 {
-                    _tilemap.SetColor(pos, _transparentColor);
+                    TweenTileAlpha(pos, 0);
                     currentOpaqueCells.Add(pos);
                 }
             }
         }
         
         _previousOpaqueCells = currentOpaqueCells;
+    }
+    
+    private void TweenTileAlpha(Vector3Int pos, float targetAlpha, float duration = 0.3f)
+    {
+        if (!_tilemap.HasTile(pos)) return;
+
+        var currentColor = _tilemap.GetColor(pos);
+        var startAlpha = currentColor.a;
+
+        DOTween.To(() => startAlpha, x =>
+        {
+            currentColor.a = x;
+            _tilemap.SetColor(pos, currentColor);
+        }, targetAlpha, duration);
     }
 
     public void ActiveTileAlphaSystem(bool active)
