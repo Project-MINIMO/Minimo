@@ -1,15 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using DG.Tweening;
 
 public class TileAlphaSystem : MonoBehaviour
 {
     [SerializeField] private Tilemap _tilemap;
     [SerializeField] private Collider2D _areaCollider;
 
-    private readonly Color _transparentColor = new(1f, 1f, 1f, 0f);
-    private readonly Color _opaqueColor = new(1f, 1f, 1f, 1f);
-    
     private HashSet<Vector3Int> _previousOpaqueCells = new();
 
     private void Start()
@@ -31,7 +29,7 @@ public class TileAlphaSystem : MonoBehaviour
         {
             if (_tilemap.HasTile(pos))
             {
-                _tilemap.SetColor(pos, _opaqueColor);
+                TweenTileAlpha(pos, 0);
             }
         }
     }
@@ -42,7 +40,7 @@ public class TileAlphaSystem : MonoBehaviour
         {
             if (_tilemap.HasTile(pos))
             {
-                _tilemap.SetColor(pos, _opaqueColor);
+                TweenTileAlpha(pos, 0f);
             }
         }
         
@@ -56,7 +54,7 @@ public class TileAlphaSystem : MonoBehaviour
                 var tileWorldCenter = _tilemap.GetCellCenterWorld(pos);
                 if (_areaCollider.OverlapPoint(tileWorldCenter))
                 {
-                    _tilemap.SetColor(pos, _transparentColor);
+                    TweenTileAlpha(pos, 1);
                     currentOpaqueCells.Add(pos);
                 }
             }
@@ -64,11 +62,39 @@ public class TileAlphaSystem : MonoBehaviour
         
         _previousOpaqueCells = currentOpaqueCells;
     }
+    
+    private void TweenTileAlpha(Vector3Int pos, float targetAlpha, float duration = 0.3f)
+    {
+        if (!_tilemap.HasTile(pos)) return;
+
+        var currentColor = _tilemap.GetColor(pos);
+        var startAlpha = currentColor.a;
+
+        DOTween.To(() => startAlpha, x =>
+        {
+            currentColor.a = x;
+            _tilemap.SetColor(pos, currentColor);
+        }, targetAlpha, duration);
+    }
 
     public void ActiveTileAlphaSystem(bool active)
     {
         _areaCollider.enabled = active;
 
-        InitializeTilemap();
+        if (active)
+        {
+            InitializeTilemap();
+        }
+        else
+        {
+            var bounds = _tilemap.cellBounds;
+            foreach (var pos in bounds.allPositionsWithin)
+            {
+                if (_tilemap.HasTile(pos))
+                {
+                    _tilemap.SetColor(pos, Color.white);
+                }
+            }
+        }
     }
 }
