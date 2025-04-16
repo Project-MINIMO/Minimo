@@ -8,9 +8,6 @@ public class TileAlphaSystem : MonoBehaviour
     [SerializeField] private Tilemap _tilemap;
     [SerializeField] private Collider2D _areaCollider;
 
-    private readonly Color _transparentColor = new(1f, 1f, 1f, 0f);
-    private readonly Color _opaqueColor = new(1f, 1f, 1f, 1f);
-    
     private HashSet<Vector3Int> _previousOpaqueCells = new();
 
     private void Start()
@@ -32,7 +29,7 @@ public class TileAlphaSystem : MonoBehaviour
         {
             if (_tilemap.HasTile(pos))
             {
-                TweenTileAlpha(pos, 1f);
+                TweenTileAlpha(pos, 0);
             }
         }
     }
@@ -43,7 +40,7 @@ public class TileAlphaSystem : MonoBehaviour
         {
             if (_tilemap.HasTile(pos))
             {
-                TweenTileAlpha(pos, 1f);
+                TweenTileAlpha(pos, 0f);
             }
         }
         
@@ -57,7 +54,7 @@ public class TileAlphaSystem : MonoBehaviour
                 var tileWorldCenter = _tilemap.GetCellCenterWorld(pos);
                 if (_areaCollider.OverlapPoint(tileWorldCenter))
                 {
-                    TweenTileAlpha(pos, 0);
+                    TweenTileAlpha(pos, 1);
                     currentOpaqueCells.Add(pos);
                 }
             }
@@ -84,6 +81,20 @@ public class TileAlphaSystem : MonoBehaviour
     {
         _areaCollider.enabled = active;
 
-        InitializeTilemap();
+        if (active)
+        {
+            InitializeTilemap();
+        }
+        else
+        {
+            var bounds = _tilemap.cellBounds;
+            foreach (var pos in bounds.allPositionsWithin)
+            {
+                if (_tilemap.HasTile(pos))
+                {
+                    _tilemap.SetColor(pos, Color.white);
+                }
+            }
+        }
     }
 }
