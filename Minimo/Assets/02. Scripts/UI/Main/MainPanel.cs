@@ -54,9 +54,9 @@ public class MainPanel : UIBase
     
     private void OnClickMain()
     {
-        Debug.Log("OnClickMain");
         _isOpened = !_isOpened;
         
+        _closeBtn.gameObject.SetActive(_isOpened);
         _mainRect.DOKill();
         _mainRect.DOAnchorPosY(_isOpened? 0f : -150f, 0.5f);
         
