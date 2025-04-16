@@ -1,3 +1,4 @@
+using UniRx;
 using UnityEngine;
 
 public class CameraInput : MonoBehaviour
@@ -15,15 +16,19 @@ public class CameraInput : MonoBehaviour
     [SerializeField] private Vector2 _maxBounds; 
     
     private InputManager _input;
-    private ScreenStateManager _screenState;
     private Camera _mainCamera;
     
+    private bool _isActive;
     private EditCirclePanel _editCirclePanel;
     
     private void Start()
     {
         _input = App.GetManager<InputManager>();
-        _screenState = App.GetManager<ScreenStateManager>();
+        var screenStateManager = App.GetManager<ScreenStateManager>();
+        screenStateManager.CurrentState.Subscribe((currentState) =>
+        {
+            _isActive = currentState is ScreenState.Town or ScreenState.Sky;
+        }).AddTo(gameObject);
         _mainCamera = Camera.main;
         
         _editCirclePanel = App.GetManager<UIManager>().GetPanel<EditCirclePanel>();
@@ -31,7 +36,7 @@ public class CameraInput : MonoBehaviour
     
     private void Update()
     {
-        if (_screenState.CurrentState is ScreenState.Space or ScreenState.DeepSpace) return;
+        if (!_isActive) return;
         
         if (_input.CurrentState == InputState.Drag)
         {

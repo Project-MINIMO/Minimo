@@ -40,7 +40,7 @@ public class UIManager : ManagerBase
             { Debug.LogError($"ERROR: {error.Message}\n{error.StackTrace}"); }
         }
         
-        FadeOut();
+        FadeOut(1);
         AkSoundEngine.SetRTPCValue("BGMFade", 100);
     }
 
@@ -69,25 +69,25 @@ public class UIManager : ManagerBase
         });
     }
 
-    public void FadeOut(Action onComplete = null)
+    public void FadeOut(float duration, Action onComplete = null)
     {
         _blackBlur.DOKill();
-        _blackBlur.DOFade(0f, 1f).SetEase(Ease.Linear).OnComplete(() =>
+        _blackBlur.DOFade(0f, duration).SetEase(Ease.Linear).OnComplete(() =>
         {
             _blackBlur.gameObject.SetActive(false);
             onComplete?.Invoke();
         });
     }
 
-    public void FadeInOut(Action midAction = null)
+    public void FadeInOut(float duration, Action midAction = null)
     {
         _blackBlur.gameObject.SetActive(true);
 
         _blackBlur.DOKill();
-        _blackBlur.DOFade(1f, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
+        _blackBlur.DOFade(1f, duration).SetEase(Ease.Linear).OnComplete(() =>
         {
             midAction?.Invoke();
-            FadeOut();
+            FadeOut(duration);
         });
     }
     #endregion

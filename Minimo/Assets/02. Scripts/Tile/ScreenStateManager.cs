@@ -1,5 +1,7 @@
+using UniRx;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using DG.Tweening;
 
 public enum ScreenState
 {
@@ -11,36 +13,38 @@ public enum ScreenState
 
 public class ScreenStateManager : ManagerBase
 {
-    public ScreenState CurrentState { get; private set; } = ScreenState.Sky;
+    public ReactiveProperty<ScreenState> CurrentState { get; } = new(ScreenState.Sky);
     
     [SerializeField] private TileAlphaSystem _tileAlphaSystem;
     [SerializeField] private Tilemap _villageMap;
+    [SerializeField] private GameObject _planetObj;
 
-    protected override void Awake()
+    private void Start()
     {
-        base.Awake();
-        
         ChangeState(ScreenState.Sky);
+        
+        _planetObj.SetActive(false);
+        Camera.main.orthographicSize = 3f;
+        _villageMap.color = Color.white;
     }
     
     public void ChangeState(int addValue)
     {
         if (addValue > 0)
         {
-            ChangeState((ScreenState)Mathf.Min((int)CurrentState + addValue, (int)ScreenState.DeepSpace));
+            ChangeState((ScreenState)Mathf.Min((int)CurrentState.Value + addValue, (int)ScreenState.DeepSpace));
         }
         else
         {
-            ChangeState((ScreenState)Mathf.Max((int)CurrentState + addValue, 0));
+            ChangeState((ScreenState)Mathf.Max((int)CurrentState.Value + addValue, 0));
         }
         
     }
 
     private void ChangeState(ScreenState newState)
     {
-        CurrentState = newState;
-        Debug.Log(CurrentState);
-
+        if (CurrentState.Value == newState) return;
+        
         switch (newState)
         {
             case ScreenState.Town:
@@ -49,19 +53,39 @@ public class ScreenStateManager : ManagerBase
             
             case ScreenState.Sky:
                 _tileAlphaSystem.ActiveTileAlphaSystem(true);
-                _villageMap.color = Color.white;
-                Camera.main.orthographicSize = 3;
+                
+                if (CurrentState.Value == ScreenState.Space)
+                {
+                    Camera.main.DOOrthoSize(3f, 1f);
+                    App.GetManager<UIManager>().FadeInOut(0.5f, 
+                        () =>
+                        {
+                            
+                            _villageMap.color = Color.white;
+                            _planetObj.SetActive(false);
+                        });
+                }
                 break;
             
             case ScreenState.Space:
-                _tileAlphaSystem.ActiveTileAlphaSystem(false);
-                _villageMap.color = Color.clear;
-                Camera.main.orthographicSize = 5;
+                Camera.main.DOKill();
+                Camera.main.DOOrthoSize(10f, 1f).SetEase(Ease.InQuad);
+                App.GetManager<UIManager>().FadeInOut(0.5f, 
+                    () =>
+                    {
+                        _tileAlphaSystem.ActiveTileAlphaSystem(false);
+                        _planetObj.SetActive(true);
+                        _villageMap.color = Color.clear;
+                    });
                 break;
             
             case ScreenState.DeepSpace:
-                Camera.main.orthographicSize = 10;
+                Camera.main.DOOrthoSize(100f, 1f).SetEase(Ease.InQuad);
+                App.GetManager<UIManager>().FadeInOut(0.5f, 
+                    () => _planetObj.SetActive(false));
                 break;
         }
+        
+        CurrentState.Value = newState;
     }
 }
