@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class TileAlphaController : MonoBehaviour
+public class TileAlphaSystem : MonoBehaviour
 {
     [SerializeField] private Tilemap _tilemap;
     [SerializeField] private Collider2D _areaCollider;
@@ -17,6 +17,13 @@ public class TileAlphaController : MonoBehaviour
         InitializeTilemap();
     }
     
+    private void Update()
+    {
+        if (!_areaCollider.isActiveAndEnabled) return;
+        
+        UpdateTileAlphas();
+    }
+    
     private void InitializeTilemap()
     {
         var bounds = _tilemap.cellBounds;
@@ -24,27 +31,24 @@ public class TileAlphaController : MonoBehaviour
         {
             if (_tilemap.HasTile(pos))
             {
-                _tilemap.SetColor(pos, _transparentColor);
+                _tilemap.SetColor(pos, _opaqueColor);
             }
         }
-    }
-    
-    private void Update()
-    {
-        UpdateTileAlphas();
     }
 
     private void UpdateTileAlphas()
     {
-        var bounds = _tilemap.cellBounds;
-        foreach (var pos in bounds.allPositionsWithin)
+        foreach (var pos in _previousOpaqueCells)
         {
             if (_tilemap.HasTile(pos))
             {
-                _tilemap.SetColor(pos, _transparentColor);
+                _tilemap.SetColor(pos, _opaqueColor);
             }
         }
         
+        var currentOpaqueCells = new HashSet<Vector3Int>();
+        
+        var bounds = _tilemap.cellBounds;
         foreach (var pos in bounds.allPositionsWithin)
         {
             if (_tilemap.HasTile(pos))
@@ -52,9 +56,19 @@ public class TileAlphaController : MonoBehaviour
                 var tileWorldCenter = _tilemap.GetCellCenterWorld(pos);
                 if (_areaCollider.OverlapPoint(tileWorldCenter))
                 {
-                    _tilemap.SetColor(pos, _opaqueColor);
+                    _tilemap.SetColor(pos, _transparentColor);
+                    currentOpaqueCells.Add(pos);
                 }
             }
         }
+        
+        _previousOpaqueCells = currentOpaqueCells;
+    }
+
+    public void ActiveTileAlphaSystem(bool active)
+    {
+        _areaCollider.enabled = active;
+
+        InitializeTilemap();
     }
 }

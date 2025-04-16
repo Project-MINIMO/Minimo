@@ -1,3 +1,4 @@
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
@@ -7,6 +8,7 @@ public class MainPanel : UIBase
     [SerializeField] private RectTransform _mainRect;
     
     [SerializeField] private Button _mainBtn;
+    [SerializeField] private Button _closeBtn;
     [SerializeField] private Button _storageBtn;
     [SerializeField] private Button _buildingBtn;
     [SerializeField] private Button _minimoBtn;
@@ -17,7 +19,26 @@ public class MainPanel : UIBase
 
     public override void Initialize()
     {
+        var screenStateManager = App.GetManager<ScreenStateManager>();
+        screenStateManager.CurrentState.Subscribe((currentState) =>
+        {
+            var isActive = currentState is ScreenState.Town or ScreenState.Sky;
+            if (isActive)
+            {
+                OpenPanel();
+            }
+            else
+            {
+                ClosePanel();
+            }
+        }).AddTo(gameObject);
+        
         _mainBtn.onClick.AddListener(OnClickMain);
+        _closeBtn.onClick.AddListener(()=>
+        {
+            if (!_isOpened) return;
+            OnClickMain();
+        });
 
         _buildingBtn.onClick.AddListener(() =>
         {
@@ -33,6 +54,7 @@ public class MainPanel : UIBase
     
     private void OnClickMain()
     {
+        Debug.Log("OnClickMain");
         _isOpened = !_isOpened;
         
         _mainRect.DOKill();
