@@ -3,12 +3,6 @@ using UnityEditor;
 using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 
-public enum TileType
-{
-    Ground,
-    Water
-}
-
 public class BuildingEditorWindow : EditorWindow
 {
     #region Fields
