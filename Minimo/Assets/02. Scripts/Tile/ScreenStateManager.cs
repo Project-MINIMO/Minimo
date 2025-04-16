@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public enum ScreenState
 {
@@ -13,6 +14,7 @@ public class ScreenStateManager : ManagerBase
     public ScreenState CurrentState { get; private set; } = ScreenState.Sky;
     
     [SerializeField] private TileAlphaSystem _tileAlphaSystem;
+    [SerializeField] private Tilemap _villageMap;
 
     protected override void Awake()
     {
@@ -29,7 +31,7 @@ public class ScreenStateManager : ManagerBase
         }
         else
         {
-            ChangeState((ScreenState)Mathf.Max((int)CurrentState - addValue, 0));
+            ChangeState((ScreenState)Mathf.Max((int)CurrentState + addValue, 0));
         }
         
     }
@@ -37,6 +39,7 @@ public class ScreenStateManager : ManagerBase
     private void ChangeState(ScreenState newState)
     {
         CurrentState = newState;
+        Debug.Log(CurrentState);
 
         switch (newState)
         {
@@ -46,12 +49,18 @@ public class ScreenStateManager : ManagerBase
             
             case ScreenState.Sky:
                 _tileAlphaSystem.ActiveTileAlphaSystem(true);
+                _villageMap.color = Color.white;
+                Camera.main.orthographicSize = 3;
                 break;
             
             case ScreenState.Space:
+                _tileAlphaSystem.ActiveTileAlphaSystem(false);
+                _villageMap.color = Color.clear;
+                Camera.main.orthographicSize = 5;
                 break;
             
             case ScreenState.DeepSpace:
+                Camera.main.orthographicSize = 10;
                 break;
         }
     }

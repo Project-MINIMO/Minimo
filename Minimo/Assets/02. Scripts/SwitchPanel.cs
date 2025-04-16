@@ -28,7 +28,7 @@ public class SwitchPanel : UIBase, IBeginDragHandler, IDragHandler, IEndDragHand
         if (Mathf.Abs(dragDelta.y) > _dragThreshold)
         {
             _isDrag = false;
-
+            
             if (dragDelta.y > 0)
             {
                 OnDragUp();

@@ -13,8 +13,9 @@ public class CameraInput : MonoBehaviour
     [Header("Map Bounds")]
     [SerializeField] private Vector2 _minBounds; 
     [SerializeField] private Vector2 _maxBounds; 
-
+    
     private InputManager _input;
+    private ScreenStateManager _screenState;
     private Camera _mainCamera;
     
     private EditCirclePanel _editCirclePanel;
@@ -22,6 +23,7 @@ public class CameraInput : MonoBehaviour
     private void Start()
     {
         _input = App.GetManager<InputManager>();
+        _screenState = App.GetManager<ScreenStateManager>();
         _mainCamera = Camera.main;
         
         _editCirclePanel = App.GetManager<UIManager>().GetPanel<EditCirclePanel>();
@@ -29,6 +31,8 @@ public class CameraInput : MonoBehaviour
     
     private void Update()
     {
+        if (_screenState.CurrentState is ScreenState.Space or ScreenState.DeepSpace) return;
+        
         if (_input.CurrentState == InputState.Drag)
         {
             Move();

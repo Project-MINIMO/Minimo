@@ -253,7 +253,6 @@ GameObject:
   - component: {fileID: 216209803}
   - component: {fileID: 216209806}
   - component: {fileID: 216209808}
-  - component: {fileID: 216209805}
   - component: {fileID: 216209807}
   - component: {fileID: 216209809}
   m_Layer: 0
@@ -278,44 +277,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &216209805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 216209802}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f411f7c5ca5bf047a880a13016ad59d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _marks:
-  - timeRatio: 0
-    color: {r: 0.2509804, g: 0.3019608, b: 1, a: 1}
-    intensity: 0.3
-  - timeRatio: 0.125
-    color: {r: 0.2509804, g: 0.3019608, b: 1, a: 1}
-    intensity: 0.7
-  - timeRatio: 0.25
-    color: {r: 1, g: 0.60784316, b: 0.015686275, a: 1}
-    intensity: 0.7
-  - timeRatio: 0.27
-    color: {r: 0.93333334, g: 0.9019608, b: 0.68235296, a: 1}
-    intensity: 0.5
-  - timeRatio: 0.375
-    color: {r: 1, g: 1, b: 1, a: 1}
-    intensity: 1
-  - timeRatio: 0.75
-    color: {r: 1, g: 0.60784316, b: 0.015686275, a: 1}
-    intensity: 0.7
-  - timeRatio: 0.79
-    color: {r: 0.2509804, g: 0.3019608, b: 1, a: 1}
-    intensity: 0.7
-  - timeRatio: 1
-    color: {r: 0.2509804, g: 0.3019608, b: 1, a: 1}
-    intensity: 0.5
-  _globalLight: {fileID: 0}
 --- !u!114 &216209806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -430,7 +391,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 408177626}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ebbd114d5cf04445bb6f8c9d34cb868, type: 3}
   m_Name: 
@@ -1078,6 +1039,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tileAlphaSystem: {fileID: 591395676}
+  _villageMap: {fileID: 1575397485}
 --- !u!1 &1138184178
 GameObject:
   m_ObjectHideFlags: 0
@@ -1234,7 +1196,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 10}
-  m_LocalScale: {x: 50, y: 50, z: 50}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 519420032}
@@ -1361,7 +1323,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.039215688}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -128038,6 +128000,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1754752339}
   - component: {fileID: 1754752338}
+  - component: {fileID: 1754752340}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -128075,6 +128038,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1754752340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1754752336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
 --- !u!1 &2027355855
 GameObject:
   m_ObjectHideFlags: 0
