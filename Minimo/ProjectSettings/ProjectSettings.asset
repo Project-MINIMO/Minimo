@@ -161,6 +161,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
+    Android: com.DefaultCompany.MINIMO
     Standalone: com.DefaultCompany.MINIMO
   buildNumber:
     Standalone: 0
@@ -754,7 +755,7 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Android: DOTWEEN;WWISE_ADDRESSABLES_POST_2023;DOOZY_REACTOR;DOOZY_UIMANAGER;DOOZY_SIGNALS
+    Android: DOTWEEN;DOOZY_REACTOR;DOOZY_UIMANAGER;DOOZY_SIGNALS
     EmbeddedLinux: DOTWEEN;DOOZY_REACTOR;DOOZY_UIMANAGER;DOOZY_SIGNALS
     GameCoreScarlett: DOTWEEN;DOOZY_REACTOR;DOOZY_UIMANAGER;DOOZY_SIGNALS
     GameCoreXboxOne: DOTWEEN;DOOZY_REACTOR;DOOZY_UIMANAGER;DOOZY_SIGNALS
