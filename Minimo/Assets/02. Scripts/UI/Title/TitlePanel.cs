@@ -49,13 +49,6 @@ public class TitlePanel : MonoBehaviour
 
     private void OnClickStart()
     {
-        var currentValue = 100;
-        DOTween.To(() => currentValue, x =>
-        {
-            currentValue = x;
-            AkSoundEngine.SetRTPCValue("BGMFade", currentValue);
-        }, 0, 1.5f);
-        
         _startTextRect.DOKill();
         _startBtn.gameObject.SetActive(false);
         

@@ -1,14 +1,5 @@
 {
   "dependencies": {
-    "com.audiokinetic.wwise.addressables": {
-      "version": "https://github.com/audiokinetic/WwiseUnityAddressables.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.addressables": "1.21.20"
-      },
-      "hash": "4339bf2a8668c71fbbca7bb2e03a4fe79bff8784"
-    },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
       "depth": 0,
@@ -112,7 +103,7 @@
     },
     "com.unity.addressables": {
       "version": "1.21.21",
-      "depth": 1,
+      "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.modules.assetbundle": "1.0.0",
@@ -240,7 +231,7 @@
     },
     "com.unity.scriptablebuildpipeline": {
       "version": "1.21.23",
-      "depth": 2,
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"

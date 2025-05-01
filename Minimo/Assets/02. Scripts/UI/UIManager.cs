@@ -41,7 +41,6 @@ public class UIManager : ManagerBase
         }
         
         FadeOut(1);
-        AkSoundEngine.SetRTPCValue("BGMFade", 100);
     }
 
     #region Get Panel
