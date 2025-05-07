@@ -1,10 +1,9 @@
 fileFormatVersion: 2
-guid: 9f2edbf81053418f879076c05f816dc2
+guid: d17c0de66ad342e1b03c7045e942545e
 labels:
 - gvh
-- gvh_targets-editor
 - gvh_version-12.8.0
-- gvhp_exportpath-Firebase/Editor/Firebase.Editor.dll
+- gvhp_exportpath-Plugins/tvOS/Firebase/libFirebaseCppFirestore.a
 timeCreated: 1480838400
 PluginImporter:
   serializedVersion: 1
@@ -73,7 +72,7 @@ PluginImporter:
         CompileFlags:
         FrameworkDependencies:
     tvOS:
-      enabled: 0
+      enabled: 1
       settings:
         CompileFlags:
         FrameworkDependencies:

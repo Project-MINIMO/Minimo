@@ -1,10 +1,9 @@
 fileFormatVersion: 2
-guid: 9f2edbf81053418f879076c05f816dc2
+guid: 32cf7cf5c81a4437b9335b413b98d5e5
 labels:
 - gvh
-- gvh_targets-editor
 - gvh_version-12.8.0
-- gvhp_exportpath-Firebase/Editor/Firebase.Editor.dll
+- gvhp_exportpath-Firebase/Plugins/x86_64/FirebaseCppFirestore.so
 timeCreated: 1480838400
 PluginImporter:
   serializedVersion: 1
@@ -20,7 +19,7 @@ PluginImporter:
       enabled: 0
       settings: {}
     Editor:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: AnyCPU
         DefaultValueInitialized: true
@@ -30,13 +29,13 @@ PluginImporter:
       settings:
         CPU: None
     Linux64:
-      enabled: 0
+      enabled: 1
       settings:
-        CPU: None
+        CPU: x86_64
     LinuxUniversal:
-      enabled: 0
+      enabled: 1
       settings:
-        CPU: None
+        CPU: AnyCPU
     OSXIntel:
       enabled: 0
       settings:
