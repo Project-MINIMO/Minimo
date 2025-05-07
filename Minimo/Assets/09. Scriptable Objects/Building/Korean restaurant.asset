@@ -10,18 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 390b3970c5ea6ac43bbc56817d8e930d, type: 3}
-  m_Name: CropFacility
+  m_Name: Korean restaurant
   m_EditorClassIdentifier: 
-  Code: CropFacility
+  Code: Korean restaurant
   GroundTilePositions:
-  - {x: -2, y: -2}
+  - {x: -3, y: -3}
+  - {x: -3, y: -2}
+  - {x: -3, y: -1}
   - {x: -2, y: -1}
-  - {x: -2, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: -1}
-  - {x: 0, y: -2}
-  - {x: -1, y: -2}
   - {x: -1, y: -1}
+  - {x: -1, y: -2}
+  - {x: -1, y: -3}
+  - {x: -2, y: -3}
+  - {x: -2, y: -2}
   WaterTilePositions: []
-  Offset: {x: 0, y: 0.06}
-  Sprite: {fileID: 21300000, guid: 41ff7208906322f478bb3e022b145689, type: 3}
+  Offset: {x: -0.01, y: -0.2}
+  Sprite: {fileID: 21300000, guid: c11042e19bd67b347aad435cc71b37fc, type: 3}
