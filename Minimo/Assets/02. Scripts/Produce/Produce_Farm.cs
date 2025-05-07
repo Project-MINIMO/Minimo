@@ -17,6 +17,7 @@ public class Produce_Farm : ProducePrimary
     {
         base.Initialize(data);
 
+        /*
         _cropSprites = new List<Sprite[]>(ProduceData.ProduceOptions.Length)
         {
             Resources.LoadAll<Sprite>("Produce/Farm/Wheat"),
@@ -25,15 +26,16 @@ public class Produce_Farm : ProducePrimary
             Resources.LoadAll<Sprite>("Produce/Farm/Sugarcane"),
             Resources.LoadAll<Sprite>("Produce/Farm/Pepper")
         };
+        */
     }
     
-    protected override int GetCropType(string cropCode) => cropCode switch
+    protected override int GetCropType(int cropCode) => cropCode switch
     {
-        "Item_Wheat" => (int)CropType.Wheat,
-        "Item_Corn" => (int)CropType.Corn,
-        "Item_Pumpkin" => (int)CropType.Pumpkin,
-        "Item_Sugarcane" => (int)CropType.Sugarcane,
-        "Item_Pepper" => (int)CropType.Pepper,
+        0 => (int)CropType.Wheat,
+        1 => (int)CropType.Corn,
+        2 => (int)CropType.Pumpkin,
+        3 => (int)CropType.Sugarcane,
+        4 => (int)CropType.Pepper,
         _ => (int)CropType.Wheat
     };
 }

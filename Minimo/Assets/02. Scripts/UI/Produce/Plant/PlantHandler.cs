@@ -14,7 +14,7 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     
     private Vector3 _startPosition;
 
-    private ProduceOption _currentOption;
+    private ProduceData _currentOption;
     private ProduceManager _produceManager;
     
     private void Start()
@@ -29,7 +29,7 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         _startPosition = _rect.anchoredPosition;
     }
 
-    public void SetOption(ProduceOption option)
+    public void SetOption(ProduceData option)
     {
         _currentOption = option;
     }

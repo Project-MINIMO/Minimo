@@ -9,7 +9,7 @@ public class ItemInfoUpdater : MonoBehaviour
     
     private TitleData _titleData;
     
-    private ProduceOption _currentOption;
+    private ProduceData _currentOption;
     
     private void Awake()
     {
@@ -27,15 +27,15 @@ public class ItemInfoUpdater : MonoBehaviour
     {
         var i = 0;
         
-        for (; i < _currentOption.Results.Length; i++) 
+        for (; i < _currentOption.ResultItems.Length; i++) 
         {
-            if (!_titleData.Item.TryGetValue(_currentOption.Results[i].Code, out var itemData))
+            if (!_titleData.Item.TryGetValue(_currentOption.ResultItems[i].ID, out var itemData))
             {
-                Debug.LogError($"Cannot find item data with code : {_currentOption.Results[i].Code}");
+                Debug.LogError($"Cannot find item data with code : {_currentOption.ResultItems[i].ID}");
                 return;
             }
             
-            _infoTMP[i].text = $"X{_currentOption.Results[i].Amount}";
+            _infoTMP[i].text = $"X{_currentOption.ResultItems[i].Amount}";
             _infoImages[i].sprite = Resources.Load<Sprite>($"Item/{itemData.ID}");
         }
 

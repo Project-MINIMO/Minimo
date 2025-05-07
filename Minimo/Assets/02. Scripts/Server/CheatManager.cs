@@ -106,19 +106,4 @@ public class CheatManager : ManagerBase
     {
         var result = await App.GetManager<MeteorManager>().GetMeteorResult(meteorId);
     }
-
-    public async void TryGetStarTreeResult()
-    {
-        var result = await App.GetManager<StarTreeManager>().GetStarTreeResult();
-    }
-    
-    public async void TryGetWishResult()
-    {
-        var result = await App.GetManager<StarTreeManager>().GetWishResult();
-    }
-    
-    public async void TryLevelUpStarTree()
-    {
-        var result = await App.GetManager<StarTreeManager>().GetLevelUpResult();
-    }
 }

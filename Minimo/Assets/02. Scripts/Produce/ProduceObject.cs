@@ -50,7 +50,7 @@ public abstract class ProduceObject : BuildingObject
             {
                 _produceSlots[i] = true;
                 
-                var produceOption = ProduceData.ProduceOptions[--buildingDto.Recipes[i]];
+                var produceOption = new ProduceData();//ProduceData.ProduceOptions[--buildingDto.Recipes[i]];
                 var newTask = new ProduceTask(produceOption, i);
                 newTask.ReduceRemainTime((int)(_timeManager.Time - buildingDto.ProduceStartAt[i]).TotalSeconds);
                 newTask.ChangeState(ActiveState.Instance);
@@ -62,7 +62,7 @@ public abstract class ProduceObject : BuildingObject
             {
                 _produceSlots[i] = true;
                 
-                var produceOption = ProduceData.ProduceOptions[--buildingDto.Recipes[i]];
+                var produceOption = new ProduceData();//ProduceData.ProduceOptions[--buildingDto.Recipes[i]];
                 var newTask = new ProduceTask(produceOption, i);
                 newTask.ChangeState(CompletedState.Instance);
                 newTask.ReduceRemainTime(produceOption.Time);
@@ -77,8 +77,8 @@ public abstract class ProduceObject : BuildingObject
                 else
                 {
                     _produceSlots[i] = true;
-                
-                    var produceOption = ProduceData.ProduceOptions[--buildingDto.Recipes[i]];
+
+                    var produceOption = new ProduceData();//ProduceData.ProduceOptions[--buildingDto.Recipes[i]];
                     var newTask = new ProduceTask(produceOption, i);
                     newTask.ChangeState(PendingState.Instance);
                     AllTasks.Add(newTask);
@@ -142,16 +142,16 @@ public abstract class ProduceObject : BuildingObject
         }
     }
 
-    public void StartPlant(ProduceOption option)
+    public void StartPlant(ProduceData option)
     {
-        if (!ProduceData.ProduceOptions.Contains(option)) return;
+        //if (!ProduceData.ProduceOptions.Contains(option)) return;
         if (_isPlanting) return;
         
         var slotIndex = Array.FindIndex(_produceSlots, slot => !slot);
         
         if (slotIndex == -1) return;
-        
-        var optionIndex = Array.IndexOf(ProduceData.ProduceOptions, option);
+
+        var optionIndex = 0;//Array.IndexOf(ProduceData.ProduceOptions, option);
         
         _plantHelper.TryPlant(
             option,
@@ -177,7 +177,7 @@ public abstract class ProduceObject : BuildingObject
         _produceSlots[task.SlotIndex] = true;
         
         AllTasks.Add(task);
-        Debug.Log($"ProduceTask Added : {task.Data.Results[0].Code}");
+        Debug.Log($"ProduceTask Added : {task.Data.ResultItems[0].ID}");
         SetNextActiveTask();
 
         _isPlanting = false;

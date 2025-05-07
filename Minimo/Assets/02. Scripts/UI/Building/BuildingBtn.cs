@@ -57,7 +57,7 @@ public class BuildingBtn : MonoBehaviour
 
         _buildingGroup = gridObjectGroup;
 
-        var spritePath = $"Building/Icon/{data.Icon}";
+        var spritePath = $"Building/Icon/{data.Name}";
         _iconImg.sprite = Resources.Load<Sprite>(spritePath);
         _iconImg.SetNativeSize();
         
@@ -65,7 +65,6 @@ public class BuildingBtn : MonoBehaviour
         _objectPrefab = Resources.Load<GameObject>(prefabPath);
 
         SetString();
-        SetRequireItem();
         SetBuildingState();
         
         //if (data.ID is "Building_Farm" or "Building_Orchard")
@@ -85,45 +84,6 @@ public class BuildingBtn : MonoBehaviour
         _nameTMP.text = titleData.GetString(Data.Name);
         _lockNoticeTMP.text = titleData.GetFormatString("STR_BUILDING_UI_LOCK", Data.UnlockLevel.ToString());
         _unlockNoticeTMP.text = titleData.GetString("STR_BUILDING_UI_UNLOCKABLE");
-
-        _hpiTMP.text = Data.HPI.ToString();
-    }
-
-    private void SetRequireItem()
-    {
-        if (!App.GetData<TitleData>().Construct.TryGetValue(Data.ID, out var constructData))
-        {
-            Debug.LogError($"Can't Find ConstructData with ID : {Data.ID}");
-            return;
-        }
-
-        if (string.IsNullOrEmpty(constructData.MatCode1))
-        {
-            _requireItem1.ItemBack.SetActive(false);
-        }
-        else
-        {
-            _requireItem1.ItemBack.SetActive(true);
-
-            string spritePath = $"Item/{constructData.MatCode1}";
-            _requireItem1.IconImg.sprite = Resources.Load<Sprite>(spritePath);
-
-            _requireItem1.CountTMP.text = constructData.MatAmount1.ToString();
-        }
-
-        if (string.IsNullOrEmpty(constructData.MatCode2))
-        {
-            _requireItem2.ItemBack.SetActive(false);
-        }
-        else
-        {
-            _requireItem2.ItemBack.SetActive(true);
-
-            string spritePath = $"Item/Icon/{constructData.MatCode2}";
-            _requireItem2.IconImg.sprite = Resources.Load<Sprite>(spritePath);
-
-            _requireItem2.CountTMP.text = constructData.MatAmount2.ToString();
-        }
     }
 
     private void SetBuildingState()

@@ -17,19 +17,21 @@ public class Produce_Orchard :ProducePrimary
     {
         base.Initialize(data);
 
+        /*
         _cropSprites = new List<Sprite[]>(ProduceData.ProduceOptions.Length)
         {
             Resources.LoadAll<Sprite>("Produce/Orchard/Apple"),
             Resources.LoadAll<Sprite>("Produce/Orchard/Blueberry"),
             Resources.LoadAll<Sprite>("Produce/Orchard/Pineapple"),
         };
+        */
     }
 
-    protected override int GetCropType(string cropCode) => cropCode switch
+    protected override int GetCropType(int cropCode) => cropCode switch
     {
-        "Item_Apple" => (int)FruitType.Apple,
-        "Item_Blueberry" => (int)FruitType.Blueberry,
-        "Item_Pineapple" => (int)FruitType.Pineapple,
+        0 => (int)FruitType.Apple,
+        1 => (int)FruitType.Blueberry,
+        2 => (int)FruitType.Pineapple,
         _ => (int)FruitType.Apple
     };
     
