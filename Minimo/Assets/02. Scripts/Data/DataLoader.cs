@@ -35,6 +35,64 @@ public class DataLoader
 
         return null;
     }
+    
+    public static ProduceData[] LoadDataProduceData(string dataPath)
+    {
+        var rawList = LoadData<RawProduceData>(dataPath);
+        if (rawList == null)
+        {
+            return Array.Empty<ProduceData>();
+        }
+        
+        return rawList.Select(raw => new ProduceData
+            {
+                ID            = raw.ID,
+                Building      = raw.Building,
+                MaterialItems = ParseMaterials(raw.Materials),
+                ResultItems   = ParseResults(raw.Results),
+                Time          = raw.Time,
+                EXP           = raw.EXP
+            })
+            .ToArray();
+    }
+
+    #region ProduceData Utils
+    private static ProduceMaterial[] ParseMaterials(string materialsRaw)
+    {
+        if (string.IsNullOrEmpty(materialsRaw)) return Array.Empty<ProduceMaterial>();
+
+        return materialsRaw.Split(',').Select(mat =>
+        {
+            var parts = mat.Split(':').Select(p => p.Trim()).ToArray();
+            return new ProduceMaterial
+            {
+                ID = GetItemIdFromCode(parts[0]),
+                Amount = int.Parse(parts[1])
+            };
+        }).ToArray();
+    }
+
+    private static ProduceResult[] ParseResults(string resultsRaw)
+    {
+        if (string.IsNullOrEmpty(resultsRaw)) return Array.Empty<ProduceResult>();
+
+        return resultsRaw.Split(',').Select(res =>
+        {
+            var parts = res.Split(':').Select(p => p.Trim()).ToArray();
+            return new ProduceResult
+            {
+                ID = GetItemIdFromCode(parts[0]),
+                Amount = int.Parse(parts[1])
+            };
+        }).ToArray();
+    }
+
+    private static int GetItemIdFromCode(string code)
+    {
+        var item = App.GetData<TitleData>().Item.FirstOrDefault(x => x.Value.Name == code);
+        return item.Key;
+    }
+    #endregion
 }
 
 public class JsonPreprocessor
@@ -101,67 +159,6 @@ public class JsonUtilityHelper
     private class Wrapper<T>
     {
         public T[] array;
-    }
-}
-
-public class DataGrouper
-{
-    public static ProduceData[] GroupData(string path)
-    {
-        var json = Resources.Load<TextAsset>(path).text;
-        
-        //Preprocessing JSON string: Converting string value of "ID" field to numeric value of EBuilding enum
-        json = JsonPreprocessor.PreprocessJson<EBuilding>(json);
-        
-        // Deserialize JSON array into a flat list of FlatData
-        var rawData = JsonConvert.DeserializeObject<List<FlatProduceData>>(json);
-
-        // Group by ID and map to ProduceData structure
-        var groupedData = rawData
-            .GroupBy(entry => entry.ID) // Group by Building ID
-            .Select(group => new ProduceData
-            {
-                ID = group.Key,
-                ProduceOptions = group.Select(option => new ProduceOption
-                {
-                    Materials = ParseMaterials(option.Materials),
-                    Results = ParseResults(option.Results),
-                    Time = option.Time,
-                    EXP = option.EXP
-                }).ToArray()
-            }).ToArray();
-
-        return groupedData;
-    }
-    
-    private static ProduceMaterial[] ParseMaterials(string materialsRaw)
-    {
-        if (string.IsNullOrEmpty(materialsRaw)) return Array.Empty<ProduceMaterial>();
-
-        return materialsRaw.Split(',').Select(mat =>
-        {
-            var parts = mat.Split(':').Select(p => p.Trim()).ToArray();
-            return new ProduceMaterial
-            {
-                Code = parts[0],
-                Amount = int.Parse(parts[1])
-            };
-        }).ToArray();
-    }
-
-    private static ProduceResult[] ParseResults(string resultsRaw)
-    {
-        if (string.IsNullOrEmpty(resultsRaw)) return Array.Empty<ProduceResult>();
-
-        return resultsRaw.Split(',').Select(res =>
-        {
-            var parts = res.Split(':').Select(p => p.Trim()).ToArray();
-            return new ProduceResult
-            {
-                Code = parts[0],
-                Amount = int.Parse(parts[1])
-            };
-        }).ToArray();
     }
 }
 

@@ -28,39 +28,16 @@ public class TitlePanel : MonoBehaviour
 
     private void Start()
     {
-        _blackBlur2.DOFade(0, 2f).SetEase(Ease.Linear);
+        _blackBlur2.DOFade(0, 2f).SetEase(Ease.Linear)
+            .OnComplete(() => ShowTitle());
     }
 
     public async UniTask ShowTitle(bool isNew = false)
     {
-        Debug.Log(" ShowTitle");
-        App.GetData<TitleData>().IsFirstLogin = isNew;
+        //App.GetData<TitleData>().IsFirstLogin = isNew;
         _isNew = isNew;
         _loadHandler.Setup(10);
-        
-        App.GetManager<AccountInfoManager>().Setup();
-        
-        App.GetManager<CheatManager>().UpdateItem(new ItemDTO {ItemType = "Item_Timber", Count = 10}).Forget();
-        _loadHandler.UpdateLoad();
-       
-        foreach (var building in App.GetData<TitleData>().Building.Values)
-        {
-            if (building.Type >= 1) continue;
-          
-            if (App.GetManager<AccountInfoManager>().Level.Value >= building.UnlockLevel)
-            { 
-                var produceSlotCount = building.ID == EBuilding.Orchard ? 5 : 3;
-                await App.GetManager<CheatManager>().UpdateBuildingInfo(new BuildingInfoDTO()
-                {
-                    BuildingType = "Building_Orchard",
-                    MaxCount = 5,
-                    ProduceSlotCount = produceSlotCount,
-                });
-                
-                _loadHandler.UpdateLoad();
-            }
-        }
-        
+      
         _loadHandler.FinishLoad();
         _startBtn.gameObject.SetActive(true);
         
@@ -72,13 +49,6 @@ public class TitlePanel : MonoBehaviour
 
     private void OnClickStart()
     {
-        var currentValue = 100;
-        DOTween.To(() => currentValue, x =>
-        {
-            currentValue = x;
-            AkSoundEngine.SetRTPCValue("BGMFade", currentValue);
-        }, 0, 1.5f);
-        
         _startTextRect.DOKill();
         _startBtn.gameObject.SetActive(false);
         
@@ -89,7 +59,7 @@ public class TitlePanel : MonoBehaviour
             .Append(_blackBlur.DOFade(1, 0.5f))
             .OnComplete(() =>
             {
-                App.LoadScene(_isNew? SceneName.Prolog : SceneName.Game);
+                App.LoadScene(SceneName.Game);
             });
     }
 }

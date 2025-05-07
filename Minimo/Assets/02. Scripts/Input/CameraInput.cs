@@ -1,3 +1,4 @@
+using UniRx;
 using UnityEngine;
 
 public class CameraInput : MonoBehaviour
@@ -13,15 +14,21 @@ public class CameraInput : MonoBehaviour
     [Header("Map Bounds")]
     [SerializeField] private Vector2 _minBounds; 
     [SerializeField] private Vector2 _maxBounds; 
-
+    
     private InputManager _input;
     private Camera _mainCamera;
     
+    private bool _isActive;
     private EditCirclePanel _editCirclePanel;
     
     private void Start()
     {
         _input = App.GetManager<InputManager>();
+        var screenStateManager = App.GetManager<ScreenStateManager>();
+        screenStateManager.CurrentState.Subscribe((currentState) =>
+        {
+            _isActive = currentState is ScreenState.Town or ScreenState.Sky;
+        }).AddTo(gameObject);
         _mainCamera = Camera.main;
         
         _editCirclePanel = App.GetManager<UIManager>().GetPanel<EditCirclePanel>();
@@ -29,6 +36,8 @@ public class CameraInput : MonoBehaviour
     
     private void Update()
     {
+        if (!_isActive) return;
+        
         if (_input.CurrentState == InputState.Drag)
         {
             Move();
@@ -56,15 +65,19 @@ public class CameraInput : MonoBehaviour
             var touch1 = Input.GetTouch(0);
             var touch2 = Input.GetTouch(1);
             
-            var prevDistance = (touch1.position - touch1.deltaPosition).magnitude - (touch2.position - touch2.deltaPosition).magnitude;
-            var currentDistance = (touch1.position - touch2.position).magnitude;
-
-            var deltaDistance = currentDistance - prevDistance;
-
-            _mainCamera.orthographicSize = Mathf.Clamp(_mainCamera.orthographicSize - deltaDistance * _zoomSpeed * Time.deltaTime, _minZoom, _maxZoom);
+            var prevPos0 = touch1.position - touch1.deltaPosition;
+            var prevPos1 = touch2.position - touch2.deltaPosition;
             
+            var prevDist = Vector2.Distance(prevPos0, prevPos1);
+            var currDist = Vector2.Distance(touch1.position, touch2.position);
+
+            var delta = currDist - prevDist;
+            var newSize = _mainCamera.orthographicSize - delta * _zoomSpeed * Time.deltaTime;
+            _mainCamera.orthographicSize = Mathf.Clamp(newSize, _minZoom, _maxZoom);
+
             ClampCameraPosition();
             _editCirclePanel.SetPosition();
+            return; 
         }
         
         var scroll = Input.GetAxis("Mouse ScrollWheel"); // Mouse

@@ -11,7 +11,7 @@ public class BuildingPanel : UIBase
     [SerializeField] private Sprite[] _btnSprites;
 
     [Header("Buttons")]
-    [SerializeField] private BottomBtn _openBtn;
+    [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
 
     public override void Initialize()
@@ -25,14 +25,6 @@ public class BuildingPanel : UIBase
         base.OpenPanel();
 
         OnClickBuildingBtn(0);
-        _openBtn.MoveBtn(true);
-    }
-    
-    public override void ClosePanel()
-    {
-        base.ClosePanel();
-        
-        _openBtn.MoveBtn(false);
     }
 
     private void SetString()
@@ -49,6 +41,7 @@ public class BuildingPanel : UIBase
 
     private void SetButtonEvent()
     {
+        _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
 
         for (int i = 0; i < _buildingBtns.Length; i++)
@@ -76,19 +69,6 @@ public class BuildingPanel : UIBase
                 _buildingBtns[i].image.sprite = _btnSprites[1];
                 _buildingBacks[i].SetActive(false);
             }
-        }
-    }
-    
-    public void SetBuildingBtnForTutorial(EBuilding[] buildingNames)
-    {
-        var buildingBtns = GetComponentsInChildren<BuildingBtn>(true);
-        foreach (var btn in buildingBtns)
-        {
-            btn.gameObject.SetActive(false);
-        }
-        for (var i = 0; i < buildingNames.Length; i++)
-        {
-            buildingBtns.FirstOrDefault(x=>x.Data.ID == buildingNames[i])?.gameObject.SetActive(true);
         }
     }
 }

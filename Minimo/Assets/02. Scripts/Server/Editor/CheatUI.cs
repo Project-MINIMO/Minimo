@@ -95,20 +95,6 @@ public class CheatUI : EditorWindow
             App.GetManager<CheatManager>().TryGetMeteorResult(meteorId);
         }
         
-        // 별나무 치트
-        if (GUILayout.Button("별나무 획득"))
-        {
-            App.GetManager<CheatManager>().TryGetStarTreeResult();
-        }
-        if (GUILayout.Button("별나무 소원"))
-        {
-            App.GetManager<CheatManager>().TryGetWishResult();
-        }
-        if (GUILayout.Button("별나무 레벨업"))
-        {
-            App.GetManager<CheatManager>().TryLevelUpStarTree();
-        }
-        
         // 스크롤뷰 끝
         EditorGUILayout.EndScrollView();
     }

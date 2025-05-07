@@ -1,345 +1,234 @@
 [
   {
-    "ID": "Farm",
-    "Materials": "",
-    "Results": "Item_Wheat : 1",
-    "Time": 60,
-    "EXP": 1
+    "ID": 0,
+    "Building": "Farm",
+    "MaterialItems": "",
+    "ResultItems": "StarCrop : 1",
+    "Time": 20,
+    "EXP": 0
   },
   {
-    "ID": "Farm",
-    "Materials": "",
-    "Results": "Item_Wheat : 3",
-    "Time": 270,
-    "EXP": 3
+    "ID": 1,
+    "Building": "Farm",
+    "MaterialItems": "",
+    "ResultItems": "StarSpice : 1",
+    "Time": 20,
+    "EXP": 0
   },
   {
-    "ID": "Farm",
-    "Materials": "",
-    "Results": "Item_Corn : 1",
-    "Time": 120,
-    "EXP": 2
+    "ID": 2,
+    "Building": "Farm",
+    "MaterialItems": "",
+    "ResultItems": "StarFruit : 1",
+    "Time": 20,
+    "EXP": 0
   },
   {
-    "ID": "Farm",
-    "Materials": "",
-    "Results": "Item_Corn : 3",
-    "Time": 540,
-    "EXP": 6
+    "ID": 3,
+    "Building": "WhiteRiceProcessor",
+    "MaterialItems": "StarCrop : 1",
+    "ResultItems": "WhiteRice : 1",
+    "Time": 30,
+    "EXP": 0
   },
   {
-    "ID": "Farm",
-    "Materials": "",
-    "Results": "Item_Pumpkin : 1",
-    "Time": 240,
-    "EXP": 4
+    "ID": 4,
+    "Building": "DoughProcessor",
+    "MaterialItems": "StarCrop : 1",
+    "ResultItems": "Dough : 1",
+    "Time": 30,
+    "EXP": 0
   },
   {
-    "ID": "Farm",
-    "Materials": "",
-    "Results": "Item_Pumpkin : 3",
-    "Time": 1080,
-    "EXP": 9
+    "ID": 5,
+    "Building": "TofuProcessor",
+    "MaterialItems": "StarCrop : 1",
+    "ResultItems": "Tofu : 1",
+    "Time": 30,
+    "EXP": 0
   },
   {
-    "ID": "Farm",
-    "Materials": "",
-    "Results": "Item_Sugarcane : 1",
-    "Time": 480,
-    "EXP": 8
+    "ID": 6,
+    "Building": "MaltProcessor",
+    "MaterialItems": "StarCrop : 1",
+    "ResultItems": "Malt : 1",
+    "Time": 30,
+    "EXP": 0
   },
   {
-    "ID": "Farm",
-    "Materials": "",
-    "Results": "Item_Sugarcane : 3",
-    "Time": 2160,
-    "EXP": 24
+    "ID": 7,
+    "Building": "SaltProcessor",
+    "MaterialItems": "StarSpice : 1",
+    "ResultItems": "Salt : 1",
+    "Time": 30,
+    "EXP": 0
   },
   {
-    "ID": "Farm",
-    "Materials": "",
-    "Results": "Item_Pepper : 1",
-    "Time": 960,
-    "EXP": 16
+    "ID": 8,
+    "Building": "SugarProcessor",
+    "MaterialItems": "StarSpice : 1",
+    "ResultItems": "Sugar : 1",
+    "Time": 30,
+    "EXP": 0
   },
   {
-    "ID": "Farm",
-    "Materials": "",
-    "Results": "Item_Pepper : 3",
-    "Time": 4320,
-    "EXP": 48
+    "ID": 9,
+    "Building": "ChiliProcessor",
+    "MaterialItems": "StarSpice : 1",
+    "ResultItems": "Chili : 1",
+    "Time": 30,
+    "EXP": 0
   },
   {
-    "ID": "Orchard",
-    "Materials": "",
-    "Results": "Item_Apple : 3 , Item_OrchardWood : 3",
-    "Time": 360,
-    "EXP": 6
+    "ID": 10,
+    "Building": "GrapeJuiceProcessor",
+    "MaterialItems": "StarFruit : 1",
+    "ResultItems": "GrapeJuice : 1",
+    "Time": 30,
+    "EXP": 0
   },
   {
-    "ID": "Orchard",
-    "Materials": "",
-    "Results": "Item_Apple : 5 , Item_OrchardWood : 5",
-    "Time": 900,
-    "EXP": 10
+    "ID": 11,
+    "Building": "OliveOilProcessor",
+    "MaterialItems": "StarFruit : 1",
+    "ResultItems": "OliveOil : 1",
+    "Time": 30,
+    "EXP": 0
   },
   {
-    "ID": "Orchard",
-    "Materials": "",
-    "Results": "Item_Blueberry : 3 , Item_OrchardWood : 3",
-    "Time": 720,
-    "EXP": 9
+    "ID": 12,
+    "Building": "KoreanDiner",
+    "MaterialItems": "WhiteRice : 1",
+    "ResultItems": "Porridge : 1",
+    "Time": 40,
+    "EXP": 0
   },
   {
-    "ID": "Orchard",
-    "Materials": "",
-    "Results": "Item_Blueberry : 5 , Item_OrchardWood : 5",
-    "Time": 1800,
-    "EXP": 20
+    "ID": 13,
+    "Building": "KoreanDiner",
+    "MaterialItems": "WhiteRice : 1",
+    "ResultItems": "Sikhye : 1",
+    "Time": 40,
+    "EXP": 0
   },
   {
-    "ID": "Orchard",
-    "Materials": "",
-    "Results": "Item_Pineapple : 3 , Item_OrchardWood : 3",
-    "Time": 1440,
-    "EXP": 24
+    "ID": 14,
+    "Building": "KoreanDiner",
+    "MaterialItems": "WhiteRice : 1 , Malt : 1",
+    "ResultItems": "Yeot : 1",
+    "Time": 40,
+    "EXP": 0
   },
   {
-    "ID": "Orchard",
-    "Materials": "",
-    "Results": "Item_Pineapple : 5 , Item_OrchardWood : 5",
-    "Time": 3600,
-    "EXP": 40
+    "ID": 15,
+    "Building": "KoreanDiner",
+    "MaterialItems": "Dough : 1 , Chili : 1",
+    "ResultItems": "Ramen : 1",
+    "Time": 40,
+    "EXP": 0
   },
   {
-    "ID": "CropFacility",
-    "Materials": "Item_Wheat : 1",
-    "Results": "Item_WheatFlour : 1",
-    "Time": 120,
-    "EXP": 2
+    "ID": 16,
+    "Building": "Restaurant",
+    "MaterialItems": "Dough : 1",
+    "ResultItems": "Pasta : 1",
+    "Time": 40,
+    "EXP": 0
   },
   {
-    "ID": "CropFacility",
-    "Materials": "Item_Wheat : 3",
-    "Results": "Item_WheatFlour : 3",
-    "Time": 540,
-    "EXP": 6
+    "ID": 17,
+    "Building": "Restaurant",
+    "MaterialItems": "Tofu : 1",
+    "ResultItems": "Steak : 1",
+    "Time": 40,
+    "EXP": 0
   },
   {
-    "ID": "CropFacility",
-    "Materials": "Item_Corn : 1",
-    "Results": "Item_CornKernel : 1",
-    "Time": 240,
-    "EXP": 4
+    "ID": 18,
+    "Building": "Restaurant",
+    "MaterialItems": "WhiteRice : 1 , OliveOil : 1",
+    "ResultItems": "Risotto : 1",
+    "Time": 40,
+    "EXP": 0
   },
   {
-    "ID": "CropFacility",
-    "Materials": "Item_Corn : 3",
-    "Results": "Item_CornKernel : 3",
-    "Time": 1080,
-    "EXP": 9
+    "ID": 19,
+    "Building": "Bakery",
+    "MaterialItems": "Dough : 1",
+    "ResultItems": "Baguette : 1",
+    "Time": 40,
+    "EXP": 0
   },
   {
-    "ID": "CropFacility",
-    "Materials": "Item_Pumpkin : 1",
-    "Results": "Item_PumpkinSlice : 1",
-    "Time": 480,
-    "EXP": 8
+    "ID": 20,
+    "Building": "Bakery",
+    "MaterialItems": "Dough : 1",
+    "ResultItems": "Croissant : 1",
+    "Time": 40,
+    "EXP": 0
   },
   {
-    "ID": "CropFacility",
-    "Materials": "Item_Pumpkin : 3",
-    "Results": "Item_PumpkinSlice : 3",
-    "Time": 2160,
-    "EXP": 24
+    "ID": 21,
+    "Building": "Bakery",
+    "MaterialItems": "Dough : 1 , Tofu : 1",
+    "ResultItems": "SausageRoll : 1",
+    "Time": 40,
+    "EXP": 0
   },
   {
-    "ID": "CropFacility",
-    "Materials": "Item_Sugarcane : 1",
-    "Results": "Item_Sugar : 1",
-    "Time": 960,
-    "EXP": 16
+    "ID": 22,
+    "Building": "DessertShop",
+    "MaterialItems": "Sugar : 1",
+    "ResultItems": "Candy : 1",
+    "Time": 40,
+    "EXP": 0
   },
   {
-    "ID": "CropFacility",
-    "Materials": "Item_Sugarcane : 3",
-    "Results": "Item_Sugar : 3",
-    "Time": 4320,
-    "EXP": 48
+    "ID": 23,
+    "Building": "DessertShop",
+    "MaterialItems": "Dough : 1 , Sugar : 1",
+    "ResultItems": "FortuneCookie : 1",
+    "Time": 40,
+    "EXP": 0
   },
   {
-    "ID": "CropFacility",
-    "Materials": "Item_Pepper : 1",
-    "Results": "Item_PepperSlice : 1",
-    "Time": 1920,
-    "EXP": 32
+    "ID": 24,
+    "Building": "DessertShop",
+    "MaterialItems": "Dough : 1 , Sugar : 1",
+    "ResultItems": "Churros : 1",
+    "Time": 40,
+    "EXP": 0
   },
   {
-    "ID": "CropFacility",
-    "Materials": "Item_Pepper : 3",
-    "Results": "Item_PepperSlice : 3",
-    "Time": 8640,
-    "EXP": 96
+    "ID": 25,
+    "Building": "Brewery",
+    "MaterialItems": "WhiteRice : 1",
+    "ResultItems": "Makgeolli : 1",
+    "Time": 40,
+    "EXP": 0
   },
   {
-    "ID": "OrchardFacility",
-    "Materials": "Item_OrchardWood : 1",
-    "Results": "Item_WoodPiece : 1",
-    "Time": 120,
-    "EXP": 2
+    "ID": 26,
+    "Building": "Brewery",
+    "MaterialItems": "Malt : 1",
+    "ResultItems": "Beer : 1",
+    "Time": 40,
+    "EXP": 0
   },
   {
-    "ID": "OrchardFacility",
-    "Materials": "Item_OrchardWood : 3",
-    "Results": "Item_WoodPiece : 3",
-    "Time": 540,
-    "EXP": 6
+    "ID": 27,
+    "Building": "Brewery",
+    "MaterialItems": "Malt : 1",
+    "ResultItems": "Whiskey : 1",
+    "Time": 40,
+    "EXP": 0
   },
   {
-    "ID": "OrchardFacility",
-    "Materials": "Item_Apple : 1",
-    "Results": "Item_AppleSlice : 1",
-    "Time": 240,
-    "EXP": 4
-  },
-  {
-    "ID": "OrchardFacility",
-    "Materials": "Item_Apple : 3",
-    "Results": "Item_AppleSlice : 3",
-    "Time": 1080,
-    "EXP": 9
-  },
-  {
-    "ID": "OrchardFacility",
-    "Materials": "Item_Blueberry : 1",
-    "Results": "Item_BlueberryBits : 1",
-    "Time": 480,
-    "EXP": 8
-  },
-  {
-    "ID": "OrchardFacility",
-    "Materials": "Item_Blueberry : 3",
-    "Results": "Item_BlueberryBits : 3",
-    "Time": 2160,
-    "EXP": 24
-  },
-  {
-    "ID": "OrchardFacility",
-    "Materials": "Item_Pineapple : 1",
-    "Results": "Item_PineappleSlice : 1",
-    "Time": 960,
-    "EXP": 16
-  },
-  {
-    "ID": "OrchardFacility",
-    "Materials": "Item_Pineapple : 3",
-    "Results": "Item_PineappleSlice : 3",
-    "Time": 4320,
-    "EXP": 48
-  },
-  {
-    "ID": "Bakery",
-    "Materials": "Item_WheatFlour : 1",
-    "Results": "Item_Baguette : 1",
-    "Time": 60,
-    "EXP": 1
-  },
-  {
-    "ID": "Bakery",
-    "Materials": "Item_WheatFlour : 1 , Item_CornKernel : 1",
-    "Results": "Item_CornBread : 1",
-    "Time": 60,
-    "EXP": 1
-  },
-  {
-    "ID": "Bakery",
-    "Materials": "Item_WheatFlour : 1 , Item_PumpkinSlice : 1",
-    "Results": "Item_PumpkinTart : 1",
-    "Time": 60,
-    "EXP": 1
-  },
-  {
-    "ID": "Bakery",
-    "Materials": "Item_WheatFlour : 1 , Item_AppleSlice : 1",
-    "Results": "Item_ApplePie : 1",
-    "Time": 60,
-    "EXP": 1
-  },
-  {
-    "ID": "Bakery",
-    "Materials": "Item_WheatFlour : 1 , Item_Sugar : 1 , Item_BlueberryBits : 1",
-    "Results": "Item_BlueberryCake : 1",
-    "Time": 60,
-    "EXP": 1
-  },
-  {
-    "ID": "Bakery",
-    "Materials": "Item_WheatFlour : 1 , Item_PepperSlice : 1 , Item_PineappleSlice : 1",
-    "Results": "Item_PineapplePizza : 1",
-    "Time": 60,
-    "EXP": 1
-  },
-  {
-    "ID": "Stationery",
-    "Materials": "Item_WoodPiece : 1",
-    "Results": "Item_WoodNote : 1",
-    "Time": 60,
-    "EXP": 1
-  },
-  {
-    "ID": "Stationery",
-    "Materials": "Item_WoodPiece : 1 , Item_AppleSlice : 1",
-    "Results": "Item_ApplePencil : 1",
-    "Time": 60,
-    "EXP": 1
-  },
-  {
-    "ID": "Stationery",
-    "Materials": "Item_WoodPiece : 1 , Item_BlueberryBits : 1",
-    "Results": "Item_BlueberryPen : 1",
-    "Time": 60,
-    "EXP": 1
-  },
-  {
-    "ID": "Stationery",
-    "Materials": "Item_WoodPiece : 1 , Item_PineappleSlice : 1",
-    "Results": "Item_PineappleCase : 1",
-    "Time": 60,
-    "EXP": 1
-  },
-  {
-    "ID": "ToyShop",
-    "Materials": "Item_WoodPiece : 1",
-    "Results": "Item_WoodDoll : 1",
-    "Time": 60,
-    "EXP": 1
-  },
-  {
-    "ID": "ToyShop",
-    "Materials": "Item_WoodPiece : 1 , Item_CornKernel : 1",
-    "Results": "Item_CornBear : 1",
-    "Time": 60,
-    "EXP": 1
-  },
-  {
-    "ID": "ToyShop",
-    "Materials": "Item_WoodPiece : 1 , Item_PumpkinSlice : 1",
-    "Results": "Item_PumpkinDino : 1",
-    "Time": 60,
-    "EXP": 1
-  },
-  {
-    "ID": "ToyShop",
-    "Materials": "Item_WoodPiece : 1 , Item_Sugar : 1",
-    "Results": "Item_SugarPrincess : 1",
-    "Time": 60,
-    "EXP": 1
-  },
-  {
-    "ID": "ToyShop",
-    "Materials": "Item_WoodPiece : 1 , Item_PepperSlice : 1",
-    "Results": "Item_PepperRobot : 1",
-    "Time": 60,
-    "EXP": 1
+    "ID": 28,
+    "Building": "Brewery",
+    "MaterialItems": "GrapeJuice : 1",
+    "ResultItems": "Wine : 1",
+    "Time": 40,
+    "EXP": 0
   }
 ]

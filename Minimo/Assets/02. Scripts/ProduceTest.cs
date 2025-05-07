@@ -5,7 +5,7 @@ using UnityEditor;
 
 public class ProduceTest : MonoBehaviour
 {
-    public Dictionary<EBuilding, ProduceData> ProduceDatas;
+    public Dictionary<int, ProduceData> ProduceDatas;
     private TitleData _titleData;
 
     private void Start()

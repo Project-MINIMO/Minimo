@@ -28,6 +28,7 @@ public class PlantPanel : UIBase
 
     private void InitOptionButtons()
     {
+        /*
         var options = _produceManager.CurrentProduceObject.ProduceData.ProduceOptions;
 
         var i = 0;
@@ -43,5 +44,6 @@ public class PlantPanel : UIBase
         {
             _plantOptionSlots[i].gameObject.SetActive(false);
         }
+        */
     }
 }

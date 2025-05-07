@@ -45,7 +45,7 @@ public class StorageInfoPanel : UIBase
     private void SetInfo(Item item)
     {
         _nameTMP.text = _titleData.GetString(item.Data.Name);
-        _descriptionTMP.text = _titleData.GetString(item.Data.Description);
+        _descriptionTMP.text = _titleData.GetString(item.Data.Name);
         _iconImg.sprite = item.Icon;
     }
 

@@ -14,62 +14,43 @@ public class CommonData
 [Serializable]
 public class BuildingData
 {
-    public EBuilding ID;
+    public int ID;
     public int Type;
-    public int HPI;
     public int UnlockLevel;
-    public string Icon;
     public string Name;
-    public string Description;
+    public int Cost;
+    public int Duration;
 }
 
 [Serializable]
 public class ItemData
 {
-    public string ID;
-    public int Type;
-    public int MaxOverlap;
-    public bool CanSell;
-    public int BuyCost;
-    public int SellCost;
-    public int CashCost;
-    public string Name;
-    public string Description;
-}
-
-[Serializable]
-public class StarTreeData
-{
     public int ID;
-    public int LimitTime;
-    public int StarCoin;
-    public int HPI;
-    public int EXP;
-    public int VisitMinimoLimit;
+    public int Type;
+    public int Level;
+    public int SellCost;
+    public int BuyCost;
+    public string Name;
 }
 
 [Serializable]
-public class FlatProduceData
+public class RawProduceData
 {
-    public EBuilding ID;
-    public string Materials;
-    public string Results;
-    public int Time;
-    public int EXP;
+    public int    ID;        // 예: 빌딩 enum 값을 int로
+    public string Building;  // 예: "StarCropFarm"
+    public string Materials; // "StarCrop:1,Water:5"
+    public string Results;   // "Sugar:2"
+    public int    Time;      
+    public int    EXP;
 }
 
 [Serializable]
 public class ProduceData
 {
-    public EBuilding ID;
-    public ProduceOption[] ProduceOptions;
-}
-
-[Serializable]
-public class ProduceOption
-{
-    public ProduceMaterial[] Materials;
-    public ProduceResult[] Results;
+    public int ID;
+    public string Building;
+    public ProduceMaterial[] MaterialItems;
+    public ProduceResult[] ResultItems;
     public int Time;
     public int EXP;
 }
@@ -77,26 +58,15 @@ public class ProduceOption
 [Serializable]
 public class ProduceMaterial
 {
-    public string Code;
+    public int ID;
     public int Amount;
 }
 
 [Serializable]
 public class ProduceResult
 {
-    public string Code;
+    public int ID;
     public int Amount;
-}
-
-[Serializable]
-public class ConstructData
-{
-    public EBuilding ID;
-    public string MatCode1;
-    public int MatAmount1;
-    public string MatCode2;
-    public int MatAmount2;
-    public int Duration;
 }
 
 [Serializable]
@@ -112,13 +82,11 @@ public class StringData
 public class TitleData : DataBase
 {
     public ItemSO ItemSO;
-    public bool IsFirstLogin = true;
+
     public Dictionary<string, int> Common { get; private set; } = new();
-    public Dictionary<EBuilding, BuildingData> Building { get; private set; } = new();
-    public Dictionary<string, ItemData> Item { get; private set; } = new();
-    public Dictionary<int, StarTreeData> StarTree { get; private set; } = new();
-    public Dictionary<EBuilding, ConstructData> Construct { get; private set; } = new();
-    public Dictionary<EBuilding, ProduceData> Produce { get; private set; } = new();
+    public Dictionary<int, BuildingData> Building { get; private set; } = new();
+    public Dictionary<int, ItemData> Item { get; private set; } = new();
+    public Dictionary<int, ProduceData> Produce { get; private set; } = new();
 
     private Dictionary<string, StringData> _string = new();
 
@@ -129,9 +97,7 @@ public class TitleData : DataBase
     private const string COMMON_PATH = "Data/CommonData";
     private const string BUILDING_PATH = "Data/BuildingData";
     private const string ITEM_PATH = "Data/ItemData";
-    private const string STARTREE_PATH = "Data/StarTreeData";
     private const string PRODUCE_PATH = "Data/ProduceData";
-    private const string CONSTRUCT_PATH = "Data/ConstructData";
     #endregion
 
     protected override void Awake()
@@ -141,7 +107,7 @@ public class TitleData : DataBase
         LoadData();
     }
 
-    public void LoadData()
+    private void LoadData()
     {
         if (_isGameDataLoaded)
         {
@@ -152,61 +118,47 @@ public class TitleData : DataBase
         Common.Clear();
         Building.Clear();
         Item.Clear();
-        StarTree.Clear();
         Produce.Clear();
-        Construct.Clear();
 
         var stringDataRaw = DataLoader.LoadData<StringData>(STRING_PATH);
-        var commonDataRaw = DataLoader.LoadData<CommonData>(COMMON_PATH);
-        var buildingDataRaw = DataLoader.LoadDataWithConvert<BuildingData, EBuilding>(BUILDING_PATH);
-        var itemDataRaw = DataLoader.LoadData<ItemData>(ITEM_PATH);
-        var starTreeDataRaw = DataLoader.LoadData<StarTreeData>(STARTREE_PATH);
-        var produceDataRaw = DataGrouper.GroupData(PRODUCE_PATH);
-        var constructDataRaw = DataLoader.LoadDataWithConvert<ConstructData, EBuilding>(CONSTRUCT_PATH);
-
         foreach (var data in stringDataRaw)
         {
             _string.Add(data.ID, data);
         }
-
+        
+        var commonDataRaw = DataLoader.LoadData<CommonData>(COMMON_PATH);
         foreach (var data in commonDataRaw)
         {
             Common.Add(data.ID, data.Value);
         }
-
+        
+        var buildingDataRaw = DataLoader.LoadData<BuildingData>(BUILDING_PATH);
         foreach (var data in buildingDataRaw)
         {
             Building.Add(data.ID, data);
         } 
-
+        
+        var itemDataRaw = DataLoader.LoadData<ItemData>(ITEM_PATH);
         foreach (var data in itemDataRaw)
         {
             Item.Add(data.ID, data);
         }
-
-        foreach (var data in starTreeDataRaw)
-        {
-            StarTree.Add(data.ID, data);
-        }
-
+        
+        var produceDataRaw = DataLoader.LoadDataProduceData(PRODUCE_PATH);
         foreach (var data in produceDataRaw)
         {
             Produce.Add(data.ID, data);       
         }
-
-        foreach (var data in constructDataRaw)
-        {
-            Construct.Add(data.ID, data);
-        }
-
+        
         foreach (var item in ItemSO.items) //TEMP
         {
-            item.SetData(Item[item.Code]);
+            item.SetData(Item.FirstOrDefault(x => x.Value.Name == item.Code).Value);
         }
 
         _isGameDataLoaded = true;
     }
 
+    #region StringData
     public string GetString(string _code)
     {
         TryGetString(_code, out var str);
@@ -247,41 +199,5 @@ public class TitleData : DataBase
         str = _code;
         return false;
     }
-    
-    public void SetCommonData(Dictionary<string, int> Common)
-    {
-        this.Common = Common;
-    }
-    
-    public void SetBuildingData(List<BuildingData> Building)
-    {
-        foreach (var data in Building)
-        {
-            this.Building[data.ID] = data;
-        }
-    }
-    
-    public void SetItemData(List<ItemData> Item)
-    {
-        foreach (var data in Item)
-        {
-            this.Item[data.ID] = data;
-        }
-    }
-    
-    public void SetStarTreeData(List<StarTreeData> StarTree)
-    {
-        foreach (var data in StarTree)
-        {
-            this.StarTree[data.ID] = data;
-        }
-    }
-    
-    public void SetConstructData(List<ConstructData> Construct)
-    {
-        foreach (var data in Construct)
-        {
-            this.Construct[data.ID] = data;
-        }
-    }
+    #endregion
 }
