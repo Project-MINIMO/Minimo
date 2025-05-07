@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class ProduceTask
 {
-    public ProduceOption Data { get; }
+    public ProduceData Data { get; }
     public int RemainTime { get; private set; }
     public int SlotIndex { get; private set; }
     public ITaskState CurrentState { get; private set; }
     
-    public ProduceTask(ProduceOption produceOption, int slotIndex)
+    public ProduceTask(ProduceData produceOption, int slotIndex)
     {
         Data = produceOption;
         RemainTime = produceOption.Time;
@@ -83,7 +83,7 @@ public class CompletedState : ITaskState
 
     public void OnHarvest(ProduceTask task)
     {
-        Debug.Log($"Harvested: {task.Data.Results[0].Code}");
+        Debug.Log($"Harvested: {task.Data.ResultItems[0].ID}");
 
         task.ChangeState(EndState.Instance);
     }

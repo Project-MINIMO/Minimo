@@ -10,12 +10,12 @@ public class PlantHelper
     private readonly AccountInfoManager _accountInfo = App.GetManager<AccountInfoManager>();
 
     public void TryPlant(
-        ProduceOption option,
+        ProduceData option,
         int optionIndex,
         int slotIndex,
         Func<ProduceTask, int, UniTask> onTaskCreated)
     {
-        var lackItems = GetLackItems(option.Materials);
+        var lackItems = GetLackItems(option.MaterialItems);
 
         if (lackItems.Count > 0)
         {
@@ -40,7 +40,7 @@ public class PlantHelper
 
         foreach (var material in materials)
         {
-            var item = _itemSO.GetItem(material.Code);
+            var item = _itemSO.GetItem(material.ID);
             var itemDTO = _accountInfo.GetItem(item.Code);
             if (itemDTO.Count < material.Amount)
             {
@@ -52,12 +52,12 @@ public class PlantHelper
     }
     
     private async UniTask CreateTaskAsync(
-        ProduceOption option, 
+        ProduceData option, 
         int optionIndex, 
         int slotIndex,
         Func<ProduceTask, int, UniTask> onTaskCreated)
     {
-        ConsumeMaterials(option.Materials);
+        ConsumeMaterials(option.MaterialItems);
 
         var newTask = new ProduceTask(option, slotIndex);
         await onTaskCreated(newTask, optionIndex);
@@ -67,7 +67,7 @@ public class PlantHelper
     {
         foreach (var material in materials)
         {
-            _accountInfo.AddItemCount(material.Code, -material.Amount);
+            _accountInfo.AddItemCount(material.ID, -material.Amount);
         }
     }
 }

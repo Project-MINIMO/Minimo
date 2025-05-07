@@ -100,7 +100,7 @@ public abstract class ProducePrimary : ProduceObject
     {
         _currentSpriteIndex = 0;
 
-        var cropCode = AllTasks[0].Data.Results[0].Code;
+        var cropCode = AllTasks[0].Data.ResultItems[0].ID;
         _currentCropSprites = _cropSprites[GetCropType(cropCode)];
         _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
     }
@@ -127,5 +127,5 @@ public abstract class ProducePrimary : ProduceObject
         _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
     }
 
-    protected abstract int GetCropType(string cropCode);
+    protected abstract int GetCropType(int cropCode);
 }

@@ -129,6 +129,11 @@ public class AccountInfoManager : ManagerBase
         App.GetManager<CheatManager>().UpdateItem(item);
     }
     
+    public void AddItemCount(int itemType, int count)
+    {
+        
+    }
+    
     public ItemDTO GetItem(string itemType)
     {
         var item = _gameClient.AccountInfo.Items.Find(i => i.ItemType == itemType);
@@ -147,6 +152,11 @@ public class AccountInfoManager : ManagerBase
 
             return newItem;
         }
+    }
+    
+    public ItemDTO GetItem(int itemType)
+    {
+        return null;
     }
     
     public void UpdateAssetInfo(AssetUpdateDTO assetUpdate)
