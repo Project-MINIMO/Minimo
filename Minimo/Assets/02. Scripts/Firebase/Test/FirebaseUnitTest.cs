@@ -3,27 +3,51 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using Firebase.Auth;
+using Firebase;
 
 /// <summary>
-/// Firebase Authentication 기능을 테스트하는 단위 테스트 클래스
+/// Firebase 서비스들을 테스트하는 통합 단위 테스트 클래스
 /// </summary>
 public class FirebaseUnitTest : MonoBehaviour
 {
     private FirebaseAuthManager authManager;
+    private FirebaseFirestoreManager firestoreManager;
+    private FirebaseAuth auth;
+    private bool isFirebaseInitialized = false;
+    
     private const string TEST_EMAIL = "test@example.com";
     private const string TEST_PASSWORD = "test123456";
     private const string TEST_DISPLAY_NAME = "Test User";
 
     /// <summary>
     /// 테스트 시작 시 호출되는 메서드
-    /// FirebaseAuthManager를 찾고 이벤트를 구독한 후 테스트를 시작합니다.
+    /// Firebase 매니저들을 찾고 초기화한 후 테스트를 시작합니다.
     /// </summary>
     async void Start()
     {
+        Debug.Log("=== Firebase 통합 테스트 시작 ===");
+        
+        // Firebase 초기화
+        await InitializeFirebaseAsync();
+        if (!isFirebaseInitialized)
+        {
+            Debug.LogError("Firebase 초기화 실패!");
+            return;
+        }
+        
+        // 매니저 찾기
         authManager = FindObjectOfType<FirebaseAuthManager>();
+        firestoreManager = FindObjectOfType<FirebaseFirestoreManager>();
+        
         if (authManager == null)
         {
             Debug.LogError("씬에서 FirebaseAuthManager를 찾을 수 없습니다!");
+            return;
+        }
+        
+        if (firestoreManager == null)
+        {
+            Debug.LogError("씬에서 FirebaseFirestoreManager를 찾을 수 없습니다!");
             return;
         }
 
@@ -32,11 +56,66 @@ public class FirebaseUnitTest : MonoBehaviour
         authManager.OnUserSignedOut += () => Debug.Log("사용자 로그아웃");
         authManager.OnError += (error) => Debug.LogError($"인증 오류: {error}");
 
-        // Firebase 초기화 대기
-        await Task.Delay(2000);
+        // 테스트 시작 (필요한 테스트 선택)
+        bool runAuthTest = true;
+        bool runFunctionsTest = true;
+
+        if (runAuthTest)
+        {
+            await UnitTestFirebaseAuth();
+            await Task.Delay(1000);
+        }
+
+        if (runFunctionsTest)
+        {
+            await UnitTestFirebaseFunctions();
+        }
         
-        // 테스트 시작
-        await UnitTestFirebaseAuth();
+        Debug.Log("=== Firebase 통합 테스트 완료 ===");
+    }
+
+    /// <summary>
+    /// Firebase 초기화 및 인증 설정을 수행합니다.
+    /// </summary>
+    private async Task InitializeFirebaseAsync()
+    {
+        Debug.Log("Firebase 초기화 중...");
+        
+        // Firebase 초기화 확인
+        await Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
+            var dependencyStatus = task.Result;
+            if (dependencyStatus == Firebase.DependencyStatus.Available)
+            {
+                // Firebase 초기화 성공
+                auth = FirebaseAuth.DefaultInstance;
+                isFirebaseInitialized = true;
+                Debug.Log("Firebase 초기화 성공!");
+                
+                // 익명 로그인 시도
+                if (auth.CurrentUser == null)
+                {
+                    Debug.Log("익명 인증 시도 중...");
+                    auth.SignInAnonymouslyAsync().ContinueWith(authTask => {
+                        if (authTask.IsCanceled || authTask.IsFaulted)
+                        {
+                            Debug.LogError($"익명 인증 실패: {authTask.Exception}");
+                            return;
+                        }
+                        
+                        Debug.Log($"익명 인증 성공! User ID: {auth.CurrentUser.UserId}");
+                    });
+                }
+                else
+                {
+                    Debug.Log($"이미 인증된 사용자: {auth.CurrentUser.UserId}");
+                }
+            }
+            else
+            {
+                Debug.LogError($"Firebase 초기화 실패: {dependencyStatus}");
+                isFirebaseInitialized = false;
+            }
+        });
     }
 
     /// <summary>
@@ -101,6 +180,53 @@ public class FirebaseUnitTest : MonoBehaviour
         Debug.Log($"계정 삭제 결과: {deleteResult}");
 
         Debug.Log("=== Firebase 인증 단위 테스트 완료 ===");
+    }
+    
+    /// <summary>
+    /// Firebase Functions의 기능을 테스트합니다.
+    /// </summary>
+    private async Task UnitTestFirebaseFunctions()
+    {
+        Debug.Log("=== Firebase Functions 테스트 시작 ===");
+        
+        // 사용자가 로그인될 때까지 대기
+        if (auth.CurrentUser == null)
+        {
+            Debug.Log("Functions 테스트를 위해 익명 로그인이 필요합니다.");
+            
+            // 익명 로그인 시도
+            try
+            {
+                await auth.SignInAnonymouslyAsync();
+                Debug.Log($"익명 인증 성공! User ID: {auth.CurrentUser.UserId}");
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"익명 인증 실패: {ex.Message}");
+                return;
+            }
+        }
+        
+        while (auth.CurrentUser == null)
+        {
+            await Task.Delay(500);
+            Debug.Log("사용자 로그인 대기 중...");
+        }
+        
+        // Firebase Functions 테스트
+        Debug.Log("Firestore Function 테스트 시작...");
+        bool result = await firestoreManager.TestFirestore();
+        
+        if (result)
+        {
+            Debug.Log("Firestore Function 테스트 성공!");
+        }
+        else
+        {
+            Debug.LogError("Firestore Function 테스트 실패!");
+        }
+        
+        Debug.Log("=== Firebase Functions 테스트 완료 ===");
     }
 
     // Update is called once per frame
