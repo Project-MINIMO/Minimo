@@ -31,6 +31,6 @@ export const testFirestore = onCall(async (request) => {
 
     return {success: true, message: "Firestore 테스트 성공"};
   } catch (error) {
-    throw new Error("Firestore 테스트 실패");
+    throw new HttpsError("internal", "Firestore 테스트 실패");
   }
 });
