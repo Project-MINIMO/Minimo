@@ -19,7 +19,7 @@ export const helloWorld = onRequest((request, response) => {
 // Firestore 테스트 함수
 export const testFirestore = onCall(async (request) => {
   if (!request.auth) {
-    throw new Error("인증이 필요합니다.");
+    throw new HttpsError("unauthenticated", "인증이 필요합니다.");
   }
 
   try {
