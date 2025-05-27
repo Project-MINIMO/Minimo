@@ -18,10 +18,10 @@ public class ProducePrimary : ProduceObject
     
     [SerializeField] protected SpriteRenderer _cropSpriteRenderer;
     
-    protected List<Sprite[]> _cropSprites;
+    private List<Sprite[]> _cropSprites;
    
-    protected Sprite[] _currentCropSprites;
-    protected int _currentSpriteIndex;
+    private Sprite[] _currentCropSprites;
+    private int _currentSpriteIndex;
   
     public override void Initialize(int id)
     {
@@ -33,7 +33,7 @@ public class ProducePrimary : ProduceObject
             SetCropSprite();
         }
         
-        _cropSprites = new List<Sprite[]>(ProduceData.ProduceOptions.Length)
+        _cropSprites = new List<Sprite[]>(ProduceData.Count)
         {
             Resources.LoadAll<Sprite>("Produce/Farm/Wheat"),
             Resources.LoadAll<Sprite>("Produce/Farm/Corn"),
@@ -92,22 +92,22 @@ public class ProducePrimary : ProduceObject
         }
     }
     
-    protected override async UniTask CompleteActiveTask()
+    protected override void CompleteActiveTask()
     {
-        await base.CompleteActiveTask();
+        base.CompleteActiveTask();
         
         _currentSpriteIndex = 2;
         _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
     }
     
-    protected override async UniTask OnPlant(ProduceTask task, int optionIndex)
+    protected override void OnPlant(ProduceTask task, int optionIndex)
     {
         if (AllTasks.Count > 0)
         {
             return;
         }
         
-        await base.OnPlant(task, optionIndex);
+        base.OnPlant(task, optionIndex);
 
         SetSpriteResources();
     }
@@ -121,9 +121,9 @@ public class ProducePrimary : ProduceObject
         _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
     }
     
-    public override async UniTask StartHarvest()
+    public override void StartHarvest()
     {
-        await base.StartHarvest();
+        base.StartHarvest();
 
         if (ActiveTask == null)
         {
@@ -135,9 +135,9 @@ public class ProducePrimary : ProduceObject
         }
     }
     
-    public override async UniTask HarvestEarly()
+    public override void HarvestEarly()
     {
-        await base.HarvestEarly();
+        base.HarvestEarly();
         
         _currentSpriteIndex = 2;
         _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];

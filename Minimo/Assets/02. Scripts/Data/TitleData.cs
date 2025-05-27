@@ -87,6 +87,7 @@ public class TitleData : DataBase
     public Dictionary<int, BuildingData> Building { get; private set; } = new();
     public Dictionary<int, ItemData> Item { get; private set; } = new();
     public Dictionary<int, ProduceData> Produce { get; private set; } = new();
+    public Dictionary<string, List<ProduceData>> GroupedProduce { get; private set; } = new();
 
     private Dictionary<string, StringData> _string = new();
 
@@ -149,6 +150,10 @@ public class TitleData : DataBase
         {
             Produce.Add(data.ID, data);       
         }
+        GroupedProduce = Produce
+            .Values
+            .GroupBy(data => data.Building)
+            .ToDictionary(data => data.Key, data => data.ToList());
         
         foreach (var item in ItemSO.items) //TEMP
         {

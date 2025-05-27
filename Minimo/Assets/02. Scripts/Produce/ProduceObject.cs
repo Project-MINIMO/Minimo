@@ -6,7 +6,7 @@ using UnityEngine;
 
 public abstract class ProduceObject : BuildingObject
 {
-    public ProduceData ProduceData { get; private set; }
+    public List<ProduceData> ProduceData { get; private set; }
     public List<ProduceTask> AllTasks { get; } = new(); 
     public ProduceTask ActiveTask { get; private set; }
     public virtual bool IsPrimary => false;
@@ -28,7 +28,7 @@ public abstract class ProduceObject : BuildingObject
     {
         base.Initialize(data);
 
-        ProduceData = App.GetData<TitleData>().Produce[data.ID];
+        ProduceData = App.GetData<TitleData>().GroupedProduce[data.Name];
 
         _plantHelper = new PlantHelper();
         
