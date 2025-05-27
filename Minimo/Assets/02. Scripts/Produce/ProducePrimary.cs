@@ -1,12 +1,19 @@
 using System.Collections.Generic;
 using System.Linq;
-using MinimoShared;
-using Cysharp.Threading.Tasks;
 
 using UnityEngine;
 
-public abstract class ProducePrimary : ProduceObject
+public class ProducePrimary : ProduceObject
 {
+    private enum CropType
+    {
+        Wheat,
+        Corn,
+        Pumpkin,
+        Sugarcane,
+        Pepper
+    }
+    
     public override bool IsPrimary => true;
     
     [SerializeField] protected SpriteRenderer _cropSpriteRenderer;
@@ -16,15 +23,24 @@ public abstract class ProducePrimary : ProduceObject
     protected Sprite[] _currentCropSprites;
     protected int _currentSpriteIndex;
   
-    public override void Initialize(BuildingDTO buildingDto)
+    public override void Initialize(int id)
     {
-        base.Initialize(buildingDto);
+        base.Initialize(id);
 
         if (AllTasks.Count > 0)
         {
             SetSpriteResources();
             SetCropSprite();
         }
+        
+        _cropSprites = new List<Sprite[]>(ProduceData.ProduceOptions.Length)
+        {
+            Resources.LoadAll<Sprite>("Produce/Farm/Wheat"),
+            Resources.LoadAll<Sprite>("Produce/Farm/Corn"),
+            Resources.LoadAll<Sprite>("Produce/Farm/Pumpkin"),
+            Resources.LoadAll<Sprite>("Produce/Farm/Sugarcane"),
+            Resources.LoadAll<Sprite>("Produce/Farm/Pepper")
+        };
     }
     
     protected override void Update()
@@ -49,7 +65,7 @@ public abstract class ProducePrimary : ProduceObject
         SetCropSprite();
     }
 
-    protected virtual void SetCropSprite()
+    private void SetCropSprite()
     {
         float remainPercent;
 
@@ -127,5 +143,13 @@ public abstract class ProducePrimary : ProduceObject
         _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
     }
 
-    protected abstract int GetCropType(int cropCode);
+    private int GetCropType(int cropCode) => cropCode switch
+    {
+        0 => (int)CropType.Wheat,
+        1 => (int)CropType.Corn,
+        2 => (int)CropType.Pumpkin,
+        3 => (int)CropType.Sugarcane,
+        4 => (int)CropType.Pepper,
+        _ => (int)CropType.Wheat
+    };
 }

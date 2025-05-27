@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using MinimoShared;
-using Cysharp.Threading.Tasks;
 
 using UnityEngine;
 
@@ -24,8 +22,7 @@ public abstract class ProduceObject : BuildingObject
     private PlantHelper _plantHelper;
     
     private ProduceManager _produceManager;
-    private TimeManager _timeManager;
-    private DateTime _lastUpdateTime;
+    private float _lastUpdateTime;
 
     public override void Initialize(BuildingData data)
     {
@@ -36,14 +33,14 @@ public abstract class ProduceObject : BuildingObject
         _plantHelper = new PlantHelper();
         
         _produceManager = App.GetManager<ProduceManager>();
-        _timeManager = App.GetManager<TimeManager>();
-        _lastUpdateTime = _timeManager.Time;
+        _lastUpdateTime = Time.time;
     }
     
-    public override void Initialize(BuildingDTO buildingDto)
+    public override void Initialize(int id)
     {
-        base.Initialize(buildingDto);
+        base.Initialize(id);
 
+        /*
         for (var i = 0; i < buildingDto.ProduceStatus.Length; i++)
         {
             if (buildingDto.ProduceStatus[i] == ProduceSlotStatus.Producing)
@@ -85,13 +82,14 @@ public abstract class ProduceObject : BuildingObject
                 }
             }
         }
+        */
     }
 
     protected virtual void Update()
     {
-        if ((_timeManager.Time - _lastUpdateTime).TotalSeconds < 1f) return;
+        if (Time.time - _lastUpdateTime < 1f) return;
 
-        _lastUpdateTime = _timeManager.Time;
+        _lastUpdateTime = Time.time;
 
         if (ActiveTask == null) return;
         
@@ -104,17 +102,10 @@ public abstract class ProduceObject : BuildingObject
         }
     }
     
-    protected virtual async UniTask CompleteActiveTask()
+    protected virtual void CompleteActiveTask()
     {
-        var newCompleteProduce = new BuildingCompleteProduceDTO
-        {
-            BuildingId = ID,
-            SlotIndex = ActiveTask.SlotIndex
-        };
-        await _buildingManager.CompleteProduce(newCompleteProduce);
-        
+        ActiveTask.ChangeState(CompletedState.Instance);
         ActiveTask = null;
-
         SetNextActiveTask();
     }
     
@@ -161,18 +152,9 @@ public abstract class ProduceObject : BuildingObject
         );
     }
 
-    protected virtual async UniTask OnPlant(ProduceTask task, int optionIndex)
+    protected virtual void OnPlant(ProduceTask task, int optionIndex)
     {
         _isPlanting = true;
-        
-        var newStartProduce = new BuildingStartProduceDTO
-        {
-            BuildingId = ID,
-            SlotIndex = task.SlotIndex,
-            RecipeId = optionIndex + 1
-        };
-        
-        await _buildingManager.StartProduce(newStartProduce);
         
         _produceSlots[task.SlotIndex] = true;
         
@@ -183,7 +165,7 @@ public abstract class ProduceObject : BuildingObject
         _isPlanting = false;
     }
 
-    public virtual async UniTask StartHarvest()
+    public virtual void StartHarvest()
     {
         if (_isHarvesting) return;
         _isHarvesting = true;
@@ -193,13 +175,6 @@ public abstract class ProduceObject : BuildingObject
             var task = AllTasks[i];
             if (task.CurrentState is CompletedState)
             {
-                var newHarvestProduce = new BuildingHarvestProduceDTO()
-                {
-                    BuildingId = ID,
-                    SlotIndex = task.SlotIndex
-                };
-                await _buildingManager.HarvestProduce(newHarvestProduce);
-                
                 task.Harvest();
                 AllTasks.RemoveAt(i);
                 _produceSlots[task.SlotIndex] = false;
@@ -211,16 +186,10 @@ public abstract class ProduceObject : BuildingObject
         _isHarvesting = false;
     }
 
-    public virtual async UniTask HarvestEarly()
+    public virtual void HarvestEarly()
     {
         if (ActiveTask == null) return;
         
-        var newInstantProduce = new BuildingInstantProduceDTO
-        {
-            BuildingId = ID,
-            SlotIndex = ActiveTask.SlotIndex
-        };
-        await _buildingManager.InstantProduceAsync(newInstantProduce);
         ActiveTask.Harvest();
         ActiveTask = null;
 
