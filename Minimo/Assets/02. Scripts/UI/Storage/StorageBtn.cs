@@ -7,7 +7,7 @@ using TMPro;
 
 public class StorageBtn : MonoBehaviour
 {
-    public bool CanShow => AccountInfo.Instance.items.ContainsKey(Item);
+    public bool CanShow => Item != null && AccountInfo.Instance.items.ContainsKey(Item);
     public ItemData Item { get; private set; }
     public Vector2 Position { get; private set; }
     public int SibilingsIndex => transform.GetSiblingIndex() % 4;

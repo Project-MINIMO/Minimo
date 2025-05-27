@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -25,16 +26,24 @@ public class BuildingObject : InteractObject
         _editManager = App.GetManager<EditManager>();
     }
     
-    public virtual void Initialize(BuildingData data)
+    public async virtual void Initialize(BuildingData data)
     {
-        BuildingData = data;
-        LoadPositionData();
+        try
+        {
+            BuildingData = data;
+            await LoadPositionData();
         
-        var size = new Vector3Int(1, 1, 1/*data.SizeX, data.SizeY, 1*/);
-        Area = new BoundsInt(_editManager.GetCellPosition(transform.position), size);
-        PreviousArea = Area;
+            var size = new Vector3Int(1, 1, 1/*data.SizeX, data.SizeY, 1*/);
+            Area = new BoundsInt(_editManager.GetCellPosition(transform.position), size);
+            PreviousArea = Area;
         
-        transform.position = _editManager.GetWorldPosition(Area.position);
+            transform.position = _editManager.GetWorldPosition(Area.position);
+            _editManager.StartEdit(this);
+        }
+        catch (Exception e)
+        {
+            throw; // TODO 예외 처리
+        }
     }
     
     public virtual void Initialize(int id)
@@ -45,11 +54,11 @@ public class BuildingObject : InteractObject
         Initialize(buildingData);
     }
     
-    private async void LoadPositionData()
+    private async Task LoadPositionData()
     {
         try
         {
-            var path = $"Assets/09. Scriptable Objects/Building/{BuildingData.ID}.asset";
+            var path = $"Assets/09. Scriptable Objects/Building/{BuildingData.Name}.asset";
             var handle = Addressables.LoadAssetAsync<BuildingPositionData>(path);
             await handle.Task;
             if (handle.Status == AsyncOperationStatus.Succeeded)

@@ -648,8 +648,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bb2f1d2d9b852047a298dec0b8c8389, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDefaultListener: 1
-  listenerId: 0
 --- !u!114 &1708394409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -662,16 +660,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95e830c658b21374c8356365b10eb5dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_listeners:
-    initialListenerList: []
-    useDefaultListeners: 1
-  isEnvironmentAware: 0
-  isStaticObject: 0
-  m_positionOffsetData:
-    KeepMe: 0
-    positionOffset: {x: 0, y: 0, z: 0}
-  m_posOffsetData: {fileID: 0}
-  listenerMask: 1
 --- !u!114 &1708394410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -903,6 +891,7 @@ GameObject:
   - component: {fileID: 3036070759918541829}
   - component: {fileID: 8300059609362807838}
   - component: {fileID: 8300059609362807839}
+  - component: {fileID: 8300059609362807840}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -1042,8 +1031,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e8bd3f34a1cff4489a79b055baba9eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemSO: {fileID: 11400000, guid: 91d4e4515b698b340a706e3cfc8aa394, type: 2}
-  IsFirstLogin: 1
 --- !u!114 &8300059609362807838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1073,6 +1060,18 @@ MonoBehaviour:
   _bgmPlayer: {fileID: 1072097328}
   _sfxPlayer: {fileID: 1247558949}
   _mixer: {fileID: 24100000, guid: 14fb2df9e30898748bf19b7e9df7123d, type: 2}
+--- !u!114 &8300059609362807840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356189734272973316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fff2976dd07a3c547a1584d56cac7f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

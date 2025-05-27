@@ -61,20 +61,11 @@ public class BuildingBtn : MonoBehaviour
         _iconImg.sprite = Resources.Load<Sprite>(spritePath);
         _iconImg.SetNativeSize();
         
-        var prefabPath = $"Building/{data.ID}";
+        var prefabPath = $"Building/{data.Name}";
         _objectPrefab = Resources.Load<GameObject>(prefabPath);
 
         SetString();
         SetBuildingState();
-        
-        //if (data.ID is "Building_Farm" or "Building_Orchard")
-        //{
-        //    gameObject.SetActive(true);
-        //}
-        //else
-        //{
-        //    gameObject.SetActive(false);
-        //}
     }
 
     private void SetString()
@@ -88,7 +79,7 @@ public class BuildingBtn : MonoBehaviour
 
     private void SetBuildingState()
     {
-        if (App.GetManager<AccountInfoManager>().Level.Value < Data.UnlockLevel)
+        if (AccountInfo.Instance.level < Data.UnlockLevel)
         {
             _currentState = BuildingState.Lock;
         }
@@ -123,7 +114,6 @@ public class BuildingBtn : MonoBehaviour
         if (gridObject != null)
         {
             gridObject.Initialize(Data);
-            App.GetManager<EditManager>().StartEdit(gridObject);
         }
         else
         {
