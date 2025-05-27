@@ -11,20 +11,17 @@ public class StorageSellCtrl : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _countText;
     [SerializeField] private Button _sellBtn;
     [SerializeField] private TextMeshProUGUI _priceText;
-
-    private AccountInfoManager _accountInfo;
+    
     private StoragePanel _storagePanel;
     private StorageInfoPanel _infoPanel;
     
-    private Item _item;
-    private ItemDTO _itemDTO;
+    private ItemData _item;
     
     private int _currentCount;
     private string _sellText;
 
     public void Setup()
     {
-        _accountInfo = App.GetManager<AccountInfoManager>();
         _storagePanel = App.GetManager<UIManager>().GetPanel<StoragePanel>();
         _infoPanel = App.GetManager<UIManager>().GetPanel<StorageInfoPanel>();
         
@@ -35,19 +32,25 @@ public class StorageSellCtrl : MonoBehaviour
         _sellBtn.onClick.AddListener(OnClickSell);
     }
     
-    public void Initialize(Item item)
+    public void Initialize(ItemData item)
     {
         _item = item;
-
-        _itemDTO = _accountInfo.GetItem(item.Code);
-        _currentCount = (_itemDTO.Count / 2) + 1;
+        
+        if (AccountInfo.Instance.items.TryGetValue(item, out var value))
+        {
+            _currentCount = (value / 2) + 1;
+        }
+        else
+        {
+            _currentCount = 0;
+        }
         UpdateCurrentCount();
     }
     
     private void UpdateCurrentCount()
     {
         _countText.text = $"X{_currentCount}";
-        _priceText.text = string.Format(_sellText, Mathf.Max(_item.Data.SellCost * _currentCount, 0));
+        _priceText.text = string.Format(_sellText, Mathf.Max(_item.SellCost * _currentCount, 0));
         
         UpdateButtonActive();
     }
@@ -70,20 +73,27 @@ public class StorageSellCtrl : MonoBehaviour
             _decreaseBtn.gameObject.SetActive(true);
         }
 
-        if (_currentCount >= _itemDTO.Count) 
+        if (AccountInfo.Instance.items.TryGetValue(_item, out var value))
         {
-            _increaseBtn.gameObject.SetActive(false);
-        }
-        else
-        {
-            _increaseBtn.gameObject.SetActive(true);
+            if (_currentCount >= value) 
+            {
+                _increaseBtn.gameObject.SetActive(false);
+            }
+            else
+            {
+                _increaseBtn.gameObject.SetActive(true);
+            }
         }
     }
 
     private void OnClickSell()
     {
-        _accountInfo.AddItemCount(_item.Code, -_currentCount);
+        if (AccountInfo.Instance.items.ContainsKey(_item))
+        {
+            AccountInfo.Instance.items[_item] += -_currentCount;
+        }
         
+        /*
         var newCurrencyRequest = new CurrencyDTO
         {
             Star = _accountInfo.Star.Value,
@@ -91,6 +101,7 @@ public class StorageSellCtrl : MonoBehaviour
         };
         
         _accountInfo.UpdateCurrency(newCurrencyRequest);
+        */
         
         _storagePanel.OnStorageChanged();
         _infoPanel.ClosePanel();
