@@ -79,12 +79,7 @@ public class StoragePanel : UIBase
     {
         StorageChanged.Value++;
     }
-    
-    public StorageBtn GetStorageBtn(string id)
-    {
-        return _storageBack._storageBtns.Find(x => x.Item.Code == id);
-    }
-    
+
     public int GetActiveStorageBtnCount()
     {
         return _storageBack._storageBtns.FindAll(x => x.CanShow).Count;

@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class AccountInfo : Singleton<AccountInfo>
 {
-    public Dictionary<Item, int> items = new();
+    public Dictionary<ItemData, int> items = new();
 }

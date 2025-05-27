@@ -24,19 +24,18 @@ public class StorageBack : MonoBehaviour
     public void InitStorageBtns()
     {
         var existingButtons = GetComponentsInChildren<StorageBtn>(true);
-        var items = App.GetData<TitleData>().ItemSO.items;
         
-        _storageBtns = new(items.Count);
+        _storageBtns = new(App.GetData<TitleData>().Item.Count);
 
         int i = 0;
         
-        for (; i < items.Count; i++)
+        for (; i < App.GetData<TitleData>().Item.Count; i++)
         {
             var storageBtn = i < existingButtons.Length 
                 ? existingButtons[i] 
                 : Instantiate(_storageBtnPrefab, _storageBtnParent).GetComponent<StorageBtn>();
 
-            storageBtn.Initialize(items[i]);
+            storageBtn.Initialize(App.GetData<TitleData>().Item[i]);
             _storageBtns.Add(storageBtn);
         }
 
@@ -54,7 +53,7 @@ public class StorageBack : MonoBehaviour
         {
             bool isActive = 
                 targetType == StorageType.Entire 
-                || CheckType((ItemType)button.Item.Data.Type) == targetType;
+                || CheckType((ItemType)button.Item.Type) == targetType;
             
             button.gameObject.SetActive(isActive);
         }

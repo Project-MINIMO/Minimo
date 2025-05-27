@@ -21,11 +21,9 @@ public class EditManager : ManagerBase
         InstallExistBuildings();
     }
     
-    private async void InstallExistBuildings()
+    private void InstallExistBuildings()
     {
-        var buildingManager = App.GetManager<BuildingManager>();
-        var buildings = await buildingManager.GetBuildingsAsync();
-        
+        /*
         foreach (var building in buildings)
         {
             if (building.BuildingType == "TestBuilding")
@@ -46,6 +44,7 @@ public class EditManager : ManagerBase
             buildingObject.Initialize(building);
             _tileStateModifier.ModifyTileState(buildingObject.Area, TileState.Installed);
         }
+        */
     }
     
     public void StartEdit(BuildingObject gridObject)
@@ -81,7 +80,7 @@ public class EditManager : ManagerBase
             return;
         }
 
-        if (await CurrentEditObject.Install())
+        if (CurrentEditObject.Install())
         {
             _tileStateModifier.ModifyTileState(CurrentEditObject.Area, TileState.Installed);
             

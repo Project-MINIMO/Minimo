@@ -3,6 +3,8 @@
     "ID": 0,
     "Type": 1,
     "Level": 0,
+    "Flavor": 0,
+    "Texture": 0,
     "SellCost": -1,
     "BuyCost": -1,
     "Name": "StarCropSeed"
@@ -11,6 +13,8 @@
     "ID": 1,
     "Type": 1,
     "Level": 0,
+    "Flavor": 0,
+    "Texture": 0,
     "SellCost": -1,
     "BuyCost": -1,
     "Name": "StarSpiceSeed"
@@ -19,6 +23,8 @@
     "ID": 2,
     "Type": 1,
     "Level": 0,
+    "Flavor": 0,
+    "Texture": 0,
     "SellCost": -1,
     "BuyCost": -1,
     "Name": "StarFruitSeed"
@@ -27,7 +33,9 @@
     "ID": 3,
     "Type": 1,
     "Level": 1,
-    "SellCost": 10,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": 20,
     "BuyCost": 2,
     "Name": "StarCrop"
   },
@@ -35,7 +43,9 @@
     "ID": 4,
     "Type": 1,
     "Level": 1,
-    "SellCost": 10,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": 20,
     "BuyCost": 2,
     "Name": "StarSpice"
   },
@@ -43,7 +53,9 @@
     "ID": 5,
     "Type": 1,
     "Level": 1,
-    "SellCost": 10,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": 20,
     "BuyCost": 2,
     "Name": "StarFruit"
   },
@@ -51,208 +63,2030 @@
     "ID": 6,
     "Type": 1,
     "Level": 2,
-    "SellCost": 20,
-    "BuyCost": 4,
-    "Name": "WhiteRice"
+    "Flavor": 1,
+    "Texture": 2,
+    "SellCost": 50,
+    "BuyCost": 5,
+    "Name": "Rice"
   },
   {
     "ID": 7,
     "Type": 1,
     "Level": 2,
-    "SellCost": 20,
-    "BuyCost": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 50,
+    "BuyCost": 5,
     "Name": "Dough"
   },
   {
     "ID": 8,
     "Type": 1,
     "Level": 2,
-    "SellCost": 20,
-    "BuyCost": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 50,
+    "BuyCost": 5,
     "Name": "Tofu"
   },
   {
     "ID": 9,
     "Type": 1,
     "Level": 2,
-    "SellCost": 20,
-    "BuyCost": 4,
+    "Flavor": 1,
+    "Texture": 0,
+    "SellCost": 50,
+    "BuyCost": 5,
     "Name": "Malt"
   },
   {
     "ID": 10,
     "Type": 1,
     "Level": 2,
-    "SellCost": 20,
-    "BuyCost": 4,
+    "Flavor": 2,
+    "Texture": 2,
+    "SellCost": 50,
+    "BuyCost": 5,
     "Name": "Salt"
   },
   {
     "ID": 11,
     "Type": 1,
     "Level": 2,
-    "SellCost": 20,
-    "BuyCost": 4,
+    "Flavor": 3,
+    "Texture": 2,
+    "SellCost": 50,
+    "BuyCost": 5,
     "Name": "Sugar"
   },
   {
     "ID": 12,
     "Type": 1,
     "Level": 2,
-    "SellCost": 20,
-    "BuyCost": 4,
-    "Name": "Chili"
+    "Flavor": 4,
+    "Texture": 0,
+    "SellCost": 50,
+    "BuyCost": 5,
+    "Name": "ChiliPowder"
   },
   {
     "ID": 13,
     "Type": 1,
     "Level": 2,
-    "SellCost": 20,
-    "BuyCost": 4,
-    "Name": "GrapeJuice"
+    "Flavor": 5,
+    "Texture": 4,
+    "SellCost": 50,
+    "BuyCost": 5,
+    "Name": "Juice"
   },
   {
     "ID": 14,
     "Type": 1,
     "Level": 2,
-    "SellCost": 20,
-    "BuyCost": 4,
-    "Name": "OliveOil"
+    "Flavor": 1,
+    "Texture": 0,
+    "SellCost": 50,
+    "BuyCost": 5,
+    "Name": "CookingOil"
   },
   {
     "ID": 15,
     "Type": 1,
-    "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
-    "Name": "Porridge"
+    "Level": 2,
+    "Flavor": 0,
+    "Texture": 3,
+    "SellCost": 50,
+    "BuyCost": 5,
+    "Name": "Vegetable"
   },
   {
     "ID": 16,
     "Type": 1,
     "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
-    "Name": "Sikhye"
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 110,
+    "BuyCost": 11,
+    "Name": "Porridge"
   },
   {
     "ID": 17,
     "Type": 1,
     "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
-    "Name": "Yeot"
+    "Flavor": 4,
+    "Texture": 1,
+    "SellCost": 160,
+    "BuyCost": 16,
+    "Name": "Ramen"
   },
   {
     "ID": 18,
     "Type": 1,
     "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
-    "Name": "Ramen"
+    "Flavor": 1,
+    "Texture": 3,
+    "SellCost": 160,
+    "BuyCost": 16,
+    "Name": "Pajeon"
   },
   {
     "ID": 19,
     "Type": 1,
     "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
-    "Name": "Pasta"
+    "Flavor": 4,
+    "Texture": 1,
+    "SellCost": 210,
+    "BuyCost": 21,
+    "Name": "Bibimbap"
   },
   {
     "ID": 20,
     "Type": 1,
     "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
-    "Name": "Steak"
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 210,
+    "BuyCost": 21,
+    "Name": "BulgogiSet"
   },
   {
     "ID": 21,
     "Type": 1,
     "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
-    "Name": "Risotto"
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 110,
+    "BuyCost": 11,
+    "Name": "Soup"
   },
   {
     "ID": 22,
     "Type": 1,
     "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
-    "Name": "Baguette"
+    "Flavor": 5,
+    "Texture": 3,
+    "SellCost": 160,
+    "BuyCost": 16,
+    "Name": "Salad"
   },
   {
     "ID": 23,
     "Type": 1,
     "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
-    "Name": "Croissant"
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 160,
+    "BuyCost": 16,
+    "Name": "Pasta"
   },
   {
     "ID": 24,
     "Type": 1,
     "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
-    "Name": "SausageRoll"
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 210,
+    "BuyCost": 21,
+    "Name": "Hamburger"
   },
   {
     "ID": 25,
     "Type": 1,
     "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
-    "Name": "Candy"
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 210,
+    "BuyCost": 21,
+    "Name": "Steak"
   },
   {
     "ID": 26,
     "Type": 1,
     "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
-    "Name": "FortuneCookie"
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 110,
+    "BuyCost": 11,
+    "Name": "Croissant"
   },
   {
     "ID": 27,
     "Type": 1,
     "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
-    "Name": "Churros"
+    "Flavor": 2,
+    "Texture": 2,
+    "SellCost": 160,
+    "BuyCost": 16,
+    "Name": "Pretzel"
   },
   {
     "ID": 28,
     "Type": 1,
     "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
-    "Name": "Makgeolli"
+    "Flavor": 2,
+    "Texture": 1,
+    "SellCost": 160,
+    "BuyCost": 16,
+    "Name": "SausageRoll"
   },
   {
     "ID": 29,
     "Type": 1,
     "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
-    "Name": "Beer"
+    "Flavor": 1,
+    "Texture": 3,
+    "SellCost": 160,
+    "BuyCost": 16,
+    "Name": "FortuneCookie"
   },
   {
     "ID": 30,
     "Type": 1,
     "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
-    "Name": "Whiskey"
+    "Flavor": 3,
+    "Texture": 1,
+    "SellCost": 210,
+    "BuyCost": 21,
+    "Name": "FruitCake"
   },
   {
     "ID": 31,
     "Type": 1,
     "Level": 3,
-    "SellCost": 40,
-    "BuyCost": 8,
+    "Flavor": 3,
+    "Texture": 2,
+    "SellCost": 110,
+    "BuyCost": 11,
+    "Name": "Candy"
+  },
+  {
+    "ID": 32,
+    "Type": 1,
+    "Level": 3,
+    "Flavor": 3,
+    "Texture": 2,
+    "SellCost": 110,
+    "BuyCost": 11,
+    "Name": "Dalgona"
+  },
+  {
+    "ID": 33,
+    "Type": 1,
+    "Level": 3,
+    "Flavor": 3,
+    "Texture": 4,
+    "SellCost": 160,
+    "BuyCost": 16,
+    "Name": "Yeot"
+  },
+  {
+    "ID": 34,
+    "Type": 1,
+    "Level": 3,
+    "Flavor": 3,
+    "Texture": 1,
+    "SellCost": 160,
+    "BuyCost": 16,
+    "Name": "FruitPudding"
+  },
+  {
+    "ID": 35,
+    "Type": 1,
+    "Level": 3,
+    "Flavor": 3,
+    "Texture": 3,
+    "SellCost": 210,
+    "BuyCost": 21,
+    "Name": "Macaron"
+  },
+  {
+    "ID": 36,
+    "Type": 1,
+    "Level": 3,
+    "Flavor": 3,
+    "Texture": 0,
+    "SellCost": 110,
+    "BuyCost": 11,
+    "Name": "Makgeolli"
+  },
+  {
+    "ID": 37,
+    "Type": 1,
+    "Level": 3,
+    "Flavor": 1,
+    "Texture": 0,
+    "SellCost": 110,
+    "BuyCost": 11,
+    "Name": "Beer"
+  },
+  {
+    "ID": 38,
+    "Type": 1,
+    "Level": 3,
+    "Flavor": 5,
+    "Texture": 0,
+    "SellCost": 110,
+    "BuyCost": 11,
     "Name": "Wine"
+  },
+  {
+    "ID": 39,
+    "Type": 1,
+    "Level": 3,
+    "Flavor": 1,
+    "Texture": 0,
+    "SellCost": 160,
+    "BuyCost": 16,
+    "Name": "Whiskey"
+  },
+  {
+    "ID": 40,
+    "Type": 1,
+    "Level": 3,
+    "Flavor": 3,
+    "Texture": 0,
+    "SellCost": 160,
+    "BuyCost": 16,
+    "Name": "Brandy"
+  },
+  {
+    "ID": 41,
+    "Type": 2,
+    "Level": 0,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": -1,
+    "BuyCost": -1,
+    "Name": "RoseSeed"
+  },
+  {
+    "ID": 42,
+    "Type": 2,
+    "Level": 0,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": -1,
+    "BuyCost": -1,
+    "Name": "SunflowerSeed"
+  },
+  {
+    "ID": 43,
+    "Type": 2,
+    "Level": 0,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": -1,
+    "BuyCost": -1,
+    "Name": "DandelionSeed"
+  },
+  {
+    "ID": 44,
+    "Type": 2,
+    "Level": 0,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": -1,
+    "BuyCost": -1,
+    "Name": "CloverSeed"
+  },
+  {
+    "ID": 45,
+    "Type": 2,
+    "Level": 0,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": -1,
+    "BuyCost": -1,
+    "Name": "HydrangeaSeed"
+  },
+  {
+    "ID": 46,
+    "Type": 2,
+    "Level": 0,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": -1,
+    "BuyCost": -1,
+    "Name": "TulipSeed"
+  },
+  {
+    "ID": 47,
+    "Type": 2,
+    "Level": 1,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": 30,
+    "BuyCost": 3,
+    "Name": "Rose"
+  },
+  {
+    "ID": 48,
+    "Type": 2,
+    "Level": 1,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": 30,
+    "BuyCost": 3,
+    "Name": "Sunflower"
+  },
+  {
+    "ID": 49,
+    "Type": 2,
+    "Level": 1,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": 30,
+    "BuyCost": 3,
+    "Name": "Dandelion"
+  },
+  {
+    "ID": 50,
+    "Type": 2,
+    "Level": 1,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": 30,
+    "BuyCost": 3,
+    "Name": "Clover"
+  },
+  {
+    "ID": 51,
+    "Type": 2,
+    "Level": 1,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": 30,
+    "BuyCost": 3,
+    "Name": "Hydrangea"
+  },
+  {
+    "ID": 52,
+    "Type": 2,
+    "Level": 1,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": 30,
+    "BuyCost": 3,
+    "Name": "Tulip"
+  },
+  {
+    "ID": 53,
+    "Type": 2,
+    "Level": 2,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": 90,
+    "BuyCost": 9,
+    "Name": "LovePowder"
+  },
+  {
+    "ID": 54,
+    "Type": 2,
+    "Level": 2,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": 90,
+    "BuyCost": 9,
+    "Name": "FriendshipPowder"
+  },
+  {
+    "ID": 55,
+    "Type": 2,
+    "Level": 2,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": 90,
+    "BuyCost": 9,
+    "Name": "MemoryPowder"
+  },
+  {
+    "ID": 56,
+    "Type": 2,
+    "Level": 2,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": 90,
+    "BuyCost": 9,
+    "Name": "PeacePowder"
+  },
+  {
+    "ID": 57,
+    "Type": 2,
+    "Level": 2,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": 90,
+    "BuyCost": 9,
+    "Name": "HopePowder"
+  },
+  {
+    "ID": 58,
+    "Type": 2,
+    "Level": 2,
+    "Flavor": 0,
+    "Texture": 0,
+    "SellCost": 90,
+    "BuyCost": 9,
+    "Name": "CouragePowder"
+  },
+  {
+    "ID": 59,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "LovePorridge"
+  },
+  {
+    "ID": 60,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 4,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "LoveRamen"
+  },
+  {
+    "ID": 61,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "LovePajeon"
+  },
+  {
+    "ID": 62,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 4,
+    "Texture": 1,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "LoveBibimbap"
+  },
+  {
+    "ID": 63,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "LoveBulgogiSet"
+  },
+  {
+    "ID": 64,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "LoveSoup"
+  },
+  {
+    "ID": 65,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 5,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "LoveSalad"
+  },
+  {
+    "ID": 66,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "LovePasta"
+  },
+  {
+    "ID": 67,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "LoveHamburger"
+  },
+  {
+    "ID": 68,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "LoveSteak"
+  },
+  {
+    "ID": 69,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "LoveCroissant"
+  },
+  {
+    "ID": 70,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 2,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "LovePretzel"
+  },
+  {
+    "ID": 71,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "LoveSausageRoll"
+  },
+  {
+    "ID": 72,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "LoveFortuneCookie"
+  },
+  {
+    "ID": 73,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 1,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "LoveFruitCake"
+  },
+  {
+    "ID": 74,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 2,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "LoveCandy"
+  },
+  {
+    "ID": 75,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 2,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "LoveDalgona"
+  },
+  {
+    "ID": 76,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 4,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "LoveYeot"
+  },
+  {
+    "ID": 77,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "LoveFruitPudding"
+  },
+  {
+    "ID": 78,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 3,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "LoveMacaron"
+  },
+  {
+    "ID": 79,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "LoveMakgeolli"
+  },
+  {
+    "ID": 80,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "LoveBeer"
+  },
+  {
+    "ID": 81,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 5,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "LoveWine"
+  },
+  {
+    "ID": 82,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 0,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "LoveWhiskey"
+  },
+  {
+    "ID": 83,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 0,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "LoveBrandy"
+  },
+  {
+    "ID": 84,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "FriendshipPorridge"
+  },
+  {
+    "ID": 85,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 4,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "FriendshipRamen"
+  },
+  {
+    "ID": 86,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "FriendshipPajeon"
+  },
+  {
+    "ID": 87,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 4,
+    "Texture": 1,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "FriendshipBibimbap"
+  },
+  {
+    "ID": 88,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "FriendshipBulgogiSet"
+  },
+  {
+    "ID": 89,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "FriendshipSoup"
+  },
+  {
+    "ID": 90,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 5,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "FriendshipSalad"
+  },
+  {
+    "ID": 91,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "FriendshipPasta"
+  },
+  {
+    "ID": 92,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "FriendshipHamburger"
+  },
+  {
+    "ID": 93,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "FriendshipSteak"
+  },
+  {
+    "ID": 94,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "FriendshipCroissant"
+  },
+  {
+    "ID": 95,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 2,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "FriendshipPretzel"
+  },
+  {
+    "ID": 96,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "FriendshipSausageRoll"
+  },
+  {
+    "ID": 97,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "FriendshipFortuneCookie"
+  },
+  {
+    "ID": 98,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 1,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "FriendshipFruitCake"
+  },
+  {
+    "ID": 99,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 2,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "FriendshipCandy"
+  },
+  {
+    "ID": 100,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 2,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "FriendshipDalgona"
+  },
+  {
+    "ID": 101,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 4,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "FriendshipYeot"
+  },
+  {
+    "ID": 102,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "FriendshipFruitPudding"
+  },
+  {
+    "ID": 103,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 3,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "FriendshipMacaron"
+  },
+  {
+    "ID": 104,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "FriendshipMakgeolli"
+  },
+  {
+    "ID": 105,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "FriendshipBeer"
+  },
+  {
+    "ID": 106,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 5,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "FriendshipWine"
+  },
+  {
+    "ID": 107,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 0,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "FriendshipWhiskey"
+  },
+  {
+    "ID": 108,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 0,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "FriendshipBrandy"
+  },
+  {
+    "ID": 109,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "MemoryPorridge"
+  },
+  {
+    "ID": 110,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 4,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "MemoryRamen"
+  },
+  {
+    "ID": 111,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "MemoryPajeon"
+  },
+  {
+    "ID": 112,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 4,
+    "Texture": 1,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "MemoryBibimbap"
+  },
+  {
+    "ID": 113,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "MemoryBulgogiSet"
+  },
+  {
+    "ID": 114,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "MemorySoup"
+  },
+  {
+    "ID": 115,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 5,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "MemorySalad"
+  },
+  {
+    "ID": 116,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "MemoryPasta"
+  },
+  {
+    "ID": 117,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "MemoryHamburger"
+  },
+  {
+    "ID": 118,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "MemorySteak"
+  },
+  {
+    "ID": 119,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "MemoryCroissant"
+  },
+  {
+    "ID": 120,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 2,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "MemoryPretzel"
+  },
+  {
+    "ID": 121,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "MemorySausageRoll"
+  },
+  {
+    "ID": 122,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "MemoryFortuneCookie"
+  },
+  {
+    "ID": 123,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 1,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "MemoryFruitCake"
+  },
+  {
+    "ID": 124,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 2,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "MemoryCandy"
+  },
+  {
+    "ID": 125,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 2,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "MemoryDalgona"
+  },
+  {
+    "ID": 126,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 4,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "MemoryYeot"
+  },
+  {
+    "ID": 127,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "MemoryFruitPudding"
+  },
+  {
+    "ID": 128,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 3,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "MemoryMacaron"
+  },
+  {
+    "ID": 129,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "MemoryMakgeolli"
+  },
+  {
+    "ID": 130,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "MemoryBeer"
+  },
+  {
+    "ID": 131,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 5,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "MemoryWine"
+  },
+  {
+    "ID": 132,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 0,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "MemoryWhiskey"
+  },
+  {
+    "ID": 133,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 0,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "MemoryBrandy"
+  },
+  {
+    "ID": 134,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "PeacePorridge"
+  },
+  {
+    "ID": 135,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 4,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "PeaceRamen"
+  },
+  {
+    "ID": 136,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "PeacePajeon"
+  },
+  {
+    "ID": 137,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 4,
+    "Texture": 1,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "PeaceBibimbap"
+  },
+  {
+    "ID": 138,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "PeaceBulgogiSet"
+  },
+  {
+    "ID": 139,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "PeaceSoup"
+  },
+  {
+    "ID": 140,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 5,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "PeaceSalad"
+  },
+  {
+    "ID": 141,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "PeacePasta"
+  },
+  {
+    "ID": 142,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "PeaceHamburger"
+  },
+  {
+    "ID": 143,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "PeaceSteak"
+  },
+  {
+    "ID": 144,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "PeaceCroissant"
+  },
+  {
+    "ID": 145,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 2,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "PeacePretzel"
+  },
+  {
+    "ID": 146,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "PeaceSausageRoll"
+  },
+  {
+    "ID": 147,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "PeaceFortuneCookie"
+  },
+  {
+    "ID": 148,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 1,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "PeaceFruitCake"
+  },
+  {
+    "ID": 149,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 2,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "PeaceCandy"
+  },
+  {
+    "ID": 150,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 2,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "PeaceDalgona"
+  },
+  {
+    "ID": 151,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 4,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "PeaceYeot"
+  },
+  {
+    "ID": 152,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "PeaceFruitPudding"
+  },
+  {
+    "ID": 153,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 3,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "PeaceMacaron"
+  },
+  {
+    "ID": 154,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "PeaceMakgeolli"
+  },
+  {
+    "ID": 155,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "PeaceBeer"
+  },
+  {
+    "ID": 156,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 5,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "PeaceWine"
+  },
+  {
+    "ID": 157,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 0,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "PeaceWhiskey"
+  },
+  {
+    "ID": 158,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 0,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "PeaceBrandy"
+  },
+  {
+    "ID": 159,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "HopePorridge"
+  },
+  {
+    "ID": 160,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 4,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "HopeRamen"
+  },
+  {
+    "ID": 161,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "HopePajeon"
+  },
+  {
+    "ID": 162,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 4,
+    "Texture": 1,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "HopeBibimbap"
+  },
+  {
+    "ID": 163,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "HopeBulgogiSet"
+  },
+  {
+    "ID": 164,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "HopeSoup"
+  },
+  {
+    "ID": 165,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 5,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "HopeSalad"
+  },
+  {
+    "ID": 166,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "HopePasta"
+  },
+  {
+    "ID": 167,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "HopeHamburger"
+  },
+  {
+    "ID": 168,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "HopeSteak"
+  },
+  {
+    "ID": 169,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "HopeCroissant"
+  },
+  {
+    "ID": 170,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 2,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "HopePretzel"
+  },
+  {
+    "ID": 171,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "HopeSausageRoll"
+  },
+  {
+    "ID": 172,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "HopeFortuneCookie"
+  },
+  {
+    "ID": 173,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 1,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "HopeFruitCake"
+  },
+  {
+    "ID": 174,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 2,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "HopeCandy"
+  },
+  {
+    "ID": 175,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 2,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "HopeDalgona"
+  },
+  {
+    "ID": 176,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 4,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "HopeYeot"
+  },
+  {
+    "ID": 177,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "HopeFruitPudding"
+  },
+  {
+    "ID": 178,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 3,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "HopeMacaron"
+  },
+  {
+    "ID": 179,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "HopeMakgeolli"
+  },
+  {
+    "ID": 180,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "HopeBeer"
+  },
+  {
+    "ID": 181,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 5,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "HopeWine"
+  },
+  {
+    "ID": 182,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 0,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "HopeWhiskey"
+  },
+  {
+    "ID": 183,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 0,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "HopeBrandy"
+  },
+  {
+    "ID": 184,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "CouragePorridge"
+  },
+  {
+    "ID": 185,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 4,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "CourageRamen"
+  },
+  {
+    "ID": 186,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "CouragePajeon"
+  },
+  {
+    "ID": 187,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 4,
+    "Texture": 1,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "CourageBibimbap"
+  },
+  {
+    "ID": 188,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "CourageBulgogiSet"
+  },
+  {
+    "ID": 189,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "CourageSoup"
+  },
+  {
+    "ID": 190,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 5,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "CourageSalad"
+  },
+  {
+    "ID": 191,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "CouragePasta"
+  },
+  {
+    "ID": 192,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "CourageHamburger"
+  },
+  {
+    "ID": 193,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 5,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "CourageSteak"
+  },
+  {
+    "ID": 194,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 1,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "CourageCroissant"
+  },
+  {
+    "ID": 195,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 2,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "CouragePretzel"
+  },
+  {
+    "ID": 196,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 2,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "CourageSausageRoll"
+  },
+  {
+    "ID": 197,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 3,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "CourageFortuneCookie"
+  },
+  {
+    "ID": 198,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 1,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "CourageFruitCake"
+  },
+  {
+    "ID": 199,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 2,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "CourageCandy"
+  },
+  {
+    "ID": 200,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 2,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "CourageDalgona"
+  },
+  {
+    "ID": 201,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 4,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "CourageYeot"
+  },
+  {
+    "ID": 202,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 1,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "CourageFruitPudding"
+  },
+  {
+    "ID": 203,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 3,
+    "SellCost": 420,
+    "BuyCost": 42,
+    "Name": "CourageMacaron"
+  },
+  {
+    "ID": 204,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "CourageMakgeolli"
+  },
+  {
+    "ID": 205,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "CourageBeer"
+  },
+  {
+    "ID": 206,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 5,
+    "Texture": 0,
+    "SellCost": 320,
+    "BuyCost": 32,
+    "Name": "CourageWine"
+  },
+  {
+    "ID": 207,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 1,
+    "Texture": 0,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "CourageWhiskey"
+  },
+  {
+    "ID": 208,
+    "Type": 3,
+    "Level": 4,
+    "Flavor": 3,
+    "Texture": 0,
+    "SellCost": 370,
+    "BuyCost": 37,
+    "Name": "CourageBrandy"
   }
 ]

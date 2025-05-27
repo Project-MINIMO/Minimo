@@ -46,7 +46,7 @@ public class UseCashPanel : UIBase
         _useBack.Setup(type, price, useAction);
     }
 
-    public void OpenPanel(List<(Item, int)> lackItems, Action useAction)
+    public void OpenPanel(List<(ItemData, int)> lackItems, Action useAction)
     {
         base.OpenPanel();
         

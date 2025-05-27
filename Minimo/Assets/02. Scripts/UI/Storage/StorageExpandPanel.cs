@@ -32,7 +32,7 @@ public class StorageExpandPanel : UIBase
         
         _accountInfo = App.GetManager<AccountInfoManager>();
         
-        _expandCost = titleData.Common["WareHouseExpandCost"];
+        _expandCost = titleData.Common["StorageExpandCost"];
         _expandString = titleData.GetString("STR_STORAGE_EXPAND_COST");
         
         _titleTMP.text = titleData.GetString("STR_STORAGE_EXPAND_TITLE");

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class PlantHelper 
 {
-    private readonly ItemSO _itemSO = App.GetData<TitleData>().ItemSO;
+    private readonly TitleData _titleData = App.GetData<TitleData>();
     private readonly UseCashPanel _useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
 
     public void TryPlant(
@@ -38,13 +38,13 @@ public class PlantHelper
         CreateTaskAsync(option, optionIndex, slotIndex, onTaskCreated);
     }
     
-    private List<(Item, int)> GetLackItems(ProduceMaterial[] materials)
+    private List<(ItemData, int)> GetLackItems(ProduceMaterial[] materials)
     {
-        var lackItems = new List<(Item, int)>();
+        var lackItems = new List<(ItemData, int)>();
 
         foreach (var material in materials)
         {
-            var item = _itemSO.GetItem(material.ID);
+            var item = _titleData.Item[material.ID];
             if (AccountInfo.Instance.items.TryGetValue(item, out var value))
             {
                 if (value < material.Amount)

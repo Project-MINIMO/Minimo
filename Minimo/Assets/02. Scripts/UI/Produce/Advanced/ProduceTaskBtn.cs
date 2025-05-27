@@ -99,7 +99,7 @@ public class ProduceTaskBtn : MonoBehaviour
         }
         else if (_produceTask?.CurrentState is CompletedState)
         {
-            await _produceManager.CurrentProduceObject.StartHarvest();
+            _produceManager.CurrentProduceObject.StartHarvest();
             _produceObject.OrganizeTasks();
         }
     }
