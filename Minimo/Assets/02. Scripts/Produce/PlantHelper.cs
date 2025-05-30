@@ -9,7 +9,6 @@ public class PlantHelper
     public void TryPlant(
         ProduceData option,
         int optionIndex,
-        int slotIndex,
         Action<ProduceTask, int> onTaskCreated)
     {
         var lackItems = GetLackItems(option.MaterialItems);
@@ -29,13 +28,13 @@ public class PlantHelper
                         AccountInfo.Instance.items.Add(item.Item1, item.Item2);
                     }
                 }
-                CreateTaskAsync(option, optionIndex, slotIndex, onTaskCreated);
+                CreateTaskAsync(option, optionIndex, onTaskCreated);
             });
 
             return;
         }
 
-        CreateTaskAsync(option, optionIndex, slotIndex, onTaskCreated);
+        CreateTaskAsync(option, optionIndex, onTaskCreated);
     }
     
     private List<(ItemData, int)> GetLackItems(ProduceMaterial[] materials)
@@ -60,12 +59,11 @@ public class PlantHelper
     private void CreateTaskAsync(
         ProduceData option, 
         int optionIndex, 
-        int slotIndex,
         Action<ProduceTask, int> onTaskCreated)
     {
         ConsumeMaterials(option.MaterialItems);
 
-        var newTask = new ProduceTask(option, slotIndex);
+        var newTask = new ProduceTask(option);
         onTaskCreated?.Invoke(newTask, optionIndex);
     }
 

@@ -34,11 +34,6 @@ public class ProduceTaskBtn : MonoBehaviour
         _produceManager.CurrentRemainTime
             .Subscribe(SetRemainTime)
             .AddTo(gameObject);
-
-        _produceManager.IsProducing
-            .Subscribe((produceObject) => 
-                SetRemainTime(_produceManager.CurrentRemainTime.Value))
-            .AddTo(gameObject);
     }
     
     public void Initialize(ProduceObject produceObject)
@@ -100,7 +95,6 @@ public class ProduceTaskBtn : MonoBehaviour
         else if (_produceTask?.CurrentState is CompletedState)
         {
             _produceManager.CurrentProduceObject.StartHarvest();
-            _produceObject.OrganizeTasks();
         }
     }
     

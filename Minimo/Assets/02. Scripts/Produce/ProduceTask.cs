@@ -4,14 +4,12 @@ public class ProduceTask
 {
     public ProduceData Data { get; }
     public int RemainTime { get; private set; }
-    public int SlotIndex { get; private set; }
     public ITaskState CurrentState { get; private set; }
     
-    public ProduceTask(ProduceData produceOption, int slotIndex)
+    public ProduceTask(ProduceData produceOption)
     {
         Data = produceOption;
         RemainTime = produceOption.Time;
-        SlotIndex = slotIndex;
         
         CurrentState = PendingState.Instance;
     }

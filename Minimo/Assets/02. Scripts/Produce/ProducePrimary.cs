@@ -18,11 +18,15 @@ public class ProducePrimary : ProduceObject
    
     private Sprite[] _currentCropSprites;
     private int _currentSpriteIndex;
+    
+    private PrimaryPanel _primaryPanel;
   
     public override void Initialize(int id)
     {
         base.Initialize(id);
 
+        _primaryPanel = App.GetManager<UIManager>().GetPanel<PrimaryPanel>();
+        
         if (AllTasks.Count > 0)
         {
             SetSpriteResources();
@@ -143,4 +147,27 @@ public class ProducePrimary : ProduceObject
         1 => (int)CropType.Bean,
         2 => (int)CropType.Fruit,
     };
+
+    public override void OpenUI()
+    {
+        switch (ActiveTask.CurrentState)
+        {
+            case CompletedState:
+                _primaryPanel.OpenPanel(ProduceState.Complete);
+                break;
+            
+            case ActiveState:
+                _primaryPanel.OpenPanel(ProduceState.Produce);
+                break;
+            
+            default:
+                _primaryPanel.OpenPanel(ProduceState.Idle);
+                break;
+        }
+    }
+    
+    public override void CloseUI()
+    {
+        _primaryPanel.ClosePanel();
+    }
 }
