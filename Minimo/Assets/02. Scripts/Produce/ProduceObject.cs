@@ -9,11 +9,6 @@ public abstract class ProduceObject : BuildingObject
     public List<ProduceData> ProduceData { get; private set; }
     public List<ProduceTask> AllTasks { get; } = new(); 
     public ProduceTask ActiveTask { get; private set; }
-    public virtual bool IsPrimary => false;
-    
-    public Transform MinimoWorkingPosition;
-    public bool IsMinimoWorking => MinimoWorkingPosition != null && MinimoWorkingPosition.childCount > 0;
-    public string AnimTrigger;
     
     private readonly bool[] _produceSlots = new bool[5];
     private bool _isPlanting = false;
@@ -135,7 +130,7 @@ public abstract class ProduceObject : BuildingObject
 
     public void StartPlant(ProduceData option)
     {
-        //if (!ProduceData.ProduceOptions.Contains(option)) return;
+        if (!ProduceData.Contains(option)) return;
         if (_isPlanting) return;
         
         var slotIndex = Array.FindIndex(_produceSlots, slot => !slot);

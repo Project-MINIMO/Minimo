@@ -7,14 +7,10 @@ public class ProducePrimary : ProduceObject
 {
     private enum CropType
     {
-        Wheat,
-        Corn,
-        Pumpkin,
-        Sugarcane,
-        Pepper
+        Grain,
+        Bean,
+        Fruit,
     }
-    
-    public override bool IsPrimary => true;
     
     [SerializeField] protected SpriteRenderer _cropSpriteRenderer;
     
@@ -38,8 +34,6 @@ public class ProducePrimary : ProduceObject
             Resources.LoadAll<Sprite>("Produce/Farm/Wheat"),
             Resources.LoadAll<Sprite>("Produce/Farm/Corn"),
             Resources.LoadAll<Sprite>("Produce/Farm/Pumpkin"),
-            Resources.LoadAll<Sprite>("Produce/Farm/Sugarcane"),
-            Resources.LoadAll<Sprite>("Produce/Farm/Pepper")
         };
     }
     
@@ -145,11 +139,8 @@ public class ProducePrimary : ProduceObject
 
     private int GetCropType(int cropCode) => cropCode switch
     {
-        0 => (int)CropType.Wheat,
-        1 => (int)CropType.Corn,
-        2 => (int)CropType.Pumpkin,
-        3 => (int)CropType.Sugarcane,
-        4 => (int)CropType.Pepper,
-        _ => (int)CropType.Wheat
+        0 => (int)CropType.Grain,
+        1 => (int)CropType.Bean,
+        2 => (int)CropType.Fruit,
     };
 }

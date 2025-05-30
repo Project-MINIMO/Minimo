@@ -25,7 +25,7 @@ public class PrimaryPanel : UIBase
                     return;
                 }
                 
-                if (_produceManager.CurrentProduceObject.IsPrimary)
+                if (true/*_produceManager.CurrentProduceObject.IsPrimary*/)
                 {
                     OpenPanel();
                 }
