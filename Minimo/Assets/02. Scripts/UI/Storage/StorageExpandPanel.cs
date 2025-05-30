@@ -1,5 +1,3 @@
-using MinimoShared;
-
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -20,7 +18,6 @@ public class StorageExpandPanel : UIBase
     [SerializeField] private Button _expandBtn;
     [SerializeField] private TextMeshProUGUI _priceTMP;
     
-    private AccountInfoManager _accountInfo;
     private int _currentCount;
     private int _expandCost;
     
@@ -29,9 +26,7 @@ public class StorageExpandPanel : UIBase
     public override void Initialize()
     {
         var titleData = App.GetData<TitleData>();
-        
-        _accountInfo = App.GetManager<AccountInfoManager>();
-        
+
         _expandCost = titleData.Common["StorageExpandCost"];
         _expandString = titleData.GetString("STR_STORAGE_EXPAND_COST");
         
@@ -60,14 +55,9 @@ public class StorageExpandPanel : UIBase
 
     private void OnClickExpand()
     {
-        if (_accountInfo.BlueStar.Value < _expandCost * _currentCount) return;
+        if (AccountInfo.Instance.blueStar < _expandCost * _currentCount) return;
         
-        var newCurrencyRequest = new CurrencyDTO
-        {
-            Star = _accountInfo.Star.Value,
-            BlueStar = _accountInfo.BlueStar.Value - _expandCost * _currentCount
-        };
-        _accountInfo.UpdateCurrency(newCurrencyRequest);
+        AccountInfo.Instance.blueStar -= _expandCost * _currentCount;
         //_accountInfo.MaxStorageCapacity += _currentCount;
         
         _storageCapacityCtrl.UpdateMaxCapacity();

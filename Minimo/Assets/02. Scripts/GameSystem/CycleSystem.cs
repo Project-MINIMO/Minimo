@@ -1,5 +1,4 @@
 using System;
-
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -16,22 +15,17 @@ public class CycleSystem : MonoBehaviour
     [SerializeField] private CycleMark[] _marks;
     [SerializeField] private Light2D _globalLight;
 
-    private TimeManager _timeManager;
-    
-    private const float CYCLE_LENGTH = 24f;
-    private DateTime _lastUpdateTime;
+    private const float CYCLE_LENGTH = 24f * 60f * 60f; // 24 hours in seconds
+    private float _startTime;
     private float _time;
-
     private int _currentIndex = 0;
 
     private void Start()
     {
-        _timeManager = App.GetManager<TimeManager>();
-        
+        _startTime = Time.time;
+
         Array.Sort(_marks, (a, b) => a.timeRatio.CompareTo(b.timeRatio));
 
-        _lastUpdateTime = _timeManager.Time;
-        
         UpdateTime();
         FindCurrentIndex();
         UpdateLight(CalculateTransitionFactor());
@@ -39,10 +33,6 @@ public class CycleSystem : MonoBehaviour
 
     private void Update()
     {
-        if ((_timeManager.Time - _lastUpdateTime).TotalSeconds < 1f) return;
-        
-        _lastUpdateTime = _timeManager.Time;
-
         UpdateTime();
         FindCurrentIndex();
         UpdateLight(CalculateTransitionFactor());
@@ -50,9 +40,8 @@ public class CycleSystem : MonoBehaviour
 
     private void UpdateTime()
     {
-        var now = _timeManager.Time;
-
-        _time = (now.Hour + now.Minute / 60f) / CYCLE_LENGTH;
+        var elapsed = (Time.time - _startTime) % CYCLE_LENGTH;
+        _time = elapsed / CYCLE_LENGTH;
     }
 
     private void FindCurrentIndex()

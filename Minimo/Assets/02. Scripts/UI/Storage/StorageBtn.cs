@@ -1,5 +1,3 @@
-using MinimoShared;
-
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;

@@ -53,7 +53,6 @@ public class OptionLogout : OptionBase
     
     private void OnClickYes()
     {
-        App.GetManager<LoginManager>().Logout();
         App.LoadScene(SceneName.Title);
     }
 }

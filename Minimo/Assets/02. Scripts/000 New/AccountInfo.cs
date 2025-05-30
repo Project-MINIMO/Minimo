@@ -6,4 +6,6 @@ public class AccountInfo : Singleton<AccountInfo>
 {
     public Dictionary<ItemData, int> items = new();
     public int level { get; private set; } = 2;
+    public int blueStar;
+    public int rainbowStar;
 }

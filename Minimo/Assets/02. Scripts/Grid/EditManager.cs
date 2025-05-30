@@ -73,7 +73,7 @@ public class EditManager : ManagerBase
         IsEditing.Value = false;
     }
     
-    public async void ConfirmEdit()
+    public void ConfirmEdit()
     {
         if (!_installChecker.CheckCanInstall(CurrentEditObject))
         {
