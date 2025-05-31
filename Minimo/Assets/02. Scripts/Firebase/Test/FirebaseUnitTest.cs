@@ -241,6 +241,20 @@ public class FirebaseUnitTest : MonoBehaviour
             Debug.LogError("Firestore Function 테스트 실패!");
         }
         
+        // 익명 계정 삭제
+        if (auth.CurrentUser != null)
+        {
+            try
+            {
+                await auth.CurrentUser.DeleteAsync();
+                Debug.Log("익명 계정 삭제 성공");
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"익명 계정 삭제 실패: {ex.Message}");
+            }
+        }
+        
         Debug.Log("=== Firebase Functions 테스트 완료 ===");
     }
     
