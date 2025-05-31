@@ -1,38 +1,57 @@
 using UniRx;
+using UnityEngine;
 
 public class ProduceManager : ManagerBase
 {
-    public ReactiveProperty<bool> IsProducing { get; } = new(false);
-    public ReactiveProperty<int> CurrentRemainTime { get; } = new(-1);
     public ProduceObject CurrentProduceObject { get; private set; }
+    
+    public ReactiveProperty<int> CurrentRemainTime { get; } = new(-1);
 
+    private float _lastUpdateTime;
+    
+    private void Update()
+    {
+        if (Time.time - _lastUpdateTime < 1f) return;
+
+        _lastUpdateTime = Time.time;
+
+        SetRemainTime();
+    }
+    
     public void ActiveProduce(ProduceObject produceObject)
     {
         if (CurrentProduceObject && CurrentProduceObject != produceObject)
         {
-            DeactiveProduce();
+            CurrentProduceObject.CloseUI();
         }
         
         CurrentProduceObject = produceObject;
-        IsProducing.Value = true;
+        CurrentProduceObject.OpenUI();
+        
+        SetRemainTime();
     }
     
     public void DeactiveProduce()
     {
         CurrentProduceObject = null;
-        IsProducing.Value = false;
-        
         CurrentRemainTime.Value = -1;
     }
 
-    public void SetRemainTime(int remainTime)
+    private void SetRemainTime()
     {
-        CurrentRemainTime.Value = remainTime;
+        if (CurrentProduceObject == null) return;
+        if (CurrentProduceObject.ActiveTask == null) return;
+        
+        CurrentRemainTime.Value = CurrentProduceObject.ActiveTask.RemainTime;
     }
 
     public void HarvestEarly()
     {
+        if (!CurrentProduceObject) return;
+        
         CurrentProduceObject.HarvestEarly();
         CurrentRemainTime.Value = -1;
+
+        SetRemainTime();
     }
 }

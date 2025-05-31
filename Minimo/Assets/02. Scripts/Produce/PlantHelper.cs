@@ -1,19 +1,15 @@
 using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using MinimoShared;
 
 public class PlantHelper 
 {
-    private readonly ItemSO _itemSO = App.GetData<TitleData>().ItemSO;
+    private readonly TitleData _titleData = App.GetData<TitleData>();
     private readonly UseCashPanel _useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
-    private readonly AccountInfoManager _accountInfo = App.GetManager<AccountInfoManager>();
 
     public void TryPlant(
         ProduceData option,
         int optionIndex,
-        int slotIndex,
-        Func<ProduceTask, int, UniTask> onTaskCreated)
+        Action<ProduceTask, int> onTaskCreated)
     {
         var lackItems = GetLackItems(option.MaterialItems);
 
@@ -23,51 +19,59 @@ public class PlantHelper
             {
                 foreach (var item in lackItems)
                 {
-                    _accountInfo.AddItemCount(item.Item1.Code, item.Item2);
+                    if (AccountInfo.Instance.items.ContainsKey(item.Item1))
+                    {
+                        AccountInfo.Instance.items[item.Item1] += item.Item2;
+                    }
+                    else
+                    {
+                        AccountInfo.Instance.items.Add(item.Item1, item.Item2);
+                    }
                 }
-                await CreateTaskAsync(option, optionIndex, slotIndex, onTaskCreated);
+                CreateTaskAsync(option, optionIndex, onTaskCreated);
             });
 
             return;
         }
 
-        CreateTaskAsync(option, optionIndex, slotIndex, onTaskCreated).Forget();
+        CreateTaskAsync(option, optionIndex, onTaskCreated);
     }
     
-    private List<(Item, int)> GetLackItems(ProduceMaterial[] materials)
+    private List<(ItemData, int)> GetLackItems(ProduceMaterial[] materials)
     {
-        var lackItems = new List<(Item, int)>();
+        var lackItems = new List<(ItemData, int)>();
 
         foreach (var material in materials)
         {
-            var item = _itemSO.GetItem(material.ID);
-            var itemDTO = _accountInfo.GetItem(item.Code);
-            if (itemDTO.Count < material.Amount)
+            var item = _titleData.Item[material.ID];
+            if (AccountInfo.Instance.items.TryGetValue(item, out var value))
             {
-                lackItems.Add((item, material.Amount - itemDTO.Count));
+                if (value < material.Amount)
+                {
+                    lackItems.Add((item, material.Amount - value));
+                }
             }
         }
 
         return lackItems;
     }
     
-    private async UniTask CreateTaskAsync(
+    private void CreateTaskAsync(
         ProduceData option, 
         int optionIndex, 
-        int slotIndex,
-        Func<ProduceTask, int, UniTask> onTaskCreated)
+        Action<ProduceTask, int> onTaskCreated)
     {
         ConsumeMaterials(option.MaterialItems);
 
-        var newTask = new ProduceTask(option, slotIndex);
-        await onTaskCreated(newTask, optionIndex);
+        var newTask = new ProduceTask(option);
+        onTaskCreated?.Invoke(newTask, optionIndex);
     }
 
     private void ConsumeMaterials(ProduceMaterial[] materials)
     {
         foreach (var material in materials)
         {
-            _accountInfo.AddItemCount(material.ID, -material.Amount);
+            //_accountInfo.AddItemCount(material.ID, -material.Amount);
         }
     }
 }

@@ -4,6 +4,16 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+public enum ItemType
+{
+    None,
+    Seed,
+    Harvest,
+    Ingredient,
+    Product,
+    Construction
+}
+
 [Serializable]
 public class CommonData
 {
@@ -81,12 +91,11 @@ public class StringData
 
 public class TitleData : DataBase
 {
-    public ItemSO ItemSO;
-
     public Dictionary<string, int> Common { get; private set; } = new();
     public Dictionary<int, BuildingData> Building { get; private set; } = new();
     public Dictionary<int, ItemData> Item { get; private set; } = new();
     public Dictionary<int, ProduceData> Produce { get; private set; } = new();
+    public Dictionary<string, List<ProduceData>> GroupedProduce { get; private set; } = new();
 
     private Dictionary<string, StringData> _string = new();
 
@@ -149,12 +158,11 @@ public class TitleData : DataBase
         {
             Produce.Add(data.ID, data);       
         }
-        
-        foreach (var item in ItemSO.items) //TEMP
-        {
-            item.SetData(Item.FirstOrDefault(x => x.Value.Name == item.Code).Value);
-        }
-
+        GroupedProduce = Produce
+            .Values
+            .GroupBy(data => data.Building)
+            .ToDictionary(data => data.Key, data => data.ToList());
+       
         _isGameDataLoaded = true;
     }
 

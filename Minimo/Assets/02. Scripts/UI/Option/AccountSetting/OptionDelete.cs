@@ -54,7 +54,6 @@ public class OptionDelete : OptionBase
     private void OnClickYes()
     {
         // TODO : Delete Account
-        App.GetManager<LoginManager>().Logout();
         App.LoadScene(SceneName.Title);
     }
 }

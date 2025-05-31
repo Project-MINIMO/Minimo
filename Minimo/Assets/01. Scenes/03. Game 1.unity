@@ -12377,7 +12377,6 @@ GameObject:
   - component: {fileID: 216209803}
   - component: {fileID: 216209806}
   - component: {fileID: 216209808}
-  - component: {fileID: 216209807}
   - component: {fileID: 216209809}
   m_Layer: 0
   m_Name: GameSystem
@@ -12415,21 +12414,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _checkTilemap: {fileID: 1575397485}
   _emptyTile: {fileID: 11400000, guid: 4987ea3ce8b575a4c8f6997c4cf129b1, type: 2}
---- !u!114 &216209807
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 216209802}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea730450353907640a42aa89ed32357a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _meteorPrefab: {fileID: 3721485543838847492, guid: 56465b84b74b9dc4d9b1f7a9bd614c5d, type: 3}
-  _installChecker: {fileID: 538196022}
-  _tileStateModifier: {fileID: 538196026}
 --- !u!114 &216209808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29833,8 +29817,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _checkTilemap: {fileID: 1575397485}
   _installTilemap: {fileID: 149741492}
-  _groundTile: {fileID: 11400000, guid: 4987ea3ce8b575a4c8f6997c4cf129b1, type: 2}
-  _waterTile: {fileID: 11400000, guid: 1a934297cc3040942802345af246f42f, type: 2}
+  _groundTile: {fileID: 11400000, guid: c40bb1e08c0d15243804b0c0a76fe3a0, type: 2}
+  _waterTile: {fileID: 11400000, guid: decb3544dc685a94ab4d16c69f1fa5f3, type: 2}
 --- !u!114 &538196023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79943,7 +79927,7 @@ Transform:
   m_GameObject: {fileID: 1575397482}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.56, y: -0.45, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

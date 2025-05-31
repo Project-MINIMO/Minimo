@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using MinimoShared;
-
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -15,80 +14,83 @@ public class BuildingObject : InteractObject
     public BuildingData BuildingData { get; private set; }
     public BuildingPositionData PositionData { get; private set; }
 
-    protected int ID;
-
     public bool IsPlaced { get; private set; } 
     private bool _isFlipped = false;
-   
-    protected BuildingManager _buildingManager;
+    
     protected EditManager _editManager;
     private SpriteRenderer _spriteRenderer;
 
     private void Awake()
     {
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        
         _editManager = App.GetManager<EditManager>();
-        _buildingManager = App.GetManager<BuildingManager>();
     }
     
-    public virtual void Initialize(BuildingData data)
+    public async virtual void Initialize(BuildingData data)
     {
-        BuildingData = data;
-        LoadPositionData();
+        try
+        {
+            BuildingData = data;
+            await LoadPositionData();
         
-        var size = new Vector3Int(1, 1, 1/*data.SizeX, data.SizeY, 1*/);
-        Area = new BoundsInt(_editManager.GetCellPosition(transform.position), size);
-        PreviousArea = Area;
+            var size = new Vector3Int(1, 1, 1/*data.SizeX, data.SizeY, 1*/);
+            Area = new BoundsInt(_editManager.GetCellPosition(transform.position), size);
+            PreviousArea = Area;
         
-        transform.position = _editManager.GetWorldPosition(Area.position);
+            transform.position = _editManager.GetWorldPosition(Area.position);
+            _editManager.StartEdit(this);
+        }
+        catch (Exception e)
+        {
+            throw; // TODO 예외 처리
+        }
     }
     
-    public virtual void Initialize(BuildingDTO buildingDto)
+    public virtual void Initialize(int id)
     {
-        ID = buildingDto.Id;
         IsPlaced = true;
-
-        var buildingString = buildingDto.BuildingType;
-        buildingString = buildingString.Replace("Building_", "");
-        var buildingType = buildingDto.Id;
-        var buildingData = App.GetData<TitleData>().Building[buildingType];
+        
+        var buildingData = App.GetData<TitleData>().Building[id];
         Initialize(buildingData);
     }
     
-    private async void LoadPositionData()
+    private async Task LoadPositionData()
     {
-        var path = $"Assets/09. Scriptable Objects/Building/{BuildingData.ID}.asset";
-        var handle = Addressables.LoadAssetAsync<BuildingPositionData>(path);
-        await handle.Task;
-        if (handle.Status == AsyncOperationStatus.Succeeded)
+        try
         {
-            PositionData = handle.Result;
-            SetPolygonCollider(GetComponent<PolygonCollider2D>());
-            Debug.Log($"BuildingData loaded: {PositionData.Code}");
+            var path = $"Assets/09. Scriptable Objects/Building/{BuildingData.Name}.asset";
+            var handle = Addressables.LoadAssetAsync<BuildingPositionData>(path);
+            await handle.Task;
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                PositionData = handle.Result;
+                SetPolygonCollider(GetComponent<PolygonCollider2D>());
+                Debug.Log($"BuildingData loaded: {PositionData.Code}");
+            }
+            else
+            {
+                Debug.LogError("Failed to load BuildingData");
+            }
         }
-        else
+        catch (Exception e)
         {
-            Debug.LogError("Failed to load BuildingData");
+            throw; // TODO 예외 처리
         }
     }
     
     private void SetPolygonCollider(PolygonCollider2D polyCollider)
     {
-        // SO에 저장된 땅, 물 타일 상대 좌표들을 합친 집합 생성
-        HashSet<Vector2Int> tileSet = new HashSet<Vector2Int>();
+        var tileSet = new HashSet<Vector2Int>();
         foreach (var pos in PositionData.GroundTilePositions)
             tileSet.Add(pos);
         foreach (var pos in PositionData.WaterTilePositions)
             tileSet.Add(pos);
+        
+        var polygonPoints = ColliderGenerator.GenerateIsoPolygonCentered(tileSet);
+        
+        var simplifiedPolygon = ColliderGenerator.SimplifyPolygon(polygonPoints, 0.1f);
     
-        // 건물 로컬 좌표계에 맞게 외곽선(볼록 껍질) 생성 후, 재중심화
-        List<Vector2> polygonPoints = ColliderGenerator.GenerateIsoPolygonCentered(tileSet);
-    
-        // (필요하다면 추가로 단순화)
-        List<Vector2> simplifiedPolygon = ColliderGenerator.SimplifyPolygon(polygonPoints, 0.1f);
-    
-        if (simplifiedPolygon != null && simplifiedPolygon.Count > 0)
+        if (simplifiedPolygon is { Count: > 0 })
         {
             polyCollider.pathCount = 1;
             polyCollider.SetPath(0, simplifiedPolygon.ToArray());
@@ -129,67 +131,31 @@ public class BuildingObject : InteractObject
         _spriteRenderer.color = color;
     }
 
-    public async UniTask<bool> Install()
+    public bool Install()
     {
         if (IsPlaced)
         {
-            return await UpdateBuilding();
+            return UpdateBuilding();
         }
         else
         {
-            return await CreateBuilding();
+            return CreateBuilding();
         }
     }
 
-    private async UniTask<bool> CreateBuilding()
+    private bool CreateBuilding()
     {
-        var buildingType = "Building_" + BuildingData.ID;
-        var newBuildingRequest = new BuildingDTO
-        {
-            BuildingType = buildingType,
-            Position = new int[] {Area.position.x, Area.position.y, Area.position.z},
-        };
-        
-        var newBuildingDto = await _buildingManager.CreateBuildingAsync(newBuildingRequest);
-        if (newBuildingDto != null)
-        {
-            Debug.Log($"Building created: {newBuildingDto.BuildingType} (ID: {newBuildingDto.Id})");
-            ID = newBuildingDto.Id;
-            IsPlaced = true;
-            PreviousArea = Area;
-
-            EndEdit();
-            return true;
-        }
-        else
-        {
-            Debug.LogError("Failed to create building");
-            return false;
-        }
+        IsPlaced = true;
+        PreviousArea = Area;
+        EndEdit();
+        return true;
     }
     
-    private async UniTask<bool> UpdateBuilding()
+    private bool UpdateBuilding()
     {
-        var updateBuildingParameter = new UpdateBuildingParameter
-        {
-            Id = ID,
-            Position = new int[] {Area.position.x, Area.position.y, Area.position.z},
-        };
-
-        var updatedBuilding = await _buildingManager.UpdateBuildingAsync(updateBuildingParameter);
-        if (updatedBuilding != null)
-        {
-            Debug.Log($"Building updated: {updatedBuilding.BuildingType} (ID: {updatedBuilding.Id})");
-            PreviousArea = Area;
-
-            EndEdit();
-            return true;
-        }
-        else
-        {
-            Debug.LogError("Failed to create building");
-            return false;
-        }
+        PreviousArea = Area;
+        EndEdit();
+        return true;
     }
   
     public void Cancel()

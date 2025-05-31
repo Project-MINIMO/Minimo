@@ -1,30 +1,44 @@
 using System.Collections.Generic;
 using System.Linq;
-using MinimoShared;
-using Cysharp.Threading.Tasks;
 
 using UnityEngine;
 
-public abstract class ProducePrimary : ProduceObject
+public class ProducePrimary : ProduceObject
 {
-    public override bool IsPrimary => true;
+    private enum CropType
+    {
+        Grain,
+        Bean,
+        Fruit,
+    }
     
     [SerializeField] protected SpriteRenderer _cropSpriteRenderer;
     
-    protected List<Sprite[]> _cropSprites;
+    private List<Sprite[]> _cropSprites;
    
-    protected Sprite[] _currentCropSprites;
-    protected int _currentSpriteIndex;
+    private Sprite[] _currentCropSprites;
+    private int _currentSpriteIndex;
+    
+    private PrimaryPanel _primaryPanel;
   
-    public override void Initialize(BuildingDTO buildingDto)
+    public override void Initialize(int id)
     {
-        base.Initialize(buildingDto);
+        base.Initialize(id);
 
+        _primaryPanel = App.GetManager<UIManager>().GetPanel<PrimaryPanel>();
+        
         if (AllTasks.Count > 0)
         {
             SetSpriteResources();
             SetCropSprite();
         }
+        
+        _cropSprites = new List<Sprite[]>(ProduceData.Count)
+        {
+            Resources.LoadAll<Sprite>("Produce/Farm/Wheat"),
+            Resources.LoadAll<Sprite>("Produce/Farm/Corn"),
+            Resources.LoadAll<Sprite>("Produce/Farm/Pumpkin"),
+        };
     }
     
     protected override void Update()
@@ -49,7 +63,7 @@ public abstract class ProducePrimary : ProduceObject
         SetCropSprite();
     }
 
-    protected virtual void SetCropSprite()
+    private void SetCropSprite()
     {
         float remainPercent;
 
@@ -76,22 +90,22 @@ public abstract class ProducePrimary : ProduceObject
         }
     }
     
-    protected override async UniTask CompleteActiveTask()
+    protected override void CompleteActiveTask()
     {
-        await base.CompleteActiveTask();
+        base.CompleteActiveTask();
         
         _currentSpriteIndex = 2;
         _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
     }
     
-    protected override async UniTask OnPlant(ProduceTask task, int optionIndex)
+    protected override void OnPlant(ProduceTask task, int optionIndex)
     {
         if (AllTasks.Count > 0)
         {
             return;
         }
         
-        await base.OnPlant(task, optionIndex);
+        base.OnPlant(task, optionIndex);
 
         SetSpriteResources();
     }
@@ -105,9 +119,9 @@ public abstract class ProducePrimary : ProduceObject
         _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
     }
     
-    public override async UniTask StartHarvest()
+    public override void StartHarvest()
     {
-        await base.StartHarvest();
+        base.StartHarvest();
 
         if (ActiveTask == null)
         {
@@ -119,13 +133,41 @@ public abstract class ProducePrimary : ProduceObject
         }
     }
     
-    public override async UniTask HarvestEarly()
+    public override void HarvestEarly()
     {
-        await base.HarvestEarly();
+        base.HarvestEarly();
         
         _currentSpriteIndex = 2;
         _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
     }
 
-    protected abstract int GetCropType(int cropCode);
+    private int GetCropType(int cropCode) => cropCode switch
+    {
+        0 => (int)CropType.Grain,
+        1 => (int)CropType.Bean,
+        2 => (int)CropType.Fruit,
+    };
+
+    public override void OpenUI()
+    {
+        switch (ActiveTask.CurrentState)
+        {
+            case CompletedState:
+                _primaryPanel.OpenPanel(ProduceState.Complete);
+                break;
+            
+            case ActiveState:
+                _primaryPanel.OpenPanel(ProduceState.Produce);
+                break;
+            
+            default:
+                _primaryPanel.OpenPanel(ProduceState.Idle);
+                break;
+        }
+    }
+    
+    public override void CloseUI()
+    {
+        _primaryPanel.ClosePanel();
+    }
 }

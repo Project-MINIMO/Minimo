@@ -17,27 +17,6 @@ public class AdvancedPanel : UIBase
     {
         _produceManager = App.GetManager<ProduceManager>();
         
-        _produceManager.IsProducing
-            .Subscribe((isProducing) =>
-            {
-                if (!isProducing)
-                {
-                    ClosePanel();
-                    return;
-                }
-                
-                var id = _produceManager.CurrentProduceObject.BuildingData.ID;
-                if (string.Equals(id.ToString(), "Farm") 
-                    || string.Equals(id.ToString(), "Orchard"))
-                {
-                    ClosePanel();
-                }
-                else
-                {
-                    OpenPanel();
-                }
-            }).AddTo(gameObject);
-        
         _taskBtns = GetComponentsInChildren<ProduceTaskBtn>(true);
         _closeBtn.onClick.AddListener(()=>
         {

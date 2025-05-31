@@ -94,7 +94,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6314677405763876296}
   - component: {fileID: 7782138920005508789}
-  - component: {fileID: 4822127152620520583}
   m_Layer: 0
   m_Name: GridObject
   m_TagString: GridObject
@@ -163,18 +162,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
---- !u!114 &4822127152620520583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6314677405763876294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9dceedff0a8b6645b4a40ab3fdebced, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Area:
-    m_Position: {x: 0, y: 0, z: 0}
-    m_Size: {x: 0, y: 0, z: 0}
