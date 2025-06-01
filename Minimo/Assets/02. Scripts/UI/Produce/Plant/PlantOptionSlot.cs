@@ -20,8 +20,7 @@ public class PlantOptionSlot : MonoBehaviour
     public void SetOption(ProduceData optionData)
     {
         _plantHandler.SetOption(optionData);
-
-        Debug.Log(optionData.ResultItems.Length);
+        
         SetResultInfo(optionData.ResultItems[0]);
 
         var item = _titleData.Item[optionData.ResultItems[0].ID];

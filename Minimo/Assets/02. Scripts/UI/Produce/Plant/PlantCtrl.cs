@@ -30,7 +30,6 @@ public class PlantCtrl : MonoBehaviour
         for (; i < options.Count; i++) 
         {
             var option = options[i];
-            Debug.Log(option.ID);
             _plantOptionSlots[i].gameObject.SetActive(true);
             _plantOptionSlots[i].SetOption(option);
         }

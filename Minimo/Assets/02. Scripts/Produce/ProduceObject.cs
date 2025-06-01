@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -70,7 +71,7 @@ public abstract class ProduceObject : BuildingObject
     {
         if (!ProduceData.Contains(option)) return;
 
-        var optionIndex = 0;//Array.IndexOf(ProduceData.ProduceOptions, option);
+        var optionIndex = ProduceData.IndexOf(option);
         
         _plantHelper.TryPlant(
             option,

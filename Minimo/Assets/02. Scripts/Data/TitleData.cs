@@ -48,8 +48,8 @@ public class RawProduceData
 {
     public int    ID;        // 예: 빌딩 enum 값을 int로
     public string Building;  // 예: "StarCropFarm"
-    public string Materials; // "StarCrop:1,Water:5"
-    public string Results;   // "Sugar:2"
+    public string MaterialItems; // "StarCrop:1,Water:5"
+    public string ResultItems;   // "Sugar:2"
     public int    Time;      
     public int    EXP;
 }
@@ -156,7 +156,7 @@ public class TitleData : DataBase
         var produceDataRaw = DataLoader.LoadDataProduceData(PRODUCE_PATH);
         foreach (var data in produceDataRaw)
         {
-            Produce.Add(data.ID, data);       
+            Produce.Add(data.ID, data);   
         }
         GroupedProduce = Produce
             .Values

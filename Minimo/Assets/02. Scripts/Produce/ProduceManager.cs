@@ -33,6 +33,7 @@ public class ProduceManager : ManagerBase
     
     public void DeactiveProduce()
     {
+        CurrentProduceObject.CloseUI();
         CurrentProduceObject = null;
         CurrentRemainTime.Value = -1;
     }
