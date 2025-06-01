@@ -17,8 +17,8 @@ public class ProduceStarBtn : MonoBehaviour
     private void Start()
     {
         _useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
-        
-        _starValue = App.GetData<TitleData>().Common["BlueStarValue"];
+
+        _starValue = 1;//App.GetData<TitleData>().Common["BlueStarValue"];
 
         _produceManager = App.GetManager<ProduceManager>();
         _produceManager.CurrentRemainTime

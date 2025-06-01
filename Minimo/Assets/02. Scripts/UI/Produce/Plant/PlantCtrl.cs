@@ -2,11 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class PlantPanel : UIBase
+public class PlantCtrl : UIBase
 {
-    [SerializeField] private ScrollRect _scrollRect;
-    [SerializeField] private Button _closeBtn;
-    
     private PlantOptionSlot[] _plantOptionSlots;
     private ProduceManager _produceManager;
 
@@ -14,8 +11,6 @@ public class PlantPanel : UIBase
     {
         _plantOptionSlots = GetComponentsInChildren<PlantOptionSlot>(true);
         _produceManager = App.GetManager<ProduceManager>();
-        
-        _closeBtn.onClick.AddListener(ClosePanel);
     }
    
     public override void OpenPanel()
@@ -23,17 +18,15 @@ public class PlantPanel : UIBase
         base.OpenPanel();
         
         InitOptionButtons();
-        _scrollRect.horizontalNormalizedPosition = 0;
     }
 
     private void InitOptionButtons()
     {
-        /*
-        var options = _produceManager.CurrentProduceObject.ProduceData.ProduceOptions;
+        var options = _produceManager.CurrentProduceObject.ProduceData;
 
         var i = 0;
         
-        for (; i < options.Length; i++) 
+        for (; i < options.Count; i++) 
         {
             var option = options[i];
             _plantOptionSlots[i].gameObject.SetActive(true);
@@ -44,6 +37,5 @@ public class PlantPanel : UIBase
         {
             _plantOptionSlots[i].gameObject.SetActive(false);
         }
-        */
     }
 }

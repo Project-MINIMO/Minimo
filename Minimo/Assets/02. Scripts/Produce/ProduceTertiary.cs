@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class ProduceTertiary : ProduceAdvanced
 {
-    // Start is called before the first frame update
-    void Start()
+    private AdvancedPanel _advancedPanel;
+    
+    public override void Initialize(int id)
     {
-        
-    }
+        base.Initialize(id);
 
-    // Update is called once per frame
-    void Update()
+        _advancedPanel = App.GetManager<UIManager>().GetPanel<AdvancedPanel>();
+    }
+    
+    public override void OpenUI()
     {
-        
+        _advancedPanel.OpenPanel();
+    }
+    
+    public override void CloseUI()
+    {
+        _advancedPanel.ClosePanel();
     }
 }

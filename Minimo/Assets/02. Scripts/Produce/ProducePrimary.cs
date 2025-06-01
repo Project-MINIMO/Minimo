@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class ProducePrimary : ProduceObject
@@ -150,6 +150,12 @@ public class ProducePrimary : ProduceObject
 
     public override void OpenUI()
     {
+        if (ActiveTask == null)
+        {
+            _primaryPanel.OpenPanel(ProduceState.Idle);
+            return;
+        }
+        
         switch (ActiveTask.CurrentState)
         {
             case CompletedState:
@@ -158,10 +164,6 @@ public class ProducePrimary : ProduceObject
             
             case ActiveState:
                 _primaryPanel.OpenPanel(ProduceState.Produce);
-                break;
-            
-            default:
-                _primaryPanel.OpenPanel(ProduceState.Idle);
                 break;
         }
     }

@@ -6,7 +6,7 @@ public class PrimaryPanel : UIBase
 {
     [SerializeField] private Button _closeBtn;
     
-    [SerializeField] private PlantPanel _plantCtrl;
+    [SerializeField] private PlantCtrl _plantCtrl;
     [SerializeField] private ProduceInfoCtrl _infoCtrl;
     [SerializeField] private HarvestHandler _harvestCtrl;
     
