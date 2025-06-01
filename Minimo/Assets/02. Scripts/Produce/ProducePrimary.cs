@@ -55,7 +55,7 @@ public class ProducePrimary : ProduceObject
             return;
         }
 
-        if (AllTasks.Any(task => task.RemainTime <= 0))
+        if (_currentSpriteIndex == 2)
         {
             return;
         }
@@ -89,15 +89,7 @@ public class ProducePrimary : ProduceObject
             _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
         }
     }
-    
-    protected override void CompleteActiveTask()
-    {
-        base.CompleteActiveTask();
-        
-        _currentSpriteIndex = 2;
-        _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
-    }
-    
+
     protected override void OnPlant(ProduceTask task, int optionIndex)
     {
         if (AllTasks.Count > 0)
@@ -152,19 +144,11 @@ public class ProducePrimary : ProduceObject
     {
         if (ActiveTask == null)
         {
-            _primaryPanel.OpenPanel(ProduceState.Idle);
-            return;
+            _primaryPanel.OpenPanel(AllTasks.Count == 0 ? ProduceState.Idle : ProduceState.Complete);
         }
-        
-        switch (ActiveTask.CurrentState)
+        else
         {
-            case CompletedState:
-                _primaryPanel.OpenPanel(ProduceState.Complete);
-                break;
-            
-            case ActiveState:
-                _primaryPanel.OpenPanel(ProduceState.Produce);
-                break;
+            _primaryPanel.OpenPanel(ProduceState.Produce);
         }
     }
     

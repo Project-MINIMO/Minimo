@@ -52,7 +52,7 @@ public abstract class ProduceObject : BuildingObject
     
     protected virtual void CompleteActiveTask()
     {
-        ActiveTask.ChangeState(CompletedState.Instance);
+        ActiveTask.Harvest();
         SetNextActiveTask();
     }
     

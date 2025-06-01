@@ -26,7 +26,7 @@ public class BuildingObject : InteractObject
         _editManager = App.GetManager<EditManager>();
     }
     
-    public async virtual void Initialize(BuildingData data)
+    public virtual async void Initialize(BuildingData data)
     {
         try
         {
@@ -65,6 +65,7 @@ public class BuildingObject : InteractObject
             {
                 PositionData = handle.Result;
                 SetPolygonCollider(GetComponent<PolygonCollider2D>());
+                _spriteRenderer.transform.position = new Vector3(PositionData.Offset.x, PositionData.Offset.y, 0);
                 Debug.Log($"BuildingData loaded: {PositionData.Code}");
             }
             else
