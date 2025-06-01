@@ -6,9 +6,9 @@ public class ProduceTertiary : ProduceAdvanced
 {
     private AdvancedPanel _advancedPanel;
     
-    public override void Initialize(int id)
+    public override void Initialize(BuildingData data)
     {
-        base.Initialize(id);
+        base.Initialize(data);
 
         _advancedPanel = App.GetManager<UIManager>().GetPanel<AdvancedPanel>();
     }

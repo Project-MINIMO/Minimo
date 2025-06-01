@@ -1,20 +1,11 @@
-using System;
-
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class PlantOptionSlot : MonoBehaviour
 {
-    [Serializable]
-    private struct PlantInfo
-    {
-        public GameObject _gameObject;
-        public Image _image;
-        public TextMeshProUGUI _text;
-    }
-    
-    [SerializeField] private PlantInfo _result;
+    [SerializeField] private Image _itemImg;
+    [SerializeField] private TextMeshProUGUI _amountTMP;
     [SerializeField] private TextMeshProUGUI _storageTMP;
     
     private TitleData _titleData;
@@ -30,9 +21,18 @@ public class PlantOptionSlot : MonoBehaviour
     {
         _plantHandler.SetOption(optionData);
 
+        Debug.Log(optionData.ResultItems.Length);
         SetResultInfo(optionData.ResultItems[0]);
 
-        //_storageTMP.text = _accountInfo.GetItem(optionData.ResultItems[0].ID).Count.ToString();
+        var item = _titleData.Item[optionData.ResultItems[0].ID];
+        if (AccountInfo.Instance.items.TryGetValue(item, out var value))
+        {
+            _storageTMP.text = value.ToString();
+        }
+        else
+        {
+            _storageTMP.text = string.Empty;
+        }
     }
 
     private void SetResultInfo(ProduceResult result)
@@ -43,8 +43,8 @@ public class PlantOptionSlot : MonoBehaviour
             return;
         }
         
-        _result._image.sprite = Resources.Load<Sprite>($"Item/{result.ID}");
-        _result._text.text = $"X{result.Amount}";
+        _itemImg.sprite = Resources.Load<Sprite>($"Item/{itemData.Name}");
+        _amountTMP.text = $"X{result.Amount}";
     }
 }
 

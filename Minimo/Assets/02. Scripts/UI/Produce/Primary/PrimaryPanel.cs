@@ -47,7 +47,7 @@ public class PrimaryPanel : UIBase
     {
         _harvestCtrl.gameObject.SetActive(targetUI == _harvestCtrl);
         _infoCtrl.SetActive(targetUI == _infoCtrl);
-        _plantCtrl.gameObject.SetActive(targetUI == _plantCtrl);
+        _plantCtrl.SetActive(targetUI == _plantCtrl);
     }
     
     private void SetPosition()

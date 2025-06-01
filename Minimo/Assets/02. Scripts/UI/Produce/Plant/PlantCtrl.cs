@@ -1,23 +1,24 @@
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
-public class PlantCtrl : UIBase
+public class PlantCtrl : MonoBehaviour
 {
     private PlantOptionSlot[] _plantOptionSlots;
     private ProduceManager _produceManager;
 
-    public override void Initialize()
+    private void Awake()
     {
         _plantOptionSlots = GetComponentsInChildren<PlantOptionSlot>(true);
         _produceManager = App.GetManager<ProduceManager>();
     }
-   
-    public override void OpenPanel()
+
+    public void SetActive(bool isActive)
     {
-        base.OpenPanel();
-        
-        InitOptionButtons();
+        gameObject.SetActive(isActive);
+
+        if (isActive)
+        {
+            InitOptionButtons();
+        }
     }
 
     private void InitOptionButtons()
@@ -29,6 +30,7 @@ public class PlantCtrl : UIBase
         for (; i < options.Count; i++) 
         {
             var option = options[i];
+            Debug.Log(option.ID);
             _plantOptionSlots[i].gameObject.SetActive(true);
             _plantOptionSlots[i].SetOption(option);
         }

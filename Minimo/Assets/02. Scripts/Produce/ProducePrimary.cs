@@ -21,9 +21,9 @@ public class ProducePrimary : ProduceObject
     
     private PrimaryPanel _primaryPanel;
   
-    public override void Initialize(int id)
+    public override void Initialize(BuildingData data)
     {
-        base.Initialize(id);
+        base.Initialize(data);
 
         _primaryPanel = App.GetManager<UIManager>().GetPanel<PrimaryPanel>();
         

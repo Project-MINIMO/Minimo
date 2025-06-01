@@ -15,7 +15,6 @@ public class ProduceTaskBtn : MonoBehaviour
     [SerializeField] private RemainTimeUpdater _remainTimeUpdater;
 
     private int _currentRemainTime; 
-    private PlantCtrl _plantPanel;
 
     private ProduceManager _produceManager;
     private ProduceObject _produceObject;
@@ -25,7 +24,6 @@ public class ProduceTaskBtn : MonoBehaviour
     private void Start()
     {
         _taskIndex = transform.GetSiblingIndex();
-        _plantPanel = App.GetManager<UIManager>().GetPanel<PlantCtrl>();
         
         _taskBtn.onClick.AddListener(OnClickTask);
         
@@ -76,7 +74,7 @@ public class ProduceTaskBtn : MonoBehaviour
     {
         if (_produceTask == null) 
         {
-            _plantPanel.OpenPanel();
+            //_plantPanel.OpenPanel();
             return;
         }
             
