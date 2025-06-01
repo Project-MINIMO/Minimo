@@ -7,8 +7,8 @@ public class BuildingBack : MonoBehaviour
 {
     private enum EBuildingType
     {
-        Production,
-        Decoration,
+        Production = 0,
+        Decoration = 3,
         Utility,
         Minimo
     }
@@ -33,11 +33,15 @@ public class BuildingBack : MonoBehaviour
 
         var existingButtons = GetComponentsInChildren<BuildingBtn>(true);
 
-        int index = 0;
+        var index = 0;
 
         foreach (var data in App.GetData<TitleData>().Building.Values)
         {
-            if (data.Type != (int)_buildingType)
+            var isValid = _buildingType == EBuildingType.Production
+                ? data.Type is 0 or 1 or 2
+                : data.Type == (int)_buildingType;
+
+            if (!isValid)
             {
                 continue;
             }

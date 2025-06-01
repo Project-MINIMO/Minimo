@@ -1,6 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
-using Cysharp.Threading.Tasks;
+
 using UnityEngine;
 
 public class ProducePrimary : ProduceObject
@@ -12,7 +11,7 @@ public class ProducePrimary : ProduceObject
         Fruit,
     }
     
-    [SerializeField] protected SpriteRenderer _cropSpriteRenderer;
+    private SpriteRenderer _cropSpriteRenderer;
     
     private List<Sprite[]> _cropSprites;
    
@@ -20,7 +19,14 @@ public class ProducePrimary : ProduceObject
     private int _currentSpriteIndex;
     
     private PrimaryPanel _primaryPanel;
-  
+
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        _cropSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
+    }
+    
     public override void Initialize(BuildingData data)
     {
         base.Initialize(data);
@@ -70,6 +76,7 @@ public class ProducePrimary : ProduceObject
         if (ActiveTask == null)
         {
             remainPercent = 0;
+            OpenUI();
         }
         else
         {
@@ -131,6 +138,8 @@ public class ProducePrimary : ProduceObject
         
         _currentSpriteIndex = 2;
         _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
+        
+        OpenUI();
     }
 
     private int GetCropType(int cropCode) => cropCode switch

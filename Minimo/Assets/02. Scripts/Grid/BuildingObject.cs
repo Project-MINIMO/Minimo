@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
+
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -20,7 +20,7 @@ public class BuildingObject : InteractObject
     protected EditManager _editManager;
     private SpriteRenderer _spriteRenderer;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _editManager = App.GetManager<EditManager>();
@@ -65,6 +65,8 @@ public class BuildingObject : InteractObject
             {
                 PositionData = handle.Result;
                 SetPolygonCollider(GetComponent<PolygonCollider2D>());
+                GetComponent<PolygonCollider2D>().offset = PositionData.ColliderOffset;
+                _spriteRenderer.sprite = PositionData.Sprite;
                 _spriteRenderer.transform.position = new Vector3(PositionData.Offset.x, PositionData.Offset.y, 0);
                 Debug.Log($"BuildingData loaded: {PositionData.Code}");
             }

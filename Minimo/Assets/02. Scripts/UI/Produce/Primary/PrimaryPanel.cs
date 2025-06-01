@@ -54,6 +54,7 @@ public class PrimaryPanel : UIBase
     {
         var position = _produceManager.CurrentProduceObject.transform.position;
         var screenPos = Camera.main.WorldToScreenPoint(position);
+        screenPos.y -= 100;
         _rect.position = screenPos;
     }
 }

@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class BuildingBtn : MonoBehaviour
 {
@@ -60,7 +61,7 @@ public class BuildingBtn : MonoBehaviour
         _iconImg.sprite = Resources.Load<Sprite>(spritePath);
         _iconImg.SetNativeSize();
         
-        var prefabPath = $"Building/{data.Name}";
+        var prefabPath = $"Building/GridObject";
         _objectPrefab = Resources.Load<GameObject>(prefabPath);
 
         SetString();
@@ -87,7 +88,7 @@ public class BuildingBtn : MonoBehaviour
             _currentState = BuildingState.Use;
         }
 
-        for (int i = 0; i < _stateBacks.Length; i++)
+        for (var i = 0; i < _stateBacks.Length; i++)
         {
             if (i == (int)_currentState)
             {
@@ -107,12 +108,30 @@ public class BuildingBtn : MonoBehaviour
         var cameraCenterPosition = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, Camera.main.nearClipPlane));
         cameraCenterPosition.z = 0;
         
-        var gridObject = Instantiate(_objectPrefab, cameraCenterPosition, Quaternion.identity, _buildingGroup)
-            .GetComponent<BuildingObject>();
-
-        if (gridObject != null)
+        var gridObject = Instantiate(_objectPrefab, cameraCenterPosition, Quaternion.identity, _buildingGroup);
+        switch (Data.Type)
         {
-            gridObject.Initialize(Data);
+            case 0:
+                gridObject.AddComponent<ProducePrimary>();
+                break;
+            
+            case 1:
+                gridObject.AddComponent<ProduceSecondary>();
+                break;
+            
+            case 2:
+                gridObject.AddComponent<ProduceTertiary>();
+                break;
+            
+            default:
+                gridObject.AddComponent<BuildingObject>();
+                break;
+        }
+       
+
+        if (gridObject.TryGetComponent<ProduceObject>(out var produce))
+        {
+            produce.Initialize(Data);
         }
         else
         {

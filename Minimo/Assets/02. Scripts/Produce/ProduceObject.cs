@@ -21,7 +21,7 @@ public abstract class ProduceObject : BuildingObject
     
     private ProduceManager _produceManager;
     private float _lastUpdateTime;
-
+    
     public override void Initialize(BuildingData data)
     {
         base.Initialize(data);

@@ -8,5 +8,6 @@ public class BuildingPositionData : ScriptableObject
     public List<Vector2Int> GroundTilePositions = new(); 
     public List<Vector2Int> WaterTilePositions = new();  
     public Vector2 Offset;
+    public Vector2 ColliderOffset;
     public Sprite Sprite;
 }
