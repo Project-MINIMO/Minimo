@@ -560,8 +560,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1708394407}
   - component: {fileID: 1708394406}
-  - component: {fileID: 1708394409}
-  - component: {fileID: 1708394408}
   - component: {fileID: 1708394410}
   m_Layer: 0
   m_Name: Main Camera
@@ -636,30 +634,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1708394408
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1708394404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bb2f1d2d9b852047a298dec0b8c8389, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1708394409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1708394404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95e830c658b21374c8356365b10eb5dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1708394410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1072,6 +1046,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fff2976dd07a3c547a1584d56cac7f27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blueStar: 0
+  rainbowStar: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

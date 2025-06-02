@@ -40,8 +40,6 @@ public class InputManager : ManagerBase
         }
 
         _previousState = CurrentState;
-        
-        Debug.Log(CurrentState);
     }
     
     private bool IsPointerOverUI()

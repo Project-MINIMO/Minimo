@@ -113,7 +113,6 @@ public class ColliderGenerator
         float cx = (tile.x - tile.y) * (TileWidth / 2f);
         float cy = (tile.x + tile.y) * (TileHeight / 2f) - (TileHeight / 2f);
         Vector2 center = new Vector2(cx, cy);
-        Debug.Log($"Tile: {tile} -> Center: {center}");
         return center;
     }
 
