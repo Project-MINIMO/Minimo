@@ -865,7 +865,6 @@ GameObject:
   - component: {fileID: 3036070759918541829}
   - component: {fileID: 8300059609362807838}
   - component: {fileID: 8300059609362807839}
-  - component: {fileID: 8300059609362807840}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -971,6 +970,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2512545061631071770}
   - component: {fileID: 6799798795851076159}
+  - component: {fileID: 6961438074902565525}
   m_Layer: 0
   m_Name: App
   m_TagString: Untagged
@@ -978,6 +978,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &6961438074902565525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6961438074902565524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fff2976dd07a3c547a1584d56cac7f27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blueStar: 0
+  rainbowStar: 0
 --- !u!4 &7360035127340598085
 Transform:
   m_ObjectHideFlags: 0
@@ -1034,20 +1048,6 @@ MonoBehaviour:
   _bgmPlayer: {fileID: 1072097328}
   _sfxPlayer: {fileID: 1247558949}
   _mixer: {fileID: 24100000, guid: 14fb2df9e30898748bf19b7e9df7123d, type: 2}
---- !u!114 &8300059609362807840
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1356189734272973316}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fff2976dd07a3c547a1584d56cac7f27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  blueStar: 0
-  rainbowStar: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

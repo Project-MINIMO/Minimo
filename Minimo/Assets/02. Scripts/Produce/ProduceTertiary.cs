@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class ProduceTertiary : ProduceAdvanced
 {
     public int MaxSlotCount { get; private set; } = 1;

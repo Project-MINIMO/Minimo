@@ -142,9 +142,9 @@ public class ProducePrimary : ProduceObject
 
     private int GetCropType(int cropCode) => cropCode switch
     {
-        3 => (int)CropType.Grain,
-        4 => (int)CropType.Bean,
-        5 => (int)CropType.Fruit,
+        3 or 47 or 48 => (int)CropType.Grain,
+        4 or 49 or 50 => (int)CropType.Bean,
+        5 or 51 or 52 => (int)CropType.Fruit,
     };
 
     public override void OpenUI()

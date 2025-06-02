@@ -68,7 +68,6 @@ public class BuildingObject : InteractObject
                 GetComponent<PolygonCollider2D>().offset = PositionData.ColliderOffset;
                 _spriteRenderer.sprite = PositionData.Sprite;
                 _spriteRenderer.transform.position = new Vector3(PositionData.Offset.x, PositionData.Offset.y, 0);
-                Debug.Log($"BuildingData loaded: {PositionData.Code}");
             }
             else
             {
@@ -97,7 +96,6 @@ public class BuildingObject : InteractObject
         {
             polyCollider.pathCount = 1;
             polyCollider.SetPath(0, simplifiedPolygon.ToArray());
-            Debug.Log("Collider vertices count: " + simplifiedPolygon.Count);
         }
     }
 
