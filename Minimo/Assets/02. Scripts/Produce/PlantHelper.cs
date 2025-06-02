@@ -51,6 +51,10 @@ public class PlantHelper
                     lackItems.Add((item, material.Amount - value));
                 }
             }
+            else
+            {
+                lackItems.Add((item, material.Amount));
+            }
         }
 
         return lackItems;
@@ -71,7 +75,8 @@ public class PlantHelper
     {
         foreach (var material in materials)
         {
-            //_accountInfo.AddItemCount(material.ID, -material.Amount);
+            var item = _titleData.Item[material.ID];
+            AccountInfo.Instance.items[item] -= material.Amount;
         }
     }
 }
