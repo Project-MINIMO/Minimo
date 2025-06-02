@@ -49,7 +49,7 @@ public abstract class ProduceObject : BuildingObject
         }
     }
     
-    private void CompleteActiveTask()
+    protected virtual void CompleteActiveTask()
     {
         ActiveTask.Harvest();
         SetNextActiveTask();

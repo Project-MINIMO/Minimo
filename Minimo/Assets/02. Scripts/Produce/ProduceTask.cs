@@ -59,10 +59,6 @@ public class ActiveState : ITaskState
     public void OnUpdate(ProduceTask task)
     {
         task.ReduceRemainTime(1);
-        if (task.RemainTime <= 0)
-        {
-            task.ChangeState(CompletedState.Instance);
-        }
     }
 
     public void OnHarvest(ProduceTask task)

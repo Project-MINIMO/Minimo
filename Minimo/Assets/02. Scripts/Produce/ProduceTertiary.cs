@@ -20,6 +20,16 @@ public class ProduceTertiary : ProduceAdvanced
         MaxSlotCount++;
     }
 
+    protected override void CompleteActiveTask()
+    {
+        var activeTask = ActiveTask;
+        
+        base.CompleteActiveTask();
+        
+        AllTasks.Remove(activeTask);
+        AllTasks.Add(activeTask);
+    }
+
     public void StartHarvest(ProduceTask task)
     {
         if (!AllTasks.Contains(task)) return;

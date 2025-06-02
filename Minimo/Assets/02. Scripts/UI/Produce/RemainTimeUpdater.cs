@@ -33,8 +33,6 @@ public class RemainTimeUpdater : MonoBehaviour
     
     public void SetRemainTime(int remainTime, int fullTime)
     {
-        Debug.Log(remainTime);
-        
         switch (remainTime)
         {
             case < 0:
