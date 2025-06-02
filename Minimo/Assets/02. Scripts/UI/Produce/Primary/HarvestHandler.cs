@@ -32,7 +32,7 @@ public class HarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
 
         Vector2 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Collider2D hit = Physics2D.OverlapPoint(worldPosition, _targetLayerMask);
-        if (hit != null && hit.TryGetComponent<ProduceObject>(out var component))
+        if (hit != null && hit.TryGetComponent<ProducePrimary>(out var component))
         {
             component.StartHarvest();
         }

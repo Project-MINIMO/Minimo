@@ -17,10 +17,18 @@ public abstract class ProduceObject : BuildingObject
     public List<ProduceTask> AllTasks { get; } = new(); 
     public ProduceTask ActiveTask => AllTasks.FirstOrDefault(t => t.CurrentState is ActiveState);
     
-    private PlantHelper _plantHelper;
-    
     private ProduceManager _produceManager;
+    private PlantHelper _plantHelper;
+    private ProduceStateUI _produceStateUI;
+    
     private float _lastUpdateTime;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        _produceStateUI = GetComponent<ProduceStateUI>();
+    }
     
     public override void Initialize(BuildingData data)
     {
@@ -40,8 +48,13 @@ public abstract class ProduceObject : BuildingObject
 
         _lastUpdateTime = Time.time;
 
-        if (ActiveTask == null) return;
+        if (ActiveTask == null)
+        {
+            _produceStateUI.ShowUI(AllTasks.Count > 0 ? ProduceState.Complete : ProduceState.Idle);
+            return;
+        }
         
+        _produceStateUI.ShowUI(ProduceState.Produce);
         ActiveTask.Update();
         
         if (ActiveTask is { RemainTime: <= 0 })
@@ -50,7 +63,7 @@ public abstract class ProduceObject : BuildingObject
         }
     }
     
-    protected virtual void CompleteActiveTask()
+    private void CompleteActiveTask()
     {
         ActiveTask.Harvest();
         SetNextActiveTask();

@@ -41,7 +41,11 @@ public class ProduceManager : ManagerBase
     private void SetRemainTime()
     {
         if (CurrentProduceObject == null) return;
-        if (CurrentProduceObject.ActiveTask == null) return;
+        if (CurrentProduceObject.ActiveTask == null)
+        {
+            CurrentRemainTime.Value = -1;
+            return;
+        }
         
         CurrentRemainTime.Value = CurrentProduceObject.ActiveTask.RemainTime;
     }

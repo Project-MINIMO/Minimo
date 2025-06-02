@@ -25,14 +25,13 @@ public class ProducePrimary : ProduceObject
         base.Awake();
         
         _cropSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        _primaryPanel = App.GetManager<UIManager>().GetPanel<PrimaryPanel>();
     }
     
     public override void Initialize(BuildingData data)
     {
         base.Initialize(data);
 
-        _primaryPanel = App.GetManager<UIManager>().GetPanel<PrimaryPanel>();
-        
         if (AllTasks.Count > 0)
         {
             SetSpriteResources();
@@ -76,7 +75,6 @@ public class ProducePrimary : ProduceObject
         if (ActiveTask == null)
         {
             remainPercent = 0;
-            OpenUI();
         }
         else
         {

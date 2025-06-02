@@ -6,24 +6,49 @@ public class ProduceSecondary : ProduceAdvanced
 {
     private PrimaryPanel _primaryPanel;
     
-    public override void Initialize(BuildingData data)
+    protected override void Awake()
     {
-        base.Initialize(data);
+        base.Awake();
 
         _primaryPanel = App.GetManager<UIManager>().GetPanel<PrimaryPanel>();
     }
     
+    protected override void OnPlant(ProduceTask task, int optionIndex)
+    {
+        if (AllTasks.Count > 0)
+        {
+            return;
+        }
+        
+        base.OnPlant(task, optionIndex);
+    }
+    
+    public override void OnClickUp()
+    {
+        base.OnClickUp();
+
+        if (AllTasks.Count > 0 && AllTasks[0].CurrentState is CompletedState)
+        {
+            StartHarvest();
+        }
+    }
+    
     public override void OpenUI()
     {
-        switch (ActiveTask.CurrentState)
+        if (ActiveTask == null)
         {
-            case ActiveState:
-                _primaryPanel.OpenPanel(ProduceState.Produce);
-                break;
-            
-            default:
+            if (AllTasks.Count == 0)
+            {
                 _primaryPanel.OpenPanel(ProduceState.Idle);
-                break;
+            }
+            else
+            {
+                _primaryPanel.ClosePanel();
+            }
+        }
+        else
+        {
+            _primaryPanel.OpenPanel(ProduceState.Produce);
         }
     }
     
