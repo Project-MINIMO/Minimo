@@ -1,6 +1,3 @@
-using System.Linq;
-
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -9,7 +6,10 @@ public class AdvancedPanel : UIBase
 {
     [SerializeField] private Button _closeBtn;
     [SerializeField] private TextMeshProUGUI _titleTMP;
-    [SerializeField] private ProduceTaskBtn[] _taskBtns;
+    
+    private ProduceTaskBtn[] _taskBtns;
+    [SerializeField] private Button _expandBtn;
+    [SerializeField] private PlantCtrl _plantCtrl;
 
     private ProduceManager _produceManager;
     
@@ -18,9 +18,11 @@ public class AdvancedPanel : UIBase
         _produceManager = App.GetManager<ProduceManager>();
         
         _taskBtns = GetComponentsInChildren<ProduceTaskBtn>(true);
-        _closeBtn.onClick.AddListener(()=>
+        _closeBtn.onClick.AddListener(()=> _produceManager.DeactiveProduce());
+        _expandBtn.onClick.AddListener(() =>
         {
-            _produceManager.DeactiveProduce();
+            ((ProduceTertiary)_produceManager.CurrentProduceObject).AddSlotCount();
+            InitializeTaskBtns();
         });
     }
 
@@ -28,29 +30,29 @@ public class AdvancedPanel : UIBase
     {
         base.OpenPanel();
         
-        InitTaskBtns();
-        _titleTMP.text = App.GetData<TitleData>().GetString(_produceManager.CurrentProduceObject.BuildingData.Name);
+        _titleTMP.text = App.GetData<TitleData>()
+            .GetString($"STR_BUILDING_{_produceManager.CurrentProduceObject.BuildingData.Name.ToUpper()}_NAME");
+
+        InitializeTaskBtns();
+        _plantCtrl.SetActive(true);
     }
 
-    private void InitTaskBtns()
+    private void InitializeTaskBtns()
     {
-        foreach (var taskBtn in _taskBtns)
+        var maxCount = ((ProduceTertiary)_produceManager.CurrentProduceObject).MaxSlotCount;
+        var i = 0;
+
+        for (; i < maxCount; i++)
         {
-            taskBtn.Initialize(_produceManager.CurrentProduceObject);
+            _taskBtns[i].gameObject.SetActive(true);
+            _taskBtns[i].SetSlot();
         }
-    }
-    
-    public bool ExpandTaskBtn()
-    {
-        foreach (var taskBtn in _taskBtns)
+
+        for (; i < _taskBtns.Length; i++)
         {
-            if (!taskBtn.IsActive)
-            {
-                taskBtn.gameObject.SetActive(true);
-                break;
-            }
+            _taskBtns[i].gameObject.SetActive(false);
         }
         
-        return  _taskBtns.Any(btn => !btn.IsActive);
+        _expandBtn.gameObject.SetActive(maxCount < 5);
     }
 }

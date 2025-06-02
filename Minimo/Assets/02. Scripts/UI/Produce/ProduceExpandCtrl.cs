@@ -36,8 +36,8 @@ public class ProduceExpandCtrl : MonoBehaviour
 
     private void Expand()
     {
-        var isRemainDeactiveBtn = _advancedPanel.ExpandTaskBtn();
-        gameObject.SetActive(isRemainDeactiveBtn);
+        //var isRemainDeactiveBtn = _advancedPanel.ExpandTaskBtn();
+        //gameObject.SetActive(isRemainDeactiveBtn);
         
         _currentPrice += 100;
         UpdatePriceText();
