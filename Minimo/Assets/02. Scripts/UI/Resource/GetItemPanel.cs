@@ -18,8 +18,6 @@ public class GetItemPanel : UIBase
     [SerializeField] private Vector2 _endPosition;
     
     private Vector2[] _startPosition = new Vector2[8];
-    
-    public bool IsComplete { get; private set; } = false;
 
     public override void Initialize()
     {
@@ -28,12 +26,6 @@ public class GetItemPanel : UIBase
         for (var i = 0; i < _iconImgs.Length; i++)
         {
             _startPosition[i] = _iconImgs[i].rectTransform.anchoredPosition;
-        }
-        
-        var storagePanel = App.GetManager<UIManager>().GetPanel<StoragePanel>();
-        if (storagePanel.GetActiveStorageBtnCount() > 6)
-        {
-            IsComplete = true;
         }
     }
     
@@ -98,8 +90,7 @@ public class GetItemPanel : UIBase
         }
         
         yield return new WaitForSeconds(0.3f);
-        
-        IsComplete = true;
+ 
         ClosePanel();   
     }
 }

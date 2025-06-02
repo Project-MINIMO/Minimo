@@ -1,4 +1,3 @@
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -22,8 +21,6 @@ public class StorageBtn : MonoBehaviour
         _infoPanel= App.GetManager<UIManager>().GetPanel<StorageInfoPanel>();
         
         _infoBtn.onClick.AddListener(OnClickInfoBtn);
-        
-        App.GetManager<UIManager>().GetPanel<StoragePanel>().StorageChanged.Subscribe(_ => SetCount()).AddTo(gameObject);;
     }
 
     private void OnEnable()
@@ -36,7 +33,7 @@ public class StorageBtn : MonoBehaviour
         Item = item;
         Position = GetComponent<RectTransform>().position;
 
-        _iconImg.sprite = null; //item.Icon;
+        _iconImg.sprite = Resources.Load<Sprite>($"Item/{item.Name}");
     }
     
     private void OnClickInfoBtn()
@@ -46,19 +43,13 @@ public class StorageBtn : MonoBehaviour
 
     private void SetCount()
     {
-        if (CanShow == false)
-        {
-            gameObject.SetActive(false);
-            return;
-        }
+        if (Item == null) return;
+        
+        gameObject.SetActive(CanShow);
 
         if (AccountInfo.Instance.items.TryGetValue(Item, out var value))
         {
             _countTMP.text = value.ToString();
-        }
-        else
-        {
-            _countTMP.text = "0";
         }
     }
 }

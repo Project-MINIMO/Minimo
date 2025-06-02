@@ -75,14 +75,29 @@ public class ActiveState : ITaskState
 public class CompletedState : ITaskState
 {
     public static readonly CompletedState Instance = new();
-    private CompletedState() { }
+    private TitleData _titleData;
+
+    private CompletedState()
+    {
+        _titleData = App.GetData<TitleData>();
+    }
     
     public void OnUpdate(ProduceTask task) { }
 
     public void OnHarvest(ProduceTask task)
     {
         Debug.Log($"Harvested: {task.Data.ResultItems[0].ID}");
-
+        
+        var item = _titleData.Item[task.Data.ResultItems[0].ID];
+        if (AccountInfo.Instance.items.ContainsKey(item))
+        {
+            AccountInfo.Instance.items[item] += task.Data.ResultItems[0].Amount;
+        }
+        else
+        {
+            AccountInfo.Instance.items.Add(item, task.Data.ResultItems[0].Amount);
+        }
+        
         task.ChangeState(EndState.Instance);
     }
 }

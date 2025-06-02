@@ -17,7 +17,6 @@ public class StorageCapacityCtrl : MonoBehaviour
 
     private void Start()
     {
-        App.GetManager<UIManager>().GetPanel<StoragePanel>().StorageChanged.Subscribe(_ => SetCapacity()).AddTo(gameObject);
         _expandBtn.GetComponentInChildren<TextMeshProUGUI>().text = App.GetData<TitleData>().GetString("STR_STORAGE_UI_EXPAND");
         _expandBtn.onClick.AddListener(() => _expandPanel.OpenPanel());
 

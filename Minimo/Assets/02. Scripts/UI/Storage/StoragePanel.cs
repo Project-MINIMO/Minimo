@@ -1,27 +1,63 @@
-using UniRx;
+using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class StoragePanel : UIBase
 {
-    public ReactiveProperty<int> StorageChanged = new ReactiveProperty<int>(0);
+    private enum StorageType
+    {
+        Entire,
+        Food,
+        Flower,
+        Amulet
+    }
     
     [SerializeField] private TextMeshProUGUI _titleTMP;
-    [SerializeField] private Button[] _storageBtns;
+    [SerializeField] private Button[] _menuBtns;
     [SerializeField] private Sprite[] _btnSprites;
-    [SerializeField] private StorageBack _storageBack;
+    
+    [SerializeField] private Transform _buttonParent;
+    [SerializeField] private GameObject _buttonPrefab;
+    [SerializeField] private ScrollRect _scrollRect;
 
     [Header("Buttons")]
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
+    
+    private List<StorageBtn> _storageBtns;
 
     public override void Initialize()
     {
         SetString();
         SetButtonEvent();
         
-        _storageBack.InitStorageBtns();
+        InitStorageBtns();
+    }
+    
+    private void InitStorageBtns()
+    {
+        var existingButtons = GetComponentsInChildren<StorageBtn>(true);
+        
+        _storageBtns = new List<StorageBtn>(App.GetData<TitleData>().Item.Count);
+
+        var i = 0;
+        
+        for (; i < App.GetData<TitleData>().Item.Count; i++)
+        {
+            var storageBtn = i < existingButtons.Length 
+                ? existingButtons[i] 
+                : Instantiate(_buttonPrefab, _buttonParent).GetComponent<StorageBtn>();
+
+            storageBtn.Initialize(App.GetData<TitleData>().Item[i]);
+            _storageBtns.Add(storageBtn);
+        }
+
+        for (; i < existingButtons.Length; i++)
+        {
+            existingButtons[i].gameObject.SetActive(false);
+        }
     }
 
     public override void OpenPanel()
@@ -29,7 +65,7 @@ public class StoragePanel : UIBase
         base.OpenPanel();
 
         OnClickStorageBtn(0);
-        _storageBack.FilterStorageBtns(0);
+        FilterStorageBtns(0);
     }
 
     private void SetString()
@@ -38,10 +74,10 @@ public class StoragePanel : UIBase
 
         _titleTMP.text = titleData.GetString("STR_STORAGE_UI_TITLE");
 
-        _storageBtns[0].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_ENTIRE");
-        _storageBtns[1].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_RESOURCE");
-        _storageBtns[2].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_PRODUCT");
-        _storageBtns[3].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_CONSTRUCTION");
+        _menuBtns[0].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_ENTIRE");
+        _menuBtns[1].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_RESOURCE");
+        _menuBtns[2].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_PRODUCT");
+        _menuBtns[3].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_CONSTRUCTION");
     }
 
     private void SetButtonEvent()
@@ -49,39 +85,43 @@ public class StoragePanel : UIBase
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
 
-        for (int i = 0; i < _storageBtns.Length; i++)
+        for (var i = 0; i < _menuBtns.Length; i++)
         {
-            int idx = i;
+            var idx = i;
 
-            _storageBtns[idx].onClick.AddListener(() => OnClickStorageBtn(idx));
+            _menuBtns[idx].onClick.AddListener(() => OnClickStorageBtn(idx));
         }
     }
 
     private void OnClickStorageBtn(int index)
     {
-        for (int i = 0; i < _storageBtns.Length; i++)
+        for (var i = 0; i < _menuBtns.Length; i++)
         {
-            var idx = i;
-            
-            if (index == idx)
+            if (index == i)
             {
-                _storageBtns[idx].image.sprite = _btnSprites[0];
-                _storageBack.FilterStorageBtns(idx);
+                _menuBtns[i].image.sprite = _btnSprites[0];
+                FilterStorageBtns(i);
             }
             else
             {
-                _storageBtns[idx].image.sprite = _btnSprites[1];
+                _menuBtns[i].image.sprite = _btnSprites[1];
             }
         }
     }
     
-    public void OnStorageChanged()
+    private void FilterStorageBtns(int index)
     {
-        StorageChanged.Value++;
-    }
-
-    public int GetActiveStorageBtnCount()
-    {
-        return _storageBack._storageBtns.FindAll(x => x.CanShow).Count;
+        var targetType = (StorageType)index;
+        
+        foreach (var button in _storageBtns)
+        {
+            var isActive = 
+                targetType == StorageType.Entire 
+                || index == button.Item.Type;
+            
+            button.gameObject.SetActive(isActive);
+        }
+        
+        _scrollRect.verticalNormalizedPosition = 1;
     }
 }

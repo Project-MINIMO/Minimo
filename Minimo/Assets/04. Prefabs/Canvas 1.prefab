@@ -3527,7 +3527,7 @@ GameObject:
   - component: {fileID: 3951201057499677769}
   - component: {fileID: 478620782279181663}
   m_Layer: 5
-  m_Name: Btn_Product
+  m_Name: Btn_Flower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19956,10 +19956,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2321e4bdad81d41b75b77729fa2916, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StorageChanged:
-    value: 0
   _titleTMP: {fileID: 2368658000857783545}
-  _storageBtns:
+  _menuBtns:
   - {fileID: 7841616091435965054}
   - {fileID: 1392139784735039411}
   - {fileID: 478620782279181663}
@@ -19967,7 +19965,9 @@ MonoBehaviour:
   _btnSprites:
   - {fileID: 21300000, guid: 34e98163b4157414f85f82304fe72ad8, type: 3}
   - {fileID: 21300000, guid: 1022e2ea2cf44844e848282ad47981a7, type: 3}
-  _storageBack: {fileID: 8867312060376695533}
+  _buttonParent: {fileID: 6196690754335002479}
+  _buttonPrefab: {fileID: 5257376174168130367, guid: 2797ab095c93f864baf16b4156ad3bb2, type: 3}
+  _scrollRect: {fileID: 644235296697701446}
   _openBtn: {fileID: 8378456008090855127}
   _closeBtn: {fileID: 8942037745438511175}
 --- !u!1 &5708601655436675257
@@ -21183,7 +21183,7 @@ GameObject:
   - component: {fileID: 6625068874211740613}
   - component: {fileID: 1392139784735039411}
   m_Layer: 5
-  m_Name: Btn_Ingredient
+  m_Name: Btn_Food
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26622,7 +26622,7 @@ GameObject:
   - component: {fileID: 5384215401520769216}
   - component: {fileID: 1417719352517568516}
   m_Layer: 5
-  m_Name: Btn_Construction
+  m_Name: Btn_Amulet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29434,7 +29434,6 @@ GameObject:
   - component: {fileID: 7905430381130223483}
   - component: {fileID: 530978631213617619}
   - component: {fileID: 4062827554471899778}
-  - component: {fileID: 8867312060376695533}
   m_Layer: 5
   m_Name: Back_Storage
   m_TagString: Untagged
@@ -29507,22 +29506,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8867312060376695533
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8147343526431391085}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c79b66b90390c4e4d813fe48a793cf51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _storageBtnParent: {fileID: 6196690754335002479}
-  _storageBtnPrefab: {fileID: 5257376174168130367, guid: 2797ab095c93f864baf16b4156ad3bb2, type: 3}
-  _scrollRect: {fileID: 644235296697701446}
-  _storageBtns: []
 --- !u!1 &8166648698137904193
 GameObject:
   m_ObjectHideFlags: 0

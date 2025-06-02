@@ -101,7 +101,6 @@ public class StorageSellCtrl : MonoBehaviour
         _accountInfo.UpdateCurrency(newCurrencyRequest);
         */
         
-        _storagePanel.OnStorageChanged();
         _infoPanel.ClosePanel();
     }
 }
