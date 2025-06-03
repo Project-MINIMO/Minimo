@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class QuestManager : ManagerBase
 {
-    public List<QuestData> ActiveQuests { get; private set; } = new List<QuestData>();
+    public List<QuestData> ActiveQuests { get; private set; } = new();
 
     private QuestPanel _questPanel;
 
@@ -18,12 +18,12 @@ public class QuestManager : ManagerBase
     public void AddQuest(QuestData quest)
     {
         ActiveQuests.Add(quest);
-        _questPanel.UpdateQuest();
+        _questPanel.UpdateQuest(quest.Type);
     }
 
     public void RemoveQuest(QuestData quest)
     {
         ActiveQuests.Remove(quest);
-        _questPanel.UpdateQuest();
+        _questPanel.UpdateQuest(0);
     }
 }

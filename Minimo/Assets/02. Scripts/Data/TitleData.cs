@@ -48,13 +48,13 @@ public class DetailQuestData
     public string ClearDesc3;
     public int ResultType;
     public int RewardType1;
-    public int RewardID1;
+    public int Reward1ID;
     public int RewardValue1;
     public int RewardType2;
-    public int RewardID2;
+    public int Reward2ID;
     public int RewardValue2;
     public int RewardType3;
-    public int RewardID3;
+    public int Reward3ID;
     public int RewardValue3;
 }
 

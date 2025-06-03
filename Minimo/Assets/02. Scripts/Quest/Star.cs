@@ -12,7 +12,7 @@ public class Star : InteractObject
     private bool _eventTriggered;
     private float _lastUpdateTime;
 
-    private void Awake()
+    private void Start()
     {
         SetQuest();
         
@@ -31,11 +31,29 @@ public class Star : InteractObject
         if (_eventTriggered) return;
         if (_screenStateManager.CurrentState.Value != ScreenState.Sky) return;
 
-        if (_renderer.isVisible)
+        if (IsInUpperHalfOfScreen(transform))
         {
             _eventTriggered = true;
             App.GetManager<QuestManager>().AddQuest(_questData);
         }
+    }
+    
+    bool IsInUpperHalfOfScreen(Transform target)
+    {
+        var cam = Camera.main;
+
+        // 스프라이트의 월드 좌표 → 뷰포트 좌표로 변환
+        Vector3 viewportPos = cam.WorldToViewportPoint(target.position);
+
+        // 화면 안에 있어야 하며
+        bool isOnScreen = viewportPos.z > 0 &&
+                          viewportPos.x >= 0 && viewportPos.x <= 1 &&
+                          viewportPos.y >= 0 && viewportPos.y <= 1;
+
+        // 화면 상단 절반에 있는가?
+        bool isInUpperHalf = viewportPos.y > 0.5f;
+
+        return isOnScreen && isInUpperHalf;
     }
 
     private void SetQuest() //temp

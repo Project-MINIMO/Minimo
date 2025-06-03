@@ -1,3 +1,5 @@
+using System.Linq;
+
 using UnityEngine;
 using TMPro;
 
@@ -22,22 +24,40 @@ public class QuestInfo : MonoBehaviour
 
     public void Initialize(QuestData data)
     {
+        Debug.Log(data.Name);
         _questData = data;
-        _detailData = _titleData.DetailQuest[data.ID];
+        _detailData = _titleData.DetailQuest.Values.FirstOrDefault(x => x.QuestID == data.ID);
         
         _titleTMP.text = _titleData.GetString(data.Name);
 
-        if (_detailData.ClearDesc1 != "-1" || string.IsNullOrEmpty(_detailData.ClearDesc1))
+        if (_detailData.ClearDesc1 != "-1" || !string.IsNullOrEmpty(_detailData.ClearDesc1))
         {
             _desc1TMP.text = _titleData.GetString(_detailData.ClearDesc1);
+            _desc1TMP.gameObject.SetActive(true);
         }
-        if (_detailData.ClearDesc2 != "-1" || string.IsNullOrEmpty(_detailData.ClearDesc2))
+        else
+        {
+            _desc1TMP.gameObject.SetActive(false);
+        }
+        
+        if (_detailData.ClearDesc2 != "-1" || !string.IsNullOrEmpty(_detailData.ClearDesc2))
         {
             _desc2TMP.text = _titleData.GetString(_detailData.ClearDesc2);
+            _desc2TMP.gameObject.SetActive(true);
         }
-        if (_detailData.ClearDesc3 != "-1" || string.IsNullOrEmpty(_detailData.ClearDesc3))
+        else
         {
-            _desc3TMP.text = _titleData.GetString(_detailData.ClearDesc3);
+            _desc2TMP.gameObject.SetActive(false);
+        }
+        
+        if (_detailData.ClearDesc3 != "-1" || !string.IsNullOrEmpty(_detailData.ClearDesc3))
+        {
+            _desc3TMP.text = _titleData.GetString(_detailData.ClearDesc3); 
+            _desc3TMP.gameObject.SetActive(true);
+        }
+        else
+        {
+            _desc3TMP.gameObject.SetActive(false);
         }
     }
 }

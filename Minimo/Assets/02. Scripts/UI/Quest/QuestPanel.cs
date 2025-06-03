@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 public class QuestPanel : UIBase
 {
@@ -16,21 +17,24 @@ public class QuestPanel : UIBase
         public TextMeshProUGUI Text;
         public GameObject Alert;
     }
-    
+
+    [SerializeField] private RectTransform _backgroundRect;
     [SerializeField] private Transform _questParent;
     [SerializeField] private GameObject _questPrefab;
     [SerializeField] private ScrollRect _scrollRect;
 
     [SerializeField] private MenuButton[] _menuBtns;
     
+    [SerializeField] private UILongPressDetector _longPressDetector;
+    
     private QuestManager _questManager;
     
-    private List<QuestInfo> _questInfos;
+    private List<QuestInfo> _questInfos = new();
     
     public override void Initialize()
     {
         _questManager = App.GetManager<QuestManager>();
-
+        _longPressDetector.OnLongPress = ExpandPanel;
         SetButtonEvent();
     }
     
@@ -60,7 +64,7 @@ public class QuestPanel : UIBase
         _scrollRect.verticalNormalizedPosition = 1;
     }
 
-    public void UpdateQuest()
+    public void UpdateQuest(int questType)
     {
         _questInfos.Clear();
         
@@ -84,5 +88,15 @@ public class QuestPanel : UIBase
         {
             existingInfos[i].gameObject.SetActive(false);
         }
+
+        if (questType != 0)
+        {
+            _menuBtns[questType].Alert.SetActive(true);
+        }
+    }
+
+    private void ExpandPanel()
+    {
+        _backgroundRect.DOSizeDelta(new Vector2(800, 1440), 1f);
     }
 }
