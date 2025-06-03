@@ -3,40 +3,47 @@ using UnityEngine.EventSystems;
 
 using System;
 
-public class UILongPressDetector : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
+public class UILongPressDetector : MonoBehaviour
 {
     public Action OnLongPress { private get; set; }
 
     [SerializeField] private float _holdTime = 1f;
+
+    private RectTransform _targetRect;
     
-    private bool _isPointerDown;
-    private float _pressTime;
+    private bool _isPressing = false;
+    private float _pressTime = 0f;
 
-    public void OnPointerDown(PointerEventData eventData)
+    private void Start()
     {
-        _isPointerDown = true;
-        _pressTime = 0f;
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        _isPointerDown = false;
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        _isPointerDown = false;
+        _targetRect = GetComponent<RectTransform>();
     }
 
     private void Update()
     {
-        if (_isPointerDown)
+        if (Input.GetMouseButtonDown(0))
         {
-            _pressTime += Time.unscaledDeltaTime;
-            if (_pressTime >= _holdTime)
+            if (RectTransformUtility.RectangleContainsScreenPoint(_targetRect, Input.mousePosition))
             {
-                _isPointerDown = false;
-                OnLongPress?.Invoke();
+                _isPressing = true;
+                _pressTime = 0f;
+            }
+        }
+
+        if (_isPressing)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                _pressTime += Time.deltaTime;
+                if (_pressTime >= _holdTime)
+                {
+                    _isPressing = false;
+                    OnLongPress?.Invoke();
+                }
+            }
+            else
+            {
+                _isPressing = false;
             }
         }
     }
