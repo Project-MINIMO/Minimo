@@ -44,9 +44,9 @@ public class BuildingPanel : UIBase
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
 
-        for (int i = 0; i < _buildingBtns.Length; i++)
+        for (var i = 0; i < _buildingBtns.Length; i++)
         {
-            int idx = i;
+            var idx = i;
 
             _buildingBtns[idx].onClick.AddListener(() => OnClickBuildingBtn(idx));
 
@@ -57,7 +57,7 @@ public class BuildingPanel : UIBase
 
     private void OnClickBuildingBtn(int index)
     {
-        for (int i = 0; i < _buildingBtns.Length; i++)
+        for (var i = 0; i < _buildingBtns.Length; i++)
         {
             if (index == i)
             {

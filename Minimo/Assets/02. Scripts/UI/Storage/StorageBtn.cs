@@ -1,14 +1,11 @@
-using MinimoShared;
-
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class StorageBtn : MonoBehaviour
 {
-    public bool CanShow => _itemDto?.Count > 0;
-    public Item Item { get; private set; }
+    public bool CanShow => Item != null && AccountInfo.Instance.items.ContainsKey(Item) && AccountInfo.Instance.items[Item] > 0;
+    public ItemData Item { get; private set; }
     public Vector2 Position { get; private set; }
     public int SibilingsIndex => transform.GetSiblingIndex() % 4;
     
@@ -16,20 +13,14 @@ public class StorageBtn : MonoBehaviour
     
     [SerializeField] private Image _iconImg;
     [SerializeField] private TextMeshProUGUI _countTMP;
-
-    private AccountInfoManager _accountInfo;
+    
     private StorageInfoPanel _infoPanel;
-
-    private ItemDTO _itemDto;
-
+    
     private void Awake()
     {
-        _accountInfo = App.GetManager<AccountInfoManager>();
         _infoPanel= App.GetManager<UIManager>().GetPanel<StorageInfoPanel>();
         
         _infoBtn.onClick.AddListener(OnClickInfoBtn);
-        
-        App.GetManager<UIManager>().GetPanel<StoragePanel>().StorageChanged.Subscribe(_ => SetCount()).AddTo(gameObject);;
     }
 
     private void OnEnable()
@@ -37,13 +28,12 @@ public class StorageBtn : MonoBehaviour
         SetCount();
     }
 
-    public void Initialize(Item item)
+    public void Initialize(ItemData item)
     {
         Item = item;
-        _itemDto = _accountInfo.GetItem(item.Code);
         Position = GetComponent<RectTransform>().position;
-        
-        _iconImg.sprite = item.Icon;
+
+        _iconImg.sprite = Resources.Load<Sprite>($"Item/{item.Name}");
     }
     
     private void OnClickInfoBtn()
@@ -53,12 +43,13 @@ public class StorageBtn : MonoBehaviour
 
     private void SetCount()
     {
-        if (CanShow == false)
-        {
-            gameObject.SetActive(false);
-            return;
-        }
+        if (Item == null) return;
         
-        _countTMP.text = _itemDto?.Count.ToString();
+        gameObject.SetActive(CanShow);
+
+        if (AccountInfo.Instance.items.TryGetValue(Item, out var value))
+        {
+            _countTMP.text = value.ToString();
+        }
     }
 }

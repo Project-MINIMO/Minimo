@@ -4,6 +4,14 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+public enum ItemType
+{
+    None,
+    Food,
+    Flower,
+    Amulet,
+}
+
 [Serializable]
 public class CommonData
 {
@@ -38,8 +46,8 @@ public class RawProduceData
 {
     public int    ID;        // 예: 빌딩 enum 값을 int로
     public string Building;  // 예: "StarCropFarm"
-    public string Materials; // "StarCrop:1,Water:5"
-    public string Results;   // "Sugar:2"
+    public string MaterialItems; // "StarCrop:1,Water:5"
+    public string ResultItems;   // "Sugar:2"
     public int    Time;      
     public int    EXP;
 }
@@ -81,12 +89,11 @@ public class StringData
 
 public class TitleData : DataBase
 {
-    public ItemSO ItemSO;
-
     public Dictionary<string, int> Common { get; private set; } = new();
     public Dictionary<int, BuildingData> Building { get; private set; } = new();
     public Dictionary<int, ItemData> Item { get; private set; } = new();
     public Dictionary<int, ProduceData> Produce { get; private set; } = new();
+    public Dictionary<string, List<ProduceData>> GroupedProduce { get; private set; } = new();
 
     private Dictionary<string, StringData> _string = new();
 
@@ -147,14 +154,13 @@ public class TitleData : DataBase
         var produceDataRaw = DataLoader.LoadDataProduceData(PRODUCE_PATH);
         foreach (var data in produceDataRaw)
         {
-            Produce.Add(data.ID, data);       
+            Produce.Add(data.ID, data);   
         }
-        
-        foreach (var item in ItemSO.items) //TEMP
-        {
-            item.SetData(Item.FirstOrDefault(x => x.Value.Name == item.Code).Value);
-        }
-
+        GroupedProduce = Produce
+            .Values
+            .GroupBy(data => data.Building)
+            .ToDictionary(data => data.Key, data => data.ToList());
+       
         _isGameDataLoaded = true;
     }
 

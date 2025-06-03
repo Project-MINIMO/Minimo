@@ -1,67 +1,44 @@
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PrimaryPanel : UIBase
 {
     [SerializeField] private Button _closeBtn;
-    [SerializeField] private HarvestHandler _harvestCtrl;
+    
+    [SerializeField] private PlantCtrl _plantCtrl;
     [SerializeField] private ProduceInfoCtrl _infoCtrl;
+    [SerializeField] private HarvestHandler _harvestCtrl;
+    
     [SerializeField] private RectTransform _rect;
     
     private ProduceManager _produceManager;
-    private PlantPanel _plantPanel;
 
     public override void Initialize()
     {
         _produceManager = App.GetManager<ProduceManager>();
-        
-        _produceManager.IsProducing
-            .Subscribe((isProducing) =>
-            {
-                if (!isProducing)
-                {
-                    ClosePanel();
-                    return;
-                }
-                
-                if (_produceManager.CurrentProduceObject.IsPrimary)
-                {
-                    OpenPanel();
-                }
-                else
-                {
-                    ClosePanel();
-                }
-            }).AddTo(gameObject);
 
-        _plantPanel = App.GetManager<UIManager>().GetPanel<PlantPanel>();
-        _closeBtn.onClick.AddListener(() =>
-        {
-            _produceManager.DeactiveProduce();
-        });
+        _closeBtn.onClick.AddListener(() => _produceManager.DeactiveProduce());
     }
  
-    public override void OpenPanel()
+    public void OpenPanel(ProduceState state)
     {
         base.OpenPanel();
 
         SetPosition();
         
-        var currentObject = _produceManager.CurrentProduceObject;
-        var currentIndex = currentObject.AllTasks.IndexOf(currentObject.ActiveTask);
-        if (currentIndex > 0 || (currentObject.ActiveTask is null && currentObject.AllTasks.Count > 0))
+        switch (state)
         {
-            ShowUI(_harvestCtrl);
-        }
-        else if (currentIndex == 0)
-        {
-            ShowUI(_infoCtrl);
-        }
-        else
-        {
-            _plantPanel.OpenPanel();
-            ShowUI(_plantPanel);
+            case ProduceState.Idle:
+                ShowUI(_plantCtrl);
+                break;
+            
+            case ProduceState.Produce:
+                ShowUI(_infoCtrl);
+                break;
+            
+            case ProduceState.Complete:
+                ShowUI(_harvestCtrl);
+                break;
         }
     }
 
@@ -69,12 +46,14 @@ public class PrimaryPanel : UIBase
     {
         _harvestCtrl.gameObject.SetActive(targetUI == _harvestCtrl);
         _infoCtrl.SetActive(targetUI == _infoCtrl);
+        _plantCtrl.SetActive(targetUI == _plantCtrl);
     }
     
     private void SetPosition()
     {
         var position = _produceManager.CurrentProduceObject.transform.position;
         var screenPos = Camera.main.WorldToScreenPoint(position);
+        screenPos.y -= 100;
         _rect.position = screenPos;
     }
 }

@@ -21,21 +21,7 @@ public class DataLoader
 
         return null;
     }
-    
-    public static T[] LoadDataWithConvert<T, U>(string dataPath) where U : struct, Enum
-    {
-        var json = Resources.Load<TextAsset>(dataPath);
 
-        if (json)
-        {
-            var stringDataList = JsonUtilityHelper.FromJsonWithConvert<T, U>(json.ToString());
-
-            return stringDataList;
-        }
-
-        return null;
-    }
-    
     public static ProduceData[] LoadDataProduceData(string dataPath)
     {
         var rawList = LoadData<RawProduceData>(dataPath);
@@ -48,8 +34,8 @@ public class DataLoader
             {
                 ID            = raw.ID,
                 Building      = raw.Building,
-                MaterialItems = ParseMaterials(raw.Materials),
-                ResultItems   = ParseResults(raw.Results),
+                MaterialItems = ParseMaterials(raw.MaterialItems),
+                ResultItems   = ParseResults(raw.ResultItems),
                 Time          = raw.Time,
                 EXP           = raw.EXP
             })
@@ -64,6 +50,13 @@ public class DataLoader
         return materialsRaw.Split(',').Select(mat =>
         {
             var parts = mat.Split(':').Select(p => p.Trim()).ToArray();
+            
+            if (parts.Length < 2)
+            {
+                Debug.LogWarning($"[ParseMaterials] Invalid format: {mat}");
+                return null;
+            }
+            
             return new ProduceMaterial
             {
                 ID = GetItemIdFromCode(parts[0]),
@@ -79,6 +72,13 @@ public class DataLoader
         return resultsRaw.Split(',').Select(res =>
         {
             var parts = res.Split(':').Select(p => p.Trim()).ToArray();
+            
+            if (parts.Length < 2)
+            {
+                Debug.LogWarning($"[ParseMaterials] Invalid format: {res}");
+                return null;
+            }
+            
             return new ProduceResult
             {
                 ID = GetItemIdFromCode(parts[0]),

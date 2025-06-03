@@ -1,61 +1,36 @@
-using System;
-
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class PlantOptionSlot : MonoBehaviour
 {
-    [Serializable]
-    private struct PlantInfo
-    {
-        public GameObject _gameObject;
-        public Image _image;
-        public TextMeshProUGUI _text;
-    }
-    
-    [SerializeField] private TextMeshProUGUI _resultNameTMP;
-    [SerializeField] private PlantInfo _result;
-    [SerializeField] private PlantInfo[] _materials;
-    [SerializeField] private TextMeshProUGUI _timeTMP;
+    [SerializeField] private Image _itemImg;
+    [SerializeField] private TextMeshProUGUI _amountTMP;
     [SerializeField] private TextMeshProUGUI _storageTMP;
     
     private TitleData _titleData;
-    private AccountInfoManager _accountInfo;
     [SerializeField] private PlantHandler _plantHandler;
 
     private void Awake()
     {
         _titleData = App.GetData<TitleData>();
         _plantHandler = GetComponentInChildren<PlantHandler>(true);
-        _accountInfo = App.GetManager<AccountInfoManager>();
     }
 
     public void SetOption(ProduceData optionData)
     {
         _plantHandler.SetOption(optionData);
-
+        
         SetResultInfo(optionData.ResultItems[0]);
-        SetMaterialInfo(optionData.MaterialItems);
-        
-        _timeTMP.text = optionData.Time.ToString();
-        _storageTMP.text = _accountInfo.GetItem(optionData.ResultItems[0].ID).Count.ToString();
-    }
 
-    private void SetMaterialInfo(ProduceMaterial[] materials)
-    {
-        var i = 0;
-        
-        for (; i < materials.Length; i++) 
+        var item = _titleData.Item[optionData.ResultItems[0].ID];
+        if (AccountInfo.Instance.items.TryGetValue(item, out var value))
         {
-            _materials[i]._gameObject.SetActive(true);
-            _materials[i]._image.sprite = Resources.Load<Sprite>($"Item/{materials[i].ID}");
-            _materials[i]._text.text = materials[i].Amount.ToString();
+            _storageTMP.text = value.ToString();
         }
-        
-        for (; i < _materials.Length; i++) 
+        else
         {
-            _materials[i]._gameObject.SetActive(false);
+            _storageTMP.text = string.Empty;
         }
     }
 
@@ -67,9 +42,8 @@ public class PlantOptionSlot : MonoBehaviour
             return;
         }
         
-        _resultNameTMP.text = _titleData.GetString(itemData.Name);
-        _result._image.sprite = Resources.Load<Sprite>($"Item/{result.ID}");
-        _result._text.text = $"X{result.Amount}";
+        _itemImg.sprite = Resources.Load<Sprite>($"Item/{itemData.Name}");
+        _amountTMP.text = $"X{result.Amount}";
     }
 }
 

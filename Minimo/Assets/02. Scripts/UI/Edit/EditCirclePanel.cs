@@ -31,7 +31,6 @@ public class EditCirclePanel : UIBase
     
     private void SetPosition(Vector3 position)
     {
-        position.y += 0.5f;
         var screenPos = Camera.main.WorldToScreenPoint(position);
         _rect.position = screenPos;
     }

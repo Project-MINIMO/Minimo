@@ -14,7 +14,6 @@ public class LoginPanel : MonoBehaviour
     [SerializeField] private Button _registerBtn;
     [SerializeField] private TextMeshProUGUI _resultText;
     
-    private LoginManager _loginManager;
     //private bool isLogin;
     
     private async void Start()
@@ -26,6 +25,7 @@ public class LoginPanel : MonoBehaviour
         });
         _registerBtn.onClick.AddListener(OnRegister);
         
+        /*
         _loginManager = App.GetManager<LoginManager>();
         if (!string.IsNullOrEmpty(_loginManager.JwtToken))
         {
@@ -43,6 +43,7 @@ public class LoginPanel : MonoBehaviour
         {
             _loginPanel.SetActive(true);
         }
+        */
     }
     
     private async void OnLogin(bool isNew = false)
@@ -50,6 +51,7 @@ public class LoginPanel : MonoBehaviour
         var id = ThrowHelper.IfNullOrWhitespace(_idInputField.text);
         var pw = ThrowHelper.IfNullOrWhitespace(_pwInputField.text);
 
+        /*
         // 로그인 요청
         var result = await _loginManager.LoginAsync(id, pw);
         if (result.IsSuccess)
@@ -61,6 +63,7 @@ public class LoginPanel : MonoBehaviour
         {
             _resultText.text = result.Message;
         }
+        */
     }
     
     private async void OnRegister()
@@ -69,6 +72,7 @@ public class LoginPanel : MonoBehaviour
         var pw = ThrowHelper.IfNullOrWhitespace(_pwInputField.text);
         var randomNickname = "User" + UnityEngine.Random.Range(0, 1000);
         
+        /*
         // 회원가입 요청
         var result = await _loginManager.CreateAccountAsync(id, pw, randomNickname);
         if (result.IsSuccess) 
@@ -81,6 +85,7 @@ public class LoginPanel : MonoBehaviour
         }
         
         Debug.Log(result.Data);
+        */
     }
 }
 

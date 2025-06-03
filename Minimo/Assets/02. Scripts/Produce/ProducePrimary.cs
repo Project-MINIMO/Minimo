@@ -1,30 +1,49 @@
 using System.Collections.Generic;
-using System.Linq;
-using MinimoShared;
-using Cysharp.Threading.Tasks;
 
 using UnityEngine;
 
-public abstract class ProducePrimary : ProduceObject
+public class ProducePrimary : ProduceObject
 {
-    public override bool IsPrimary => true;
-    
-    [SerializeField] protected SpriteRenderer _cropSpriteRenderer;
-    
-    protected List<Sprite[]> _cropSprites;
-   
-    protected Sprite[] _currentCropSprites;
-    protected int _currentSpriteIndex;
-  
-    public override void Initialize(BuildingDTO buildingDto)
+    private enum CropType
     {
-        base.Initialize(buildingDto);
+        Grain,
+        Bean,
+        Fruit,
+    }
+    
+    private SpriteRenderer _cropSpriteRenderer;
+    
+    private List<Sprite[]> _cropSprites;
+   
+    private Sprite[] _currentCropSprites;
+    private int _currentSpriteIndex;
+    
+    private PrimaryPanel _primaryPanel;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        _cropSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        _primaryPanel = App.GetManager<UIManager>().GetPanel<PrimaryPanel>();
+    }
+    
+    public override void Initialize(BuildingData data)
+    {
+        base.Initialize(data);
 
         if (AllTasks.Count > 0)
         {
             SetSpriteResources();
             SetCropSprite();
         }
+        
+        _cropSprites = new List<Sprite[]>(ProduceData.Count)
+        {
+            Resources.LoadAll<Sprite>("Produce/Farm/Wheat"),
+            Resources.LoadAll<Sprite>("Produce/Farm/Corn"),
+            Resources.LoadAll<Sprite>("Produce/Farm/Pumpkin"),
+        };
     }
     
     protected override void Update()
@@ -41,7 +60,7 @@ public abstract class ProducePrimary : ProduceObject
             return;
         }
 
-        if (AllTasks.Any(task => task.RemainTime <= 0))
+        if (_currentSpriteIndex == 2)
         {
             return;
         }
@@ -49,7 +68,7 @@ public abstract class ProducePrimary : ProduceObject
         SetCropSprite();
     }
 
-    protected virtual void SetCropSprite()
+    private void SetCropSprite()
     {
         float remainPercent;
 
@@ -75,23 +94,15 @@ public abstract class ProducePrimary : ProduceObject
             _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
         }
     }
-    
-    protected override async UniTask CompleteActiveTask()
-    {
-        await base.CompleteActiveTask();
-        
-        _currentSpriteIndex = 2;
-        _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
-    }
-    
-    protected override async UniTask OnPlant(ProduceTask task, int optionIndex)
+
+    protected override void OnPlant(ProduceTask task, int optionIndex)
     {
         if (AllTasks.Count > 0)
         {
             return;
         }
         
-        await base.OnPlant(task, optionIndex);
+        base.OnPlant(task, optionIndex);
 
         SetSpriteResources();
     }
@@ -105,9 +116,9 @@ public abstract class ProducePrimary : ProduceObject
         _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
     }
     
-    public override async UniTask StartHarvest()
+    public override void StartHarvest()
     {
-        await base.StartHarvest();
+        base.StartHarvest();
 
         if (ActiveTask == null)
         {
@@ -119,13 +130,37 @@ public abstract class ProducePrimary : ProduceObject
         }
     }
     
-    public override async UniTask HarvestEarly()
+    public override void HarvestEarly()
     {
-        await base.HarvestEarly();
+        base.HarvestEarly();
         
         _currentSpriteIndex = 2;
         _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
+        
+        OpenUI();
     }
 
-    protected abstract int GetCropType(int cropCode);
+    private int GetCropType(int cropCode) => cropCode switch
+    {
+        3 or 47 or 48 => (int)CropType.Grain,
+        4 or 49 or 50 => (int)CropType.Bean,
+        5 or 51 or 52 => (int)CropType.Fruit,
+    };
+
+    public override void OpenUI()
+    {
+        if (ActiveTask == null)
+        {
+            _primaryPanel.OpenPanel(AllTasks.Count == 0 ? ProduceState.Idle : ProduceState.Complete);
+        }
+        else
+        {
+            _primaryPanel.OpenPanel(ProduceState.Produce);
+        }
+    }
+    
+    public override void CloseUI()
+    {
+        _primaryPanel.ClosePanel();
+    }
 }

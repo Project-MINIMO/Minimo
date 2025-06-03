@@ -74,7 +74,7 @@ public class ProduceInfoCtrl : MonoBehaviour
                 _resultsNameTMP.text += " / ";
             }
             
-            _resultsNameTMP.text += _titleData.GetString(itemData.Name);
+            _resultsNameTMP.text += _titleData.GetString($"STR_ITEM_{itemData.Name.ToUpper()}_NAME");
         }
     }
 }
