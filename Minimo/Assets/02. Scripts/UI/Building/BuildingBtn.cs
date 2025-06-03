@@ -124,7 +124,7 @@ public class BuildingBtn : MonoBehaviour
                 break;
             
             default:
-                gridObject.AddComponent<BuildingObject>();
+                gridObject.AddComponent<ProduceQuaternary>();
                 break;
         }
        

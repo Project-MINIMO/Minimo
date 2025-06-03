@@ -38,7 +38,7 @@ public class BuildingBack : MonoBehaviour
         foreach (var data in App.GetData<TitleData>().Building.Values)
         {
             var isValid = _buildingType == EBuildingType.Production
-                ? data.Type is 0 or 1 or 2
+                ? data.Type is 0 or 1 or 2 or 3
                 : data.Type == (int)_buildingType;
 
             if (!isValid)

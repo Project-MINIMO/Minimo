@@ -18,6 +18,7 @@ public class WishPanel : UIBase
     {
         public Button Button;
         public Image Icon;
+        public ItemData Item;
     }
     
     [SerializeField] private Button _closeBtn;
@@ -106,6 +107,12 @@ public class WishPanel : UIBase
             _food.OptionsBack.SetActive(false);
             
             _food.Slot.Icon.sprite = Resources.Load<Sprite>($"Item/{item.Name}");
+            _food.Slot.Item = item;
+
+            if (_flower.Slot.Item != null)
+            {
+                ((ProduceQuaternary)_produceManager.CurrentProduceObject).StartPlant(_food.Slot.Item.ID,  _flower.Slot.Item.ID);
+            }
         }
         else
         {
@@ -113,6 +120,12 @@ public class WishPanel : UIBase
             _flower.OptionsBack.SetActive(false);
             
             _flower.Slot.Icon.sprite = Resources.Load<Sprite>($"Item/{item.Name}");
+            _flower.Slot.Item = item;
+
+            if (_food.Slot.Item != null)
+            {
+                ((ProduceQuaternary)_produceManager.CurrentProduceObject).StartPlant(_food.Slot.Item.ID,  _flower.Slot.Item.ID);
+            }
         }
     }
 }
