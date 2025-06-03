@@ -3,12 +3,14 @@ using System.Linq;
 public class ProduceQuaternary : ProduceTertiary
 {
     private WishPanel _wishPanel;
+    private MainPanel _mainPanel;
     
     protected override void Awake()
     {
         base.Awake();
         
         _wishPanel = App.GetManager<UIManager>().GetPanel<WishPanel>();
+        _mainPanel = App.GetManager<UIManager>().GetPanel<MainPanel>();
     }
 
     public void StartPlant(int food, int flower)
@@ -25,10 +27,12 @@ public class ProduceQuaternary : ProduceTertiary
     public override void OpenUI()
     {
         _wishPanel.OpenPanel();
+        _mainPanel.ClosePanel();
     }
     
     public override void CloseUI()
     {
         _wishPanel.ClosePanel();
+        _mainPanel.OpenPanel();
     }
 }
