@@ -8,11 +8,13 @@ public class ProduceStateUI : MonoBehaviour
     [SerializeField] private GameObject _produceBack;
     [SerializeField] private GameObject _completeBack;
 
+    private EditManager _editManager;
     private ProduceObject _object;
     private float _lastUpdateTime;
     
     private void Start()
     {
+        _editManager = App.GetManager<EditManager>();
         _object = GetComponent<ProduceObject>();
         _lastUpdateTime = Time.time;
 
@@ -27,6 +29,14 @@ public class ProduceStateUI : MonoBehaviour
         if (Time.time - _lastUpdateTime < 0.1f) return;
 
         _lastUpdateTime = Time.time;
+        
+        if (_editManager.IsEditing.Value)
+        {
+            _idleBack.SetActive(false);
+            _produceBack.SetActive(false);
+            _completeBack.SetActive(false);
+            return;
+        }
 
         var state = GetCurrentProduceState();
         

@@ -13,6 +13,17 @@ public enum ItemType
 }
 
 [Serializable]
+public class QuestData
+{
+    public int ID;
+    public string Name;
+    public int Type;
+    public int Title;
+    public int PreQuestID;
+    public int OpenLevel;
+}
+
+[Serializable]
 public class CommonData
 {
     public string ID;
@@ -89,6 +100,7 @@ public class StringData
 
 public class TitleData : DataBase
 {
+    public Dictionary<int, QuestData> Quest { get; private set; } = new();
     public Dictionary<string, int> Common { get; private set; } = new();
     public Dictionary<int, BuildingData> Building { get; private set; } = new();
     public Dictionary<int, ItemData> Item { get; private set; } = new();
@@ -101,6 +113,7 @@ public class TitleData : DataBase
 
     #region Data Path
     private const string STRING_PATH = "Data/StringData";
+    private const string QUEST_PATH = "Data/QuestData";
     private const string COMMON_PATH = "Data/CommonData";
     private const string BUILDING_PATH = "Data/BuildingData";
     private const string ITEM_PATH = "Data/ItemData";
@@ -122,6 +135,7 @@ public class TitleData : DataBase
         }
 
         _string.Clear();
+        Quest.Clear();
         Common.Clear();
         Building.Clear();
         Item.Clear();
@@ -131,6 +145,12 @@ public class TitleData : DataBase
         foreach (var data in stringDataRaw)
         {
             _string.Add(data.ID, data);
+        }
+        
+        var questDataRaw = DataLoader.LoadData<QuestData>(QUEST_PATH);
+        foreach (var data in questDataRaw)
+        {
+            Quest.Add(data.ID, data);
         }
         
         var commonDataRaw = DataLoader.LoadData<CommonData>(COMMON_PATH);
