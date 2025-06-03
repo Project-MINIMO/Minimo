@@ -1,14 +1,34 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class WishPanel : UIBase
 {
+    [Serializable]
+    public struct WishOption
+    {
+        public WishSlot Slot;
+        public Button CloseBtn;
+        public GameObject OptionsBack;
+    }
+
+    [Serializable]
+    public struct WishSlot
+    {
+        public Button Button;
+        public Image Icon;
+    }
+    
     [SerializeField] private Button _closeBtn;
     [SerializeField] private TextMeshProUGUI _titleTMP;
     
     private ProduceTaskBtn[] _taskBtns;
     [SerializeField] private Button _expandBtn;
+    [SerializeField] private GameObject _back;
+    
+    [SerializeField] private WishOption _food;
+    [SerializeField] private WishOption _flower;
 
     private ProduceManager _produceManager;
     
@@ -22,6 +42,30 @@ public class WishPanel : UIBase
         {
             ((ProduceTertiary)_produceManager.CurrentProduceObject).AddSlotCount();
             InitializeTaskBtns();
+        });
+        
+        _food.Slot.Button.onClick.AddListener(() =>
+        {
+            _back.SetActive(false);
+            _food.OptionsBack.SetActive(true);
+        });
+        
+        _flower.Slot.Button.onClick.AddListener(() =>
+        {
+            _back.SetActive(false);
+            _flower.OptionsBack.SetActive(true);
+        });
+        
+        _food.CloseBtn.onClick.AddListener(() =>
+        {
+            _back.SetActive(true);
+            _food.OptionsBack.SetActive(false);
+        });
+        
+        _flower.CloseBtn.onClick.AddListener(() =>
+        {
+            _back.SetActive(true);
+            _flower.OptionsBack.SetActive(false);
         });
     }
 
@@ -52,5 +96,23 @@ public class WishPanel : UIBase
         }
         
         _expandBtn.gameObject.SetActive(maxCount < 5);
+    }
+
+    public void SetItemOnSlot(ItemData item)
+    {
+        if (item.Type == (int)ItemType.Food)
+        {
+            _back.SetActive(true);
+            _food.OptionsBack.SetActive(false);
+            
+            _food.Slot.Icon.sprite = Resources.Load<Sprite>($"Item/{item.Name}");
+        }
+        else
+        {
+            _back.SetActive(true);
+            _flower.OptionsBack.SetActive(false);
+            
+            _flower.Slot.Icon.sprite = Resources.Load<Sprite>($"Item/{item.Name}");
+        }
     }
 }

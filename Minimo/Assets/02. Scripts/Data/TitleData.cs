@@ -7,11 +7,9 @@ using UnityEngine;
 public enum ItemType
 {
     None,
-    Seed,
-    Harvest,
-    Ingredient,
-    Product,
-    Construction
+    Food,
+    Flower,
+    Amulet,
 }
 
 [Serializable]

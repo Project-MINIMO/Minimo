@@ -39,18 +39,19 @@ public class StoragePanel : UIBase
     private void InitStorageBtns()
     {
         var existingButtons = GetComponentsInChildren<StorageBtn>(true);
-        
-        _storageBtns = new List<StorageBtn>(App.GetData<TitleData>().Item.Count);
+
+        var items = App.GetData<TitleData>().Item;
+        _storageBtns = new List<StorageBtn>(items.Count);
 
         var i = 0;
         
-        for (; i < App.GetData<TitleData>().Item.Count; i++)
+        for (; i < items.Count; i++)
         {
             var storageBtn = i < existingButtons.Length 
                 ? existingButtons[i] 
                 : Instantiate(_buttonPrefab, _buttonParent).GetComponent<StorageBtn>();
 
-            storageBtn.Initialize(App.GetData<TitleData>().Item[i]);
+            storageBtn.Initialize(items[i]);
             _storageBtns.Add(storageBtn);
         }
 

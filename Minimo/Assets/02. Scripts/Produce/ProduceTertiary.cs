@@ -3,12 +3,14 @@ public class ProduceTertiary : ProduceAdvanced
     public int MaxSlotCount { get; private set; } = 1;
     
     private AdvancedPanel _advancedPanel;
+    private WishPanel _wishPanel;
     
     public override void Initialize(BuildingData data)
     {
         base.Initialize(data);
 
         _advancedPanel = App.GetManager<UIManager>().GetPanel<AdvancedPanel>();
+        _wishPanel = App.GetManager<UIManager>().GetPanel<WishPanel>();
     }
 
     public void AddSlotCount()
@@ -37,11 +39,25 @@ public class ProduceTertiary : ProduceAdvanced
     
     public override void OpenUI()
     {
-        _advancedPanel.OpenPanel();
+        if (BuildingData.ID == 23)
+        {
+            _wishPanel.OpenPanel();
+        }
+        else
+        {
+            _advancedPanel.OpenPanel();
+        }
     }
     
     public override void CloseUI()
     {
-        _advancedPanel.ClosePanel();
+        if (BuildingData.ID == 23)
+        {
+            _wishPanel.ClosePanel();
+        }
+        else
+        {
+            _advancedPanel.ClosePanel();
+        }
     }
 }
