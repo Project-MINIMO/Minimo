@@ -3,11 +3,13 @@ using TMPro;
 
 public class QuestInfo : MonoBehaviour
 {
+    public int QuestType => _questData.Type;
+    
     [SerializeField] private TextMeshProUGUI _titleTMP;
     [SerializeField] private TextMeshProUGUI _desc1TMP;
     [SerializeField] private TextMeshProUGUI _desc2TMP;
     [SerializeField] private TextMeshProUGUI _desc3TMP;
-    
+ 
     private TitleData _titleData;
     
     private QuestData _questData;

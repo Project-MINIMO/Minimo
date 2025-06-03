@@ -8,7 +8,9 @@ public class Star : InteractObject
     private ScreenStateManager _screenStateManager;
     
     private SpriteRenderer _renderer;
+    
     private bool _eventTriggered;
+    private float _lastUpdateTime;
 
     private void Awake()
     {
@@ -16,10 +18,16 @@ public class Star : InteractObject
         
         _renderer = GetComponent<SpriteRenderer>();
         _screenStateManager = App.GetManager<ScreenStateManager>();
+        
+        _lastUpdateTime = Time.time;
     }
     
     private void Update()
     {
+        if (Time.time - _lastUpdateTime < 0.1f) return;
+
+        _lastUpdateTime = Time.time;
+        
         if (_eventTriggered) return;
         if (_screenStateManager.CurrentState.Value != ScreenState.Sky) return;
 
