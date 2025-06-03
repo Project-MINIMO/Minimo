@@ -1,15 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
 
 public class Star : InteractObject
 {
-    private QuestConfirmPanel _questPanel;
     private QuestData _questData;
+    private ScreenStateManager _screenStateManager;
+    
+    private SpriteRenderer _renderer;
+    private bool _eventTriggered;
 
     private void Awake()
+    {
+        SetQuest();
+        
+        _renderer = GetComponent<SpriteRenderer>();
+        _screenStateManager = App.GetManager<ScreenStateManager>();
+    }
+    
+    private void Update()
+    {
+        if (_eventTriggered) return;
+        if (_screenStateManager.CurrentState.Value != ScreenState.Sky) return;
+
+        if (_renderer.isVisible)
+        {
+            _eventTriggered = true;
+            App.GetManager<QuestManager>().AddQuest(_questData);
+        }
+    }
+
+    private void SetQuest() //temp
     {
         var filtered = App.GetData<TitleData>().Quest.Values.Where(q => q.Type == 2).ToList();
 
@@ -20,14 +41,9 @@ public class Star : InteractObject
         }
         
         _questData = filtered[Random.Range(0, filtered.Count)];
-
-        _questPanel = App.GetManager<UIManager>().GetPanel<QuestConfirmPanel>();
     }
     
     public override void OnLongPress() { }
 
-    public override void OnClickUp()
-    {
-        _questPanel.OpenPanel(_questData);
-    }
+    public override void OnClickUp() { }
 }

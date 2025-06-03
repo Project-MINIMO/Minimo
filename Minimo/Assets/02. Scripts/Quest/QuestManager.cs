@@ -4,15 +4,26 @@ using UnityEngine;
 
 public class QuestManager : ManagerBase
 {
-    public List<QuestData> ActiveQuests { get; private set; }= new List<QuestData>();
+    public List<QuestData> ActiveQuests { get; private set; } = new List<QuestData>();
 
+    private QuestPanel _questPanel;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        _questPanel = App.GetManager<UIManager>().GetPanel<QuestPanel>();
+    }
+    
     public void AddQuest(QuestData quest)
     {
         ActiveQuests.Add(quest);
+        _questPanel.UpdateQuest();
     }
 
     public void RemoveQuest(QuestData quest)
     {
-        
+        ActiveQuests.Remove(quest);
+        _questPanel.UpdateQuest();
     }
 }

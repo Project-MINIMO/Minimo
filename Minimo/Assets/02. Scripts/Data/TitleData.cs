@@ -24,6 +24,41 @@ public class QuestData
 }
 
 [Serializable]
+public class DetailQuestData
+{
+    public int ID;
+    public int QuestID;
+    public int PreQuestID;
+    public int OpenLevel;
+    public string SubName;
+    public string QuestSubIcon;
+    public int Type;
+    public string Description;
+    public int ClearType1;
+    public int ClearTarget1;
+    public int ClearValue1;
+    public string ClearDesc1;
+    public int ClearType2;
+    public int ClearTarget2;
+    public int ClearValue2;
+    public string ClearDesc2;
+    public int ClearType3;
+    public int ClearTarget3;
+    public int ClearValue3;
+    public string ClearDesc3;
+    public int ResultType;
+    public int RewardType1;
+    public int RewardID1;
+    public int RewardValue1;
+    public int RewardType2;
+    public int RewardID2;
+    public int RewardValue2;
+    public int RewardType3;
+    public int RewardID3;
+    public int RewardValue3;
+}
+
+[Serializable]
 public class CommonData
 {
     public string ID;
@@ -101,6 +136,7 @@ public class StringData
 public class TitleData : DataBase
 {
     public Dictionary<int, QuestData> Quest { get; private set; } = new();
+    public Dictionary<int, DetailQuestData> DetailQuest { get; private set; } = new();
     public Dictionary<string, int> Common { get; private set; } = new();
     public Dictionary<int, BuildingData> Building { get; private set; } = new();
     public Dictionary<int, ItemData> Item { get; private set; } = new();
@@ -114,6 +150,7 @@ public class TitleData : DataBase
     #region Data Path
     private const string STRING_PATH = "Data/StringData";
     private const string QUEST_PATH = "Data/QuestData";
+    private const string DETAILQUEST_PATH = "Data/DetailQuestData";
     private const string COMMON_PATH = "Data/CommonData";
     private const string BUILDING_PATH = "Data/BuildingData";
     private const string ITEM_PATH = "Data/ItemData";
@@ -136,6 +173,7 @@ public class TitleData : DataBase
 
         _string.Clear();
         Quest.Clear();
+        DetailQuest.Clear();
         Common.Clear();
         Building.Clear();
         Item.Clear();
@@ -151,6 +189,12 @@ public class TitleData : DataBase
         foreach (var data in questDataRaw)
         {
             Quest.Add(data.ID, data);
+        }
+        
+        var detailQuestDataRaw = DataLoader.LoadData<DetailQuestData>(DETAILQUEST_PATH);
+        foreach (var data in detailQuestDataRaw)
+        {
+            DetailQuest.Add(data.ID, data);
         }
         
         var commonDataRaw = DataLoader.LoadData<CommonData>(COMMON_PATH);
