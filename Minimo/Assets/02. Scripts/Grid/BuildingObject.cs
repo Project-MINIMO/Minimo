@@ -67,7 +67,7 @@ public class BuildingObject : InteractObject
                 SetPolygonCollider(GetComponent<PolygonCollider2D>());
                 GetComponent<PolygonCollider2D>().offset = PositionData.ColliderOffset;
                 _spriteRenderer.sprite = PositionData.Sprite;
-                _spriteRenderer.transform.position = new Vector3(PositionData.Offset.x, PositionData.Offset.y, 0);
+                _spriteRenderer.transform.localPosition = new Vector3(PositionData.Offset.x, PositionData.Offset.y, 0);
             }
             else
             {

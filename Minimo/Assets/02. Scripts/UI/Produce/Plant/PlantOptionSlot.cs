@@ -30,7 +30,7 @@ public class PlantOptionSlot : MonoBehaviour
         }
         else
         {
-            _storageTMP.text = string.Empty;
+            _storageTMP.text = "0";
         }
     }
 
