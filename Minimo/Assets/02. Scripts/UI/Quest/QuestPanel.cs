@@ -27,6 +27,8 @@ public class QuestPanel : UIBase
     
     [SerializeField] private UILongPressDetector _longPressDetector;
     
+    [SerializeField] private QuestCons _questCons;
+    
     private QuestManager _questManager;
     
     private List<QuestInfo> _questInfos = new();
@@ -54,9 +56,7 @@ public class QuestPanel : UIBase
     {
         foreach (var info in _questInfos)
         {
-            var isActive = 
-                index == 0 
-                || index == info.QuestType;
+            var isActive = index == 0 || index == info.QuestType;
             
             info.gameObject.SetActive(isActive);
         }
@@ -98,5 +98,15 @@ public class QuestPanel : UIBase
     private void ExpandPanel()
     {
         _backgroundRect.DOSizeDelta(new Vector2(800, 1440), 1f);
+    }
+
+    public void OpenCons(DetailQuestData questData)
+    {
+        _questCons.ShowUI(questData);
+    }
+
+    public void OpenSide(DetailQuestData questData)
+    {
+        
     }
 }
