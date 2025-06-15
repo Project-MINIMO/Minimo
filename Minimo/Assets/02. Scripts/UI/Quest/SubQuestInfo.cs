@@ -7,11 +7,11 @@ using TMPro;
 public class SubQuestInfo : MonoBehaviour
 {
     [SerializeField] private Button _infoBtn;
-    [SerializeField] private Image _iconImg;
     [SerializeField] private TextMeshProUGUI _titleTMP;
+    [SerializeField] private TextMeshProUGUI _descriptionTMP;
 
-    [SerializeField] private GameObject _levelBack;
-    [SerializeField] private GameObject _preQuestBack;
+    [SerializeField] private GameObject _lockBack;
+    [SerializeField] private TextMeshProUGUI _lockDescriptionTMP;
 
     private DetailQuestData _detailQuestData;
     private TitleData _titleData;
@@ -30,7 +30,10 @@ public class SubQuestInfo : MonoBehaviour
         _detailQuestData = questData;
 
         _titleTMP.text = _titleData.GetString(questData.SubName);
-        _preQuestBack.SetActive(!IsUnlocked());
+
+        var isUnlocked = IsUnlocked();
+        _infoBtn.gameObject.SetActive(isUnlocked);
+        _lockBack.SetActive(!isUnlocked);
     }
 
     private void OnClickInfoBtn()
