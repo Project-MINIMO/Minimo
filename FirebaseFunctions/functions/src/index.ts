@@ -112,6 +112,12 @@ functions.auth.user().onCreate(async (user: admin.auth.UserRecord) => {
         .serverTimestamp() as admin.firestore.Timestamp,
       lastLoginAt: admin.firestore.FieldValue
         .serverTimestamp() as admin.firestore.Timestamp,
+      currencies: {
+        SDC: 0,
+        SLP: 0,
+        WSD: 0,
+        HDP: 0,
+      },
     };
 
     await userDocRef.set(initialUserData);

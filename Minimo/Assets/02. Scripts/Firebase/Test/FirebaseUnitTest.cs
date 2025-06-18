@@ -152,6 +152,10 @@ public class FirebaseUnitTest : MonoBehaviour
         bool signInResult = await authManager.SignInWithEmailAndPasswordAsync(TEST_EMAIL, TEST_PASSWORD);
         Debug.Log($"로그인 결과: {signInResult}");
         await Task.Delay(1000);
+        
+        // 2.5 GetAccountInfo FireFunction Test
+        Debug.Log("2.5. 사용자 정보 가져오기 테스트...");
+        // TODO
 
         // 3. 프로필 업데이트 테스트
         Debug.Log("3. 사용자 프로필 업데이트 테스트...");
@@ -346,11 +350,5 @@ public class FirebaseUnitTest : MonoBehaviour
         Debug.Log($"문서 삭제 결과: {deleteResult}");
         
         Debug.Log("=== Firebase Firestore 테스트 완료 ===");
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // Update 메서드는 비워둡니다
     }
 }
