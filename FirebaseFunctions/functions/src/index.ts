@@ -10,6 +10,7 @@
 import * as functions from "firebase-functions/v1";
 import {onRequest, onCall, HttpsError} from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
+import {UserData} from "./types/user";
 
 admin.initializeApp();
 
@@ -35,15 +36,6 @@ export const testFirestore = onCall(async (request) => {
     throw new HttpsError("internal", "Firestore 테스트 실패");
   }
 });
-
-// Define a type/interface for the User Data stored in Firestore
-interface UserData {
-  uid: string;
-  nickname: string;
-  createdAt: admin.firestore.Timestamp; // Use Firestore Timestamp type
-  lastLoginAt: admin.firestore.Timestamp; // Use Firestore Timestamp type
-  // Add other basic fields here if needed in the future
-}
 
 // --- 계정 정보 조회 함수 ---
 // Firebase SDK를 통해 호출되며, 인증 정보를 자동으로 받습니다.
