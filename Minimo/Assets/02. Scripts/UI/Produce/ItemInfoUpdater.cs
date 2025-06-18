@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class ItemInfoUpdater : MonoBehaviour
 {
@@ -36,13 +37,21 @@ public class ItemInfoUpdater : MonoBehaviour
             }
             
             _infoTMP[i].text = $"X{_currentOption.ResultItems[i].Amount}";
-            _infoImages[i]?.sprite = Resources.Load<Sprite>($"Item/{itemData.Name}");
-            _infoImages[i]?.gameObject.SetActive(true);
+
+            if (_infoImages[i] != null)
+            {
+                _infoImages[i].sprite = Resources.Load<Sprite>($"Item/{itemData.Name}");
+                _infoImages[i].gameObject.SetActive(true);
+            }
         }
 
         for (; i < _infoImages.Length; i++) 
         {
-            _infoImages[i]?.gameObject.SetActive(false);
+            if (_infoImages[i] != null)
+            {
+                _infoImages[i]?.gameObject.SetActive(false);
+            }
+            
         }
     }
 
