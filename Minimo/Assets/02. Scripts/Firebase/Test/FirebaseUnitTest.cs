@@ -81,10 +81,10 @@ public class FirebaseUnitTest : MonoBehaviour
             await Task.Delay(1000);
         }
         
-        // if (runFirestoreTest)
-        // {
-        //     await UnitTestFirebaseFirestore();
-        // }
+        if (runFirestoreTest)
+        {
+            await UnitTestFirebaseFirestore();
+        }
         
         Debug.Log("=== Firebase 통합 테스트 완료 ===");
     }
@@ -152,6 +152,10 @@ public class FirebaseUnitTest : MonoBehaviour
         bool signInResult = await authManager.SignInWithEmailAndPasswordAsync(TEST_EMAIL, TEST_PASSWORD);
         Debug.Log($"로그인 결과: {signInResult}");
         await Task.Delay(1000);
+        
+        // 2.5 GetAccountInfo FireFunction Test
+        Debug.Log("2.5. 사용자 정보 가져오기 테스트...");
+        // TODO
 
         // 3. 프로필 업데이트 테스트
         Debug.Log("3. 사용자 프로필 업데이트 테스트...");
@@ -263,94 +267,88 @@ public class FirebaseUnitTest : MonoBehaviour
     /// </summary>
     private async Task UnitTestFirebaseFirestore()
     {
-        // Debug.Log("=== Firebase Firestore 테스트 시작 ===");
-        //
-        // // 사용자가 로그인될 때까지 대기
-        // if (auth.CurrentUser == null)
-        // {
-        //     Debug.Log("Firestore 테스트를 위해 익명 로그인이 필요합니다.");
-        //     
-        //     try
-        //     {
-        //         await auth.SignInAnonymouslyAsync();
-        //         Debug.Log($"익명 인증 성공! User ID: {auth.CurrentUser.UserId}");
-        //     }
-        //     catch (System.Exception ex)
-        //     {
-        //         Debug.LogError($"익명 인증 실패: {ex.Message}");
-        //         return;
-        //     }
-        // }
-        //
-        // string userId = auth.CurrentUser.UserId;
-        // string testCollection = "unitTest";
-        // string testDocId = $"test_{userId}";
-        //
-        // // 1. 문서 생성 테스트
-        // Debug.Log("1. Firestore 문서 생성 테스트...");
-        // Dictionary<string, object> testData = new Dictionary<string, object>
-        // {
-        //     { "name", "테스트 데이터" },
-        //     { "value", 42 },
-        //     { "isTest", true },
-        //     { "timestamp", Firebase.Firestore.FieldValue.ServerTimestamp }
-        // };
-        //
-        // bool createResult = await firestoreManager.SetDocument(testCollection, testDocId, testData);
-        // Debug.Log($"문서 생성 결과: {createResult}");
-        // await Task.Delay(1000);
-        //
-        // // 2. 문서 읽기 테스트
-        // Debug.Log("2. Firestore 문서 읽기 테스트...");
-        // Dictionary<string, object> readData = await firestoreManager.GetDocument(testCollection, testDocId);
-        //
-        // if (readData != null)
-        // {
-        //     Debug.Log($"문서 읽기 성공: 이름={readData["name"]}, 값={readData["value"]}");
-        // }
-        // else
-        // {
-        //     Debug.LogError("문서 읽기 실패!");
-        // }
-        // await Task.Delay(1000);
-        //
-        // // 3. 문서 업데이트 테스트
-        // Debug.Log("3. Firestore 문서 업데이트 테스트...");
-        // Dictionary<string, object> updateData = new Dictionary<string, object>
-        // {
-        //     { "value", 100 },
-        //     { "updated", true }
-        // };
-        //
-        // bool updateResult = await firestoreManager.UpdateDocument(testCollection, testDocId, updateData);
-        // Debug.Log($"문서 업데이트 결과: {updateResult}");
-        // await Task.Delay(1000);
-        //
-        // // 4. 업데이트된 문서 읽기
-        // Debug.Log("4. 업데이트된 Firestore 문서 읽기 테스트...");
-        // Dictionary<string, object> updatedData = await firestoreManager.GetDocument(testCollection, testDocId);
-        //
-        // if (updatedData != null)
-        // {
-        //     Debug.Log($"업데이트된 문서 읽기 성공: 이름={updatedData["name"]}, 값={updatedData["value"]}, 업데이트됨={updatedData["updated"]}");
-        // }
-        // else
-        // {
-        //     Debug.LogError("업데이트된 문서 읽기 실패!");
-        // }
-        // await Task.Delay(1000);
-        //
-        // // 5. 문서 삭제 테스트
-        // Debug.Log("5. Firestore 문서 삭제 테스트...");
-        // bool deleteResult = await firestoreManager.DeleteDocument(testCollection, testDocId);
-        // Debug.Log($"문서 삭제 결과: {deleteResult}");
-        //
-        // Debug.Log("=== Firebase Firestore 테스트 완료 ===");
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // Update 메서드는 비워둡니다
+        Debug.Log("=== Firebase Firestore 테스트 시작 ===");
+        
+        // 사용자가 로그인될 때까지 대기
+        if (auth.CurrentUser == null)
+        {
+            Debug.Log("Firestore 테스트를 위해 익명 로그인이 필요합니다.");
+            
+            try
+            {
+                await auth.SignInAnonymouslyAsync();
+                Debug.Log($"익명 인증 성공! User ID: {auth.CurrentUser.UserId}");
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"익명 인증 실패: {ex.Message}");
+                return;
+            }
+        }
+        
+        string userId = auth.CurrentUser.UserId;
+        string testCollection = "unitTest";
+        string testDocId = $"test_{userId}";
+        
+        // 1. 문서 생성 테스트
+        Debug.Log("1. Firestore 문서 생성 테스트...");
+        Dictionary<string, object> testData = new Dictionary<string, object>
+        {
+            { "name", "테스트 데이터" },
+            { "value", 42 },
+            { "isTest", true },
+            { "timestamp", Firebase.Firestore.FieldValue.ServerTimestamp }
+        };
+        
+        bool createResult = await firestoreManager.SetDocument(testCollection, testDocId, testData);
+        Debug.Log($"문서 생성 결과: {createResult}");
+        await Task.Delay(1000);
+        
+        // 2. 문서 읽기 테스트
+        Debug.Log("2. Firestore 문서 읽기 테스트...");
+        Dictionary<string, object> readData = await firestoreManager.GetDocument(testCollection, testDocId);
+        
+        if (readData != null)
+        {
+            Debug.Log($"문서 읽기 성공: 이름={readData["name"]}, 값={readData["value"]}");
+        }
+        else
+        {
+            Debug.LogError("문서 읽기 실패!");
+        }
+        await Task.Delay(1000);
+        
+        // 3. 문서 업데이트 테스트
+        Debug.Log("3. Firestore 문서 업데이트 테스트...");
+        Dictionary<string, object> updateData = new Dictionary<string, object>
+        {
+            { "value", 100 },
+            { "updated", true }
+        };
+        
+        bool updateResult = await firestoreManager.UpdateDocument(testCollection, testDocId, updateData);
+        Debug.Log($"문서 업데이트 결과: {updateResult}");
+        await Task.Delay(1000);
+        
+        // 4. 업데이트된 문서 읽기
+        Debug.Log("4. 업데이트된 Firestore 문서 읽기 테스트...");
+        Dictionary<string, object> updatedData = await firestoreManager.GetDocument(testCollection, testDocId);
+        
+        if (updatedData != null)
+        {
+            Debug.Log($"업데이트된 문서 읽기 성공: 이름={updatedData["name"]}, 값={updatedData["value"]}, 업데이트됨={updatedData["updated"]}");
+        }
+        else
+        {
+            Debug.LogError("업데이트된 문서 읽기 실패!");
+        }
+        await Task.Delay(1000);
+        
+        // 5. 문서 삭제 테스트
+        Debug.Log("5. Firestore 문서 삭제 테스트...");
+        bool deleteResult = await firestoreManager.DeleteDocument(testCollection, testDocId);
+        Debug.Log($"문서 삭제 결과: {deleteResult}");
+        
+        Debug.Log("=== Firebase Firestore 테스트 완료 ===");
     }
 }

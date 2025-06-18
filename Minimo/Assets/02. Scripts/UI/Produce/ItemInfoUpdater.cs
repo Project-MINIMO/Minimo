@@ -35,7 +35,7 @@ public class ItemInfoUpdater : MonoBehaviour
                 Debug.LogError($"Cannot find item data with code : {_currentOption.ResultItems[i].ID}");
                 return;
             }
-            
+           
             _infoTMP[i].text = $"X{_currentOption.ResultItems[i].Amount}";
 
             if (_infoImages[i] != null)
