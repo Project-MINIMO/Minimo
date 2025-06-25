@@ -1,10 +1,10 @@
 using System;
-using MinimoShared;
 using Cysharp.Threading.Tasks;
 
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class BuildingBtn : MonoBehaviour
 {
@@ -61,20 +61,11 @@ public class BuildingBtn : MonoBehaviour
         _iconImg.sprite = Resources.Load<Sprite>(spritePath);
         _iconImg.SetNativeSize();
         
-        var prefabPath = $"Building/{data.ID}";
+        var prefabPath = $"Building/GridObject";
         _objectPrefab = Resources.Load<GameObject>(prefabPath);
 
         SetString();
         SetBuildingState();
-        
-        //if (data.ID is "Building_Farm" or "Building_Orchard")
-        //{
-        //    gameObject.SetActive(true);
-        //}
-        //else
-        //{
-        //    gameObject.SetActive(false);
-        //}
     }
 
     private void SetString()
@@ -88,7 +79,7 @@ public class BuildingBtn : MonoBehaviour
 
     private void SetBuildingState()
     {
-        if (App.GetManager<AccountInfoManager>().Level.Value < Data.UnlockLevel)
+        if (AccountInfo.Instance.level < Data.UnlockLevel)
         {
             _currentState = BuildingState.Lock;
         }
@@ -97,7 +88,7 @@ public class BuildingBtn : MonoBehaviour
             _currentState = BuildingState.Use;
         }
 
-        for (int i = 0; i < _stateBacks.Length; i++)
+        for (var i = 0; i < _stateBacks.Length; i++)
         {
             if (i == (int)_currentState)
             {
@@ -117,13 +108,30 @@ public class BuildingBtn : MonoBehaviour
         var cameraCenterPosition = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, Camera.main.nearClipPlane));
         cameraCenterPosition.z = 0;
         
-        var gridObject = Instantiate(_objectPrefab, cameraCenterPosition, Quaternion.identity, _buildingGroup)
-            .GetComponent<BuildingObject>();
-
-        if (gridObject != null)
+        var gridObject = Instantiate(_objectPrefab, cameraCenterPosition, Quaternion.identity, _buildingGroup);
+        switch (Data.Type)
         {
-            gridObject.Initialize(Data);
-            App.GetManager<EditManager>().StartEdit(gridObject);
+            case 0:
+                gridObject.AddComponent<ProducePrimary>();
+                break;
+            
+            case 1:
+                gridObject.AddComponent<ProduceSecondary>();
+                break;
+            
+            case 2:
+                gridObject.AddComponent<ProduceTertiary>();
+                break;
+            
+            default:
+                gridObject.AddComponent<ProduceQuaternary>();
+                break;
+        }
+       
+
+        if (gridObject.TryGetComponent<ProduceObject>(out var produce))
+        {
+            produce.Initialize(Data);
         }
         else
         {

@@ -29,17 +29,6 @@ public class App : Singleton<App>
         Application.targetFrameRate = 120;
 
         DOTween.safeModeLogBehaviour = DG.Tweening.Core.Enums.SafeModeLogBehaviour.Error;
-        
-        ConfigureServices();
-    }
-    
-    private void ConfigureServices()
-    {
-        var services = new ServiceCollection();
-        var remoteServerAddress = "https://asptest2-985439182780.asia-northeast3.run.app";
-        services.AddSingleton(new GameClient(remoteServerAddress));
-        Services = services.BuildServiceProvider();
-        Debug.LogWarning("Services configured.");
     }
 
     private static void Register(MonoBehaviour obj, Dictionary<Type, MonoBehaviour> dictionary)

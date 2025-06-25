@@ -3,120 +3,240 @@
     "ID": 0,
     "Type": 0,
     "UnlockLevel": 1,
+    "SizeX": 1,
+    "SizeY": 1,
     "Name": "Farm",
     "Cost": 0,
     "Duration": 10
   },
   {
     "ID": 1,
-    "Type": 0,
+    "Type": 1,
     "UnlockLevel": 1,
-    "Name": "WhiteRiceProcessor",
+    "SizeX": 2,
+    "SizeY": 2,
+    "Name": "RiceProcessor",
     "Cost": 0,
-    "Duration": 10
+    "Duration": 20
   },
   {
     "ID": 2,
-    "Type": 0,
+    "Type": 1,
     "UnlockLevel": 1,
+    "SizeX": 2,
+    "SizeY": 2,
     "Name": "DoughProcessor",
     "Cost": 0,
-    "Duration": 10
+    "Duration": 20
   },
   {
     "ID": 3,
-    "Type": 0,
+    "Type": 1,
     "UnlockLevel": 1,
+    "SizeX": 2,
+    "SizeY": 2,
     "Name": "TofuProcessor",
     "Cost": 0,
-    "Duration": 10
+    "Duration": 20
   },
   {
     "ID": 4,
-    "Type": 0,
+    "Type": 1,
     "UnlockLevel": 1,
+    "SizeX": 2,
+    "SizeY": 2,
     "Name": "MaltProcessor",
     "Cost": 0,
-    "Duration": 10
+    "Duration": 20
   },
   {
     "ID": 5,
-    "Type": 0,
+    "Type": 1,
     "UnlockLevel": 1,
+    "SizeX": 2,
+    "SizeY": 2,
     "Name": "SaltProcessor",
     "Cost": 0,
-    "Duration": 10
+    "Duration": 20
   },
   {
     "ID": 6,
-    "Type": 0,
+    "Type": 1,
     "UnlockLevel": 1,
+    "SizeX": 2,
+    "SizeY": 2,
     "Name": "SugarProcessor",
     "Cost": 0,
-    "Duration": 10
+    "Duration": 20
   },
   {
     "ID": 7,
-    "Type": 0,
+    "Type": 1,
     "UnlockLevel": 1,
-    "Name": "ChiliProcessor",
+    "SizeX": 2,
+    "SizeY": 2,
+    "Name": "ChiliPowderProcessor",
     "Cost": 0,
-    "Duration": 10
+    "Duration": 20
   },
   {
     "ID": 8,
-    "Type": 0,
+    "Type": 1,
     "UnlockLevel": 1,
-    "Name": "GrapeJuiceProcessor",
+    "SizeX": 2,
+    "SizeY": 2,
+    "Name": "JuiceProcessor",
     "Cost": 0,
-    "Duration": 10
+    "Duration": 20
   },
   {
     "ID": 9,
-    "Type": 0,
+    "Type": 1,
     "UnlockLevel": 1,
-    "Name": "OliveOilProcessor",
+    "SizeX": 2,
+    "SizeY": 2,
+    "Name": "CookingOilProcessor",
     "Cost": 0,
-    "Duration": 10
+    "Duration": 20
   },
   {
     "ID": 10,
-    "Type": 0,
+    "Type": 1,
     "UnlockLevel": 1,
-    "Name": "KoreanDiner",
+    "SizeX": 2,
+    "SizeY": 2,
+    "Name": "VegetableProcessor",
     "Cost": 0,
-    "Duration": 10
+    "Duration": 20
   },
   {
     "ID": 11,
-    "Type": 0,
+    "Type": 2,
     "UnlockLevel": 1,
-    "Name": "Restaurant",
+    "SizeX": 3,
+    "SizeY": 3,
+    "Name": "KoreanDiner",
     "Cost": 0,
-    "Duration": 10
+    "Duration": 30
   },
   {
     "ID": 12,
-    "Type": 0,
+    "Type": 2,
     "UnlockLevel": 1,
-    "Name": "Bakery",
+    "SizeX": 3,
+    "SizeY": 3,
+    "Name": "Restaurant",
     "Cost": 0,
-    "Duration": 10
+    "Duration": 30
   },
   {
     "ID": 13,
+    "Type": 2,
+    "UnlockLevel": 1,
+    "SizeX": 3,
+    "SizeY": 3,
+    "Name": "Bakery",
+    "Cost": 0,
+    "Duration": 30
+  },
+  {
+    "ID": 14,
+    "Type": 2,
+    "UnlockLevel": 1,
+    "SizeX": 3,
+    "SizeY": 3,
+    "Name": "DessertShop",
+    "Cost": 0,
+    "Duration": 30
+  },
+  {
+    "ID": 15,
+    "Type": 2,
+    "UnlockLevel": 1,
+    "SizeX": 3,
+    "SizeY": 3,
+    "Name": "Brewery",
+    "Cost": 0,
+    "Duration": 30
+  },
+  {
+    "ID": 16,
     "Type": 0,
     "UnlockLevel": 1,
-    "Name": "DessertShop",
+    "SizeX": 1,
+    "SizeY": 1,
+    "Name": "FlowerGarden",
     "Cost": 0,
     "Duration": 10
   },
   {
-    "ID": 14,
-    "Type": 0,
+    "ID": 17,
+    "Type": 1,
     "UnlockLevel": 1,
-    "Name": "Brewery",
+    "SizeX": 2,
+    "SizeY": 2,
+    "Name": "LoveProcessor",
     "Cost": 0,
-    "Duration": 10
+    "Duration": 20
+  },
+  {
+    "ID": 18,
+    "Type": 1,
+    "UnlockLevel": 1,
+    "SizeX": 2,
+    "SizeY": 2,
+    "Name": "FriendshipProcessor",
+    "Cost": 0,
+    "Duration": 20
+  },
+  {
+    "ID": 19,
+    "Type": 1,
+    "UnlockLevel": 1,
+    "SizeX": 2,
+    "SizeY": 2,
+    "Name": "MemoryProcessor",
+    "Cost": 0,
+    "Duration": 20
+  },
+  {
+    "ID": 20,
+    "Type": 1,
+    "UnlockLevel": 1,
+    "SizeX": 2,
+    "SizeY": 2,
+    "Name": "PeaceProcessor",
+    "Cost": 0,
+    "Duration": 20
+  },
+  {
+    "ID": 21,
+    "Type": 1,
+    "UnlockLevel": 1,
+    "SizeX": 2,
+    "SizeY": 2,
+    "Name": "HopeProcessor",
+    "Cost": 0,
+    "Duration": 20
+  },
+  {
+    "ID": 22,
+    "Type": 1,
+    "UnlockLevel": 1,
+    "SizeX": 2,
+    "SizeY": 2,
+    "Name": "CourageProcessor",
+    "Cost": 0,
+    "Duration": 20
+  },
+  {
+    "ID": 23,
+    "Type": 3,
+    "UnlockLevel": 1,
+    "SizeX": 3,
+    "SizeY": 3,
+    "Name": "WishWorkshop",
+    "Cost": 0,
+    "Duration": 40
   }
 ]

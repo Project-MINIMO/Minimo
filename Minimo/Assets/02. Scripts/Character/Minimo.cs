@@ -43,7 +43,7 @@ public class Minimo : MonoBehaviour
         FSM.ChangeState(randomIndex == 0 ? MinimoState.Idle : MinimoState.Walk);
     }
 
-    public void SetWorkState(ProduceObject produceObject)
+    public void SetWorkState(ProduceAdvanced produceObject)
     {
         FSM.ChangeState(MinimoState.Work);
         _animator.SetTrigger(produceObject.AnimTrigger);

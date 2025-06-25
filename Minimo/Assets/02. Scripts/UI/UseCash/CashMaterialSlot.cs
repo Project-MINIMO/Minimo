@@ -15,11 +15,11 @@ public class CashMaterialSlot : MonoBehaviour
         _titleData = App.GetData<TitleData>();
     }
     
-    public void SetData(Item material, int count)
+    public void SetData(ItemData material, int count)
     {
-        _nameTMP.text = _titleData.GetString(material.Data.Name);
+        _nameTMP.text = _titleData.GetString(material.Name);
         _countTMP.text = count.ToString();
-        _iconImage.sprite = material.Icon;
+        _iconImage.sprite = null;//material.Icon;
         
         gameObject.SetActive(true);
     }

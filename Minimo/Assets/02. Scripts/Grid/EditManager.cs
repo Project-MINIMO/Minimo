@@ -21,11 +21,9 @@ public class EditManager : ManagerBase
         InstallExistBuildings();
     }
     
-    private async void InstallExistBuildings()
+    private void InstallExistBuildings()
     {
-        var buildingManager = App.GetManager<BuildingManager>();
-        var buildings = await buildingManager.GetBuildingsAsync();
-        
+        /*
         foreach (var building in buildings)
         {
             if (building.BuildingType == "TestBuilding")
@@ -46,6 +44,7 @@ public class EditManager : ManagerBase
             buildingObject.Initialize(building);
             _tileStateModifier.ModifyTileState(buildingObject.Area, TileState.Installed);
         }
+        */
     }
     
     public void StartEdit(BuildingObject gridObject)
@@ -55,7 +54,7 @@ public class EditManager : ManagerBase
             CancelEdit();
         }
         
-        _tileStateModifier.ModifyTileState(gridObject.Area, TileState.Empty);
+        _tileStateModifier.ModifyTileState(gridObject, TileState.Empty);
         
         CurrentEditObject = gridObject;
         IsEditing.Value = true;
@@ -68,22 +67,22 @@ public class EditManager : ManagerBase
     {
         CurrentEditObject.Cancel();
         
-        _tileStateModifier.ModifyTileState(CurrentEditObject.Area, TileState.Installed);
+        _tileStateModifier.ModifyTileState(CurrentEditObject, TileState.Installed);
         
         CurrentEditObject = null;
         IsEditing.Value = false;
     }
     
-    public async void ConfirmEdit()
+    public void ConfirmEdit()
     {
         if (!_installChecker.CheckCanInstall(CurrentEditObject))
         {
             return;
         }
 
-        if (await CurrentEditObject.Install())
+        if (CurrentEditObject.Install())
         {
-            _tileStateModifier.ModifyTileState(CurrentEditObject.Area, TileState.Installed);
+            _tileStateModifier.ModifyTileState(CurrentEditObject, TileState.Installed);
             
             CurrentEditObject = null;
             IsEditing.Value = false;
@@ -106,7 +105,6 @@ public class EditManager : ManagerBase
     private void SetCurrentPosition(Vector3Int position)
     {
         CurrentEditObject.transform.position = _gridLayout.CellToWorld(position);
-        CurrentEditObject.Area.position =  position;
         CurrentCellPosition.Value = CurrentEditObject.transform.position;
     }
     

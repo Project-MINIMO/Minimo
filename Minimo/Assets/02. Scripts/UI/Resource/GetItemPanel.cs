@@ -18,25 +18,14 @@ public class GetItemPanel : UIBase
     [SerializeField] private Vector2 _endPosition;
     
     private Vector2[] _startPosition = new Vector2[8];
-    
-    private ItemSO _itemSO;
-
-    public bool IsComplete { get; private set; } = false;
 
     public override void Initialize()
     {
-        _itemSO = App.GetData<TitleData>().ItemSO;
         _closeBtn.onClick.AddListener(ClosePanel);
         
         for (var i = 0; i < _iconImgs.Length; i++)
         {
             _startPosition[i] = _iconImgs[i].rectTransform.anchoredPosition;
-        }
-        
-        var storagePanel = App.GetManager<UIManager>().GetPanel<StoragePanel>();
-        if (storagePanel.GetActiveStorageBtnCount() > 6)
-        {
-            IsComplete = true;
         }
     }
     
@@ -47,52 +36,20 @@ public class GetItemPanel : UIBase
         SetItemsNull();
     }
 
-    public void OpenPanel(int index)
-    {
-        base.OpenPanel();
-
-        SetItemsNull();
-        var items = new List<Item>()
-        {
-            _itemSO.GetItem("Item_Wheat"),
-            _itemSO.GetItem("Item_Corn"),
-            _itemSO.GetItem("Item_Pumpkin"),
-            _itemSO.GetItem("Item_Sugarcane"),
-            _itemSO.GetItem("Item_Pepper"),
-            _itemSO.GetItem("Item_Apple"),
-            _itemSO.GetItem("Item_Blueberry"),
-            _itemSO.GetItem("Item_Pineapple"),
-        };
-        
-        foreach(var item in items)
-        {
-            App.GetManager<AccountInfoManager>().AddItemCount(item.Code, 5);
-        }
-        
-        SetItems(items);
-        StartCoroutine(ShowResources());
-    }
-
-    public void OpenPanel(List<Item> items)
+    public void OpenPanel(List<ItemData> items)
     {
         OpenPanel();
         SetItems(items);
     }
 
 
-    public void OpenPanel(Item item)
+    public void OpenPanel(ItemData item)
     {
         OpenPanel();
         SetItem(item);
     }
-
-    public void OpenPanel(string code, int count)
-    {
-        var item = _itemSO.GetItem(code);
-        OpenPanel(item);
-    }
     
-    private void SetItems(List<Item> items)
+    private void SetItems(List<ItemData> items)
     {
         for (var i = 0; i < items.Count; i++)
         {
@@ -100,10 +57,10 @@ public class GetItemPanel : UIBase
         }
     }
 
-    private void SetItem(Item item, int index = 0)
+    private void SetItem(ItemData item, int index = 0)
     {
         _iconImgs[index].gameObject.SetActive(true);
-        _iconImgs[index].sprite = item.Icon;
+        _iconImgs[index].sprite = null;//item.Icon;
     }
 
     private void SetItemsNull()
@@ -133,8 +90,7 @@ public class GetItemPanel : UIBase
         }
         
         yield return new WaitForSeconds(0.3f);
-        
-        IsComplete = true;
+ 
         ClosePanel();   
     }
 }

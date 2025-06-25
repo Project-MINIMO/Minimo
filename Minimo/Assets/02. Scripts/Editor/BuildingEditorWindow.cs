@@ -10,6 +10,7 @@ public class BuildingEditorWindow : EditorWindow
     private BuildingPositionData _data;
     private string _name = "New Building";
     private Vector2 _offset = Vector2.zero;
+    private Vector2 _colliderOffset = Vector2.zero;
     private Sprite _sprite;
     private bool _isFlipped;
 
@@ -94,6 +95,7 @@ public class BuildingEditorWindow : EditorWindow
         GUILayout.Label("건물 데이터 설정", EditorStyles.boldLabel);
         _name = EditorGUILayout.TextField("건물 이름", _name);
         _offset = EditorGUILayout.Vector2Field("이미지 오프셋", _offset);
+        _colliderOffset = EditorGUILayout.Vector2Field("콜라이더 오프셋", _colliderOffset);
         _sprite = (Sprite)EditorGUILayout.ObjectField("건물 스프라이트", _sprite, typeof(Sprite), false);
 
         GUILayout.BeginHorizontal();
@@ -121,6 +123,7 @@ public class BuildingEditorWindow : EditorWindow
     {
         _name = data.Code;
         _offset = data.Offset;
+        _colliderOffset = data.ColliderOffset;
         _sprite = data.Sprite;
         _groundTilePositions = new List<Vector2Int>(data.GroundTilePositions);
         _waterTilePositions = new List<Vector2Int>(data.WaterTilePositions);
@@ -133,6 +136,7 @@ public class BuildingEditorWindow : EditorWindow
         _data = null;
         _name = string.Empty;
         _offset = Vector2.zero;
+        _colliderOffset = Vector2.zero;
         _sprite = null;
         _groundTilePositions = new List<Vector2Int>();
         _waterTilePositions = new List<Vector2Int>();
@@ -156,6 +160,7 @@ public class BuildingEditorWindow : EditorWindow
 
         _data.Code = _name;
         _data.Offset = _offset;
+        _data.ColliderOffset = _colliderOffset;
         _data.Sprite = _sprite;
         _data.GroundTilePositions = new List<Vector2Int>(_groundTilePositions);
         _data.WaterTilePositions = new List<Vector2Int>(_waterTilePositions);

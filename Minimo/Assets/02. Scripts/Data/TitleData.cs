@@ -4,6 +4,60 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+public enum ItemType
+{
+    None,
+    Food,
+    Flower,
+    Amulet,
+}
+
+[Serializable]
+public class QuestData
+{
+    public int ID;
+    public string Name;
+    public int Type;
+    public int Title;
+    public int PreQuestID;
+    public int OpenLevel;
+}
+
+[Serializable]
+public class DetailQuestData
+{
+    public int ID;
+    public int QuestID;
+    public int PreQuestID;
+    public int OpenLevel;
+    public string SubName;
+    public string QuestSubIcon;
+    public int Type;
+    public string Description;
+    public int ClearType1;
+    public int ClearTarget1;
+    public int ClearValue1;
+    public string ClearDesc1;
+    public int ClearType2;
+    public int ClearTarget2;
+    public int ClearValue2;
+    public string ClearDesc2;
+    public int ClearType3;
+    public int ClearTarget3;
+    public int ClearValue3;
+    public string ClearDesc3;
+    public int ResultType;
+    public int RewardType1;
+    public int Reward1ID;
+    public int RewardValue1;
+    public int RewardType2;
+    public int Reward2ID;
+    public int RewardValue2;
+    public int RewardType3;
+    public int Reward3ID;
+    public int RewardValue3;
+}
+
 [Serializable]
 public class CommonData
 {
@@ -38,8 +92,8 @@ public class RawProduceData
 {
     public int    ID;        // 예: 빌딩 enum 값을 int로
     public string Building;  // 예: "StarCropFarm"
-    public string Materials; // "StarCrop:1,Water:5"
-    public string Results;   // "Sugar:2"
+    public string MaterialItems; // "StarCrop:1,Water:5"
+    public string ResultItems;   // "Sugar:2"
     public int    Time;      
     public int    EXP;
 }
@@ -81,12 +135,13 @@ public class StringData
 
 public class TitleData : DataBase
 {
-    public ItemSO ItemSO;
-
+    public Dictionary<int, QuestData> Quest { get; private set; } = new();
+    public Dictionary<int, DetailQuestData> DetailQuest { get; private set; } = new();
     public Dictionary<string, int> Common { get; private set; } = new();
     public Dictionary<int, BuildingData> Building { get; private set; } = new();
     public Dictionary<int, ItemData> Item { get; private set; } = new();
     public Dictionary<int, ProduceData> Produce { get; private set; } = new();
+    public Dictionary<string, List<ProduceData>> GroupedProduce { get; private set; } = new();
 
     private Dictionary<string, StringData> _string = new();
 
@@ -94,6 +149,8 @@ public class TitleData : DataBase
 
     #region Data Path
     private const string STRING_PATH = "Data/StringData";
+    private const string QUEST_PATH = "Data/QuestData";
+    private const string DETAILQUEST_PATH = "Data/DetailQuestData";
     private const string COMMON_PATH = "Data/CommonData";
     private const string BUILDING_PATH = "Data/BuildingData";
     private const string ITEM_PATH = "Data/ItemData";
@@ -115,6 +172,8 @@ public class TitleData : DataBase
         }
 
         _string.Clear();
+        Quest.Clear();
+        DetailQuest.Clear();
         Common.Clear();
         Building.Clear();
         Item.Clear();
@@ -124,6 +183,18 @@ public class TitleData : DataBase
         foreach (var data in stringDataRaw)
         {
             _string.Add(data.ID, data);
+        }
+        
+        var questDataRaw = DataLoader.LoadData<QuestData>(QUEST_PATH);
+        foreach (var data in questDataRaw)
+        {
+            Quest.Add(data.ID, data);
+        }
+        
+        var detailQuestDataRaw = DataLoader.LoadData<DetailQuestData>(DETAILQUEST_PATH);
+        foreach (var data in detailQuestDataRaw)
+        {
+            DetailQuest.Add(data.ID, data);
         }
         
         var commonDataRaw = DataLoader.LoadData<CommonData>(COMMON_PATH);
@@ -147,14 +218,13 @@ public class TitleData : DataBase
         var produceDataRaw = DataLoader.LoadDataProduceData(PRODUCE_PATH);
         foreach (var data in produceDataRaw)
         {
-            Produce.Add(data.ID, data);       
+            Produce.Add(data.ID, data);   
         }
-        
-        foreach (var item in ItemSO.items) //TEMP
-        {
-            item.SetData(Item.FirstOrDefault(x => x.Value.Name == item.Code).Value);
-        }
-
+        GroupedProduce = Produce
+            .Values
+            .GroupBy(data => data.Building)
+            .ToDictionary(data => data.Key, data => data.ToList());
+       
         _isGameDataLoaded = true;
     }
 

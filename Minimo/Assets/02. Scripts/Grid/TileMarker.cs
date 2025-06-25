@@ -54,15 +54,13 @@ public class TileMarker : MonoBehaviour
 
         Vector3Int baseCell = _markTilemap.WorldToCell(gridObject.transform.position);
         
-        // GroundTilePositions는 상대 좌표이므로, 설치 셀 좌표에 더해주면 실제 맵 좌표가 됨
         foreach (var relativePos in gridObject.PositionData.GroundTilePositions)
         {
             Vector3Int cellPos = baseCell + new Vector3Int(relativePos.x, relativePos.y, 0);
             bool canInstall = _installChecker.CheckCanInstall(cellPos, TileType.Ground);
             _markTilemap.SetTile(cellPos, canInstall ? _possibleTile : _impossibleTile);
         }
-
-        // WaterTilePositions도 같은 방식으로 처리
+        
         foreach (var relativePos in gridObject.PositionData.WaterTilePositions)
         {
             Vector3Int cellPos = baseCell + new Vector3Int(relativePos.x, relativePos.y, 0);

@@ -13,14 +13,10 @@ public class StorageCapacityCtrl : MonoBehaviour
     [SerializeField] private Button _expandBtn;
     [SerializeField] private Transform _storageParent;
 
-    private AccountInfoManager _accountInfo;
     private StorageExpandPanel _expandPanel;
 
     private void Start()
     {
-        _accountInfo = App.GetManager<AccountInfoManager>();
-            
-        App.GetManager<UIManager>().GetPanel<StoragePanel>().StorageChanged.Subscribe(_ => SetCapacity()).AddTo(gameObject);
         _expandBtn.GetComponentInChildren<TextMeshProUGUI>().text = App.GetData<TitleData>().GetString("STR_STORAGE_UI_EXPAND");
         _expandBtn.onClick.AddListener(() => _expandPanel.OpenPanel());
 

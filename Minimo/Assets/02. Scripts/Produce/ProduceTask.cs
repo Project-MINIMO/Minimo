@@ -4,14 +4,12 @@ public class ProduceTask
 {
     public ProduceData Data { get; }
     public int RemainTime { get; private set; }
-    public int SlotIndex { get; private set; }
     public ITaskState CurrentState { get; private set; }
     
-    public ProduceTask(ProduceData produceOption, int slotIndex)
+    public ProduceTask(ProduceData produceOption)
     {
         Data = produceOption;
         RemainTime = produceOption.Time;
-        SlotIndex = slotIndex;
         
         CurrentState = PendingState.Instance;
     }
@@ -61,10 +59,6 @@ public class ActiveState : ITaskState
     public void OnUpdate(ProduceTask task)
     {
         task.ReduceRemainTime(1);
-        if (task.RemainTime <= 0)
-        {
-            task.ChangeState(CompletedState.Instance);
-        }
     }
 
     public void OnHarvest(ProduceTask task)
@@ -77,14 +71,29 @@ public class ActiveState : ITaskState
 public class CompletedState : ITaskState
 {
     public static readonly CompletedState Instance = new();
-    private CompletedState() { }
+    private TitleData _titleData;
+
+    private CompletedState()
+    {
+        _titleData = App.GetData<TitleData>();
+    }
     
     public void OnUpdate(ProduceTask task) { }
 
     public void OnHarvest(ProduceTask task)
     {
         Debug.Log($"Harvested: {task.Data.ResultItems[0].ID}");
-
+        
+        var item = _titleData.Item[task.Data.ResultItems[0].ID];
+        if (AccountInfo.Instance.items.ContainsKey(item))
+        {
+            AccountInfo.Instance.items[item] += task.Data.ResultItems[0].Amount;
+        }
+        else
+        {
+            AccountInfo.Instance.items.Add(item, task.Data.ResultItems[0].Amount);
+        }
+        
         task.ChangeState(EndState.Instance);
     }
 }

@@ -8,7 +8,7 @@ public class UseCashMaterialBack : UseCashBack
 {
     [SerializeField] private CashMaterialSlot[] _materialSlots;
     
-    public void Setup(List<(Item, int)> lackItems, Action useAction)
+    public void Setup(List<(ItemData, int)> lackItems, Action useAction)
     {
         var price = CalculatePrice(lackItems);
         
@@ -17,12 +17,12 @@ public class UseCashMaterialBack : UseCashBack
         SetMaterialSlots(lackItems);
     }
 
-    private int CalculatePrice(List<(Item, int)> lackItems)
+    private int CalculatePrice(List<(ItemData, int)> lackItems)
     {
         return 0; //lackItems.Sum(lackItem => lackItem.Item1.Data.CashCost * lackItem.Item2);
     }
 
-    private void SetMaterialSlots(List<(Item, int)> lackItems)
+    private void SetMaterialSlots(List<(ItemData, int)> lackItems)
     {
         var i = 0;
         
