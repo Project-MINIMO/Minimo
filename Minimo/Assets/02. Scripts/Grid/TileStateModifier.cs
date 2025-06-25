@@ -12,26 +12,20 @@ public class TileStateModifier : MonoBehaviour
     [SerializeField] private Tilemap _installTilemap;
     [SerializeField] private TileBase _installedTile;
 
-    public void ModifyTileState(BoundsInt area, TileState tileState)
+    public void ModifyTileState(BuildingObject gridObject, TileState tileState)
     {
-        var totalSize = area.size.x * area.size.y;
-        var tiles = new TileBase[totalSize];
+        var baseCell = _installTilemap.WorldToCell(gridObject.transform.position);
         
-        if (tileState == TileState.Installed)
+        foreach (var relativePos in gridObject.PositionData.GroundTilePositions)
         {
-            for (var i = 0; i < tiles.Length; i++)
-            {
-                tiles[i] = _installedTile;
-            }
+            var cellPos = baseCell + new Vector3Int(relativePos.x, relativePos.y, 0);
+            _installTilemap.SetTile(cellPos, tileState == TileState.Installed ? _installedTile : null);
         }
         
-        _installTilemap.SetTilesBlock(area, tiles);
-    }
-
-    public void ModifyTileState(Vector3 position, TileState tileState)
-    {
-        var area = _installTilemap.WorldToCell(position);
-        var bounds = new BoundsInt(area.x, area.y, 0, 1, 1, 1);
-        ModifyTileState(bounds, tileState);
+        foreach (var relativePos in gridObject.PositionData.WaterTilePositions)
+        {
+            var cellPos = baseCell + new Vector3Int(relativePos.x, relativePos.y, 0);
+            _installTilemap.SetTile(cellPos, tileState == TileState.Installed ? _installedTile : null);
+        }
     }
 }

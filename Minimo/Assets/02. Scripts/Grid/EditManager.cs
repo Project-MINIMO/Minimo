@@ -54,7 +54,7 @@ public class EditManager : ManagerBase
             CancelEdit();
         }
         
-        _tileStateModifier.ModifyTileState(gridObject.Area, TileState.Empty);
+        _tileStateModifier.ModifyTileState(gridObject, TileState.Empty);
         
         CurrentEditObject = gridObject;
         IsEditing.Value = true;
@@ -67,7 +67,7 @@ public class EditManager : ManagerBase
     {
         CurrentEditObject.Cancel();
         
-        _tileStateModifier.ModifyTileState(CurrentEditObject.Area, TileState.Installed);
+        _tileStateModifier.ModifyTileState(CurrentEditObject, TileState.Installed);
         
         CurrentEditObject = null;
         IsEditing.Value = false;
@@ -82,7 +82,7 @@ public class EditManager : ManagerBase
 
         if (CurrentEditObject.Install())
         {
-            _tileStateModifier.ModifyTileState(CurrentEditObject.Area, TileState.Installed);
+            _tileStateModifier.ModifyTileState(CurrentEditObject, TileState.Installed);
             
             CurrentEditObject = null;
             IsEditing.Value = false;
@@ -105,7 +105,6 @@ public class EditManager : ManagerBase
     private void SetCurrentPosition(Vector3Int position)
     {
         CurrentEditObject.transform.position = _gridLayout.CellToWorld(position);
-        CurrentEditObject.Area.position =  position;
         CurrentCellPosition.Value = CurrentEditObject.transform.position;
     }
     
