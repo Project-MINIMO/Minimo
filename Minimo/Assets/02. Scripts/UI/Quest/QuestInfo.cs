@@ -1,4 +1,3 @@
-using DG.Tweening.Plugins.Options;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -10,31 +9,31 @@ public class QuestInfo : MonoBehaviour
     [SerializeField] private Button _button;
     
     [SerializeField] private TextMeshProUGUI _titleTMP;
-    [SerializeField] private TextMeshProUGUI _desc1TMP;
-    [SerializeField] private TextMeshProUGUI _desc2TMP;
-    [SerializeField] private TextMeshProUGUI _desc3TMP;
+    [SerializeField] private TextMeshProUGUI _descTMP;
  
     private TitleData _titleData;
     
     private QuestData _questData;
     private DetailQuestData _detailData;
     
-    private QuestPanel _questPanel;
+    private QuestConsPanel _consPanel;
+    private QuestSubmissionPanel _submissionPanel;
 
     private void Awake()
     {
         _titleData = App.GetData<TitleData>();
-        _questPanel = App.GetManager<UIManager>().GetPanel<QuestPanel>();
+        _consPanel = App.GetManager<UIManager>().GetPanel<QuestConsPanel>();
+        _submissionPanel = App.GetManager<UIManager>().GetPanel<QuestSubmissionPanel>();
         
         _button.onClick.AddListener(()=>
         {
             if (_questData.Type == 1)
             {
-                _questPanel.OpenCons(_detailData);
+                _consPanel.OpenPanel(_detailData);
             }
             else
             {
-                _questPanel.OpenSide(_detailData);
+                _submissionPanel.OpenPanel(_detailData);
             }
         });
     }
@@ -50,34 +49,6 @@ public class QuestInfo : MonoBehaviour
         var result = data.SubName.Substring(0, secondLastUnderscore);
         _titleTMP.text = _titleData.GetString(result);
 
-        if (_detailData.ClearDesc1 == "-1" || string.IsNullOrEmpty(_detailData.ClearDesc1))
-        {
-            _desc1TMP.gameObject.SetActive(false);
-        }
-        else
-        {
-            _desc1TMP.text = _titleData.GetString(_detailData.ClearDesc1);
-            _desc1TMP.gameObject.SetActive(true);
-        }
-        
-        if (_detailData.ClearDesc2 == "-1" || string.IsNullOrEmpty(_detailData.ClearDesc2))
-        {
-            _desc2TMP.gameObject.SetActive(false);
-        }
-        else
-        {
-            _desc2TMP.text = _titleData.GetString(_detailData.ClearDesc2);
-            _desc2TMP.gameObject.SetActive(true);
-        }
-        
-        if (_detailData.ClearDesc3 == "-1" || string.IsNullOrEmpty(_detailData.ClearDesc3))
-        {
-            _desc3TMP.gameObject.SetActive(false);
-        }
-        else
-        {
-            _desc3TMP.text = _titleData.GetString(_detailData.ClearDesc3); 
-            _desc3TMP.gameObject.SetActive(true);
-        }
+        _descTMP.text = _titleData.GetString(_detailData.ClearDesc1);
     }
 }
