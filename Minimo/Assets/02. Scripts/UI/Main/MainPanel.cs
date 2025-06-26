@@ -24,8 +24,7 @@ public class MainPanel : UIBase
         var screenStateManager = App.GetManager<ScreenStateManager>();
         screenStateManager.CurrentState.Subscribe((currentState) =>
         {
-            var isActive = currentState is ScreenState.Town or ScreenState.Sky;
-            if (isActive)
+            if (currentState is ScreenState.Sky)
             {
                 OpenPanel();
             }
