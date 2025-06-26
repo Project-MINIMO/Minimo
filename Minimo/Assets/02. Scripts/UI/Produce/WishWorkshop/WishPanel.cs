@@ -112,6 +112,12 @@ public class WishPanel : UIBase
             if (_flower.Slot.Item != null)
             {
                 ((ProduceQuaternary)_produceManager.CurrentProduceObject).StartPlant(_food.Slot.Item.ID,  _flower.Slot.Item.ID);
+                
+                _food.Slot.Item = null;
+                _food.Slot.Icon.sprite = null;
+                
+                _flower.Slot.Item = null;
+                _flower.Slot.Icon.sprite = null;
             }
         }
         else
@@ -125,6 +131,12 @@ public class WishPanel : UIBase
             if (_food.Slot.Item != null)
             {
                 ((ProduceQuaternary)_produceManager.CurrentProduceObject).StartPlant(_food.Slot.Item.ID,  _flower.Slot.Item.ID);
+                
+                _food.Slot.Item = null;
+                _food.Slot.Icon.sprite = null;
+                
+                _flower.Slot.Item = null;
+                _flower.Slot.Icon.sprite = null;
             }
         }
     }

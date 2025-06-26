@@ -8,8 +8,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class BuildingObject : InteractObject
 {
-    public BoundsInt Area;
-    public BoundsInt PreviousArea { get; private set; }
+    public Vector3 PreviousPosition { get; private set; }
     
     public BuildingData BuildingData { get; private set; }
     public BuildingPositionData PositionData { get; private set; }
@@ -32,12 +31,9 @@ public class BuildingObject : InteractObject
         {
             BuildingData = data;
             await LoadPositionData();
-        
-            var size = new Vector3Int(1, 1, 1/*data.SizeX, data.SizeY, 1*/);
-            Area = new BoundsInt(_editManager.GetCellPosition(transform.position), size);
-            PreviousArea = Area;
-        
-            transform.position = _editManager.GetWorldPosition(Area.position);
+            
+            PreviousPosition = transform.position;
+            
             _editManager.StartEdit(this);
         }
         catch (Exception e)
@@ -147,14 +143,14 @@ public class BuildingObject : InteractObject
     private bool CreateBuilding()
     {
         IsPlaced = true;
-        PreviousArea = Area;
+        PreviousPosition = transform.position;
         EndEdit();
         return true;
     }
     
     private bool UpdateBuilding()
     {
-        PreviousArea = Area;
+        PreviousPosition = transform.position;
         EndEdit();
         return true;
     }
@@ -163,7 +159,7 @@ public class BuildingObject : InteractObject
     {
         if (IsPlaced)
         {
-            _editManager.MoveObject(PreviousArea);
+            _editManager.MoveObject(PreviousPosition);
             EndEdit();
         }
         else

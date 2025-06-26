@@ -624,22 +624,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2046d104cd2952b439bf05127702b2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _resultNameTMP: {fileID: 8580430194155534969}
-  _result:
-    _gameObject: {fileID: 7752795024905339349}
-    _image: {fileID: 1585775096913899419}
-    _text: {fileID: 1441043243573052800}
-  _materials:
-  - _gameObject: {fileID: 916128373654934553}
-    _image: {fileID: 9098941539373232411}
-    _text: {fileID: 8064968514205901608}
-  - _gameObject: {fileID: 6905928118695297918}
-    _image: {fileID: 7434509072029651151}
-    _text: {fileID: 7905003573666175647}
-  - _gameObject: {fileID: 4307456635720550042}
-    _image: {fileID: 5181966742224301432}
-    _text: {fileID: 2685888341579990072}
-  _timeTMP: {fileID: 3842254237049744190}
+  _itemImg: {fileID: 0}
+  _amountTMP: {fileID: 0}
   _storageTMP: {fileID: 4387003115594439167}
   _plantHandler: {fileID: 689198271730968895}
 --- !u!1 &5999902698386832117
@@ -1520,6 +1506,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f85d2b39157fa4f44ae7421915bb0fee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _plantType: 0
 --- !u!1 &8614686373143349221
 GameObject:
   m_ObjectHideFlags: 0
