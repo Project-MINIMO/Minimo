@@ -27,7 +27,7 @@ public class CameraInput : MonoBehaviour
         var screenStateManager = App.GetManager<ScreenStateManager>();
         screenStateManager.CurrentState.Subscribe((currentState) =>
         {
-            _isActive = currentState is ScreenState.Town or ScreenState.Sky;
+            _isActive = currentState is ScreenState.Sky;
         }).AddTo(gameObject);
         _mainCamera = Camera.main;
         

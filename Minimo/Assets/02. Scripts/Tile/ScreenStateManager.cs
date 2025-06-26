@@ -5,7 +5,6 @@ using DG.Tweening;
 
 public enum ScreenState
 {
-    Town,
     Sky,
     Space,
     DeepSpace,
@@ -15,7 +14,6 @@ public class ScreenStateManager : ManagerBase
 {
     public ReactiveProperty<ScreenState> CurrentState { get; } = new(ScreenState.Sky);
     
-    [SerializeField] private TileAlphaSystem _tileAlphaSystem;
     [SerializeField] private Tilemap _villageMap;
     [SerializeField] private GameObject _planetObj;
 
@@ -47,13 +45,7 @@ public class ScreenStateManager : ManagerBase
         
         switch (newState)
         {
-            case ScreenState.Town:
-                _tileAlphaSystem.ActiveTileAlphaSystem(false);
-                break;
-            
             case ScreenState.Sky:
-                _tileAlphaSystem.ActiveTileAlphaSystem(true);
-                
                 if (CurrentState.Value == ScreenState.Space)
                 {
                     Camera.main.DOOrthoSize(3f, 1f);
@@ -73,7 +65,6 @@ public class ScreenStateManager : ManagerBase
                 App.GetManager<UIManager>().FadeInOut(0.5f, 
                     () =>
                     {
-                        _tileAlphaSystem.ActiveTileAlphaSystem(false);
                         _planetObj.SetActive(true);
                         _villageMap.color = Color.clear;
                     });
