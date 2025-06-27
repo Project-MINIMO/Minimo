@@ -1,24 +1,19 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class PlaceMinimoHandler : MonoBehaviour
+public class ManageMinimoHandler : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _nameTMP;
-    [SerializeField] private TextMeshProUGUI _currentPlaceTMP;
+    [SerializeField] private TextMeshProUGUI _levelTMP;
     [SerializeField] private TextMeshProUGUI _stat1TMP;
     [SerializeField] private TextMeshProUGUI _stat2TMP;
     [SerializeField] private TextMeshProUGUI _stat3TMP;
-    [SerializeField] private Button _placeBtn;
+    [SerializeField] private Button _upBtn;
+    [SerializeField] private Button _downBtn;
     
     private Minimo _minimo;
-    private ProduceManager _produceManager;
-    private PlaceMinimoPanel _minimoPanel;
-    
+
     private string _stat1Code;
     private string _stat2Code;
     private string _stat3Code;
@@ -27,9 +22,7 @@ public class PlaceMinimoHandler : MonoBehaviour
     {
         var index = transform.GetSiblingIndex();
         var titleData = App.GetData<TitleData>();
-        _produceManager = App.GetManager<ProduceManager>();
-        _minimoPanel = App.GetManager<UIManager>().GetPanel<PlaceMinimoPanel>();
-
+     
         _nameTMP.text = $"테스트모{index + 1}";
         _minimo = App.GetManager<MinimoManager>().Minimos[index];
 
@@ -42,19 +35,26 @@ public class PlaceMinimoHandler : MonoBehaviour
         _stat3Code = titleData.GetString(titleData.UMStat[_minimo.Data.StatType3].Name);
         _stat3TMP.text = string.Format(_stat3Code, 0.ToString());
         
-        _placeBtn.onClick.AddListener(() =>
+        _upBtn.onClick.AddListener(() =>
         {
-            var currentBuilding = (ProduceAdvanced)_produceManager.CurrentProduceObject;
-            //currentBuilding.;
-            _minimo.SetWorkState(currentBuilding);
-            _minimoPanel.ClosePanel();
+            _minimo.AddLevel(1);
+            UpdateLevelInfo();
         });
-        
+        _downBtn.onClick.AddListener(() =>
+        {
+            _minimo.AddLevel(-1);
+            UpdateLevelInfo();
+        });
+
+        _levelTMP.text = _minimo.Level.ToString();
     }
 
-    public void UpdateCurrentPlaceInfo()
+    private void UpdateLevelInfo()
     {
-        _currentPlaceTMP.text = _minimo.AssignedBuilding == null ? 
-            string.Empty : _minimo.AssignedBuilding.BuildingData.Name;
+        _levelTMP.text = _minimo.Level.ToString();
+        
+        _stat1TMP.text = string.Format(_stat1Code, 0.ToString());
+        _stat2TMP.text = string.Format(_stat2Code, 0.ToString());
+        _stat3TMP.text = string.Format(_stat3Code, 0.ToString());
     }
 }

@@ -6,6 +6,7 @@ public class Minimo : MonoBehaviour
     public UMData Data { get; private set; }
     public MinimoFSM FSM { get; private set; }
     public ProduceAdvanced AssignedBuilding { get; private set; }
+    public int Level { get; private set; } = 1;
 
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
@@ -67,5 +68,11 @@ public class Minimo : MonoBehaviour
         SetSpriteFilp(false);
 
         AssignedBuilding = produceObject;
+    }
+
+    public void AddLevel(int amount)
+    {
+        Level += amount;
+        Level = Mathf.Clamp(Level, 1, 30);
     }
 }
