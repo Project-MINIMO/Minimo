@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -53,10 +49,7 @@ public class PlaceMinimoHandler : MonoBehaviour
         _stat1TMP.text = string.Format(_stat1Code, _minimo.AbilityValue1);
         _stat2TMP.text = string.Format(_stat2Code, _minimo.AbilityValue2);
         _stat3TMP.text = string.Format(_stat3Code, _minimo.AbilityValue3);
-    }
 
-    public void UpdateCurrentPlaceInfo()
-    {
         _currentPlaceTMP.text = _minimo.AssignedBuilding == null ? 
             string.Empty : _minimo.AssignedBuilding.BuildingData.Name;
     }

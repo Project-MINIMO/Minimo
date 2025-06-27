@@ -22,6 +22,12 @@ public class QuestSummaryPanel : UIBase
             _questListPanel.OpenPanel();
             ClosePanel();
         };
+        
+        var existingInfos = GetComponentsInChildren<QuestInfo>(true);
+        foreach (var info in existingInfos)
+        {
+            info.gameObject.SetActive(false);
+        }
     }
   
     public void UpdateQuest()

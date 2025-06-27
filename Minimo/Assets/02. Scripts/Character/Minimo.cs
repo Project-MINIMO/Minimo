@@ -85,6 +85,7 @@ public class Minimo : MonoBehaviour
         SetSpriteFilp(false);
 
         AssignedBuilding = produceObject;
+        produceObject.PlaceMinimo(this);
     }
 
     public void AddLevel(int amount)
