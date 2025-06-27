@@ -27,6 +27,8 @@ public class UIManager : ManagerBase
 
     private void Start()
     {
+        _blackBlur.DOFade(1, 0);
+        
         foreach (var UI in _uiDictionary.Values)
         {
             if (!UI.gameObject.activeSelf) //wake up panels

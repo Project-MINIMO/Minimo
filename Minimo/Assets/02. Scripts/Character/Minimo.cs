@@ -1,14 +1,22 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Minimo : MonoBehaviour
 {
+    public UMData Data { get; private set; }
     public MinimoFSM FSM { get; private set; }
+    public ProduceAdvanced AssignedBuilding { get; private set; }
 
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
 
-    private void Start()
+    private Transform _parent;    //temp
+    
+    private void Awake()
     {
+        _parent = transform.parent;   //temp
+        Data = App.GetData<TitleData>().UserMinimo[transform.GetSiblingIndex()];    //temp
+        
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -38,17 +46,26 @@ public class Minimo : MonoBehaviour
 
     public void SetChillState()
     {
-        var randomIndex = Random.Range(0, 2);
+        //var randomIndex = Random.Range(0, 2);
+        //FSM.ChangeState(randomIndex == 0 ? MinimoState.Idle : MinimoState.Walk);
+        FSM.ChangeState(MinimoState.Idle);
         
-        FSM.ChangeState(randomIndex == 0 ? MinimoState.Idle : MinimoState.Walk);
+        transform.SetParent(_parent);   //temp
+        transform.localPosition = Vector3.zero;   //temp
+
+        AssignedBuilding = null;
     }
 
     public void SetWorkState(ProduceAdvanced produceObject)
     {
         FSM.ChangeState(MinimoState.Work);
-        _animator.SetTrigger(produceObject.AnimTrigger);
+        //_animator.SetTrigger(produceObject.AnimTrigger);
+        
         transform.SetParent(produceObject.MinimoWorkingPosition);
         transform.localPosition = Vector3.zero;
+        
         SetSpriteFilp(false);
+
+        AssignedBuilding = produceObject;
     }
 }

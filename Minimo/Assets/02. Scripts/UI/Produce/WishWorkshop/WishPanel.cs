@@ -30,12 +30,16 @@ public class WishPanel : UIBase
     
     [SerializeField] private WishOption _food;
     [SerializeField] private WishOption _flower;
+    
+    [SerializeField] private Button _placeMinimoBtn;
 
     private ProduceManager _produceManager;
+    private PlaceMinimoPanel _placeMinimoPanel;
     
     public override void Initialize()
     {
         _produceManager = App.GetManager<ProduceManager>();
+        _placeMinimoPanel = App.GetManager<UIManager>().GetPanel<PlaceMinimoPanel>();
         
         _taskBtns = GetComponentsInChildren<ProduceTaskBtn>(true);
         _closeBtn.onClick.AddListener(()=> _produceManager.DeactiveProduce());
@@ -68,6 +72,8 @@ public class WishPanel : UIBase
             _back.SetActive(true);
             _flower.OptionsBack.SetActive(false);
         });
+        
+        _placeMinimoBtn.onClick.AddListener(_placeMinimoPanel.OpenPanel);
     }
 
     public override void OpenPanel()
