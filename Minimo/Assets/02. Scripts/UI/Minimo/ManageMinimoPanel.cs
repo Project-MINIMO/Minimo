@@ -11,4 +11,3 @@ public class ManageMinimoPanel : UIBase
         _closeBtn.onClick.AddListener(ClosePanel);
     }
 }
-

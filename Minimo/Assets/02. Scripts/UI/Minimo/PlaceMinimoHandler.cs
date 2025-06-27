@@ -34,14 +34,9 @@ public class PlaceMinimoHandler : MonoBehaviour
         _minimo = App.GetManager<MinimoManager>().Minimos[index];
 
         _stat1Code = titleData.GetString(titleData.UMStat[_minimo.Data.StatType1].Name);
-        _stat1TMP.text = string.Format(_stat1Code, 0.ToString());
-        
         _stat2Code = titleData.GetString(titleData.UMStat[_minimo.Data.StatType2].Name);
-        _stat2TMP.text = string.Format(_stat2Code, 0.ToString());
-        
         _stat3Code = titleData.GetString(titleData.UMStat[_minimo.Data.StatType3].Name);
-        _stat3TMP.text = string.Format(_stat3Code, 0.ToString());
-        
+  
         _placeBtn.onClick.AddListener(() =>
         {
             var currentBuilding = (ProduceAdvanced)_produceManager.CurrentProduceObject;
@@ -49,7 +44,15 @@ public class PlaceMinimoHandler : MonoBehaviour
             _minimo.SetWorkState(currentBuilding);
             _minimoPanel.ClosePanel();
         });
+    }
+
+    private void OnEnable()
+    {
+        if (string.IsNullOrEmpty(_stat3Code)) return;
         
+        _stat1TMP.text = string.Format(_stat1Code, _minimo.AbilityValue1);
+        _stat2TMP.text = string.Format(_stat2Code, _minimo.AbilityValue2);
+        _stat3TMP.text = string.Format(_stat3Code, _minimo.AbilityValue3);
     }
 
     public void UpdateCurrentPlaceInfo()
