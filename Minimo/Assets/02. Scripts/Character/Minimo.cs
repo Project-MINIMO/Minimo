@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 using UnityEngine;
 
 public class Minimo : MonoBehaviour
@@ -11,14 +13,10 @@ public class Minimo : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
 
     private Transform _parent;    //temp
-    private UMStatGrowthData _statGrowthData1;
-    private UMStatGrowthData _statGrowthData2;
-    private UMStatGrowthData _statGrowthData3;
-    public float AbilityValue1 { get; private set; }
-    public float AbilityValue2 { get; private set; }
-    public float AbilityValue3 { get; private set; }
-
-    private float _potential;
+    
+    public List<IMinimoAbility> Abilities { get; private set; }
+    
+    public MinimoManager _minimoManager;
     
     private void Awake()
     {
@@ -27,11 +25,15 @@ public class Minimo : MonoBehaviour
         Data = titleData.UserMinimo[transform.GetSiblingIndex()];    //temp
         float potentialValue = Data.Potential;
         var rawPotential = (potentialValue / 9) * titleData.Common["PotentialGap"];
-        _potential = Mathf.Round(rawPotential * 100f) / 100f;
+        var potential = Mathf.Round(rawPotential * 100f) / 100f;
+        _minimoManager = App.GetManager<MinimoManager>();
 
-        _statGrowthData1 = titleData.UMStatGrowth[Data.StatType1];
-        _statGrowthData2 = titleData.UMStatGrowth[Data.StatType2];
-        _statGrowthData3 = titleData.UMStatGrowth[Data.StatType3];
+        Abilities = new List<IMinimoAbility>
+        {
+            CreateAbility(titleData.UMStat[Data.StatType1].StatType, Data.StatType1, potential),
+            CreateAbility(titleData.UMStat[Data.StatType2].StatType, Data.StatType2, potential),
+            CreateAbility(titleData.UMStat[Data.StatType3].StatType, Data.StatType3, potential),
+        };
         
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -41,6 +43,19 @@ public class Minimo : MonoBehaviour
 
         AddLevel(1);
     }
+
+    private IMinimoAbility CreateAbility(int abilityType, int id, float potential) => (AbilityType)abilityType switch
+    {
+        AbilityType.None => null,
+        AbilityType.ProdTime_Second => new TimeReductionAbility(id, potential),
+        AbilityType.ProdTime_Percent => new TimeReductionAbility(id, potential),
+        AbilityType.ProdAmount => null,
+        AbilityType.ProdEXP => null,
+        AbilityType.QuestEXP => null,
+        AbilityType.SellValue => null,
+        AbilityType.TimeSkipCost => null,
+        AbilityType.MissionTime => null
+    };
 
     private void Update()
     {
@@ -71,7 +86,12 @@ public class Minimo : MonoBehaviour
         transform.SetParent(_parent);   //temp
         transform.localPosition = Vector3.zero;   //temp
 
-        AssignedBuilding = null;
+        if (AssignedBuilding != null)
+        {
+            AssignedBuilding = null;
+        
+            _minimoManager.OnMinimoUnassigned(this);
+        }
     }
 
     public void SetWorkState(ProduceAdvanced produceObject)
@@ -86,6 +106,8 @@ public class Minimo : MonoBehaviour
 
         AssignedBuilding = produceObject;
         produceObject.PlaceMinimo(this);
+        
+        _minimoManager.OnMinimoAssigned(this);
     }
 
     public void AddLevel(int amount)
@@ -93,27 +115,9 @@ public class Minimo : MonoBehaviour
         Level += amount;
         Level = Mathf.Clamp(Level, 1, 30);
 
-        CalculateAbility();
-    }
-
-    private void CalculateAbility()
-    {
-        if (_statGrowthData1 != null)
+        foreach (var ability in Abilities)
         {
-            var value = _statGrowthData1.BaseValue + Level * _statGrowthData1.Step;
-            AbilityValue1 = Mathf.Round(value * _potential * 100f) / 100f;
-        }
-        
-        if (_statGrowthData2 != null)
-        {
-            var value = _statGrowthData2.BaseValue + Level * _statGrowthData2.Step;
-            AbilityValue2 = Mathf.Round(value * _potential * 100f) / 100f;
-        }
-        
-        if (_statGrowthData3 != null)
-        {
-            var value = _statGrowthData3.BaseValue + Level * _statGrowthData3.Step;
-            AbilityValue3 = Mathf.Round(value * _potential * 100f) / 100f;
+            ability.CalculateAbility(Level);
         }
     }
 }

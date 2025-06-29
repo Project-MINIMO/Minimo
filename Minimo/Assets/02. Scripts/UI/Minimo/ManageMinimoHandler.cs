@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -6,17 +8,13 @@ public class ManageMinimoHandler : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _nameTMP;
     [SerializeField] private TextMeshProUGUI _levelTMP;
-    [SerializeField] private TextMeshProUGUI _stat1TMP;
-    [SerializeField] private TextMeshProUGUI _stat2TMP;
-    [SerializeField] private TextMeshProUGUI _stat3TMP;
+    [SerializeField] private TextMeshProUGUI[] _statTMPs;
     [SerializeField] private Button _upBtn;
     [SerializeField] private Button _downBtn;
     
     private Minimo _minimo;
 
-    private string _stat1Code;
-    private string _stat2Code;
-    private string _stat3Code;
+    private List<string> _statCodes = new(3);
 
     private void Awake()
     {
@@ -25,15 +23,15 @@ public class ManageMinimoHandler : MonoBehaviour
      
         _nameTMP.text = $"테스트모{index + 1}";
         _minimo = App.GetManager<MinimoManager>().Minimos[index];
+        
+        _statCodes = new List<string>
+        {
+            titleData.GetString(titleData.UMStat[_minimo.Data.StatType1].Name),
+            titleData.GetString(titleData.UMStat[_minimo.Data.StatType2].Name),
+            titleData.GetString(titleData.UMStat[_minimo.Data.StatType3].Name)
+        };
 
-        _stat1Code = titleData.GetString(titleData.UMStat[_minimo.Data.StatType1].Name);
-        _stat1TMP.text = string.Format(_stat1Code, _minimo.AbilityValue1);
-        
-        _stat2Code = titleData.GetString(titleData.UMStat[_minimo.Data.StatType2].Name);
-        _stat2TMP.text = string.Format(_stat2Code, _minimo.AbilityValue2);
-        
-        _stat3Code = titleData.GetString(titleData.UMStat[_minimo.Data.StatType3].Name);
-        _stat3TMP.text = string.Format(_stat3Code, _minimo.AbilityValue3);
+        UpdateLevelInfo();
         
         _upBtn.onClick.AddListener(() =>
         {
@@ -45,16 +43,17 @@ public class ManageMinimoHandler : MonoBehaviour
             _minimo.AddLevel(-1);
             UpdateLevelInfo();
         });
-
-        _levelTMP.text = _minimo.Level.ToString();
     }
 
     private void UpdateLevelInfo()
     {
         _levelTMP.text = _minimo.Level.ToString();
         
-        _stat1TMP.text = string.Format(_stat1Code, _minimo.AbilityValue1);
-        _stat2TMP.text = string.Format(_stat2Code, _minimo.AbilityValue2);
-        _stat3TMP.text = string.Format(_stat3Code, _minimo.AbilityValue3);
+        if (_statCodes == null) return;
+
+        for (var i = 0; i < _statCodes.Count; i++)
+        {
+            _statTMPs[i].text = string.Format(_statCodes[i], _minimo.Abilities[i].Value);
+        }
     }
 }
