@@ -59,7 +59,7 @@ public class TimeReductionAbility : IMinimoAbility
     {
         if (Scope == AbilityScope.Individual)
         {
-            //building.ApplyTimeModifier(Value);
+            building.ApplyTimeModifier(Value);
         }
     }
 

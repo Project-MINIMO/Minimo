@@ -2,6 +2,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UniRx;
 
 public enum ProduceState
 {
@@ -21,6 +22,9 @@ public abstract class ProduceObject : BuildingObject
     
     private float _lastUpdateTime;
     
+    private float _timeModifier = 1f;
+    private float _globalTimeModifier;
+    
     public override void Initialize(BuildingData data)
     {
         base.Initialize(data);
@@ -31,6 +35,19 @@ public abstract class ProduceObject : BuildingObject
         
         _produceManager = App.GetManager<ProduceManager>();
         _lastUpdateTime = Time.time;
+        
+        App.GetManager<MinimoManager>()
+            .GlobalTimeModifier
+            .Subscribe(value =>
+            {
+                _globalTimeModifier = value;
+                
+                foreach (var task in AllTasks)
+                {
+                    task.ApplyTimeModifier(_timeModifier * _globalTimeModifier); 
+                }
+            })
+            .AddTo(this);
     }
 
     protected virtual void Update()
@@ -66,6 +83,16 @@ public abstract class ProduceObject : BuildingObject
         pendingTask?.ChangeState(ActiveState.Instance);
     }
 
+    public void ApplyTimeModifier(float value)
+    {  
+        _timeModifier = value;
+        
+        foreach (var task in AllTasks)
+        {
+            task.ApplyTimeModifier(_timeModifier * _globalTimeModifier);
+        }
+    }
+
     public void StartPlant(ProduceData option)
     {
         if (!ProduceData.Contains(option)) return;
@@ -81,6 +108,7 @@ public abstract class ProduceObject : BuildingObject
 
     protected virtual void OnPlant(ProduceTask task, int optionIndex)
     {
+        task.ApplyTimeModifier(_timeModifier * _globalTimeModifier);
         AllTasks.Add(task);
         Debug.Log($"ProduceTask Added : {task.Data.ResultItems[0].ID}");
         SetNextActiveTask();

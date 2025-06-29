@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public abstract class ProduceAdvanced : ProduceObject
 {
     public Transform MinimoWorkingPosition;
@@ -9,6 +10,7 @@ public abstract class ProduceAdvanced : ProduceObject
     public string AnimTrigger;
 
     private Minimo _placedMinimo;
+
     
     protected override void Awake()
     {

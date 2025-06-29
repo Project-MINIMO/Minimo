@@ -108,6 +108,14 @@ public class Minimo : MonoBehaviour
         produceObject.PlaceMinimo(this);
         
         _minimoManager.OnMinimoAssigned(this);
+        
+        foreach (var ability in Abilities)
+        {
+            if (ability.IsApplicableTo(produceObject))
+            {
+                ability.Apply(produceObject);
+            }
+        }
     }
 
     public void AddLevel(int amount)
