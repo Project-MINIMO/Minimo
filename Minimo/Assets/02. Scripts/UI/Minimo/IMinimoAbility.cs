@@ -67,13 +67,13 @@ public abstract class MinimoAbilityBase : IMinimoAbility
     
     public void CalculateAbility(int level)
     {
-        Value = Mathf.Round((_baseValue + level * _step) * _potential * 100f) / 100f;
+        Value = Mathf.Round((_baseValue + (level - 1) * _step) * _potential * 100f) / 100f;
     }
 }
 
-public class TimeReductionSecondAbility : MinimoAbilityBase
+public class ProduceTimeSecondAbility : MinimoAbilityBase
 {
-    public TimeReductionSecondAbility(int id, float potential) : base(id, potential) { }
+    public ProduceTimeSecondAbility(int id, float potential) : base(id, potential) { }
 
     public override void Apply(ProduceAdvanced building)
     {
@@ -84,9 +84,9 @@ public class TimeReductionSecondAbility : MinimoAbilityBase
     }
 }
 
-public class TimeReductionPercentAbility : MinimoAbilityBase
+public class ProduceTimePercentAbility : MinimoAbilityBase
 {
-    public TimeReductionPercentAbility(int id, float potential) : base(id, potential) { }
+    public ProduceTimePercentAbility(int id, float potential) : base(id, potential) { }
 
     public override void Apply(ProduceAdvanced building)
     {
@@ -94,5 +94,71 @@ public class TimeReductionPercentAbility : MinimoAbilityBase
         {
             building.ApplyTimeRatio(Value);
         }
+    }
+}
+
+public class ProduceAmountAbility : MinimoAbilityBase
+{
+    public ProduceAmountAbility(int id, float potential) : base(id, potential) { }
+
+    public override void Apply(ProduceAdvanced building)
+    {
+        if (Scope == AbilityScope.Individual)
+        {
+            
+        }
+    }
+}
+
+public class ProduceExperienceAbility : MinimoAbilityBase
+{
+    public ProduceExperienceAbility(int id, float potential) : base(id, potential) { }
+
+    public override void Apply(ProduceAdvanced building)
+    {
+        if (Scope == AbilityScope.Individual)
+        {
+            
+        }
+    }
+}
+
+public class QuestExperienceAbility : MinimoAbilityBase
+{
+    public QuestExperienceAbility(int id, float potential) : base(id, potential) { }
+
+    public override void Apply(ProduceAdvanced building)
+    {
+        
+    }
+}
+
+public class SellValueAbility : MinimoAbilityBase
+{
+    public SellValueAbility(int id, float potential) : base(id, potential) { }
+
+    public override void Apply(ProduceAdvanced building)
+    {
+        
+    }
+}
+
+public class TimeSkipCostAbility : MinimoAbilityBase
+{
+    public TimeSkipCostAbility(int id, float potential) : base(id, potential) { }
+
+    public override void Apply(ProduceAdvanced building)
+    {
+        
+    }
+}
+
+public class MissionTimeAbility : MinimoAbilityBase
+{
+    public MissionTimeAbility(int id, float potential) : base(id, potential) { }
+
+    public override void Apply(ProduceAdvanced building)
+    {
+        
     }
 }

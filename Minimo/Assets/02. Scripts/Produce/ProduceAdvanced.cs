@@ -8,6 +8,7 @@ public abstract class ProduceAdvanced : ProduceObject
     public string AnimTrigger;
 
     private Minimo _placedMinimo;
+    private float _timeReduction;
     
     protected override void Awake()
     {
@@ -16,9 +17,10 @@ public abstract class ProduceAdvanced : ProduceObject
         MinimoWorkingPosition = transform.GetChild(2);
         
         App.GetManager<MinimoManager>()
-            .GlobalTimeRatio
+            .GlobalTimeReduction
             .Subscribe(value =>
             {
+                _timeReduction = value;
                 foreach (var task in AllTasks)
                 {
                     task.ApplyTimeReduction(value); 
@@ -38,10 +40,17 @@ public abstract class ProduceAdvanced : ProduceObject
     }
 
     public void ApplyTimeReduction(float reduction)
-    {
+    { 
+        _timeReduction = reduction;
         foreach (var task in AllTasks)
         {
             task.ApplyTimeReduction(reduction); 
         }
+    }
+    
+    protected override void OnPlant(ProduceTask task, int optionIndex)
+    {
+        task.ApplyTimeReduction(_timeReduction);
+        base.OnPlant(task, optionIndex);
     }
 }

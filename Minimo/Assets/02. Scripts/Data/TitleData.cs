@@ -154,8 +154,6 @@ public class UMStatData
 {
     public int ID;
     public int StatType;
-    public int ValueType;
-    public bool IsPositive;
     public int Application;
     public string Name;
 }

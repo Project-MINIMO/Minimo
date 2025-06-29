@@ -58,11 +58,11 @@ public abstract class ProduceObject : BuildingObject
     protected virtual void Update()
     {
         if (Time.time - _lastUpdateTime < 1f) return;
-
+        
         _lastUpdateTime = Time.time;
 
-        if (ActiveTask == null)   return;
-
+        if (ActiveTask == null) return;
+   
         ActiveTask.Update();
         
         if (ActiveTask is { RemainTime: <= 0 })
@@ -90,7 +90,7 @@ public abstract class ProduceObject : BuildingObject
 
     public void ApplyTimeRatio(float value)
     {  
-        _timeRatio = value;
+        _timeRatio = 1 - value / 100;
         
         foreach (var task in AllTasks)
         {

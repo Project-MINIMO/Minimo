@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class MinimoManager : ManagerBase
 {
+    public ReactiveProperty<float> GlobalTimeReduction { get; } = new(0f);
+    private float _globalTimeReduction = 0;
+    
     public ReactiveProperty<float> GlobalTimeRatio { get; } = new(1f);
     private float _globalTimeRatio = 1f;
-    
-    public ReactiveProperty<float> GlobalTimeReduction { get; } = new(1f);
-    private float _globalTimeReduction = 1f;
     
     public List<Minimo> Minimos { get; private set; }
     
@@ -25,16 +25,16 @@ public class MinimoManager : ManagerBase
     {
         foreach (var a in minimo.Abilities)
         {
-            if (a.Scope == AbilityScope.All)
+            if (a.Scope is AbilityScope.All or AbilityScope.AllExceptFirst)
             {
                 switch (a.Type)
                 {
                     case AbilityType.ProdTime_Second:
-                        _globalTimeReduction -= a.Value;
+                        _globalTimeReduction += a.Value;
                         break;
                     
                     case AbilityType.ProdTime_Percent:
-                        _globalTimeRatio *= a.Value;
+                        _globalTimeRatio *= 1 - a.Value / 100;
                         break;
                 }
             }
@@ -48,16 +48,16 @@ public class MinimoManager : ManagerBase
     {
         foreach (var a in minimo.Abilities)
         {
-            if (a.Scope == AbilityScope.All)
+            if (a.Scope is AbilityScope.All or AbilityScope.AllExceptFirst)
             {
                 switch (a.Type)
                 {
                     case AbilityType.ProdTime_Second:
-                        _globalTimeReduction += a.Value;
+                        _globalTimeReduction -= a.Value;
                         break;
                     
                     case AbilityType.ProdTime_Percent:
-                        _globalTimeRatio /= a.Value;
+                        _globalTimeRatio /= 1 - a.Value / 100;
                         break;
                 }
             }

@@ -17,6 +17,7 @@ public class ProduceTask
         Data = produceOption;
         
         OriginalTime = produceOption.Time;
+        _reducedTime = produceOption.Time;
         _modifiedTime = OriginalTime;
         
         CurrentState = PendingState.Instance;
@@ -30,13 +31,13 @@ public class ProduceTask
     public void ApplyTimeRatio(float reductionRatio)
     {
         _reductionRatio = reductionRatio;
-        _modifiedTime = _reducedTime - _reducedTime * reductionRatio;
+        _modifiedTime = _reducedTime * reductionRatio;
     }
 
     public void ApplyTimeReduction(float reductionAmount)
     {
         _reducedTime = Mathf.Max(0, OriginalTime - reductionAmount);
-        _modifiedTime = _reducedTime - _reducedTime * _reductionRatio;
+        _modifiedTime = _reducedTime * _reductionRatio;
     }
     
     public void ReduceRemainTime(float amount)
