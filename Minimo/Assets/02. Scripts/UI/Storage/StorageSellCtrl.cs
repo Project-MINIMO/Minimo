@@ -34,7 +34,7 @@ public class StorageSellCtrl : MonoBehaviour
     {
         _item = item;
         
-        if (AccountInfo.Instance.items.TryGetValue(item, out var value))
+        if (AccountInfo.Instance.Items.TryGetValue(item, out var value))
         {
             _currentCount = (value / 2) + 1;
         }
@@ -71,7 +71,7 @@ public class StorageSellCtrl : MonoBehaviour
             _decreaseBtn.gameObject.SetActive(true);
         }
 
-        if (AccountInfo.Instance.items.TryGetValue(_item, out var value))
+        if (AccountInfo.Instance.Items.TryGetValue(_item, out var value))
         {
             if (_currentCount >= value) 
             {
@@ -86,9 +86,9 @@ public class StorageSellCtrl : MonoBehaviour
 
     private void OnClickSell()
     {
-        if (AccountInfo.Instance.items.ContainsKey(_item))
+        if (AccountInfo.Instance.Items.ContainsKey(_item))
         {
-            AccountInfo.Instance.items[_item] += -_currentCount;
+            AccountInfo.Instance.Items[_item] += -_currentCount;
         }
         
         /*

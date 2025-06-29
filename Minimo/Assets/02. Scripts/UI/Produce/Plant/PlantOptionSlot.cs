@@ -24,7 +24,7 @@ public class PlantOptionSlot : MonoBehaviour
         SetResultInfo(optionData.ResultItems[0]);
 
         var item = _titleData.Item[optionData.ResultItems[0].ID];
-        if (AccountInfo.Instance.items.TryGetValue(item, out var value))
+        if (AccountInfo.Instance.Items.TryGetValue(item, out var value))
         {
             _storageTMP.text = value.ToString();
         }

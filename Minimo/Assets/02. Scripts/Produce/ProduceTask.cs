@@ -65,12 +65,11 @@ public class ProduceTask
         CurrentState = newState;
     }
 
-    public void Harvest(TitleData titleData)
+    public void Harvest()
     {
         Debug.Log($"Harvested: {Data.ResultItems[0].ID}");
         
         var result = Data.ResultItems[0];
-        var item = titleData.Item[result.ID];
         var amount = result.Amount;
 
         var bonus = 0;
@@ -84,14 +83,7 @@ public class ProduceTask
         
         var finalAmount = amount + bonus;
         
-        if (AccountInfo.Instance.items.ContainsKey(item))
-        {
-            AccountInfo.Instance.items[item] += finalAmount;
-        }
-        else
-        {
-            AccountInfo.Instance.items.Add(item, finalAmount);
-        }
+        AccountInfo.Instance.AddItem(result.ID, finalAmount);
     }
 }
 
@@ -131,18 +123,14 @@ public class ActiveState : ITaskState
 public class CompletedState : ITaskState
 {
     public static readonly CompletedState Instance = new();
-    private readonly TitleData _titleData;
 
-    private CompletedState()
-    {
-        _titleData = App.GetData<TitleData>();
-    }
+    private CompletedState() { }
     
     public void OnUpdate(ProduceTask task) { }
 
     public void OnExit(ProduceTask task)
     {
-        task.Harvest(_titleData);
+        task.Harvest();
         task.ChangeState(EndState.Instance);
     }
 }

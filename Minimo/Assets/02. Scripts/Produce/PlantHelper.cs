@@ -19,14 +19,7 @@ public class PlantHelper
             {
                 foreach (var item in lackItems)
                 {
-                    if (AccountInfo.Instance.items.ContainsKey(item.Item1))
-                    {
-                        AccountInfo.Instance.items[item.Item1] += item.Item2;
-                    }
-                    else
-                    {
-                        AccountInfo.Instance.items.Add(item.Item1, item.Item2);
-                    }
+                    AccountInfo.Instance.AddItem(item.Item1.ID, item.Item2);
                 }
                 CreateTaskAsync(option, optionIndex, onTaskCreated);
             });
@@ -44,7 +37,7 @@ public class PlantHelper
         foreach (var material in materials)
         {
             var item = _titleData.Item[material.ID];
-            if (AccountInfo.Instance.items.TryGetValue(item, out var value))
+            if (AccountInfo.Instance.Items.TryGetValue(item, out var value))
             {
                 if (value < material.Amount)
                 {
@@ -76,7 +69,7 @@ public class PlantHelper
         foreach (var material in materials)
         {
             var item = _titleData.Item[material.ID];
-            AccountInfo.Instance.items[item] -= material.Amount;
+            AccountInfo.Instance.Items[item] -= material.Amount;
         }
     }
 }

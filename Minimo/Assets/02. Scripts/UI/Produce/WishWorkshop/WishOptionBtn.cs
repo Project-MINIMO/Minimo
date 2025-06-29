@@ -4,7 +4,7 @@ using TMPro;
 
 public class WishOptionBtn : MonoBehaviour
 {
-    private bool _canShow => _item != null && AccountInfo.Instance.items.ContainsKey(_item) && AccountInfo.Instance.items[_item] > 0;
+    private bool _canShow => _item != null && AccountInfo.Instance.Items.ContainsKey(_item) && AccountInfo.Instance.Items[_item] > 0;
     private ItemData _item; 
     
     [SerializeField] private Button _choiceBtn;
@@ -43,7 +43,7 @@ public class WishOptionBtn : MonoBehaviour
         
         gameObject.SetActive(_canShow);
 
-        if (AccountInfo.Instance.items.TryGetValue(_item, out var value))
+        if (AccountInfo.Instance.Items.TryGetValue(_item, out var value))
         {
             _countTMP.text = value.ToString();
         }
