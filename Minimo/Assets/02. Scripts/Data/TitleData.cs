@@ -154,6 +154,7 @@ public class UMStatData
 {
     public int ID;
     public int StatType;
+    public int Tier;
     public int Application;
     public string Name;
 }

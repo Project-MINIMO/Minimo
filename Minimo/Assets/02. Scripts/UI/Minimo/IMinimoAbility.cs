@@ -28,6 +28,7 @@ public interface IMinimoAbility
     public AbilityType Type { get; }
     public AbilityScope Scope { get; }
     public float Value { get; }
+    public bool IsUnlocked { get; }
     public void Apply(ProduceAdvanced building);
     public bool IsApplicableTo(ProduceAdvanced building);
     public void CalculateAbility(int level);
@@ -37,13 +38,16 @@ public abstract class MinimoAbilityBase : IMinimoAbility
 {
     public AbilityType Type { get; }
     public AbilityScope Scope { get; }
+
     public float Value { get; private set; }
+    public bool IsUnlocked { get; private set; }
 
     private readonly float _baseValue;
     private readonly float _step;
     private readonly float _potential;
+    private readonly int _tier;
 
-    public MinimoAbilityBase(int id, float potential)
+    protected MinimoAbilityBase(int id, float potential)
     {
         var titleData = App.GetData<TitleData>();
         
@@ -52,6 +56,7 @@ public abstract class MinimoAbilityBase : IMinimoAbility
 
         Type = (AbilityType)statData.StatType;
         Scope = (AbilityScope)statData.Application;
+        _tier = statData.Tier;
         
         _baseValue = growthData.BaseValue;
         _step = growthData.Step;
@@ -67,7 +72,29 @@ public abstract class MinimoAbilityBase : IMinimoAbility
     
     public void CalculateAbility(int level)
     {
-        Value = Mathf.Round((_baseValue + (level - 1) * _step) * _potential * 100f) / 100f;
+        IsUnlocked = false;
+        var effectiveLevel = 0;
+        
+        switch (_tier)
+        {
+            case 0 when level >= 1:
+                IsUnlocked = true;
+                effectiveLevel = Mathf.Min(level, 10);
+                Value = Mathf.Round((_baseValue + (effectiveLevel - 1) * _step) * _potential * 100f) / 100f;
+                break;
+            
+            case 1 when level >= 11:
+                IsUnlocked = true;
+                effectiveLevel = Mathf.Min(level, 20);
+                Value = Mathf.Round((_baseValue + (effectiveLevel - 11) * _step) * _potential * 100f) / 100f;
+                break;
+            
+            case 2 when level >= 21:
+                IsUnlocked = true;
+                effectiveLevel = Mathf.Min(level, 30);
+                Value = Mathf.Round((_baseValue + (effectiveLevel - 21) * _step) * _potential * 100f) / 100f;
+                break;
+        }
     }
 }
 

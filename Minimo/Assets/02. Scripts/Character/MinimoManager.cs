@@ -34,6 +34,8 @@ public class MinimoManager : ManagerBase
     {
         foreach (var a in minimo.Abilities)
         {
+            if (!a.IsUnlocked) continue;
+            
             if (a.Scope is not AbilityScope.Individual)
             {
                 switch (a.Type)
@@ -72,6 +74,8 @@ public class MinimoManager : ManagerBase
     {
         foreach (var a in minimo.Abilities)
         {
+            if (!a.IsUnlocked) continue;
+            
             if (a.Scope is not AbilityScope.Individual)
             {
                 switch (a.Type)

@@ -54,6 +54,11 @@ public class ManageMinimoHandler : MonoBehaviour
         for (var i = 0; i < _statCodes.Count; i++)
         {
             _statTMPs[i].text = string.Format(_statCodes[i], _minimo.Abilities[i].Value);
+
+            if (!_minimo.Abilities[i].IsUnlocked)
+            {
+                _statTMPs[i].text += " <color=red>해금안됨</color>";
+            }
         }
     }
 }
