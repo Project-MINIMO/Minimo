@@ -24,7 +24,7 @@ public class UseCashPanel : UIBase
     private Action _useAction;
     private int _useCount;
 
-    private float _globalSellCostRatio;
+    private float _globalTimeSkipCostRatio;
     
     public override void Initialize()
     {
@@ -35,10 +35,10 @@ public class UseCashPanel : UIBase
         _chargeBack.Initialize(_titleData, ClosePanel);
         
         App.GetManager<MinimoManager>()
-            .GlobalHarvestRatio
+            .GlobalTimeSkipCostRatio
             .Subscribe(value =>
             {
-                _globalSellCostRatio = value;
+                _globalTimeSkipCostRatio = value;
             })
             .AddTo(this);
     }
@@ -51,7 +51,7 @@ public class UseCashPanel : UIBase
         
         _useBack.gameObject.SetActive(true);
         var price = amount / _titleData.Common["TimeSkipCost"] + 1;
-        price *= _globalSellCostRatio;
+        price *= _globalTimeSkipCostRatio;
         var roundedPrice = Mathf.RoundToInt(price);
         _useBack.Setup(type, roundedPrice, useAction);
     }

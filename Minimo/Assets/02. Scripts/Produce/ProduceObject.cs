@@ -126,7 +126,7 @@ public abstract class ProduceObject : BuildingObject
         }
     }
 
-    public void StartPlant(ProduceData option)
+    public virtual void StartPlant(ProduceData option)
     {
         if (!ProduceData.Contains(option)) return;
 

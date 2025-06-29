@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UniRx;
 
 public class StorageSellCtrl : MonoBehaviour
 {
@@ -18,8 +19,18 @@ public class StorageSellCtrl : MonoBehaviour
     private int _currentCount;
     private string _sellText;
 
+    private float _globalSellCostRatio;
+
     public void Setup()
     {
+        App.GetManager<MinimoManager>()
+            .GlobalSellCostRatio
+            .Subscribe(value =>
+            {
+                _globalSellCostRatio = value;
+            })
+            .AddTo(this);
+        
         _storagePanel = App.GetManager<UIManager>().GetPanel<StoragePanel>();
         _infoPanel = App.GetManager<UIManager>().GetPanel<StorageInfoPanel>();
         
@@ -29,7 +40,7 @@ public class StorageSellCtrl : MonoBehaviour
         _decreaseBtn.onClick.AddListener(() => AddCurrentCount(-1));
         _sellBtn.onClick.AddListener(OnClickSell);
     }
-    
+
     public void Initialize(ItemData item)
     {
         _item = item;
@@ -48,7 +59,10 @@ public class StorageSellCtrl : MonoBehaviour
     private void UpdateCurrentCount()
     {
         _countText.text = $"X{_currentCount}";
-        _priceText.text = string.Format(_sellText, Mathf.Max(_item.SellCost * _currentCount, 0));
+
+        var price = Mathf.Max(_item.SellCost * _currentCount * _globalSellCostRatio, 0);
+        var roundedPrice = Mathf.RoundToInt(price);
+        _priceText.text = string.Format(_sellText, roundedPrice);
         
         UpdateButtonActive();
     }
