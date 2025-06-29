@@ -12,6 +12,9 @@ public class MinimoManager : ManagerBase
     public ReactiveProperty<float> GlobalTimeRatio { get; } = new(1f);
     private float _globalTimeRatio = 1f;
     
+    public ReactiveProperty<float> GlobalHarvestRatio { get; } = new(1f);
+    private float _globalHarvestRatio = 1f;
+    
     public List<Minimo> Minimos { get; private set; }
     
     protected override void Awake()
@@ -36,12 +39,17 @@ public class MinimoManager : ManagerBase
                     case AbilityType.ProdTime_Percent:
                         _globalTimeRatio *= 1 - a.Value / 100;
                         break;
+                    
+                    case AbilityType.ProdAmount:
+                        _globalHarvestRatio *= 1 - a.Value / 100;
+                        break;
                 }
             }
         }
 
         GlobalTimeReduction.Value = _globalTimeReduction;
         GlobalTimeRatio.Value = _globalTimeRatio;
+        GlobalHarvestRatio.Value = _globalHarvestRatio;
     }
 
     public void OnMinimoUnassigned(Minimo minimo)
@@ -59,11 +67,16 @@ public class MinimoManager : ManagerBase
                     case AbilityType.ProdTime_Percent:
                         _globalTimeRatio /= 1 - a.Value / 100;
                         break;
+                    
+                    case AbilityType.ProdAmount:
+                        _globalHarvestRatio /= 1 - a.Value / 100;
+                        break;
                 }
             }
         }
         
         GlobalTimeReduction.Value = _globalTimeReduction;
         GlobalTimeRatio.Value = _globalTimeRatio;
+        GlobalHarvestRatio.Value = _globalHarvestRatio;
     }
 }

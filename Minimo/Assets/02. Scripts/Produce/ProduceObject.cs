@@ -25,11 +25,16 @@ public abstract class ProduceObject : BuildingObject
     private float _timeRatio = 1f;
     private float _globalTimeRatio;
 
+    private float _harvestRatio = 1f;
+    private float _globalHarvestRatio;
+
     protected override void Awake()
     {
         base.Awake();
         
-        App.GetManager<MinimoManager>()
+        var minimoManager = App.GetManager<MinimoManager>();
+        
+        minimoManager
             .GlobalTimeRatio
             .Subscribe(value =>
             {
@@ -38,6 +43,19 @@ public abstract class ProduceObject : BuildingObject
                 foreach (var task in AllTasks)
                 {
                     task.ApplyTimeRatio(_timeRatio * _globalTimeRatio); 
+                }
+            })
+            .AddTo(this);
+        
+        minimoManager
+            .GlobalHarvestRatio
+            .Subscribe(value =>
+            {
+                _globalHarvestRatio = value;
+                
+                foreach (var task in AllTasks)
+                {
+                    task.ApplyHarvestRatio(_harvestRatio * _globalHarvestRatio); 
                 }
             })
             .AddTo(this);
@@ -73,7 +91,7 @@ public abstract class ProduceObject : BuildingObject
     
     protected virtual void CompleteActiveTask()
     {
-        ActiveTask.Harvest();
+        ActiveTask.Exit();
         SetNextActiveTask();
     }
     
@@ -97,6 +115,16 @@ public abstract class ProduceObject : BuildingObject
             task.ApplyTimeRatio(_timeRatio * _globalTimeRatio);
         }
     }
+    
+    public void ApplyHarvestRatio(float value)
+    {  
+        _harvestRatio = 1 - value / 100;
+        
+        foreach (var task in AllTasks)
+        {
+            task.ApplyHarvestRatio(_harvestRatio * _globalHarvestRatio);
+        }
+    }
 
     public void StartPlant(ProduceData option)
     {
@@ -114,6 +142,7 @@ public abstract class ProduceObject : BuildingObject
     protected virtual void OnPlant(ProduceTask task, int optionIndex)
     {
         task.ApplyTimeRatio(_timeRatio * _globalTimeRatio);
+        task.ApplyHarvestRatio(_harvestRatio * _globalHarvestRatio); 
         AllTasks.Add(task);
         Debug.Log($"ProduceTask Added : {task.Data.ResultItems[0].ID}");
         SetNextActiveTask();
@@ -126,7 +155,7 @@ public abstract class ProduceObject : BuildingObject
             var task = AllTasks[i];
             if (task.CurrentState is CompletedState)
             {
-                task.Harvest();
+                task.Exit();
                 AllTasks.RemoveAt(i);
             }
         }
@@ -134,7 +163,7 @@ public abstract class ProduceObject : BuildingObject
 
     public virtual void HarvestEarly()
     {
-        ActiveTask?.Harvest();
+        ActiveTask?.Exit();
     }
 
     public override void OnClickUp()

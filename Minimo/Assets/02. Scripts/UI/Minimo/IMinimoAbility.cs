@@ -105,7 +105,7 @@ public class ProduceAmountAbility : MinimoAbilityBase
     {
         if (Scope == AbilityScope.Individual)
         {
-            
+            building.ApplyHarvestRatio(Value);
         }
     }
 }

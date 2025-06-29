@@ -1,4 +1,5 @@
 using UnityEngine;
+using Random = System.Random;
 
 public class ProduceTask
 {
@@ -6,11 +7,15 @@ public class ProduceTask
     public float OriginalTime { get; }
     public float RemainTime => Mathf.Max(0, _modifiedTime - _elapsedTime);
     public ITaskState CurrentState { get; private set; }
+    
+    private readonly Random _random = new();
 
     private float _reducedTime;
     private float _modifiedTime;
     private float _elapsedTime;
+    
     private float _reductionRatio;
+    private float _harvestRatio;
     
     public ProduceTask(ProduceData produceOption)
     {
@@ -39,27 +44,61 @@ public class ProduceTask
         _reducedTime = Mathf.Max(0, OriginalTime - reductionAmount);
         _modifiedTime = _reducedTime * _reductionRatio;
     }
+
+    public void ApplyHarvestRatio(float harvestRatio)
+    {
+        _harvestRatio = harvestRatio;
+    }
     
     public void ReduceRemainTime(float amount)
     {
         _elapsedTime += amount;
     }
 
-    public void Harvest()
+    public void Exit()
     {
-        CurrentState.OnHarvest(this);
+        CurrentState.OnExit(this);
     }
 
     public void ChangeState(ITaskState newState)
     {
         CurrentState = newState;
     }
+
+    public void Harvest(TitleData titleData)
+    {
+        Debug.Log($"Harvested: {Data.ResultItems[0].ID}");
+        
+        var result = Data.ResultItems[0];
+        var item = titleData.Item[result.ID];
+        var amount = result.Amount;
+
+        var bonus = 0;
+        for (var i = 1; i <= amount; i++)
+        {
+            if (_random.NextDouble() < _harvestRatio)
+            {
+                bonus++;
+            }
+        }
+        
+        var finalAmount = amount + bonus;
+        
+        if (AccountInfo.Instance.items.ContainsKey(item))
+        {
+            AccountInfo.Instance.items[item] += finalAmount;
+        }
+        else
+        {
+            AccountInfo.Instance.items.Add(item, finalAmount);
+        }
+    }
 }
 
 public interface ITaskState
 {
     void OnUpdate(ProduceTask task);
-    void OnHarvest(ProduceTask task);
+    void OnExit(ProduceTask task);
 }
 
 public class PendingState : ITaskState
@@ -69,7 +108,7 @@ public class PendingState : ITaskState
     
     public void OnUpdate(ProduceTask task) { }
 
-    public void OnHarvest(ProduceTask task) { }
+    public void OnExit(ProduceTask task) { }
 }
 
 public class ActiveState : ITaskState
@@ -82,7 +121,7 @@ public class ActiveState : ITaskState
         task.ReduceRemainTime(1);
     }
 
-    public void OnHarvest(ProduceTask task)
+    public void OnExit(ProduceTask task)
     {
         task.ReduceRemainTime(task.RemainTime);
         task.ChangeState(CompletedState.Instance);
@@ -92,7 +131,7 @@ public class ActiveState : ITaskState
 public class CompletedState : ITaskState
 {
     public static readonly CompletedState Instance = new();
-    private TitleData _titleData;
+    private readonly TitleData _titleData;
 
     private CompletedState()
     {
@@ -101,20 +140,9 @@ public class CompletedState : ITaskState
     
     public void OnUpdate(ProduceTask task) { }
 
-    public void OnHarvest(ProduceTask task)
+    public void OnExit(ProduceTask task)
     {
-        Debug.Log($"Harvested: {task.Data.ResultItems[0].ID}");
-        
-        var item = _titleData.Item[task.Data.ResultItems[0].ID];
-        if (AccountInfo.Instance.items.ContainsKey(item))
-        {
-            AccountInfo.Instance.items[item] += task.Data.ResultItems[0].Amount;
-        }
-        else
-        {
-            AccountInfo.Instance.items.Add(item, task.Data.ResultItems[0].Amount);
-        }
-        
+        task.Harvest(_titleData);
         task.ChangeState(EndState.Instance);
     }
 }
@@ -126,5 +154,5 @@ public class EndState : ITaskState
     
     public void OnUpdate(ProduceTask task) { }
 
-    public void OnHarvest(ProduceTask task) { }
+    public void OnExit(ProduceTask task) { }
 }
