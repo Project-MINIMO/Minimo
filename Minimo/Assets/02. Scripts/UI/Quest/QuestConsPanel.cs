@@ -1,26 +1,26 @@
 using System.Linq;
-using Cysharp.Threading.Tasks;
+
 using UnityEngine;
 using UnityEngine.UI;
 
-public class QuestCons : MonoBehaviour
+public class QuestConsPanel : UIBase
 {
     [SerializeField] private Button _closeBtn;
     
     private SubQuestInfo[] _subQuests;
     private TitleData _titleData;
 
-    private void Awake()
+    public override void Initialize()
     {
         _titleData = App.GetData<TitleData>();
         _subQuests = GetComponentsInChildren<SubQuestInfo>();
 
-        _closeBtn.onClick.AddListener(() => gameObject.SetActive(false));
+        _closeBtn.onClick.AddListener(ClosePanel);
     }
 
-    public void ShowUI(DetailQuestData questData)
+    public void OpenPanel(DetailQuestData questData)
     {
-        gameObject.SetActive(true);
+        base.OpenPanel();
 
         var quests = _titleData.DetailQuest.Values.Where(x => x.QuestID == questData.QuestID).ToList();
         

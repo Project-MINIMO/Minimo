@@ -10,12 +10,16 @@ public class AdvancedPanel : UIBase
     private ProduceTaskBtn[] _taskBtns;
     [SerializeField] private Button _expandBtn;
     [SerializeField] private PlantCtrl _plantCtrl;
+    
+    [SerializeField] private Button _placeMinimoBtn;
 
     private ProduceManager _produceManager;
+    private PlaceMinimoPanel _placeMinimoPanel;
     
     public override void Initialize()
     {
         _produceManager = App.GetManager<ProduceManager>();
+        _placeMinimoPanel = App.GetManager<UIManager>().GetPanel<PlaceMinimoPanel>();
         
         _taskBtns = GetComponentsInChildren<ProduceTaskBtn>(true);
         _closeBtn.onClick.AddListener(()=> _produceManager.DeactiveProduce());
@@ -24,6 +28,7 @@ public class AdvancedPanel : UIBase
             ((ProduceTertiary)_produceManager.CurrentProduceObject).AddSlotCount();
             InitializeTaskBtns();
         });
+        _placeMinimoBtn.onClick.AddListener(_placeMinimoPanel.OpenPanel);
     }
 
     public override void OpenPanel()

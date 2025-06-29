@@ -3,13 +3,21 @@ using UnityEngine;
 public class ProduceTask
 {
     public ProduceData Data { get; }
-    public int RemainTime { get; private set; }
+    public float OriginalTime { get; }
+    public float RemainTime => Mathf.Max(0, _modifiedTime - _elapsedTime);
     public ITaskState CurrentState { get; private set; }
+
+    private float _reducedTime;
+    private float _modifiedTime;
+    private float _elapsedTime;
+    private float _reductionRatio;
     
     public ProduceTask(ProduceData produceOption)
     {
         Data = produceOption;
-        RemainTime = produceOption.Time;
+        
+        OriginalTime = produceOption.Time;
+        _modifiedTime = OriginalTime;
         
         CurrentState = PendingState.Instance;
     }
@@ -17,6 +25,23 @@ public class ProduceTask
     public void Update()
     {
         CurrentState.OnUpdate(this);
+    }
+    
+    public void ApplyTimeRatio(float reductionRatio)
+    {
+        _reductionRatio = reductionRatio;
+        _modifiedTime = _reducedTime - _reducedTime * reductionRatio;
+    }
+
+    public void ApplyTimeReduction(float reductionAmount)
+    {
+        _reducedTime = Mathf.Max(0, OriginalTime - reductionAmount);
+        _modifiedTime = _reducedTime - _reducedTime * _reductionRatio;
+    }
+    
+    public void ReduceRemainTime(float amount)
+    {
+        _elapsedTime += amount;
     }
 
     public void Harvest()
@@ -27,11 +52,6 @@ public class ProduceTask
     public void ChangeState(ITaskState newState)
     {
         CurrentState = newState;
-    }
-
-    public void ReduceRemainTime(int amount)
-    {
-        RemainTime = Mathf.Max(0, RemainTime - amount);
     }
 }
 

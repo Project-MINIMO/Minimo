@@ -2,6 +2,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UniRx;
 
 public enum ProduceState
 {
@@ -20,6 +21,27 @@ public abstract class ProduceObject : BuildingObject
     private PlantHelper _plantHelper;
     
     private float _lastUpdateTime;
+    
+    private float _timeRatio = 1f;
+    private float _globalTimeRatio;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        App.GetManager<MinimoManager>()
+            .GlobalTimeRatio
+            .Subscribe(value =>
+            {
+                _globalTimeRatio = value;
+                
+                foreach (var task in AllTasks)
+                {
+                    task.ApplyTimeRatio(_timeRatio * _globalTimeRatio); 
+                }
+            })
+            .AddTo(this);
+    }
     
     public override void Initialize(BuildingData data)
     {
@@ -66,6 +88,16 @@ public abstract class ProduceObject : BuildingObject
         pendingTask?.ChangeState(ActiveState.Instance);
     }
 
+    public void ApplyTimeRatio(float value)
+    {  
+        _timeRatio = value;
+        
+        foreach (var task in AllTasks)
+        {
+            task.ApplyTimeRatio(_timeRatio * _globalTimeRatio);
+        }
+    }
+
     public void StartPlant(ProduceData option)
     {
         if (!ProduceData.Contains(option)) return;
@@ -81,6 +113,7 @@ public abstract class ProduceObject : BuildingObject
 
     protected virtual void OnPlant(ProduceTask task, int optionIndex)
     {
+        task.ApplyTimeRatio(_timeRatio * _globalTimeRatio);
         AllTasks.Add(task);
         Debug.Log($"ProduceTask Added : {task.Data.ResultItems[0].ID}");
         SetNextActiveTask();

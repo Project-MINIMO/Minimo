@@ -13,6 +13,46 @@ public enum ItemType
 }
 
 [Serializable]
+public class CommonData
+{
+    public string ID;
+    public int Value;
+}
+
+[Serializable]
+public class BuildingData
+{
+    public int ID;
+    public int Type;
+    public int UnlockLevel;
+    public string Name;
+    public int Cost;
+    public int Duration;
+}
+
+[Serializable]
+public class ItemData
+{
+    public int ID;
+    public int Type;
+    public int Level;
+    public int SellCost;
+    public int BuyCost;
+    public string Name;
+}
+
+[Serializable]
+public class StringData
+{
+    public string ID;
+    public string Korean;
+    public string English;
+    public string Chinese;
+    public string Japanese;
+}
+
+#region Quest
+[Serializable]
 public class QuestData
 {
     public int ID;
@@ -57,36 +97,9 @@ public class DetailQuestData
     public int Reward3ID;
     public int RewardValue3;
 }
+#endregion
 
-[Serializable]
-public class CommonData
-{
-    public string ID;
-    public int Value;
-}
-
-[Serializable]
-public class BuildingData
-{
-    public int ID;
-    public int Type;
-    public int UnlockLevel;
-    public string Name;
-    public int Cost;
-    public int Duration;
-}
-
-[Serializable]
-public class ItemData
-{
-    public int ID;
-    public int Type;
-    public int Level;
-    public int SellCost;
-    public int BuyCost;
-    public string Name;
-}
-
+#region Produce
 [Serializable]
 public class RawProduceData
 {
@@ -122,16 +135,39 @@ public class ProduceResult
     public int ID;
     public int Amount;
 }
+#endregion
+
+#region UserMinimo
+[Serializable]
+public class UMData
+{
+    public int ID;
+    public int Potential;
+    public int StatType1;
+    public int StatType2;
+    public int StatType3;
+    public string Name;
+}
 
 [Serializable]
-public class StringData
+public class UMStatData
 {
-    public string ID;
-    public string Korean;
-    public string English;
-    public string Chinese;
-    public string Japanese;
+    public int ID;
+    public int StatType;
+    public int ValueType;
+    public bool IsPositive;
+    public int Application;
+    public string Name;
 }
+
+[Serializable]
+public class UMStatGrowthData
+{
+    public int ID;
+    public float BaseValue;
+    public float Step;
+}
+#endregion
 
 public class TitleData : DataBase
 {
@@ -142,6 +178,9 @@ public class TitleData : DataBase
     public Dictionary<int, ItemData> Item { get; private set; } = new();
     public Dictionary<int, ProduceData> Produce { get; private set; } = new();
     public Dictionary<string, List<ProduceData>> GroupedProduce { get; private set; } = new();
+    public Dictionary<int, UMData> UserMinimo { get; private set; } = new();
+    public Dictionary<int, UMStatData> UMStat { get; private set; } = new();
+    public Dictionary<int, UMStatGrowthData> UMStatGrowth { get; private set; } = new();
 
     private Dictionary<string, StringData> _string = new();
 
@@ -155,6 +194,9 @@ public class TitleData : DataBase
     private const string BUILDING_PATH = "Data/BuildingData";
     private const string ITEM_PATH = "Data/ItemData";
     private const string PRODUCE_PATH = "Data/ProduceData";
+    private const string UM_PATH = "Data/UMData";
+    private const string UMSTAT_PATH = "Data/UMStatData";
+    private const string UMSTATGROWTH_PATH = "Data/UMStatGrowthData";
     #endregion
 
     protected override void Awake()
@@ -178,6 +220,9 @@ public class TitleData : DataBase
         Building.Clear();
         Item.Clear();
         Produce.Clear();
+        UserMinimo.Clear();
+        UMStat.Clear();
+        UMStatGrowth.Clear();
 
         var stringDataRaw = DataLoader.LoadData<StringData>(STRING_PATH);
         foreach (var data in stringDataRaw)
@@ -225,6 +270,25 @@ public class TitleData : DataBase
             .GroupBy(data => data.Building)
             .ToDictionary(data => data.Key, data => data.ToList());
        
+        var userMinimoDataRaw = DataLoader.LoadData<UMData>(UM_PATH);
+        foreach (var data in userMinimoDataRaw)
+        {
+            UserMinimo.Add(data.ID, data);
+        }
+        
+        var umStatDataRaw = DataLoader.LoadData<UMStatData>(UMSTAT_PATH);
+        foreach (var data in umStatDataRaw)
+        {
+            UMStat.Add(data.ID, data);
+        }
+        
+        var umStatGrowthDataRaw = DataLoader.LoadData<UMStatGrowthData>(UMSTATGROWTH_PATH);
+        foreach (var data in umStatGrowthDataRaw)
+        {
+            UMStatGrowth.Add(data.ID, data);
+        }
+        
+        
         _isGameDataLoaded = true;
     }
 

@@ -31,7 +31,7 @@ public class RemainTimeUpdater : MonoBehaviour
         _completeString = titleData.GetString("STR_PRODUCE_SLOTSTATE_COMPLETE");
     }
     
-    public void SetRemainTime(int remainTime, int fullTime)
+    public void SetRemainTime(float remainTime, int fullTime)
     {
         switch (remainTime)
         {
@@ -60,7 +60,7 @@ public class RemainTimeUpdater : MonoBehaviour
         }
     }
     
-    private string FormatTime(int time)
+    private string FormatTime(float time)
     {
         var timeSpan = TimeSpan.FromSeconds(time);
         return $"{timeSpan.Hours:D2}:{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
