@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UniRx;
 
 public enum UseCashType
 {
@@ -22,6 +23,8 @@ public class UseCashPanel : UIBase
     
     private Action _useAction;
     private int _useCount;
+
+    private float _globalSellCostRatio;
     
     public override void Initialize()
     {
@@ -31,17 +34,26 @@ public class UseCashPanel : UIBase
         _useMaterialBack.Initialize(_titleData, ClosePanel, OpenCharge);
         _chargeBack.Initialize(_titleData, ClosePanel);
         
-        ClosePanel();
+        App.GetManager<MinimoManager>()
+            .GlobalHarvestRatio
+            .Subscribe(value =>
+            {
+                _globalSellCostRatio = value;
+            })
+            .AddTo(this);
     }
 
-    public void OpenPanel(UseCashType type, int price, Action useAction)
+    public void OpenPanel(UseCashType type, float amount, Action useAction)
     {
         base.OpenPanel();
 
         ActiveBacks(isActiveUse: true);
         
         _useBack.gameObject.SetActive(true);
-        _useBack.Setup(type, price, useAction);
+        var price = amount / _titleData.Common["TimeSkipCost"] + 1;
+        price *= _globalSellCostRatio;
+        var roundedPrice = Mathf.RoundToInt(price);
+        _useBack.Setup(type, roundedPrice, useAction);
     }
 
     public void OpenPanel(List<(ItemData, int)> lackItems, Action useAction)

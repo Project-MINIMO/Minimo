@@ -12,10 +12,8 @@ public class AccountInfo : Singleton<AccountInfo>
     public int rainbowStar;
     public int Exp { get; private set; }
 
-    protected override void Awake()
+    private void Start()
     {
-        base.Awake();
-
         _titleData = App.GetData<TitleData>();
     }
     
