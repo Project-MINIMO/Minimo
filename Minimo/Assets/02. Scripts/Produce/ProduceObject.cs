@@ -22,8 +22,26 @@ public abstract class ProduceObject : BuildingObject
     
     private float _lastUpdateTime;
     
-    private float _timeModifier = 1f;
-    private float _globalTimeModifier;
+    private float _timeRatio = 1f;
+    private float _globalTimeRatio;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        App.GetManager<MinimoManager>()
+            .GlobalTimeRatio
+            .Subscribe(value =>
+            {
+                _globalTimeRatio = value;
+                
+                foreach (var task in AllTasks)
+                {
+                    task.ApplyTimeRatio(_timeRatio * _globalTimeRatio); 
+                }
+            })
+            .AddTo(this);
+    }
     
     public override void Initialize(BuildingData data)
     {
@@ -35,19 +53,6 @@ public abstract class ProduceObject : BuildingObject
         
         _produceManager = App.GetManager<ProduceManager>();
         _lastUpdateTime = Time.time;
-        
-        App.GetManager<MinimoManager>()
-            .GlobalTimeModifier
-            .Subscribe(value =>
-            {
-                _globalTimeModifier = value;
-                
-                foreach (var task in AllTasks)
-                {
-                    task.ApplyTimeModifier(_timeModifier * _globalTimeModifier); 
-                }
-            })
-            .AddTo(this);
     }
 
     protected virtual void Update()
@@ -83,13 +88,13 @@ public abstract class ProduceObject : BuildingObject
         pendingTask?.ChangeState(ActiveState.Instance);
     }
 
-    public void ApplyTimeModifier(float value)
+    public void ApplyTimeRatio(float value)
     {  
-        _timeModifier = value;
+        _timeRatio = value;
         
         foreach (var task in AllTasks)
         {
-            task.ApplyTimeModifier(_timeModifier * _globalTimeModifier);
+            task.ApplyTimeRatio(_timeRatio * _globalTimeRatio);
         }
     }
 
@@ -108,7 +113,7 @@ public abstract class ProduceObject : BuildingObject
 
     protected virtual void OnPlant(ProduceTask task, int optionIndex)
     {
-        task.ApplyTimeModifier(_timeModifier * _globalTimeModifier);
+        task.ApplyTimeRatio(_timeRatio * _globalTimeRatio);
         AllTasks.Add(task);
         Debug.Log($"ProduceTask Added : {task.Data.ResultItems[0].ID}");
         SetNextActiveTask();

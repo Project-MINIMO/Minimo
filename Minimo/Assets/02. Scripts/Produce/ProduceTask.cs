@@ -7,8 +7,10 @@ public class ProduceTask
     public float RemainTime => Mathf.Max(0, _modifiedTime - _elapsedTime);
     public ITaskState CurrentState { get; private set; }
 
+    private float _reducedTime;
     private float _modifiedTime;
     private float _elapsedTime;
+    private float _reductionRatio;
     
     public ProduceTask(ProduceData produceOption)
     {
@@ -25,9 +27,16 @@ public class ProduceTask
         CurrentState.OnUpdate(this);
     }
     
-    public void ApplyTimeModifier(float reductionRatio)
+    public void ApplyTimeRatio(float reductionRatio)
     {
-        _modifiedTime = OriginalTime - OriginalTime * reductionRatio;
+        _reductionRatio = reductionRatio;
+        _modifiedTime = _reducedTime - _reducedTime * reductionRatio;
+    }
+
+    public void ApplyTimeReduction(float reductionAmount)
+    {
+        _reducedTime = Mathf.Max(0, OriginalTime - reductionAmount);
+        _modifiedTime = _reducedTime - _reducedTime * _reductionRatio;
     }
     
     public void ReduceRemainTime(float amount)

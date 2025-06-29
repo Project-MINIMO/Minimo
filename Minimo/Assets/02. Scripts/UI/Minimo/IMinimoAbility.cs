@@ -25,6 +25,7 @@ public enum AbilityScope
 
 public interface IMinimoAbility
 {
+    public AbilityType Type { get; }
     public AbilityScope Scope { get; }
     public float Value { get; }
     public void Apply(ProduceAdvanced building);
@@ -32,8 +33,9 @@ public interface IMinimoAbility
     public void CalculateAbility(int level);
 }
 
-public class TimeReductionAbility : IMinimoAbility
+public abstract class MinimoAbilityBase : IMinimoAbility
 {
+    public AbilityType Type { get; }
     public AbilityScope Scope { get; }
     public float Value { get; private set; }
 
@@ -41,13 +43,14 @@ public class TimeReductionAbility : IMinimoAbility
     private readonly float _step;
     private readonly float _potential;
 
-    public TimeReductionAbility(int id, float potential)
+    public MinimoAbilityBase(int id, float potential)
     {
         var titleData = App.GetData<TitleData>();
         
         var statData = titleData.UMStat[id];
         var growthData = titleData.UMStatGrowth[id];
 
+        Type = (AbilityType)statData.StatType;
         Scope = (AbilityScope)statData.Application;
         
         _baseValue = growthData.BaseValue;
@@ -55,13 +58,7 @@ public class TimeReductionAbility : IMinimoAbility
         _potential = potential;
     }
 
-    public void Apply(ProduceAdvanced building)
-    {
-        if (Scope == AbilityScope.Individual)
-        {
-            building.ApplyTimeModifier(Value);
-        }
-    }
+    public abstract void Apply(ProduceAdvanced building);
 
     public bool IsApplicableTo(ProduceAdvanced building)
     {
@@ -71,5 +68,31 @@ public class TimeReductionAbility : IMinimoAbility
     public void CalculateAbility(int level)
     {
         Value = Mathf.Round((_baseValue + level * _step) * _potential * 100f) / 100f;
+    }
+}
+
+public class TimeReductionSecondAbility : MinimoAbilityBase
+{
+    public TimeReductionSecondAbility(int id, float potential) : base(id, potential) { }
+
+    public override void Apply(ProduceAdvanced building)
+    {
+        if (Scope == AbilityScope.Individual)
+        {
+            building.ApplyTimeReduction(Value);
+        }
+    }
+}
+
+public class TimeReductionPercentAbility : MinimoAbilityBase
+{
+    public TimeReductionPercentAbility(int id, float potential) : base(id, potential) { }
+
+    public override void Apply(ProduceAdvanced building)
+    {
+        if (Scope == AbilityScope.Individual)
+        {
+            building.ApplyTimeRatio(Value);
+        }
     }
 }

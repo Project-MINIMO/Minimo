@@ -6,8 +6,11 @@ using UnityEngine;
 
 public class MinimoManager : ManagerBase
 {
-    public ReactiveProperty<float> GlobalTimeModifier { get; } = new(1f);
-    private float _globalTimeModifier = 1f;
+    public ReactiveProperty<float> GlobalTimeRatio { get; } = new(1f);
+    private float _globalTimeRatio = 1f;
+    
+    public ReactiveProperty<float> GlobalTimeReduction { get; } = new(1f);
+    private float _globalTimeReduction = 1f;
     
     public List<Minimo> Minimos { get; private set; }
     
@@ -23,9 +26,22 @@ public class MinimoManager : ManagerBase
         foreach (var a in minimo.Abilities)
         {
             if (a.Scope == AbilityScope.All)
-                _globalTimeModifier *= a.Value;
+            {
+                switch (a.Type)
+                {
+                    case AbilityType.ProdTime_Second:
+                        _globalTimeReduction -= a.Value;
+                        break;
+                    
+                    case AbilityType.ProdTime_Percent:
+                        _globalTimeRatio *= a.Value;
+                        break;
+                }
+            }
         }
-        GlobalTimeModifier.Value = _globalTimeModifier;
+
+        GlobalTimeReduction.Value = _globalTimeReduction;
+        GlobalTimeRatio.Value = _globalTimeRatio;
     }
 
     public void OnMinimoUnassigned(Minimo minimo)
@@ -33,8 +49,21 @@ public class MinimoManager : ManagerBase
         foreach (var a in minimo.Abilities)
         {
             if (a.Scope == AbilityScope.All)
-                _globalTimeModifier /= a.Value;
+            {
+                switch (a.Type)
+                {
+                    case AbilityType.ProdTime_Second:
+                        _globalTimeReduction += a.Value;
+                        break;
+                    
+                    case AbilityType.ProdTime_Percent:
+                        _globalTimeRatio /= a.Value;
+                        break;
+                }
+            }
         }
-        GlobalTimeModifier.Value = _globalTimeModifier;
+        
+        GlobalTimeReduction.Value = _globalTimeReduction;
+        GlobalTimeRatio.Value = _globalTimeRatio;
     }
 }

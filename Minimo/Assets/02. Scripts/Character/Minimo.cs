@@ -47,8 +47,8 @@ public class Minimo : MonoBehaviour
     private IMinimoAbility CreateAbility(int abilityType, int id, float potential) => (AbilityType)abilityType switch
     {
         AbilityType.None => null,
-        AbilityType.ProdTime_Second => new TimeReductionAbility(id, potential),
-        AbilityType.ProdTime_Percent => new TimeReductionAbility(id, potential),
+        AbilityType.ProdTime_Second => new TimeReductionSecondAbility(id, potential),
+        AbilityType.ProdTime_Percent => new TimeReductionPercentAbility(id, potential),
         AbilityType.ProdAmount => null,
         AbilityType.ProdEXP => null,
         AbilityType.QuestEXP => null,
