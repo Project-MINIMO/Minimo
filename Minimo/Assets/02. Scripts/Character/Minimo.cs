@@ -7,7 +7,7 @@ public class Minimo : MonoBehaviour
     public UMData Data { get; private set; }
     public MinimoFSM FSM { get; private set; }
     public ProduceAdvanced AssignedBuilding { get; private set; }
-    public int Level { get; private set; } = 1;
+    public int Level { get; private set; }
 
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
@@ -41,10 +41,7 @@ public class Minimo : MonoBehaviour
         FSM = new MinimoFSM(this);
         SetChillState();
 
-        foreach (var ability in Abilities)
-        {
-            ability.CalculateAbility(Level);
-        }
+        AddLevel(1);
     }
 
     private IMinimoAbility CreateAbility(int abilityType, int id, float potential) => (AbilityType)abilityType switch
@@ -130,16 +127,19 @@ public class Minimo : MonoBehaviour
         {
             ability.CalculateAbility(Level);
         }
-        
-        foreach (var ability in Abilities)
+
+        if (AssignedBuilding != null)
         {
-            if (ability.IsApplicableTo(AssignedBuilding))
+            foreach (var ability in Abilities)
             {
-                ability.Apply(AssignedBuilding);
+                if (ability.IsApplicableTo(AssignedBuilding))
+                {
+                    ability.Apply(AssignedBuilding);
+                }
             }
-        }
         
-        _minimoManager.OnMinimoUnassigned(this);
-        _minimoManager.OnMinimoAssigned(this);
+            _minimoManager.OnMinimoUnassigned(this);
+            _minimoManager.OnMinimoAssigned(this);
+        }
     }
 }

@@ -60,9 +60,17 @@ public class StorageSellCtrl : MonoBehaviour
     {
         _countText.text = $"X{_currentCount}";
 
-        var price = Mathf.Max(_item.SellCost * _currentCount * _globalSellCostRatio, 0);
-        var roundedPrice = Mathf.RoundToInt(price);
+        var price = Mathf.Max(_item.SellCost * _currentCount, 0);
+        var modifiedPrice = price * _globalSellCostRatio;
+        var roundedPrice = Mathf.RoundToInt(modifiedPrice);
         _priceText.text = string.Format(_sellText, roundedPrice);
+        
+        Debug.Log($"\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510");
+        Debug.Log($"\u2502 <color=green>[1] \u25b6</color> <b>기존 판매 가격</b> : {price}");
+        Debug.Log($"\u2502 <color=green>[2] \u25b6</color> <b>판매 가격 증가 비율</b> : {_globalSellCostRatio}");
+        Debug.Log($"\u2502 <color=green>[3] \u25b6</color> <b>재계산된 가격</b> : {modifiedPrice}");
+        Debug.Log($"\u2502 <color=green>[4] \u25b6</color> <b>반올림된 최종 가격</b> : {roundedPrice}");
+        Debug.Log($"\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518");
         
         UpdateButtonActive();
     }
