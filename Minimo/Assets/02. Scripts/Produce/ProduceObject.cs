@@ -95,7 +95,7 @@ public abstract class ProduceObject : BuildingObject
         SetNextActiveTask();
     }
     
-    private void SetNextActiveTask()
+    protected void SetNextActiveTask()
     {
         if (ActiveTask != null)
         {
@@ -164,6 +164,7 @@ public abstract class ProduceObject : BuildingObject
     public virtual void HarvestEarly()
     {
         ActiveTask?.Exit();
+        SetNextActiveTask();
     }
 
     public override void OnClickUp()

@@ -44,6 +44,17 @@ public class ProduceTertiary : ProduceAdvanced
         AllTasks.Remove(task);
     }
     
+    public override void HarvestEarly()
+    {
+        var activeTask = ActiveTask;
+        
+        ActiveTask?.Exit();
+        SetNextActiveTask();
+        
+        AllTasks.Remove(activeTask);
+        AllTasks.Add(activeTask);
+    }
+    
     public override void OpenUI()
     {
         _advancedPanel.OpenPanel();
