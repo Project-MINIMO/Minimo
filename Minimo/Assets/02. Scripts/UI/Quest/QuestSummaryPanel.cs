@@ -23,7 +23,7 @@ public class QuestSummaryPanel : UIBase
             ClosePanel();
         };
         
-        var existingInfos = GetComponentsInChildren<QuestInfo>(true);
+        var existingInfos = GetComponentsInChildren<QuestSummaryInfo>(true);
         foreach (var info in existingInfos)
         {
             info.gameObject.SetActive(false);
@@ -32,7 +32,7 @@ public class QuestSummaryPanel : UIBase
   
     public void UpdateQuest()
     {
-        var existingInfos = GetComponentsInChildren<QuestInfo>(true);
+        var existingInfos = GetComponentsInChildren<QuestSummaryInfo>(true);
         
         var quests = _questManager.ActiveQuests.OrderBy(x => x.ID).ToList();
   
@@ -42,7 +42,7 @@ public class QuestSummaryPanel : UIBase
         {
             var questInfo = i < existingInfos.Length 
                 ? existingInfos[i] 
-                : Instantiate(_questPrefab, _questParent).GetComponent<QuestInfo>();
+                : Instantiate(_questPrefab, _questParent).GetComponent<QuestSummaryInfo>();
 
             questInfo.gameObject.SetActive(true);
             questInfo.Initialize(quests[i]);

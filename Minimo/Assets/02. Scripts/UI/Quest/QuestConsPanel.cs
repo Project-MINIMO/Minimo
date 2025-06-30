@@ -22,7 +22,7 @@ public class QuestConsPanel : UIBase
     {
         base.OpenPanel();
 
-        var quests = _titleData.DetailQuest.Values.Where(x => x.QuestID == questData.QuestID).ToList();
+        var quests = _titleData.DetailQuest.Values.Where(x => x.ID / 10 == questData.ID).ToList();
         
         var i = 0;
         

@@ -3,7 +3,12 @@ using UnityEngine;
 
 public enum ClearType
 {
-    
+    UserLevel,
+    Plant,
+    Harvest,
+    Craft,
+    Wish,
+    Build
 }
 
 public enum RewardType

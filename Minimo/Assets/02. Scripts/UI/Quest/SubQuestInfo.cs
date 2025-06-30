@@ -29,7 +29,7 @@ public class SubQuestInfo : MonoBehaviour
     {
         _detailQuestData = questData;
 
-        _titleTMP.text = _titleData.GetString(questData.SubName);
+        //_titleTMP.text = _titleData.GetString(questData.SubName);
 
         var isUnlocked = IsUnlocked();
         _infoBtn.gameObject.SetActive(isUnlocked);
@@ -47,7 +47,8 @@ public class SubQuestInfo : MonoBehaviour
         
         if (_questManager.ActiveQuests.Contains(_detailQuestData)) return true;
 
-        var next = _questManager.ActiveQuests.FirstOrDefault(x => x.QuestID == _detailQuestData.QuestID);
-        return next?.ID > _detailQuestData.ID;
+        //var next = _questManager.ActiveQuests.FirstOrDefault(x => x.QuestID == _detailQuestData.QuestID);
+        //return next?.ID > _detailQuestData.ID;
+        return true;
     }
 }

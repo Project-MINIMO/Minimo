@@ -16,7 +16,7 @@ public class QuestListBack : MonoBehaviour
     
     private QuestManager _questManager;
     
-    private List<QuestInfo> _questInfos = new();
+    private List<QuestSummaryInfo> _questInfos = new();
 
     private int _questIndex;
     
@@ -40,7 +40,7 @@ public class QuestListBack : MonoBehaviour
     {
         _questInfos.Clear();
         
-        var existingInfos = GetComponentsInChildren<QuestInfo>(true);
+        var existingInfos = GetComponentsInChildren<QuestSummaryInfo>(true);
         
         var quests = _questManager.ActiveQuests.Where(x => x.ID == _questIndex).ToList();
   
@@ -50,7 +50,7 @@ public class QuestListBack : MonoBehaviour
         {
             var questInfo = i < existingInfos.Length 
                 ? existingInfos[i] 
-                : Instantiate(_questPrefab, _questParent).GetComponent<QuestInfo>();
+                : Instantiate(_questPrefab, _questParent).GetComponent<QuestSummaryInfo>();
 
             questInfo.Initialize(quests[i]);
             _questInfos.Add(questInfo);
