@@ -69,7 +69,7 @@ public class QuestSummaryInfo : MonoBehaviour
         _questData = _titleData.Quest[data.ID / 10];
         _detailData = data;
 
-        _iconObjs[_questData.Type].SetActive(false);
+        _iconObjs[_questData.Type].SetActive(true);
         
         _titleTMP.text = _titleData.GetString($"STR_QUEST_{_detailData.Name}");
         _descTMP.text = string.Empty;
@@ -142,7 +142,7 @@ public class QuestSummaryInfo : MonoBehaviour
         _defaultBackgroundImg.DOFade(0f, 0.25f).SetEase(Ease.Linear);
         
         _titleTMP.rectTransform.DOAnchorPos(_titleExpandedPos, 0.3f).SetEase(Ease.Linear);
-        _descTMP.DOFade(1, 0.3f).SetEase(Ease.Linear);
+        _descTMP.DOFade(1, 0.2f).SetEase(Ease.Linear).SetDelay(0.1f);
         
         DOTween.To(() => _titleTMP.fontSize, 
                 x => _titleTMP.fontSize = x, 
@@ -171,7 +171,7 @@ public class QuestSummaryInfo : MonoBehaviour
         _defaultBackgroundImg.DOFade(1f, 0.25f).SetEase(Ease.Linear);
         
         _titleTMP.rectTransform.DOAnchorPos(_titleCollapsedPos, 0.3f).SetEase(Ease.Linear);
-        _descTMP.DOFade(0, 0.3f).SetEase(Ease.OutCubic);
+        _descTMP.DOFade(0, 0.2f).SetEase(Ease.Linear);
         
         DOTween.To(() => _titleTMP.fontSize, 
                 x => _titleTMP.fontSize = x, 

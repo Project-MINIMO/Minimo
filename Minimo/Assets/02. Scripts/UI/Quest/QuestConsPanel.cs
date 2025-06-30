@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 public class QuestConsPanel : UIBase
 {
+    [SerializeField] private QuestUIGrouper _grouper;
     [SerializeField] private Button _closeBtn;
-    
+
     private SubQuestInfo[] _subQuests;
     private TitleData _titleData;
 
@@ -15,7 +16,11 @@ public class QuestConsPanel : UIBase
         _titleData = App.GetData<TitleData>();
         _subQuests = GetComponentsInChildren<SubQuestInfo>();
 
-        _closeBtn.onClick.AddListener(ClosePanel);
+        _closeBtn.onClick.AddListener(() =>
+        {
+            _grouper.OpenSummaryPanel();
+            ClosePanel();
+        });
     }
 
     public void OpenPanel(DetailQuestData questData)
@@ -36,5 +41,7 @@ public class QuestConsPanel : UIBase
         {
             _subQuests[i].gameObject.SetActive(false);
         }
+        
+        _grouper.CloseAllExcept(this);
     }
 }

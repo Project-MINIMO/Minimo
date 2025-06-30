@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class QuestSummaryPanel : UIBase
 {
+    [SerializeField] private QuestUIGrouper _grouper;
     [SerializeField] private Transform _questParent;
     [SerializeField] private GameObject _questPrefab;
     
@@ -17,17 +18,20 @@ public class QuestSummaryPanel : UIBase
         _questManager = App.GetManager<QuestManager>();
         _questListPanel = App.GetManager<UIManager>().GetPanel<QuestListPanel>();
         
-        _longPressDetector.OnLongPress = () =>
-        {
-            _questListPanel.OpenPanel();
-            ClosePanel();
-        };
+        _longPressDetector.OnLongPress = _questListPanel.OpenPanel;
         
         var existingInfos = GetComponentsInChildren<QuestSummaryInfo>(true);
         foreach (var info in existingInfos)
         {
             info.gameObject.SetActive(false);
         }
+    }
+
+    public override void OpenPanel()
+    {
+        base.OpenPanel();
+        
+        _grouper.CloseAllExcept(this);
     }
   
     public void UpdateQuest()

@@ -3140,6 +3140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eed97f4d0c23b2b4a905550c7ca62faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _grouper: {fileID: 765153414881160365}
   _closeBtn: {fileID: 3566290402905709008}
 --- !u!1 &191241535505552383
 GameObject:
@@ -10821,7 +10822,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6553116176223313575
 RectTransform:
   m_ObjectHideFlags: 0
@@ -31352,7 +31353,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9110351126196541886
 RectTransform:
   m_ObjectHideFlags: 0
@@ -64904,23 +64905,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa4b51512f8484948b48d358aaed5e10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _grouper: {fileID: 765153414881160365}
   _closeBtn: {fileID: 4251670400789516536}
   _menuBtns:
   - {fileID: 2483455342950885615}
-  - {fileID: 4660366866165806807}
   - {fileID: 9099849372946267565}
+  - {fileID: 4660366866165806807}
   _menuBacks:
   - {fileID: 2485623548567500682}
-  - {fileID: 1045472555540884125}
   - {fileID: 2744341478751477462}
+  - {fileID: 1045472555540884125}
   _menuActiveObjs:
   - {fileID: 8939211554569064600}
-  - {fileID: 3038563206712864331}
   - {fileID: 530068605341584867}
+  - {fileID: 3038563206712864331}
   _alertObjs:
   - {fileID: 2315395471411572175}
-  - {fileID: 757011223162248874}
   - {fileID: 7103176112952880522}
+  - {fileID: 757011223162248874}
 --- !u!1 &4850364622420584069
 GameObject:
   m_ObjectHideFlags: 0
@@ -68491,6 +68493,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 163faca80b92628418ee7ea76968b001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _grouper: {fileID: 765153414881160365}
   _closeBtn: {fileID: 2913523373338585926}
 --- !u!1 &5144836703046245881
 GameObject:
@@ -95496,7 +95499,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2496393490882450308
 RectTransform:
   m_ObjectHideFlags: 0
@@ -103409,6 +103412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1ab900ff193aee46b31ba7460490c99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _grouper: {fileID: 765153414881160365}
   _questParent: {fileID: 8348236140958016501}
   _questPrefab: {fileID: 2469749580603384524}
   _longPressDetector: {fileID: 1494365275340109676}
@@ -104029,6 +104033,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9150939640446390490}
+  - component: {fileID: 765153414881160365}
   m_Layer: 5
   m_Name: Panel_Quest
   m_TagString: Untagged
@@ -104050,8 +104055,8 @@ RectTransform:
   m_Children:
   - {fileID: 8812061281456461806}
   - {fileID: 4880859009333365574}
-  - {fileID: 9055960265697353214}
   - {fileID: 5061812385060907555}
+  - {fileID: 9055960265697353214}
   m_Father: {fileID: 2114228335018892093}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -104059,6 +104064,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &765153414881160365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7820313463763343198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7225537df2417b440b0d9dae9eda0c6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _summaryPanel: {fileID: 2674204393497377316}
+  _listPanel: {fileID: 5714366266684596037}
+  _submissionPanel: {fileID: 8059082391034116618}
+  _consPanel: {fileID: 8223713966032729243}
 --- !u!1 &7828943262235084892
 GameObject:
   m_ObjectHideFlags: 0
@@ -113699,8 +113720,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4211622467900940315}
-  - {fileID: 7097372237364304194}
   - {fileID: 5409939384894259155}
+  - {fileID: 7097372237364304194}
   m_Father: {fileID: 4880859009333365574}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
