@@ -44,6 +44,7 @@ public class QuestSummaryPanel : UIBase
                 ? existingInfos[i] 
                 : Instantiate(_questPrefab, _questParent).GetComponent<QuestInfo>();
 
+            questInfo.gameObject.SetActive(true);
             questInfo.Initialize(quests[i]);
         }
 

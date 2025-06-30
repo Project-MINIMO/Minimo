@@ -64,38 +64,45 @@ public class QuestData
 }
 
 [Serializable]
+public class RawDetailQuestData
+{
+    public int ID;
+    public int Type;
+    public int PreQuestID;
+    public int OpenLevel;
+    public string Name;
+    public int Condition;
+    public string Clear;
+    public string Reward;
+}
+
+[Serializable]
 public class DetailQuestData
 {
     public int ID;
-    public int QuestID;
+    public int Type;
     public int PreQuestID;
     public int OpenLevel;
-    public string SubName;
-    public string QuestSubIcon;
-    public int Type;
-    public string Description;
-    public int ClearType1;
-    public int ClearTarget1;
-    public int ClearValue1;
-    public string ClearDesc1;
-    public int ClearType2;
-    public int ClearTarget2;
-    public int ClearValue2;
-    public string ClearDesc2;
-    public int ClearType3;
-    public int ClearTarget3;
-    public int ClearValue3;
-    public string ClearDesc3;
-    public int ResultType;
-    public int RewardType1;
-    public int Reward1ID;
-    public int RewardValue1;
-    public int RewardType2;
-    public int Reward2ID;
-    public int RewardValue2;
-    public int RewardType3;
-    public int Reward3ID;
-    public int RewardValue3;
+    public string Name;
+    public int Condition;
+    public QuestClear[] Clear;
+    public QuestReward[] Reward;
+}
+
+[Serializable]
+public class QuestClear
+{
+    public ClearType Type;
+    public int Target;
+    public int Amount;
+}
+
+[Serializable]
+public class QuestReward
+{
+    public RewardType Type;
+    public int Target;
+    public int Amount;
 }
 #endregion
 
@@ -235,7 +242,7 @@ public class TitleData : DataBase
             Quest.Add(data.ID, data);
         }
         
-        var detailQuestDataRaw = DataLoader.LoadData<DetailQuestData>(DETAILQUEST_PATH);
+        var detailQuestDataRaw = DataLoader.LoadDataDetailQuest(DETAILQUEST_PATH);
         foreach (var data in detailQuestDataRaw)
         {
             DetailQuest.Add(data.ID, data);

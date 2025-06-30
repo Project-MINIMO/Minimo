@@ -1,4 +1,15 @@
 using System.Collections.Generic;
+using UnityEngine;
+
+public enum ClearType
+{
+    
+}
+
+public enum RewardType
+{
+    
+}
 
 public class QuestManager : ManagerBase
 {
@@ -18,7 +29,6 @@ public class QuestManager : ManagerBase
     public void AddQuest(DetailQuestData quest)
     {
         ActiveQuests.Add(quest);
-        
         _questSummaryPanel.UpdateQuest();
         _questListPanel.UpdateQuest(quest.Type);
     }
