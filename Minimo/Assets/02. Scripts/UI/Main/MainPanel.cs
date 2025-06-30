@@ -17,7 +17,7 @@ public class MainPanel : UIBase
     private Vector2[] _btnPositions;
     private float _closeYPosition;
     
-    private bool _isOpened = false;
+    private bool _isOpened;
 
     public override void Initialize()
     {
@@ -88,14 +88,17 @@ public class MainPanel : UIBase
         if (!_isOpened) return;
         
         _isOpened = false;
-        
-        foreach (var rect in _btnRects)
-        {
-            rect.DOAnchorPos(Vector2.zero, 0).SetEase(Ease.Linear);
-            rect.gameObject.SetActive(false);
-        }
-        
+        _mainRect.DOKill();
         _mainRect.DOScale(Vector3.one, _duration).SetEase(Ease.Linear)
+            .OnPlay(() =>
+            {
+                foreach (var rect in _btnRects)
+                {
+                    rect.DOKill();
+                    rect.DOAnchorPos(Vector2.zero, 0).SetEase(Ease.Linear);
+                    rect.gameObject.SetActive(false);
+                }
+            })
             .OnComplete(() =>
             {
                 _closeBtn.gameObject.SetActive(false);

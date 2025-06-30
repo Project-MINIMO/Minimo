@@ -24,7 +24,7 @@ public class Minimo : MonoBehaviour
         _parent = transform.parent;   //temp
         Data = titleData.UserMinimo[transform.GetSiblingIndex()];    //temp
         float potentialValue = Data.Potential;
-        var rawPotential = (potentialValue / 9) * titleData.Common["PotentialGap"];
+        var rawPotential = 1 + (potentialValue - 1) * (((float)titleData.Common["PotentialGap"] - 1) / 9);
         var potential = Mathf.Round(rawPotential * 100f) / 100f;
         _minimoManager = App.GetManager<MinimoManager>();
 
@@ -47,14 +47,14 @@ public class Minimo : MonoBehaviour
     private IMinimoAbility CreateAbility(int abilityType, int id, float potential) => (AbilityType)abilityType switch
     {
         AbilityType.None => null,
-        AbilityType.ProdTime_Second => new TimeReductionSecondAbility(id, potential),
-        AbilityType.ProdTime_Percent => new TimeReductionPercentAbility(id, potential),
-        AbilityType.ProdAmount => null,
-        AbilityType.ProdEXP => null,
-        AbilityType.QuestEXP => null,
-        AbilityType.SellValue => null,
-        AbilityType.TimeSkipCost => null,
-        AbilityType.MissionTime => null
+        AbilityType.ProdTime_Second => new ProduceTimeSecondAbility(id, potential),
+        AbilityType.ProdTime_Percent => new ProduceTimePercentAbility(id, potential),
+        AbilityType.ProdAmount => new ProduceAmountAbility(id, potential),
+        AbilityType.ProdEXP => new ProduceExperienceAbility(id, potential),
+        AbilityType.QuestEXP => new QuestExperienceAbility(id, potential),
+        AbilityType.SellValue => new SellValueAbility(id, potential),
+        AbilityType.TimeSkipCost => new TimeSkipCostAbility(id, potential),
+        AbilityType.MissionTime => new MissionTimeAbility(id, potential)
     };
 
     private void Update()
@@ -126,6 +126,20 @@ public class Minimo : MonoBehaviour
         foreach (var ability in Abilities)
         {
             ability.CalculateAbility(Level);
+        }
+
+        if (AssignedBuilding != null)
+        {
+            foreach (var ability in Abilities)
+            {
+                if (ability.IsApplicableTo(AssignedBuilding))
+                {
+                    ability.Apply(AssignedBuilding);
+                }
+            }
+        
+            _minimoManager.OnMinimoUnassigned(this);
+            _minimoManager.OnMinimoAssigned(this);
         }
     }
 }

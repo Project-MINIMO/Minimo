@@ -4,7 +4,7 @@ using TMPro;
 
 public class StorageBtn : MonoBehaviour
 {
-    public bool CanShow => Item != null && AccountInfo.Instance.items.ContainsKey(Item) && AccountInfo.Instance.items[Item] > 0;
+    public bool CanShow => Item != null && AccountInfo.Instance.Items.ContainsKey(Item) && AccountInfo.Instance.Items[Item] > 0;
     public ItemData Item { get; private set; }
     public Vector2 Position { get; private set; }
     public int SibilingsIndex => transform.GetSiblingIndex() % 4;
@@ -47,7 +47,7 @@ public class StorageBtn : MonoBehaviour
         
         gameObject.SetActive(CanShow);
 
-        if (AccountInfo.Instance.items.TryGetValue(Item, out var value))
+        if (AccountInfo.Instance.Items.TryGetValue(Item, out var value))
         {
             _countTMP.text = value.ToString();
         }

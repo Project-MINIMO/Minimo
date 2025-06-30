@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UniRx;
 
 public class StorageSellCtrl : MonoBehaviour
 {
@@ -18,8 +19,18 @@ public class StorageSellCtrl : MonoBehaviour
     private int _currentCount;
     private string _sellText;
 
+    private float _globalSellCostRatio;
+
     public void Setup()
     {
+        App.GetManager<MinimoManager>()
+            .GlobalSellCostRatio
+            .Subscribe(value =>
+            {
+                _globalSellCostRatio = value;
+            })
+            .AddTo(this);
+        
         _storagePanel = App.GetManager<UIManager>().GetPanel<StoragePanel>();
         _infoPanel = App.GetManager<UIManager>().GetPanel<StorageInfoPanel>();
         
@@ -29,12 +40,12 @@ public class StorageSellCtrl : MonoBehaviour
         _decreaseBtn.onClick.AddListener(() => AddCurrentCount(-1));
         _sellBtn.onClick.AddListener(OnClickSell);
     }
-    
+
     public void Initialize(ItemData item)
     {
         _item = item;
         
-        if (AccountInfo.Instance.items.TryGetValue(item, out var value))
+        if (AccountInfo.Instance.Items.TryGetValue(item, out var value))
         {
             _currentCount = (value / 2) + 1;
         }
@@ -48,7 +59,18 @@ public class StorageSellCtrl : MonoBehaviour
     private void UpdateCurrentCount()
     {
         _countText.text = $"X{_currentCount}";
-        _priceText.text = string.Format(_sellText, Mathf.Max(_item.SellCost * _currentCount, 0));
+
+        var price = Mathf.Max(_item.SellCost * _currentCount, 0);
+        var modifiedPrice = price * _globalSellCostRatio;
+        var roundedPrice = Mathf.RoundToInt(modifiedPrice);
+        _priceText.text = string.Format(_sellText, roundedPrice);
+        
+        Debug.Log($"\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510");
+        Debug.Log($"\u2502 <color=green>[1] \u25b6</color> <b>기존 판매 가격</b> : {price}");
+        Debug.Log($"\u2502 <color=green>[2] \u25b6</color> <b>판매 가격 증가 비율</b> : {_globalSellCostRatio}");
+        Debug.Log($"\u2502 <color=green>[3] \u25b6</color> <b>재계산된 가격</b> : {modifiedPrice}");
+        Debug.Log($"\u2502 <color=green>[4] \u25b6</color> <b>반올림된 최종 가격</b> : {roundedPrice}");
+        Debug.Log($"\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518");
         
         UpdateButtonActive();
     }
@@ -71,7 +93,7 @@ public class StorageSellCtrl : MonoBehaviour
             _decreaseBtn.gameObject.SetActive(true);
         }
 
-        if (AccountInfo.Instance.items.TryGetValue(_item, out var value))
+        if (AccountInfo.Instance.Items.TryGetValue(_item, out var value))
         {
             if (_currentCount >= value) 
             {
@@ -86,9 +108,9 @@ public class StorageSellCtrl : MonoBehaviour
 
     private void OnClickSell()
     {
-        if (AccountInfo.Instance.items.ContainsKey(_item))
+        if (AccountInfo.Instance.Items.ContainsKey(_item))
         {
-            AccountInfo.Instance.items[_item] += -_currentCount;
+            AccountInfo.Instance.Items[_item] += -_currentCount;
         }
         
         /*

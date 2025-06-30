@@ -6,11 +6,20 @@ using UnityEngine;
 
 public class MinimoManager : ManagerBase
 {
+    public ReactiveProperty<float> GlobalTimeReduction { get; } = new(0f);
+    private float _globalTimeReduction = 0;
+    
     public ReactiveProperty<float> GlobalTimeRatio { get; } = new(1f);
     private float _globalTimeRatio = 1f;
     
-    public ReactiveProperty<float> GlobalTimeReduction { get; } = new(1f);
-    private float _globalTimeReduction = 1f;
+    public ReactiveProperty<float> GlobalHarvestRatio { get; } = new(1f);
+    private float _globalHarvestRatio = 1f;
+    
+    public ReactiveProperty<float> GlobalSellCostRatio { get; } = new(1f);
+    private float _globalSellCostRatio = 1f;
+    
+    public ReactiveProperty<float> GlobalTimeSkipCostRatio { get; } = new(1f);
+    private float _globalTimeSkipCostRatio = 1f;
     
     public List<Minimo> Minimos { get; private set; }
     
@@ -25,30 +34,9 @@ public class MinimoManager : ManagerBase
     {
         foreach (var a in minimo.Abilities)
         {
-            if (a.Scope == AbilityScope.All)
-            {
-                switch (a.Type)
-                {
-                    case AbilityType.ProdTime_Second:
-                        _globalTimeReduction -= a.Value;
-                        break;
-                    
-                    case AbilityType.ProdTime_Percent:
-                        _globalTimeRatio *= a.Value;
-                        break;
-                }
-            }
-        }
-
-        GlobalTimeReduction.Value = _globalTimeReduction;
-        GlobalTimeRatio.Value = _globalTimeRatio;
-    }
-
-    public void OnMinimoUnassigned(Minimo minimo)
-    {
-        foreach (var a in minimo.Abilities)
-        {
-            if (a.Scope == AbilityScope.All)
+            if (!a.IsUnlocked) continue;
+            
+            if (a.Scope is not AbilityScope.Individual)
             {
                 switch (a.Type)
                 {
@@ -57,7 +45,59 @@ public class MinimoManager : ManagerBase
                         break;
                     
                     case AbilityType.ProdTime_Percent:
-                        _globalTimeRatio /= a.Value;
+                        _globalTimeRatio *= 1 - a.Value / 100;
+                        break;
+                    
+                    case AbilityType.ProdAmount:
+                        _globalHarvestRatio *= 1 - a.Value / 100;
+                        break;
+                    
+                    case AbilityType.SellValue:
+                        _globalSellCostRatio *= 1 + a.Value / 100;
+                        break;
+                    
+                    case AbilityType.TimeSkipCost:
+                        _globalTimeSkipCostRatio *= 1 - a.Value / 100;
+                        break;
+                }
+            }
+        }
+
+        GlobalTimeReduction.Value = _globalTimeReduction;
+        GlobalTimeRatio.Value = _globalTimeRatio;
+        GlobalHarvestRatio.Value = _globalHarvestRatio;
+        GlobalSellCostRatio.Value = _globalSellCostRatio;
+        GlobalTimeSkipCostRatio.Value = _globalTimeSkipCostRatio;
+    }
+
+    public void OnMinimoUnassigned(Minimo minimo)
+    {
+        foreach (var a in minimo.Abilities)
+        {
+            if (!a.IsUnlocked) continue;
+            
+            if (a.Scope is not AbilityScope.Individual)
+            {
+                switch (a.Type)
+                {
+                    case AbilityType.ProdTime_Second:
+                        _globalTimeReduction -= a.Value;
+                        break;
+                    
+                    case AbilityType.ProdTime_Percent:
+                        _globalTimeRatio /= 1 - a.Value / 100;
+                        break;
+                    
+                    case AbilityType.ProdAmount:
+                        _globalHarvestRatio /= 1 - a.Value / 100;
+                        break;
+                    
+                    case AbilityType.SellValue:
+                        _globalSellCostRatio /= a.Value / 100;
+                        break;
+                    
+                    case AbilityType.TimeSkipCost:
+                        _globalTimeSkipCostRatio /= 1 - a.Value / 100;
                         break;
                 }
             }
@@ -65,5 +105,8 @@ public class MinimoManager : ManagerBase
         
         GlobalTimeReduction.Value = _globalTimeReduction;
         GlobalTimeRatio.Value = _globalTimeRatio;
+        GlobalHarvestRatio.Value = _globalHarvestRatio;
+        GlobalSellCostRatio.Value = _globalSellCostRatio;
+        GlobalTimeSkipCostRatio.Value = _globalTimeSkipCostRatio;
     }
 }
