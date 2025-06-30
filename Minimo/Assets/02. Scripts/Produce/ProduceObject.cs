@@ -82,7 +82,6 @@ public abstract class ProduceObject : BuildingObject
         if (ActiveTask == null) return;
    
         ActiveTask.Update();
-        Debug.Log(ActiveTask.RemainTime);
         
         if (ActiveTask is { RemainTime: <= 0 })
         {
