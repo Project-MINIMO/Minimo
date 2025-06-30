@@ -17,7 +17,7 @@ public class ConstellationQuest : QuestGiver
         
         var selected = filtered[Random.Range(0, filtered.Count)];
 
-        _questData = titleData.DetailQuest.Values.FirstOrDefault(x => x.QuestID == selected.ID);
+        _questData = titleData.DetailQuest.Values.FirstOrDefault(x => x.ID / 10 == selected.ID);
     }
     
     public override void OnLongPress() { }

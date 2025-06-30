@@ -2,15 +2,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class QuestInfo : MonoBehaviour
+public class QuestListInfo : MonoBehaviour
 {
-    public int QuestType => _questData.Type;
-
-    [SerializeField] private Button _button;
+    [SerializeField] private Button _openBtn;
     
     [SerializeField] private TextMeshProUGUI _titleTMP;
-    [SerializeField] private TextMeshProUGUI _descTMP;
- 
+    [SerializeField] private Image _iconImg;
+    [SerializeField] private Sprite[] _sprites;
+    
     private TitleData _titleData;
     
     private QuestData _questData;
@@ -25,7 +24,7 @@ public class QuestInfo : MonoBehaviour
         _consPanel = App.GetManager<UIManager>().GetPanel<QuestConsPanel>();
         _submissionPanel = App.GetManager<UIManager>().GetPanel<QuestSubmissionPanel>();
         
-        _button.onClick.AddListener(()=>
+        _openBtn.onClick.AddListener(()=>
         {
             if (_questData.Type == 1)
             {
@@ -40,15 +39,20 @@ public class QuestInfo : MonoBehaviour
 
     public void Initialize(DetailQuestData data)
     {
-        _questData = _titleData.Quest[data.QuestID];
+        _questData = _titleData.Quest[data.ID / 10];
         _detailData = data;
         
-        var lastUnderscore = data.SubName.LastIndexOf('_'); // _SUB
-        var secondLastUnderscore = data.SubName.LastIndexOf('_', lastUnderscore - 1); // _01
-
-        var result = data.SubName.Substring(0, secondLastUnderscore);
-        _titleTMP.text = _titleData.GetString(result);
-
-        _descTMP.text = _titleData.GetString(_detailData.ClearDesc1);
+        if (data.Type == (int)QuestType.Constellation)
+        {
+            var questTitle = _titleData.Quest[data.ID / 10].Name;
+            _titleTMP.text = _titleData.GetString(questTitle);
+        }
+        else
+        {
+            _titleTMP.text = _titleData.GetString($"STR_QUEST_{data.Name}");
+        }
+        
+        var randomNum = Random.Range(0, _sprites.Length);
+        _iconImg.sprite = _sprites[randomNum];
     }
 }

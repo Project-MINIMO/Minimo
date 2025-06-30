@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,8 +14,6 @@ public class QuestListBack : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _titleTMP;
     
     private QuestManager _questManager;
-    
-    private List<QuestInfo> _questInfos = new();
 
     private int _questIndex;
     
@@ -38,22 +35,20 @@ public class QuestListBack : MonoBehaviour
 
     public void UpdateQuest()
     {
-        _questInfos.Clear();
+        var quests = _questManager.ActiveQuests.Where(x => CheckQuestType(x.Type)).ToList();
+
+        var existingInfos = GetComponentsInChildren<QuestListInfo>(true);
         
-        var existingInfos = GetComponentsInChildren<QuestInfo>(true);
-        
-        var quests = _questManager.ActiveQuests.Where(x => x.ID == _questIndex).ToList();
-  
         var i = 0;
         
         for (; i < quests.Count; i++)
         {
             var questInfo = i < existingInfos.Length 
                 ? existingInfos[i] 
-                : Instantiate(_questPrefab, _questParent).GetComponent<QuestInfo>();
+                : Instantiate(_questPrefab, _questParent).GetComponent<QuestListInfo>();
 
+            questInfo.gameObject.SetActive(true);
             questInfo.Initialize(quests[i]);
-            _questInfos.Add(questInfo);
         }
 
         for (; i < existingInfos.Length; i++)
@@ -61,4 +56,12 @@ public class QuestListBack : MonoBehaviour
             existingInfos[i].gameObject.SetActive(false);
         }
     }
+
+    private bool CheckQuestType(int questType) => (QuestType)questType switch
+    {
+        QuestType.Guide => _questIndex == 0,
+        QuestType.Story => _questIndex == 0,
+        QuestType.Constellation => _questIndex == 1,
+        _ => _questIndex == 2
+    };
 }

@@ -1,4 +1,29 @@
 using System.Collections.Generic;
+using UnityEngine;
+
+public enum ClearType
+{
+    UserLevel,
+    Plant,
+    Harvest,
+    Craft,
+    Wish,
+    Build
+}
+
+public enum RewardType
+{
+    
+}
+
+public enum QuestType
+{
+    Guide,
+    Story,
+    Constellation,
+    Side,
+    Wish
+}
 
 public class QuestManager : ManagerBase
 {
@@ -18,7 +43,6 @@ public class QuestManager : ManagerBase
     public void AddQuest(DetailQuestData quest)
     {
         ActiveQuests.Add(quest);
-        
         _questSummaryPanel.UpdateQuest();
         _questListPanel.UpdateQuest(quest.Type);
     }

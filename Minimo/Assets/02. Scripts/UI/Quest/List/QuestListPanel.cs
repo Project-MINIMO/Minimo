@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class QuestListPanel : UIBase
 {
+    [SerializeField] private QuestUIGrouper _grouper;
+    
     [SerializeField] private Button _closeBtn;
     
     [SerializeField] private Button[] _menuBtns;
@@ -18,7 +20,7 @@ public class QuestListPanel : UIBase
         
         _closeBtn.onClick.AddListener(() =>
         {
-            _questSummaryPanel.OpenPanel();
+            _grouper.OpenSummaryPanel();
             ClosePanel();
         });
         
@@ -43,14 +45,22 @@ public class QuestListPanel : UIBase
     {
         for (var i = 0; i < _menuBtns.Length; i++)
         {
-            _menuBacks[i].gameObject.SetActive(index == i);
-            _menuActiveObjs[i].SetActive(index == i);
-            _alertObjs[i].SetActive(index == i);
+            var active = index == i;
+            
+            _menuBacks[i].gameObject.SetActive(active);
+            _menuActiveObjs[i].SetActive(active);
+
+            if (active)
+            {
+                _alertObjs[i].SetActive(false);
+            }
         }
     }
 
     public override void OpenPanel()
     {
+        _grouper.CloseAllExcept(this);
+        
         base.OpenPanel();
         
         OnClickMenuBtn(0);
@@ -58,11 +68,21 @@ public class QuestListPanel : UIBase
 
     public void UpdateQuest(int questType)
     {
-        if (!_menuBacks[questType].gameObject.activeSelf)
+        var index = GetQuestType(questType);
+        
+        if (!_menuBacks[index].gameObject.activeSelf)
         {
-            _alertObjs[questType].SetActive(true);
+            _alertObjs[index].SetActive(true);
         }
         
         _menuBacks[questType].UpdateQuest();
     }
+    
+    private int GetQuestType(int questType) => (QuestType)questType switch
+    {
+        QuestType.Guide => 0,
+        QuestType.Story => 0,
+        QuestType.Constellation => 1,
+        _ => 2
+    };
 }
