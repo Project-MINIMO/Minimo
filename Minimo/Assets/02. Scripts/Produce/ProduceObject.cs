@@ -75,13 +75,14 @@ public abstract class ProduceObject : BuildingObject
 
     protected virtual void Update()
     {
-        if (Time.time - _lastUpdateTime < 1f) return;
+        if (Time.time - _lastUpdateTime < 0.1f) return;
         
         _lastUpdateTime = Time.time;
 
         if (ActiveTask == null) return;
    
         ActiveTask.Update();
+        Debug.Log(ActiveTask.RemainTime);
         
         if (ActiveTask is { RemainTime: <= 0 })
         {

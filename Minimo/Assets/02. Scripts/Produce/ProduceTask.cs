@@ -124,7 +124,7 @@ public class ActiveState : ITaskState
     
     public void OnUpdate(ProduceTask task)
     {
-        task.ReduceRemainTime(1);
+        task.ReduceRemainTime(0.1f);
     }
 
     public void OnExit(ProduceTask task)
