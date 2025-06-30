@@ -13,14 +13,14 @@ public class ProduceSecondary : ProduceAdvanced
         _primaryPanel = App.GetManager<UIManager>().GetPanel<PrimaryPanel>();
     }
     
-    protected override void OnPlant(ProduceTask task, int optionIndex)
+    public override void StartPlant(ProduceData option)
     {
         if (AllTasks.Count > 0)
         {
             return;
         }
-        
-        base.OnPlant(task, optionIndex);
+
+        base.StartPlant(option);
     }
     
     public override void OnClickUp()
