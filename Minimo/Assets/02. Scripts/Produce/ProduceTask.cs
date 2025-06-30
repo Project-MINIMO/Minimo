@@ -58,7 +58,7 @@ public class ProduceTask
 
     public void ApplyHarvestRatio(float harvestRatio)
     {
-        _harvestRatio = harvestRatio;
+        _harvestRatio = 1f - harvestRatio;
     }
     
     public void ReduceRemainTime(float amount)
