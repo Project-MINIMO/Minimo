@@ -10,6 +10,7 @@ public class ProduceTask
     
     private readonly Random _random = new();
 
+    private float _maxReducedTime;
     private float _reducedTime;
     private float _modifiedTime;
     private float _elapsedTime;
@@ -24,6 +25,8 @@ public class ProduceTask
         OriginalTime = produceOption.Time;
         _reducedTime = produceOption.Time;
         _modifiedTime = OriginalTime;
+
+        _maxReducedTime = OriginalTime * (App.GetData<TitleData>().Common["ProdTimeReduceCap"] / 100f);
         
         CurrentState = PendingState.Instance;
     }
@@ -36,20 +39,21 @@ public class ProduceTask
     public void ApplyTimeRatio(float reductionRatio)
     {
         _reductionRatio = reductionRatio;
-        _modifiedTime = _reducedTime * reductionRatio;
+        _modifiedTime = Mathf.Max(_maxReducedTime, _reducedTime * _reductionRatio);
         
         Debug.Log($"\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510");
         Debug.Log($"\u2502 <color=red>[1] \u25b6</color> <b>원본 생산 시간</b> : {OriginalTime}");
         Debug.Log($"\u2502 <color=red>[3] \u25b6</color> <b>수정된 생산 시간 (원본 - 감소(초))</b> : {_reducedTime}");
         Debug.Log($"\u2502 <color=red>[2] \u25b6</color> <b>생산 시간 감소 비율</b> : {_reductionRatio}");
-        Debug.Log($"\u2502 <color=red>[4] \u25b6</color> <b>최종 생산 시간 (수정된 생산 시간 * 감소 비율)</b> : {_modifiedTime}");
+        Debug.Log($"\u2502 <color=red>[4] \u25b6</color> <b>최종 생산 시간 (수정된 생산 시간 * 감소 비율)</b> : {_reducedTime * reductionRatio}");
+        Debug.Log($"\u2502 <color=red>[4] \u25b6</color> <b>최종 생산 시간 (캡값 적용)</b> : {_modifiedTime}");
         Debug.Log($"\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518");
     }
 
     public void ApplyTimeReduction(float reductionAmount)
     {
         _reducedTime = Mathf.Max(0, OriginalTime - reductionAmount);
-        _modifiedTime = _reducedTime * _reductionRatio;
+        _modifiedTime = Mathf.Max(_maxReducedTime, _reducedTime * _reductionRatio);
     }
 
     public void ApplyHarvestRatio(float harvestRatio)
