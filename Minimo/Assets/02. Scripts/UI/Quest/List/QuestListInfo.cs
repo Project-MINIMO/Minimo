@@ -42,7 +42,15 @@ public class QuestListInfo : MonoBehaviour
         _questData = _titleData.Quest[data.ID / 10];
         _detailData = data;
         
-        _titleTMP.text = _titleData.GetString($"STR_QUEST_{_detailData.Name}");
+        if (data.Type == (int)QuestType.Constellation)
+        {
+            var questTitle = _titleData.Quest[data.ID / 10].Name;
+            _titleTMP.text = _titleData.GetString(questTitle);
+        }
+        else
+        {
+            _titleTMP.text = _titleData.GetString($"STR_QUEST_{data.Name}");
+        }
         
         var randomNum = Random.Range(0, _sprites.Length);
         _iconImg.sprite = _sprites[randomNum];

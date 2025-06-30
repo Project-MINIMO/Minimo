@@ -26,13 +26,6 @@ public class QuestSummaryPanel : UIBase
             info.gameObject.SetActive(false);
         }
     }
-
-    public override void OpenPanel()
-    {
-        base.OpenPanel();
-        
-        _grouper.CloseAllExcept(this);
-    }
   
     public void UpdateQuest()
     {

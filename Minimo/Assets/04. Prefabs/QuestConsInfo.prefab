@@ -75,7 +75,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 1728053247
-  m_fontColor: {r: 1, g: 1, b: 1, a: 0.4}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1106,9 +1106,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3344130997543011974}
-  - component: {fileID: 9216150015240130904}
+  - component: {fileID: 7965789824015290896}
   m_Layer: 5
-  m_Name: Back_SubQuest
+  m_Name: QuestConsInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1136,7 +1136,7 @@ RectTransform:
   m_AnchoredPosition: {x: 348, y: -62.5}
   m_SizeDelta: {x: 696, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &9216150015240130904
+--- !u!114 &7965789824015290896
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1145,11 +1145,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 9194411756296663001}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee0c8ee05016f8948a7c607e151fc53b, type: 3}
+  m_Script: {fileID: 11500000, guid: ffe9b8a40da036f48a8b7724f706cceb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _infoBtn: {fileID: 2036257478165319065}
   _titleTMP: {fileID: 2637535133797476957}
-  _descriptionTMP: {fileID: 1913875424372482046}
+  _completeBack: {fileID: 3653429950368121742}
+  _completeTitleTMP: {fileID: 3068983980278658972}
+  _completeDescriptionTMP: {fileID: 1471690218786307879}
+  _completeDayTMP: {fileID: 1346099319398043154}
   _lockBack: {fileID: 2054712877296583999}
   _lockDescriptionTMP: {fileID: 1913875424372482046}

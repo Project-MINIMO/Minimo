@@ -16,6 +16,15 @@ public enum RewardType
     
 }
 
+public enum QuestType
+{
+    Guide,
+    Story,
+    Constellation,
+    Side,
+    Wish
+}
+
 public class QuestManager : ManagerBase
 {
     public List<DetailQuestData> ActiveQuests { get; private set; } = new();

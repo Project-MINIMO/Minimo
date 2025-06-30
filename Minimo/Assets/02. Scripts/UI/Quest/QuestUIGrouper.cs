@@ -11,6 +11,11 @@ public class QuestUIGrouper : MonoBehaviour
     {
         _summaryPanel.OpenPanel();
     }
+
+    public void OpenListPanel()
+    {
+        _listPanel.OpenPanel();
+    }
     
     public void CloseAllExcept(UIBase exceptPanel)
     {

@@ -59,10 +59,11 @@ public class QuestListPanel : UIBase
 
     public override void OpenPanel()
     {
+        _grouper.CloseAllExcept(this);
+        
         base.OpenPanel();
         
         OnClickMenuBtn(0);
-        _grouper.CloseAllExcept(this);
     }
 
     public void UpdateQuest(int questType)
@@ -77,11 +78,11 @@ public class QuestListPanel : UIBase
         _menuBacks[questType].UpdateQuest();
     }
     
-    private int GetQuestType(int questType) => questType switch
+    private int GetQuestType(int questType) => (QuestType)questType switch
     {
-        0 => 0,
-        1 => 0,
-        2 => 1,
+        QuestType.Guide => 0,
+        QuestType.Story => 0,
+        QuestType.Constellation => 1,
         _ => 2
     };
 }

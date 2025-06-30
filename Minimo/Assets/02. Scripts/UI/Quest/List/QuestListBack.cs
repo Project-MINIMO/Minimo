@@ -57,11 +57,11 @@ public class QuestListBack : MonoBehaviour
         }
     }
 
-    private bool CheckQuestType(int questType) => questType switch
+    private bool CheckQuestType(int questType) => (QuestType)questType switch
     {
-        0 => _questIndex == 0,
-        1 => _questIndex == 0,
-        2 => _questIndex == 1,
+        QuestType.Guide => _questIndex == 0,
+        QuestType.Story => _questIndex == 0,
+        QuestType.Constellation => _questIndex == 1,
         _ => _questIndex == 2
     };
 }
