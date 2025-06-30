@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-public class PlantHelper : MonoBehaviour
+
+public class PlantHelper
 {
     private readonly TitleData _titleData = App.GetData<TitleData>();
     private readonly UseCashPanel _useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
@@ -37,19 +37,16 @@ public class PlantHelper : MonoBehaviour
         foreach (var material in materials)
         {
             var item = _titleData.Item[material.ID];
-            Debug.Log(item.Name);
             if (AccountInfo.Instance.Items.TryGetValue(item, out var value))
             {
                 if (value < material.Amount)
                 {
                     lackItems.Add((item, material.Amount - value));
-                    Debug.Log(material.Amount - value);
                 }
             }
             else
             {
                 lackItems.Add((item, material.Amount));
-                Debug.Log(material.Amount);
             }
         }
 

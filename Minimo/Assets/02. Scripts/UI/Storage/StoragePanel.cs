@@ -66,7 +66,6 @@ public class StoragePanel : UIBase
         base.OpenPanel();
 
         OnClickStorageBtn(0);
-        FilterStorageBtns(0);
     }
 
     private void SetString()
@@ -124,5 +123,13 @@ public class StoragePanel : UIBase
         }
         
         _scrollRect.verticalNormalizedPosition = 1;
+    }
+
+    public void Refresh()
+    {
+        foreach (var button in _storageBtns)
+        {
+            button.SetCount();
+        }
     }
 }

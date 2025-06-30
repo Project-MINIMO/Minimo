@@ -41,7 +41,7 @@ public class StorageBtn : MonoBehaviour
         _infoPanel.OpenPanel(this);
     }
 
-    private void SetCount()
+    public void SetCount()
     {
         if (Item == null) return;
         

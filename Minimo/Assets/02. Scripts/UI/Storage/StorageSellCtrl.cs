@@ -108,10 +108,9 @@ public class StorageSellCtrl : MonoBehaviour
 
     private void OnClickSell()
     {
-        if (AccountInfo.Instance.Items.ContainsKey(_item))
-        {
-            AccountInfo.Instance.Items[_item] += -_currentCount;
-        }
+        AccountInfo.Instance.RemoveItem(_item, _currentCount);
+
+        _storagePanel.Refresh();
         
         /*
         var newCurrencyRequest = new CurrencyDTO

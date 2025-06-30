@@ -37,6 +37,18 @@ public class AccountInfo : Singleton<AccountInfo>
     {
         var item = _titleData.Item[id];
         
+        RemoveItem(item, amount);
+    }
+
+    public void RemoveItem(ItemData item, int amount)
+    {
+        if (!Items.ContainsKey(item)) return;
         
+        Items[item] -= amount;
+
+        if (Items[item] <= 0)
+        {
+            Items.Remove(item);
+        }
     }
 }
