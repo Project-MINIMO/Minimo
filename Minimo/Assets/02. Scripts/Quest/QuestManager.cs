@@ -1,29 +1,57 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+public enum ClearType
+{
+    UserLevel,
+    Plant,
+    Harvest,
+    Craft,
+    Wish,
+    Build
+}
+
+public enum RewardType
+{
+    
+}
+
+public enum QuestType
+{
+    Guide,
+    Story,
+    Constellation,
+    Side,
+    Wish
+}
 
 public class QuestManager : ManagerBase
 {
     public List<DetailQuestData> ActiveQuests { get; private set; } = new();
 
-    private QuestPanel _questPanel;
+    private QuestSummaryPanel _questSummaryPanel;
+    private QuestListPanel _questListPanel;
 
     protected override void Awake()
     {
         base.Awake();
 
-        _questPanel = App.GetManager<UIManager>().GetPanel<QuestPanel>();
+        _questSummaryPanel = App.GetManager<UIManager>().GetPanel<QuestSummaryPanel>();
+        _questListPanel = App.GetManager<UIManager>().GetPanel<QuestListPanel>();
     }
     
     public void AddQuest(DetailQuestData quest)
     {
         ActiveQuests.Add(quest);
-        _questPanel.UpdateQuest(quest.Type);
+        _questSummaryPanel.UpdateQuest();
+        _questListPanel.UpdateQuest(quest.Type);
     }
 
     public void RemoveQuest(DetailQuestData quest)
     {
         ActiveQuests.Remove(quest);
-        _questPanel.UpdateQuest(0);
+        
+        _questSummaryPanel.UpdateQuest();
+        _questListPanel.UpdateQuest(quest.Type);
     }
 }

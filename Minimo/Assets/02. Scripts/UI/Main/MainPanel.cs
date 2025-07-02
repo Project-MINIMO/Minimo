@@ -5,25 +5,26 @@ using DG.Tweening;
 
 public class MainPanel : UIBase
 {
-    [SerializeField] private RectTransform _mainRect;
+    [SerializeField] private RectTransform[] _btnRects;
+    [SerializeField] private float _openYPosition = -294;
+    [SerializeField] private float _openSize = 2;
+    [SerializeField] private float _duration = 0.3f;
     
     [SerializeField] private Button _mainBtn;
     [SerializeField] private Button _closeBtn;
-    [SerializeField] private Button _storageBtn;
-    [SerializeField] private Button _buildingBtn;
-    [SerializeField] private Button _minimoBtn;
-    [SerializeField] private Button _friendBtn;
-    [SerializeField] private Button _optionBtn;
     
-    private bool _isOpened = false;
+    private RectTransform _mainRect;
+    private Vector2[] _btnPositions;
+    private float _closeYPosition;
+    
+    private bool _isOpened;
 
     public override void Initialize()
     {
         var screenStateManager = App.GetManager<ScreenStateManager>();
         screenStateManager.CurrentState.Subscribe((currentState) =>
         {
-            var isActive = currentState is ScreenState.Town or ScreenState.Sky;
-            if (isActive)
+            if (currentState is ScreenState.Sky)
             {
                 OpenPanel();
             }
@@ -33,37 +34,76 @@ public class MainPanel : UIBase
             }
         }).AddTo(gameObject);
         
-        _mainBtn.onClick.AddListener(OnClickMain);
-        _closeBtn.onClick.AddListener(()=>
-        {
-            if (!_isOpened) return;
-            OnClickMain();
-        });
+        _mainRect = _mainBtn.GetComponent<RectTransform>();
+        _closeYPosition = _mainRect.anchoredPosition.y;
+        _btnPositions = new Vector2[_btnRects.Length];
 
-        _buildingBtn.onClick.AddListener(() =>
+        for (var i = 0; i < _btnRects.Length; i++)
         {
-            OnClickMain();
-            App.GetManager<UIManager>().GetPanel<BuildingPanel>().OpenPanel();
-        });
-        _storageBtn.onClick.AddListener(() =>
-        {
-            OnClickMain();
-            App.GetManager<UIManager>().GetPanel<StoragePanel>().OpenPanel();
-        });
+            _btnRects[i].GetComponent<Button>().onClick.AddListener(Close);
+            
+            _btnPositions[i] = _btnRects[i].anchoredPosition;
+            _btnRects[i].DOAnchorPos(Vector2.zero, 0).SetEase(Ease.Linear);
+            _btnRects[i].gameObject.SetActive(false);
+        }
+        
+        _mainBtn.onClick.AddListener(Toggle);
+        _closeBtn.onClick.AddListener(Close);
     }
-    
-    private void OnClickMain()
+   
+    private void Toggle()
     {
-        _isOpened = !_isOpened;
+        if (_isOpened)
+        {
+            Close();
+        }
+        else
+        {
+            Open();
+        }
+    }
+
+    private void Open()
+    {
+        if (_isOpened) return;
         
-        _closeBtn.gameObject.SetActive(_isOpened);
+        _isOpened = true;
         _mainRect.DOKill();
-        _mainRect.DOAnchorPosY(_isOpened? 0f : -150f, 0.5f);
+        _mainRect.DOScale(_openSize, _duration).SetEase(Ease.Linear)
+            .OnComplete(() =>
+            {
+                _closeBtn.gameObject.SetActive(true);
+                for (var i = 0; i < _btnRects.Length; i++)
+                {
+                    _btnRects[i].gameObject.SetActive(true);
+                    _btnRects[i].DOAnchorPos(_btnPositions[i], _duration).SetEase(Ease.Linear);
+                }
+            });
         
-        _storageBtn.gameObject.SetActive(_isOpened);
-        _buildingBtn.gameObject.SetActive(_isOpened);
-        _minimoBtn.gameObject.SetActive(_isOpened);
-        _friendBtn.gameObject.SetActive(_isOpened);
-        _optionBtn.gameObject.SetActive(_isOpened);
+        _mainRect.DOAnchorPosY(_openYPosition, _duration).SetEase(Ease.Linear);
+    }
+
+    private void Close()
+    {
+        if (!_isOpened) return;
+        
+        _isOpened = false;
+        _mainRect.DOKill();
+        _mainRect.DOScale(Vector3.one, _duration).SetEase(Ease.Linear)
+            .OnPlay(() =>
+            {
+                foreach (var rect in _btnRects)
+                {
+                    rect.DOKill();
+                    rect.DOAnchorPos(Vector2.zero, 0).SetEase(Ease.Linear);
+                    rect.gameObject.SetActive(false);
+                }
+            })
+            .OnComplete(() =>
+            {
+                _closeBtn.gameObject.SetActive(false);
+            });
+        
+        _mainRect.DOAnchorPosY(_closeYPosition, _duration).SetEase(Ease.Linear);
     }
 }

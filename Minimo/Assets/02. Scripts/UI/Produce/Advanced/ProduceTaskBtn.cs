@@ -79,9 +79,8 @@ public class ProduceTaskBtn : MonoBehaviour
         else if (_produceTask?.CurrentState is ActiveState)
         {
             var useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
-            var currentStarCount = (_produceTask.RemainTime / 30) + 1;
             useCashPanel.OpenPanel(UseCashType.Produce, 
-                currentStarCount, 
+                _produceTask.RemainTime, 
                 ()=>_produceManager.HarvestEarly());
         }
         else if (_produceTask?.CurrentState is CompletedState)

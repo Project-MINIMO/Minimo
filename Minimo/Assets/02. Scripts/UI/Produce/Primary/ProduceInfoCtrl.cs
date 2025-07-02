@@ -40,7 +40,7 @@ public class ProduceInfoCtrl : MonoBehaviour
         }
     }
 
-    private void SetRemainTime(int remainTime)
+    private void SetRemainTime(float remainTime)
     {
         if (_currentOption == null)
         {

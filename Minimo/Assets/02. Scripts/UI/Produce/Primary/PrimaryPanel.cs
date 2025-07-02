@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class PrimaryPanel : UIBase
 {
     [SerializeField] private Button _closeBtn;
+    [SerializeField] private Button _minimoBtn;
     
     [SerializeField] private PlantCtrl _plantCtrl;
     [SerializeField] private ProduceInfoCtrl _infoCtrl;
@@ -12,12 +13,15 @@ public class PrimaryPanel : UIBase
     [SerializeField] private RectTransform _rect;
     
     private ProduceManager _produceManager;
+    private PlaceMinimoPanel _placeMinimoPanel;
 
     public override void Initialize()
     {
         _produceManager = App.GetManager<ProduceManager>();
+        _placeMinimoPanel = App.GetManager<UIManager>().GetPanel<PlaceMinimoPanel>();
 
         _closeBtn.onClick.AddListener(() => _produceManager.DeactiveProduce());
+        _minimoBtn.onClick.AddListener(_placeMinimoPanel.OpenPanel);
     }
  
     public void OpenPanel(ProduceState state)
