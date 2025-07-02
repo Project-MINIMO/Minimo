@@ -13,52 +13,6 @@ public enum ItemType
 }
 
 [Serializable]
-public class QuestData
-{
-    public int ID;
-    public string Name;
-    public int Type;
-    public int Title;
-    public int PreQuestID;
-    public int OpenLevel;
-}
-
-[Serializable]
-public class DetailQuestData
-{
-    public int ID;
-    public int QuestID;
-    public int PreQuestID;
-    public int OpenLevel;
-    public string SubName;
-    public string QuestSubIcon;
-    public int Type;
-    public string Description;
-    public int ClearType1;
-    public int ClearTarget1;
-    public int ClearValue1;
-    public string ClearDesc1;
-    public int ClearType2;
-    public int ClearTarget2;
-    public int ClearValue2;
-    public string ClearDesc2;
-    public int ClearType3;
-    public int ClearTarget3;
-    public int ClearValue3;
-    public string ClearDesc3;
-    public int ResultType;
-    public int RewardType1;
-    public int Reward1ID;
-    public int RewardValue1;
-    public int RewardType2;
-    public int Reward2ID;
-    public int RewardValue2;
-    public int RewardType3;
-    public int Reward3ID;
-    public int RewardValue3;
-}
-
-[Serializable]
 public class CommonData
 {
     public string ID;
@@ -87,6 +41,72 @@ public class ItemData
     public string Name;
 }
 
+[Serializable]
+public class StringData
+{
+    public string ID;
+    public string Korean;
+    public string English;
+    public string Chinese;
+    public string Japanese;
+}
+
+#region Quest
+[Serializable]
+public class QuestData
+{
+    public int ID;
+    public string Name;
+    public int Type;
+    public int Title;
+    public int PreQuestID;
+    public int OpenLevel;
+}
+
+[Serializable]
+public class RawDetailQuestData
+{
+    public int ID;
+    public int Type;
+    public int PreQuestID;
+    public int OpenLevel;
+    public string Name;
+    public int Condition;
+    public string Clear;
+    public string Reward;
+}
+
+[Serializable]
+public class DetailQuestData
+{
+    public int ID;
+    public QuestType Type;
+    public int PreQuestID;
+    public int OpenLevel;
+    public string Name;
+    public QuestCondition Condition;
+    public QuestClear[] Clear;
+    public QuestReward[] Reward;
+}
+
+[Serializable]
+public class QuestClear
+{
+    public ClearType Type;
+    public int Target;
+    public int Amount;
+}
+
+[Serializable]
+public class QuestReward
+{
+    public RewardType Type;
+    public int Target;
+    public int Amount;
+}
+#endregion
+
+#region Produce
 [Serializable]
 public class RawProduceData
 {
@@ -122,16 +142,38 @@ public class ProduceResult
     public int ID;
     public int Amount;
 }
+#endregion
+
+#region UserMinimo
+[Serializable]
+public class UMData
+{
+    public int ID;
+    public int Potential;
+    public int StatType1;
+    public int StatType2;
+    public int StatType3;
+    public string Name;
+}
 
 [Serializable]
-public class StringData
+public class UMStatData
 {
-    public string ID;
-    public string Korean;
-    public string English;
-    public string Chinese;
-    public string Japanese;
+    public int ID;
+    public int StatType;
+    public int Tier;
+    public int Application;
+    public string Name;
 }
+
+[Serializable]
+public class UMStatGrowthData
+{
+    public int ID;
+    public float BaseValue;
+    public float Step;
+}
+#endregion
 
 public class TitleData : DataBase
 {
@@ -142,6 +184,9 @@ public class TitleData : DataBase
     public Dictionary<int, ItemData> Item { get; private set; } = new();
     public Dictionary<int, ProduceData> Produce { get; private set; } = new();
     public Dictionary<string, List<ProduceData>> GroupedProduce { get; private set; } = new();
+    public Dictionary<int, UMData> UserMinimo { get; private set; } = new();
+    public Dictionary<int, UMStatData> UMStat { get; private set; } = new();
+    public Dictionary<int, UMStatGrowthData> UMStatGrowth { get; private set; } = new();
 
     private Dictionary<string, StringData> _string = new();
 
@@ -155,6 +200,9 @@ public class TitleData : DataBase
     private const string BUILDING_PATH = "Data/BuildingData";
     private const string ITEM_PATH = "Data/ItemData";
     private const string PRODUCE_PATH = "Data/ProduceData";
+    private const string UM_PATH = "Data/UMData";
+    private const string UMSTAT_PATH = "Data/UMStatData";
+    private const string UMSTATGROWTH_PATH = "Data/UMStatGrowthData";
     #endregion
 
     protected override void Awake()
@@ -178,6 +226,9 @@ public class TitleData : DataBase
         Building.Clear();
         Item.Clear();
         Produce.Clear();
+        UserMinimo.Clear();
+        UMStat.Clear();
+        UMStatGrowth.Clear();
 
         var stringDataRaw = DataLoader.LoadData<StringData>(STRING_PATH);
         foreach (var data in stringDataRaw)
@@ -191,7 +242,7 @@ public class TitleData : DataBase
             Quest.Add(data.ID, data);
         }
         
-        var detailQuestDataRaw = DataLoader.LoadData<DetailQuestData>(DETAILQUEST_PATH);
+        var detailQuestDataRaw = DataLoader.LoadDataDetailQuest(DETAILQUEST_PATH);
         foreach (var data in detailQuestDataRaw)
         {
             DetailQuest.Add(data.ID, data);
@@ -225,6 +276,25 @@ public class TitleData : DataBase
             .GroupBy(data => data.Building)
             .ToDictionary(data => data.Key, data => data.ToList());
        
+        var userMinimoDataRaw = DataLoader.LoadData<UMData>(UM_PATH);
+        foreach (var data in userMinimoDataRaw)
+        {
+            UserMinimo.Add(data.ID, data);
+        }
+        
+        var umStatDataRaw = DataLoader.LoadData<UMStatData>(UMSTAT_PATH);
+        foreach (var data in umStatDataRaw)
+        {
+            UMStat.Add(data.ID, data);
+        }
+        
+        var umStatGrowthDataRaw = DataLoader.LoadData<UMStatGrowthData>(UMSTATGROWTH_PATH);
+        foreach (var data in umStatGrowthDataRaw)
+        {
+            UMStatGrowth.Add(data.ID, data);
+        }
+        
+        
         _isGameDataLoaded = true;
     }
 

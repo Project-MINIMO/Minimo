@@ -35,9 +35,9 @@ public class ProduceStarBtn : MonoBehaviour
             ()=>_produceManager.HarvestEarly());
     }
 
-    private void SetStarText(int remainTime)
+    private void SetStarText(float remainTime)
     {
-        _currentStarCount = (remainTime / _starValue) + 1;
+        _currentStarCount = (int)(remainTime / _starValue) + 1;
         _starText.text = _currentStarCount.ToString();
     }
 }

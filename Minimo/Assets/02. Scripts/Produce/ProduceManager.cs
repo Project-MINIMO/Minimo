@@ -5,7 +5,7 @@ public class ProduceManager : ManagerBase
 {
     public ProduceObject CurrentProduceObject { get; private set; }
     
-    public ReactiveProperty<int> CurrentRemainTime { get; } = new(-1);
+    public ReactiveProperty<float> CurrentRemainTime { get; } = new(-1);
 
     private float _lastUpdateTime;
     

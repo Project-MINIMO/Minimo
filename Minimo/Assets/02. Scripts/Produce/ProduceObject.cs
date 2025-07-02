@@ -2,6 +2,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UniRx;
 
 public enum ProduceState
 {
@@ -21,6 +22,45 @@ public abstract class ProduceObject : BuildingObject
     
     private float _lastUpdateTime;
     
+    private float _timeRatio = 1f;
+    private float _globalTimeRatio;
+
+    private float _harvestRatio = 1f;
+    private float _globalHarvestRatio;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        var minimoManager = App.GetManager<MinimoManager>();
+        
+        minimoManager
+            .GlobalTimeRatio
+            .Subscribe(value =>
+            {
+                _globalTimeRatio = value;
+                
+                foreach (var task in AllTasks)
+                {
+                    task.ApplyTimeRatio(_timeRatio * _globalTimeRatio); 
+                }
+            })
+            .AddTo(this);
+        
+        minimoManager
+            .GlobalHarvestRatio
+            .Subscribe(value =>
+            {
+                _globalHarvestRatio = value;
+                
+                foreach (var task in AllTasks)
+                {
+                    task.ApplyHarvestRatio(_harvestRatio * _globalHarvestRatio); 
+                }
+            })
+            .AddTo(this);
+    }
+    
     public override void Initialize(BuildingData data)
     {
         base.Initialize(data);
@@ -35,12 +75,12 @@ public abstract class ProduceObject : BuildingObject
 
     protected virtual void Update()
     {
-        if (Time.time - _lastUpdateTime < 1f) return;
-
+        if (Time.time - _lastUpdateTime < 0.1f) return;
+        
         _lastUpdateTime = Time.time;
 
-        if (ActiveTask == null)   return;
-
+        if (ActiveTask == null) return;
+   
         ActiveTask.Update();
         
         if (ActiveTask is { RemainTime: <= 0 })
@@ -51,22 +91,20 @@ public abstract class ProduceObject : BuildingObject
     
     protected virtual void CompleteActiveTask()
     {
-        ActiveTask.Harvest();
+        ActiveTask.ChangeState(CompletedState.Instance);
         SetNextActiveTask();
     }
     
-    private void SetNextActiveTask()
+    protected void SetNextActiveTask()
     {
-        if (ActiveTask != null)
-        {
-            return;
-        }
-        
-        var pendingTask = AllTasks.FirstOrDefault(task => task.CurrentState is PendingState);
-        pendingTask?.ChangeState(ActiveState.Instance);
+        if (ActiveTask != null) return;
+
+        AllTasks
+            .FirstOrDefault(task => task.CurrentState is PendingState)
+            ?.ChangeState(ActiveState.Instance);
     }
 
-    public void StartPlant(ProduceData option)
+    public virtual void StartPlant(ProduceData option)
     {
         if (!ProduceData.Contains(option)) return;
 
@@ -81,6 +119,8 @@ public abstract class ProduceObject : BuildingObject
 
     protected virtual void OnPlant(ProduceTask task, int optionIndex)
     {
+        task.ApplyTimeRatio(_timeRatio * _globalTimeRatio);
+        task.ApplyHarvestRatio(_harvestRatio * _globalHarvestRatio); 
         AllTasks.Add(task);
         Debug.Log($"ProduceTask Added : {task.Data.ResultItems[0].ID}");
         SetNextActiveTask();
@@ -91,17 +131,17 @@ public abstract class ProduceObject : BuildingObject
         for (var i = AllTasks.Count - 1; i >= 0; i--)
         {
             var task = AllTasks[i];
-            if (task.CurrentState is CompletedState)
-            {
-                task.Harvest();
-                AllTasks.RemoveAt(i);
-            }
+            if (task.CurrentState is not CompletedState) continue;
+            
+            task.ChangeState(EndState.Instance);
+            AllTasks.RemoveAt(i);
         }
     }
 
     public virtual void HarvestEarly()
     {
-        ActiveTask?.Harvest();
+        ActiveTask?.ChangeState(CompletedState.Instance);
+        SetNextActiveTask();
     }
 
     public override void OnClickUp()
@@ -113,6 +153,28 @@ public abstract class ProduceObject : BuildingObject
             _produceManager.ActiveProduce(this);
         }
     }
+    
+    #region Apply Minimo Abilities
+    public void ApplyTimeRatio(float value)
+    {  
+        _timeRatio = 1 - value / 100;
+        
+        foreach (var task in AllTasks)
+        {
+            task.ApplyTimeRatio(_timeRatio * _globalTimeRatio);
+        }
+    }
+    
+    public void ApplyHarvestRatio(float value)
+    {  
+        _harvestRatio = 1 - value / 100;
+        
+        foreach (var task in AllTasks)
+        {
+            task.ApplyHarvestRatio(_harvestRatio * _globalHarvestRatio);
+        }
+    }
+    #endregion
 
     public abstract void OpenUI();
     public abstract void CloseUI();

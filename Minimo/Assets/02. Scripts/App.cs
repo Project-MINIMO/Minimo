@@ -88,4 +88,15 @@ public class App : Singleton<App>
 
         UnityEngine.SceneManagement.SceneManager.LoadScene((int)sceneName);
     }
+    
+    public static void LogBox(string titleColor, string title, Dictionary<string, string> contents)
+    {
+        Debug.Log("┌────────────────────────────────────────────┐");
+        Debug.Log($"│ <color={titleColor}><b>{title}</b></color> ");
+        foreach (var pair in contents)
+        {
+            Debug.Log($"│ <color={titleColor}>▶</color> <b>{pair.Key}</b> : {pair.Value}");
+        }
+        Debug.Log("└────────────────────────────────────────────┘");
+    }
 }

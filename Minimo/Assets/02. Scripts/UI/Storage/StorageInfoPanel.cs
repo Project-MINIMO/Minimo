@@ -32,21 +32,18 @@ public class StorageInfoPanel : UIBase
         SetInfo(storageBtn.Item);
         _sellCtrl.Initialize(storageBtn.Item);
         
-        Debug.Log(storageBtn.SibilingsIndex);
-        Debug.Log(storageBtn.Position.y);
-        
-        var newPosition = new Vector2(GetPositionBySiblingIndex(storageBtn.SibilingsIndex), 0);
-        _infoRect.anchoredPosition = newPosition;
+        //var newPosition = new Vector2(GetPositionBySiblingIndex(storageBtn.SibilingsIndex), 0);
+        //_infoRect.anchoredPosition = newPosition;
 
-        newPosition = new Vector2(_infoRect.position.x, storageBtn.Position.y - 100);
-        _infoRect.position = newPosition;
+        //newPosition = new Vector2(_infoRect.position.x, storageBtn.Position.y - 100);
+        //_infoRect.position = newPosition;
     }
 
     private void SetInfo(ItemData item)
     {
         _nameTMP.text = _titleData.GetString(item.Name);
         _descriptionTMP.text = _titleData.GetString(item.Name);
-        _iconImg.sprite = null;//item.Icon;
+        _iconImg.sprite = Resources.Load<Sprite>($"Item/{item.Name}");
     }
 
     private int GetPositionBySiblingIndex(int index) => index switch
