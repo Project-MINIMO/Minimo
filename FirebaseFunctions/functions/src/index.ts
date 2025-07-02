@@ -8,14 +8,14 @@
  */
 
 import * as functions from "firebase-functions/v1";
-import {onRequest, onCall, HttpsError} from "firebase-functions/v2/https";
+import {onCall, HttpsError} from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
 import {UserData} from "./types/user";
 
 admin.initializeApp();
 
-export const helloWorld = onRequest((request, response) => {
-  response.send("Hello from Firebase!");
+export const helloWorld = onCall((data, context) => {
+  return {message: "Hello from Firebase! - onCall"};
 });
 
 // Firestore 테스트 함수

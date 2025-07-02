@@ -16,6 +16,9 @@ public class FirebaseFunctionsManager : ManagerBase
     {
         base.Awake();
         functions = FirebaseFunctions.DefaultInstance;
+#if USE_EMULATOR
+        functions.UseFunctionsEmulator("http://localhost:4000");
+#endif
     }
 
     /// <summary>

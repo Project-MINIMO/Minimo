@@ -19,6 +19,10 @@ public class FirebaseUnitTest : MonoBehaviour
     private const string TEST_EMAIL = "test@example.com";
     private const string TEST_PASSWORD = "test123456";
     private const string TEST_DISPLAY_NAME = "Test User";
+    
+    [SerializeField] bool runAuthTest = true;
+    [SerializeField] bool runFunctionsTest = true;
+    [SerializeField] bool runFirestoreTest = true;
 
     /// <summary>
     /// 테스트 시작 시 호출되는 메서드
@@ -63,11 +67,6 @@ public class FirebaseUnitTest : MonoBehaviour
         authManager.OnUserSignedIn += (user) => Debug.Log($"사용자 로그인: {user.DisplayName}");
         authManager.OnUserSignedOut += () => Debug.Log("사용자 로그아웃");
         authManager.OnError += (error) => Debug.LogError($"인증 오류: {error}");
-
-        // 테스트 시작 (필요한 테스트 선택)
-        bool runAuthTest = true;
-        bool runFunctionsTest = true;
-        bool runFirestoreTest = true;
 
         if (runAuthTest)
         {
@@ -155,7 +154,7 @@ public class FirebaseUnitTest : MonoBehaviour
         
         // 2.5 GetAccountInfo FireFunction Test
         Debug.Log("2.5. 사용자 정보 가져오기 테스트...");
-        // TODO
+        
 
         // 3. 프로필 업데이트 테스트
         Debug.Log("3. 사용자 프로필 업데이트 테스트...");
