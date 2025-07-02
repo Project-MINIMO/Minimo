@@ -1,112 +1,89 @@
 using UnityEngine;
+
 using Random = System.Random;
 
 public class ProduceTask
 {
     public ProduceData Data { get; }
-    public float OriginalTime { get; }
-    public float RemainTime => Mathf.Max(0, _modifiedTime - _elapsedTime);
     public ITaskState CurrentState { get; private set; }
     
-    private readonly Random _random = new();
-
+    public float RemainTime => Mathf.Max(0, _modifiedTime - ElapsedTime);
+    public float ModifiedTime => _isModifiedDirty ? RecalculateModifiedTime() : _modifiedTime;
+    private float ElapsedTime => CurrentState is ActiveState activeState ? activeState.ElapsedTime : 0;
+    
+    public float HarvestRatio { get; private set; }
+    
     private readonly float _maxReducedTime;
+    private readonly float _baseTime;
+    
     private float _reducedTime;
     private float _modifiedTime;
-    private float _elapsedTime;
+    private float _timeRatio;
     
-    private float _reductionRatio;
-    private float _harvestRatio;
+    private bool _isModifiedDirty = true;
     
     public ProduceTask(ProduceData produceOption)
     {
         Data = produceOption;
         
-        OriginalTime = produceOption.Time;
+        _baseTime = produceOption.Time;
         _reducedTime = produceOption.Time;
-        _modifiedTime = OriginalTime;
+        _modifiedTime = _baseTime;
 
-        _maxReducedTime = OriginalTime * (App.GetData<TitleData>().Common["ProdTimeReduceCap"] / 100f);
-        
-        CurrentState = PendingState.Instance;
-    }
+        _maxReducedTime = _baseTime * (1 - App.GetData<TitleData>().Common["ProdTimeReduceCap"] / 100f);
 
-    public void Update()
-    {
-        CurrentState.OnUpdate(this);
+        ChangeState(PendingState.Instance);
     }
     
+    public void ChangeState(ITaskState newState)
+    {
+        CurrentState?.OnExit(this);
+        CurrentState = newState;
+        CurrentState.OnEnter(this);
+    }
+    
+    public void Update() => CurrentState.OnUpdate(this);
+    
+    private float RecalculateModifiedTime()
+    {
+        _modifiedTime = Mathf.Max(_maxReducedTime, _reducedTime * _timeRatio);
+        _isModifiedDirty = false;
+        
+        return _modifiedTime;
+    }
+
+    #region Apply Minimo Abilities
     public void ApplyTimeRatio(float reductionRatio)
     {
-        _reductionRatio = reductionRatio;
-        _modifiedTime = Mathf.Max(_maxReducedTime, _reducedTime * _reductionRatio);
+        _timeRatio = reductionRatio;
+        _isModifiedDirty = true;
         
-        Debug.Log($"\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510");
-        Debug.Log($"\u2502 <color=red>[1] \u25b6</color> <b>원본 생산 시간</b> : {OriginalTime}");
-        Debug.Log($"\u2502 <color=red>[3] \u25b6</color> <b>수정된 생산 시간 (원본 - 감소(초))</b> : {_reducedTime}");
-        Debug.Log($"\u2502 <color=red>[2] \u25b6</color> <b>생산 시간 감소 비율</b> : {_reductionRatio}");
-        Debug.Log($"\u2502 <color=red>[4] \u25b6</color> <b>최종 생산 시간 (수정된 생산 시간 * 감소 비율)</b> : {_reducedTime * reductionRatio}");
-        Debug.Log($"\u2502 <color=red>[4] \u25b6</color> <b>최종 생산 시간 (캡값 적용)</b> : {_modifiedTime}");
-        Debug.Log($"\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518");
+        App.LogBox("red", "생산 시간 로그", new()
+        {
+            { "원본 생산 시간", _baseTime.ToString() },
+            { "수정된 생산 시간", _reducedTime.ToString() },
+            { "생산 시간 감소 비율", _timeRatio.ToString() },
+            { "최종 생산 시간 (비율 적용)", (_reducedTime * _timeRatio).ToString() },
+            { "최종 생산 시간 (캡값 적용)", _modifiedTime.ToString() }
+        });
     }
 
     public void ApplyTimeReduction(float reductionAmount)
     {
-        _reducedTime = Mathf.Max(0, OriginalTime - reductionAmount);
-        _modifiedTime = Mathf.Max(_maxReducedTime, _reducedTime * _reductionRatio);
+        _reducedTime = Mathf.Max(0, _baseTime - reductionAmount);
+        _isModifiedDirty = true;
     }
 
     public void ApplyHarvestRatio(float harvestRatio)
     {
-        _harvestRatio = 1f - harvestRatio;
+        HarvestRatio = 1f - harvestRatio;
     }
-    
-    public void ReduceRemainTime(float amount)
-    {
-        _elapsedTime += amount;
-    }
-
-    public void Exit()
-    {
-        CurrentState.OnExit(this);
-    }
-
-    public void ChangeState(ITaskState newState)
-    {
-        CurrentState = newState;
-    }
-
-    public void Harvest()
-    {
-        Debug.Log($"Harvested: {Data.ResultItems[0].ID}");
-        
-        var result = Data.ResultItems[0];
-        var amount = result.Amount;
-
-        var bonus = 0;
-        for (var i = 1; i <= amount; i++)
-        {
-            if (_random.NextDouble() < _harvestRatio)
-            {
-                bonus++;
-            }
-        }
-        
-        var finalAmount = amount + bonus;
-        
-        AccountInfo.Instance.AddItem(result.ID, finalAmount);
-        
-        Debug.Log($"\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510");
-        Debug.Log($"\u2502 <color=yellow>[1] \u25b6</color> <b>기존 수확량</b> : {amount}");
-        Debug.Log($"\u2502 <color=yellow>[2] \u25b6</color> <b>추가 생산 확률</b> : {_harvestRatio}");
-        Debug.Log($"\u2502 <color=yellow>[3] \u25b6</color> <b>추가 수확량</b> : {bonus}");
-        Debug.Log($"\u2502 <color=yellow>[4] \u25b6</color> <b>최종 수확량</b> : {finalAmount}");
-        Debug.Log($"\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518");
-    }
+    #endregion
 }
 
 public interface ITaskState
 {
+    void OnEnter(ProduceTask produceTask);
     void OnUpdate(ProduceTask task);
     void OnExit(ProduceTask task);
 }
@@ -116,25 +93,31 @@ public class PendingState : ITaskState
     public static readonly PendingState Instance = new();
     private PendingState() { }
     
+    public void OnEnter(ProduceTask task) { }
     public void OnUpdate(ProduceTask task) { }
-
     public void OnExit(ProduceTask task) { }
 }
 
 public class ActiveState : ITaskState
 {
+    public float ElapsedTime { get; private set; }
+
     public static readonly ActiveState Instance = new();
     private ActiveState() { }
     
+    public void OnEnter(ProduceTask task)
+    {
+        ElapsedTime = 0f;
+    }
+    
     public void OnUpdate(ProduceTask task)
     {
-        task.ReduceRemainTime(0.1f);
+        ElapsedTime += 0.1f;
     }
 
     public void OnExit(ProduceTask task)
     {
-        task.ReduceRemainTime(task.RemainTime);
-        task.ChangeState(CompletedState.Instance);
+        ElapsedTime = task.ModifiedTime;
     }
 }
 
@@ -144,12 +127,40 @@ public class CompletedState : ITaskState
 
     private CompletedState() { }
     
+    public void OnEnter(ProduceTask task) { }
     public void OnUpdate(ProduceTask task) { }
-
     public void OnExit(ProduceTask task)
     {
-        task.Harvest();
-        task.ChangeState(EndState.Instance);
+        TryHarvest(task);
+    }
+    
+    private void TryHarvest(ProduceTask task)
+    {
+        var result = task.Data.ResultItems[0];
+        var bonus = CalculateBonus(result.Amount, task.HarvestRatio);
+
+        AccountInfo.Instance.AddItem(result.ID, result.Amount + bonus);
+        
+        App.LogBox("yellow", "생산물 추가 수확 로그", new()
+        {
+            { "기존 수확량", result.Amount.ToString() },
+            { "추가 생산 확률", task.HarvestRatio.ToString() },
+            { "추가 수확량", bonus.ToString() },
+            { "최종 수확량", (result.Amount + bonus).ToString() },
+        });
+    }
+
+    private int CalculateBonus(int amount, float chance)
+    {
+        var random = new Random();
+        var bonus = 0;
+        
+        for (var i = 0; i < amount; i++)
+        {
+            if (random.NextDouble() < chance) bonus++;
+        }
+        
+        return bonus;
     }
 }
 
@@ -158,7 +169,7 @@ public class EndState : ITaskState
     public static readonly EndState Instance = new();
     private EndState() { }
     
+    public void OnEnter(ProduceTask task) { }
     public void OnUpdate(ProduceTask task) { }
-
     public void OnExit(ProduceTask task) { }
 }

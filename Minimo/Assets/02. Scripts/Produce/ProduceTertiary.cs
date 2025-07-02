@@ -40,7 +40,7 @@ public class ProduceTertiary : ProduceAdvanced
         if (!AllTasks.Contains(task)) return;
         if (task.CurrentState is not CompletedState) return;
         
-        task.Harvest();
+        task.ChangeState(EndState.Instance);
         AllTasks.Remove(task);
     }
     
@@ -48,7 +48,7 @@ public class ProduceTertiary : ProduceAdvanced
     {
         var activeTask = ActiveTask;
         
-        ActiveTask?.Exit();
+        ActiveTask?.ChangeState(CompletedState.Instance);
         SetNextActiveTask();
         
         AllTasks.Remove(activeTask);
