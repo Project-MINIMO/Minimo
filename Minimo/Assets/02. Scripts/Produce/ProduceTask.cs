@@ -10,7 +10,7 @@ public class ProduceTask
     
     private readonly Random _random = new();
 
-    private float _maxReducedTime;
+    private readonly float _maxReducedTime;
     private float _reducedTime;
     private float _modifiedTime;
     private float _elapsedTime;

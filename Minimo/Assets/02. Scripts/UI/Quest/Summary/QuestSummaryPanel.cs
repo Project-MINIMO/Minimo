@@ -31,6 +31,8 @@ public class QuestSummaryPanel : UIBase
     {
         var existingInfos = GetComponentsInChildren<QuestSummaryInfo>(true);
         
+        Debug.Log(_questManager == null);
+        Debug.Log(_questManager.ActiveQuests == null);
         var quests = _questManager.ActiveQuests.OrderBy(x => x.ID).ToList();
   
         var i = 0;
