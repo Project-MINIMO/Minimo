@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
-using TMPro;
+
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+using TMPro;
 
 public class QuestSubmissionPanel : UIBase
 {
-
-    
     [Serializable]
     public struct RewardInfo
     {
@@ -32,6 +32,10 @@ public class QuestSubmissionPanel : UIBase
     
     [SerializeField] private Button _cancelBtn;
     [SerializeField] private Button _submitBtn;
+    
+    [SerializeField] private CanvasGroup _canvasGroup;
+    [SerializeField] private CanvasGroup _canvasGroup2;
+    [SerializeField] private RectTransform _canvasRect;
 
     private TitleData _titleData;
     private DetailQuestData _questData;
@@ -56,24 +60,57 @@ public class QuestSubmissionPanel : UIBase
   
         _closeBtn.onClick.AddListener(() =>
         {
-            if (_questData.Type == QuestType.Constellation)
+            ClosePanel(() =>
             {
-                _consPanel.OpenPanel(_questData);
-            }
-            else
-            {
-                _grouper.OpenListPanel();
-            }
-        
-            ClosePanel();
+                if (_questData.Type == QuestType.Constellation)
+                {
+                    _consPanel.OpenPanel2(_questData);
+                }
+                else
+                {
+                    _grouper.OpenListPanel();
+                }
+            });
         });
+    }
+
+    public override void OpenPanel()
+    {
+        _canvasGroup2.alpha = 0;
+        _canvasGroup2.blocksRaycasts = false;
+        
+        base.OpenPanel();  
+        
+        _canvasGroup2.alpha = 1;
+        _canvasGroup.alpha = 0;
+        _canvasRect.anchoredPosition = new Vector2(120, 0);
+        _canvasRect.DOAnchorPosX(160, 0.3f).SetEase(Ease.Linear);
+        _canvasGroup.DOFade(1, 0.3f).SetEase(Ease.Linear)
+            .OnComplete(() =>
+            {
+                _canvasGroup2.blocksRaycasts = true;
+            });
+    }
+   
+    public void ClosePanel(Action callback = null)
+    {
+        _canvasGroup2.blocksRaycasts = false;
+        _canvasRect.anchoredPosition = new Vector2(160, 0);
+        _canvasRect.DOAnchorPosX(120, 0.3f).SetEase(Ease.Linear);
+        _canvasGroup.DOFade(0, 0.3f).SetEase(Ease.Linear)
+            .OnComplete(() =>
+            {
+                _canvasGroup2.blocksRaycasts = true;
+                callback?.Invoke();
+                base.ClosePanel();
+            });
     }
 
     public void OpenPanel(DetailQuestData questData)
     {
         _grouper.CloseAllExcept(this);
         
-        base.OpenPanel();
+        OpenPanel();
 
         _questData = questData;
         

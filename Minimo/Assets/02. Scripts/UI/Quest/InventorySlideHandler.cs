@@ -12,6 +12,9 @@ public class InventorySlideHandler : MonoBehaviour, IBeginDragHandler, IDragHand
 
     private Vector2 _dragStartPos;
     private Vector2 _imageStartPos;
+    
+    private float _prevDragY;
+    private float _lastDragDelta;
 
     private void OnEnable()
     {
@@ -22,17 +25,23 @@ public class InventorySlideHandler : MonoBehaviour, IBeginDragHandler, IDragHand
     {
         _dragStartPos = eventData.position;
         _imageStartPos = _targetRect.anchoredPosition;
+        _prevDragY = _dragStartPos.y;
+        _lastDragDelta = 0f;
         
         _targetRect.DOKill();
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        var deltaY = eventData.position.y - _dragStartPos.y;
+        var currentY = eventData.position.y;
+        var deltaY = currentY - _dragStartPos.y;
         var unclampedY = _imageStartPos.y + deltaY;
         var targetY = Mathf.Clamp(unclampedY, _minY - _outerMargin, _maxY + _outerMargin);
 
         _targetRect.anchoredPosition = new Vector2(_imageStartPos.x, targetY);
+
+        _lastDragDelta = currentY - _prevDragY;
+        _prevDragY = currentY;
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -46,6 +55,10 @@ public class InventorySlideHandler : MonoBehaviour, IBeginDragHandler, IDragHand
         else if (currentY < _minY && currentY >= _minY - _outerMargin)
         {
             SnapTo(_minY);
+        }
+        else
+        {
+            SnapTo(_lastDragDelta > 0f ? _maxY : _minY);
         }
     }
     
