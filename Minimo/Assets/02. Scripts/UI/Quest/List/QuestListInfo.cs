@@ -42,7 +42,7 @@ public class QuestListInfo : MonoBehaviour
         _questData = _titleData.Quest[data.ID / 10];
         _detailData = data;
         
-        if (data.Type == (int)QuestType.Constellation)
+        if (data.Type == QuestType.Constellation)
         {
             var questTitle = _titleData.Quest[data.ID / 10].Name;
             _titleTMP.text = _titleData.GetString(questTitle);

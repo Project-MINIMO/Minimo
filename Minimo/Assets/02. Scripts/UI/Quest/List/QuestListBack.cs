@@ -57,7 +57,7 @@ public class QuestListBack : MonoBehaviour
         }
     }
 
-    private bool CheckQuestType(int questType) => (QuestType)questType switch
+    private bool CheckQuestType(QuestType questType) => questType switch
     {
         QuestType.Guide => _questIndex == 0,
         QuestType.Story => _questIndex == 0,

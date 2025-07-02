@@ -66,7 +66,7 @@ public class QuestListPanel : UIBase
         OnClickMenuBtn(0);
     }
 
-    public void UpdateQuest(int questType)
+    public void UpdateQuest(QuestType questType)
     {
         var index = GetQuestType(questType);
         
@@ -75,10 +75,10 @@ public class QuestListPanel : UIBase
             _alertObjs[index].SetActive(true);
         }
         
-        _menuBacks[questType].UpdateQuest();
+        _menuBacks[index].UpdateQuest();
     }
     
-    private int GetQuestType(int questType) => (QuestType)questType switch
+    private int GetQuestType(QuestType questType) => questType switch
     {
         QuestType.Guide => 0,
         QuestType.Story => 0,

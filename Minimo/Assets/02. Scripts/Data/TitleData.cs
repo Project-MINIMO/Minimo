@@ -80,11 +80,11 @@ public class RawDetailQuestData
 public class DetailQuestData
 {
     public int ID;
-    public int Type;
+    public QuestType Type;
     public int PreQuestID;
     public int OpenLevel;
     public string Name;
-    public int Condition;
+    public QuestCondition Condition;
     public QuestClear[] Clear;
     public QuestReward[] Reward;
 }

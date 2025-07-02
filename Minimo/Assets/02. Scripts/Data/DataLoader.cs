@@ -106,11 +106,11 @@ public class DataLoader
         return rawList.Select(raw => new DetailQuestData
             {
                 ID            = raw.ID,
-                Type          = raw.Type,
+                Type          = (QuestType)raw.Type,
                 PreQuestID    = raw.PreQuestID,
                 OpenLevel     = raw.OpenLevel,
                 Name          = raw.Name,
-                Condition     = raw.Condition,
+                Condition     = (QuestCondition)raw.Condition,
                 Clear         = ParseClear(raw.Clear),
                 Reward        = ParseReward(raw.Reward),
             })

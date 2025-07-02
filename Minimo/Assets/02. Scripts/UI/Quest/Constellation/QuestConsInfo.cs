@@ -27,13 +27,13 @@ public class QuestConsInfo : MonoBehaviour
     private DetailQuestData _detailQuestData;
     private TitleData _titleData;
     private QuestManager _questManager;
-    private QuestSubmissionPanel _submissionPanel;
+    private QuestConsPanel _consPanel;
     
     private void Awake()
     {
         _titleData = App.GetData<TitleData>();
         _questManager = App.GetManager<QuestManager>();
-        _submissionPanel = App.GetManager<UIManager>().GetPanel<QuestSubmissionPanel>();
+        _consPanel = App.GetManager<UIManager>().GetPanel<QuestConsPanel>();
         
         _infoBtn.onClick.AddListener(OnClickInfoBtn);
     }
@@ -58,7 +58,7 @@ public class QuestConsInfo : MonoBehaviour
 
     private void OnClickInfoBtn()
     {
-        _submissionPanel.OpenPanel(_detailQuestData);
+        _consPanel.OpenSubmissionPanel(_detailQuestData);
     }
     
     private QuestState GetQuestState()
