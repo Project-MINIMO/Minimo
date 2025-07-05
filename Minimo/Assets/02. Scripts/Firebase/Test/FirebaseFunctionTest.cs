@@ -49,9 +49,18 @@ public class FirebaseFunctionTest : MonoBehaviour
         var uid = _auth.CurrentUser.UserId;
         Debug.Log("Current User ID: " + uid);
         FetchUserData(uid);
+        
+        // Delete Current User
+        await _auth.CurrentUser.DeleteAsync().ContinueWithOnMainThread(task => {
+            if (task.IsFaulted) {
+                Debug.LogError("Error deleting user: " + task.Exception);
+            } else {
+                Debug.Log("User deleted successfully.");
+            }
+        });
     }
 
-    public void FetchUserData(string uid)
+    private void FetchUserData(string uid)
     {
         var db = FirebaseFirestore.DefaultInstance;
         var docRef = db.Collection("users").Document(uid);
