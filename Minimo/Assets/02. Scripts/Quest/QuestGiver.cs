@@ -30,7 +30,6 @@ public abstract class QuestGiver : InteractObject
 
         if (IsInUpperHalfOfScreen(transform))
         {
-            Debug.Log("_eventTriggered");
             _eventTriggered = true;
             App.GetManager<QuestManager>().AddQuest(_questData);
         }
