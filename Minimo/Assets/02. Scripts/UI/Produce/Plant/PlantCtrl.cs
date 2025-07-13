@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class PlantCtrl : MonoBehaviour
 {
-    private PlantOptionSlot[] _plantOptionSlots;
+    private PlantHandler[] _plantHandlers;
     private ProduceManager _produceManager;
 
     private void Awake()
     {
-        _plantOptionSlots = GetComponentsInChildren<PlantOptionSlot>(true);
+        _plantHandlers = GetComponentsInChildren<PlantHandler>(true);
         _produceManager = App.GetManager<ProduceManager>();
     }
 
@@ -30,13 +30,13 @@ public class PlantCtrl : MonoBehaviour
         for (; i < options.Count; i++) 
         {
             var option = options[i];
-            _plantOptionSlots[i].gameObject.SetActive(true);
-            _plantOptionSlots[i].SetOption(option);
+            _plantHandlers[i].gameObject.SetActive(true);
+            _plantHandlers[i].SetOption(option);
         }
 
-        for (; i < _plantOptionSlots.Length; i++) 
+        for (; i < _plantHandlers.Length; i++) 
         {
-            _plantOptionSlots[i].gameObject.SetActive(false);
+            _plantHandlers[i].gameObject.SetActive(false);
         }
     }
 }

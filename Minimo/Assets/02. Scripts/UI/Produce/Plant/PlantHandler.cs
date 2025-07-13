@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -14,6 +15,10 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     }
     
     [SerializeField] private PlantType _plantType;
+    
+    [SerializeField] private Image _itemImg;
+    [SerializeField] private TextMeshProUGUI _amountTMP;
+    
     private LayerMask _targetLayerMask;
     
     private RectTransform _rect;
@@ -22,11 +27,14 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     
     private Vector3 _startPosition;
 
+    private TitleData _titleData;
     private ProduceData _currentOption;
     private ProduceManager _produceManager;
     
-    private void Start()
+    private void Awake()
     {
+        _titleData = App.GetData<TitleData>();
+        
         _targetLayerMask = LayerMask.GetMask("InteractObject");
         _produceManager = App.GetManager<ProduceManager>();
         
@@ -40,11 +48,27 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     public void SetOption(ProduceData option)
     {
         _currentOption = option;
+        
+        SetResultInfo(option.ResultItems[0]);
+    }
+    
+    private void SetResultInfo(ProduceResult result)
+    {
+        if (!_titleData.Item.TryGetValue(result.ID, out var itemData))
+        {
+            Debug.LogError($"Cannot find item data with code : {result.ID}");
+            return;
+        }
+        
+        _itemImg.sprite = Resources.Load<Sprite>($"Item/{itemData.Name}");
+        _amountTMP.text = result.Amount.ToString();
     }
     
     public void OnBeginDrag(PointerEventData eventData)
     {
         _image.raycastTarget = false;
+        
+        _amountTMP.gameObject.SetActive(false);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -79,5 +103,7 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 currentObject.StartPlant(_currentOption);
             }
         }
+        
+        _amountTMP.gameObject.SetActive(true);
     }
 }

@@ -6,7 +6,6 @@ public class PlantOptionSlot : MonoBehaviour
 {
     [SerializeField] private Image _itemImg;
     [SerializeField] private TextMeshProUGUI _amountTMP;
-    [SerializeField] private TextMeshProUGUI _storageTMP;
     
     private TitleData _titleData;
     [SerializeField] private PlantHandler _plantHandler;
@@ -22,16 +21,6 @@ public class PlantOptionSlot : MonoBehaviour
         _plantHandler.SetOption(optionData);
         
         SetResultInfo(optionData.ResultItems[0]);
-
-        var item = _titleData.Item[optionData.ResultItems[0].ID];
-        if (AccountInfo.Instance.Items.TryGetValue(item, out var value))
-        {
-            _storageTMP.text = value.ToString();
-        }
-        else
-        {
-            _storageTMP.text = "0";
-        }
     }
 
     private void SetResultInfo(ProduceResult result)
