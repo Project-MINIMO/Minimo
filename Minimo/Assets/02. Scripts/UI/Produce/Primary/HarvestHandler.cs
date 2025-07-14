@@ -7,6 +7,8 @@ public class HarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     [SerializeField] private RectTransform _rect;
     [SerializeField] private Image _image;
     
+    private ProduceManager _produceManager;
+    
     private Canvas _canvas;
     private LayerMask _targetLayerMask;
     
@@ -15,7 +17,8 @@ public class HarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     private void Start()
     {
         _targetLayerMask = LayerMask.GetMask("InteractObject");
-  
+        _produceManager = App.GetManager<ProduceManager>();
+        
         _canvas = GetComponentInParent<Canvas>();
         
         _startPosition = _rect.anchoredPosition;
@@ -30,11 +33,11 @@ public class HarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     {
         _rect.anchoredPosition += eventData.delta / _canvas.scaleFactor;
 
-        Vector2 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Collider2D hit = Physics2D.OverlapPoint(worldPosition, _targetLayerMask);
+        var worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var hit = Physics2D.OverlapPoint(worldPosition, _targetLayerMask);
         if (hit != null && hit.TryGetComponent<ProducePrimary>(out var component))
         {
-            component.StartHarvest();
+            _produceManager.Harvest(component);
         }
     }
 

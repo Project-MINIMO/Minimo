@@ -4,8 +4,9 @@ using TMPro;
 
 public class ItemInfoUpdater : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _infoTMP;
-    [SerializeField] private Image _infoImage;
+    [SerializeField] private TextMeshProUGUI _itemNameTMP;
+    [SerializeField] private TextMeshProUGUI _itemCountTMP;
+    [SerializeField] private Image _iconImg;
     
     private TitleData _titleData;
     
@@ -16,36 +17,54 @@ public class ItemInfoUpdater : MonoBehaviour
 
     public void SetItem(ProduceTask produceTask)
     {
-        var item = produceTask.Data.ResultItems[0];
-        
-        if (!_titleData.Item.TryGetValue(item.ID, out var itemData))
+        SetItem(produceTask.Data.ResultItems[0]);
+    }
+
+    public void SetItem(ProduceData data)
+    {
+        SetItem(data.ResultItems[0]);
+    }
+
+    private void SetItem(ProduceResult result)
+    {
+        if (!_titleData.Item.TryGetValue(result.ID, out var itemData))
         {
-            Debug.LogError($"Cannot find item data with code : {item.ID}");
+            Debug.LogError($"Cannot find item data with code : {result.ID}");
             return;
         }
 
-        if (_infoTMP)
+        if (_itemNameTMP)
         {
-            _infoTMP.text = _titleData.GetString($"STR_ITEM_{itemData.Name.ToUpper()}_NAME");
+            _itemNameTMP.text = _titleData.GetString($"STR_ITEM_{itemData.Name.ToUpper()}_NAME");
         }
 
-        if (_infoImage)
+        if (_itemCountTMP)
         {
-            _infoImage.sprite = Resources.Load<Sprite>($"Item/{itemData.Name}");
-            _infoImage.gameObject.SetActive(true);
+            _itemCountTMP.text = result.Amount.ToString();
+        }
+
+        if (_iconImg)
+        {
+            _iconImg.sprite = Resources.Load<Sprite>($"Item/{itemData.Name}");
+            _iconImg.gameObject.SetActive(true);
         }
     }
     
     public void SetItemEmpty()
     {
-        if (_infoTMP)
+        if (_itemNameTMP)
         {
-            _infoTMP.text = string.Empty;
+            _itemNameTMP.text = string.Empty;
+        }
+        
+        if (_itemCountTMP)
+        {
+            _itemCountTMP.text = string.Empty;
         }
 
-        if (_infoImage)
+        if (_iconImg)
         {
-            _infoImage.sprite = null;
+            _iconImg.sprite = null;
         }
     }
 }

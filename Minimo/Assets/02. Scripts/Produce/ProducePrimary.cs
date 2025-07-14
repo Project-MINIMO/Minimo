@@ -92,7 +92,7 @@ public class ProducePrimary : ProduceObject
         }
     }
 
-    public override void StartPlant(ProduceData option)
+    internal override void StartPlant(ProduceData option)
     {
         if (AllTasks.Count > 0)
         {
@@ -118,21 +118,14 @@ public class ProducePrimary : ProduceObject
         _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
     }
     
-    public override void StartHarvest()
+    internal override void StartHarvest()
     {
         base.StartHarvest();
 
-        if (ActiveTask == null)
-        {
-            _cropSpriteRenderer.sprite = null;
-        }
-        else
-        {
-            SetCropSprite();
-        }
+        _cropSpriteRenderer.sprite = null;
     }
     
-    public override void HarvestEarly()
+    internal override void HarvestEarly()
     {
         base.HarvestEarly();
         

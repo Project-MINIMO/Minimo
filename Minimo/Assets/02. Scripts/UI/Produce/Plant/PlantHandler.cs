@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using TMPro;
 
 public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -16,8 +15,8 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     
     [SerializeField] private PlantType _plantType;
     
-    [SerializeField] private Image _itemImg;
-    [SerializeField] private TextMeshProUGUI _amountTMP;
+    [SerializeField] private ItemInfoUpdater _infoUpdater;
+    [SerializeField] private GameObject _amountObj;
     
     private LayerMask _targetLayerMask;
     
@@ -27,14 +26,11 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     
     private Vector3 _startPosition;
 
-    private TitleData _titleData;
     private ProduceData _currentOption;
     private ProduceManager _produceManager;
     
     private void Awake()
     {
-        _titleData = App.GetData<TitleData>();
-        
         _targetLayerMask = LayerMask.GetMask("InteractObject");
         _produceManager = App.GetManager<ProduceManager>();
         
@@ -49,26 +45,14 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     {
         _currentOption = option;
         
-        SetResultInfo(option.ResultItems[0]);
-    }
-    
-    private void SetResultInfo(ProduceResult result)
-    {
-        if (!_titleData.Item.TryGetValue(result.ID, out var itemData))
-        {
-            Debug.LogError($"Cannot find item data with code : {result.ID}");
-            return;
-        }
-        
-        _itemImg.sprite = Resources.Load<Sprite>($"Item/{itemData.Name}");
-        _amountTMP.text = result.Amount.ToString();
+        _infoUpdater.SetItem(option);
     }
     
     public void OnBeginDrag(PointerEventData eventData)
     {
         _image.raycastTarget = false;
         
-        _amountTMP.gameObject.SetActive(false);
+        _amountObj.gameObject.SetActive(false);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -82,7 +66,7 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             var hit = Physics2D.OverlapPoint(worldPosition, _targetLayerMask);
             if (hit != null && hit.TryGetComponent<ProduceObject>(out var component))
             {
-                component.StartPlant(_currentOption);
+                _produceManager.Plant(component, _currentOption);
             }
         }
     }
@@ -99,11 +83,10 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             raycaster.Raycast(eventData, raycastResults);
             if (raycastResults.Any(result => result.gameObject.CompareTag("ProduceTaskBtn")))
             {
-                var currentObject = _produceManager.CurrentObject;
-                currentObject.StartPlant(_currentOption);
+                _produceManager.Plant(_currentOption);
             }
         }
         
-        _amountTMP.gameObject.SetActive(true);
+        _amountObj.gameObject.SetActive(true);
     }
 }

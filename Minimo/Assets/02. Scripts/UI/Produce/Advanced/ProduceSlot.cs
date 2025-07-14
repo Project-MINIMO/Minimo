@@ -79,11 +79,11 @@ public class ProduceSlot : MonoBehaviour
             var useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
             useCashPanel.OpenPanel(UseCashType.Produce, 
                 _produceTask.RemainTime, 
-                ()=>_produceManager.CurrentObject.HarvestEarly());
+                _produceManager.HarvestEarly);
         }
         else if (_produceTask?.CurrentState is CompletedState)
         {
-            _produceObject.StartHarvest(_produceTask);
+            _produceObject.StartHarvest();
         }
     }
 }

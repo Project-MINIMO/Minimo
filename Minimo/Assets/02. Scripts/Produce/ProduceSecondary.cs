@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ProduceSecondary : ProduceAdvanced
 {
-    public override void StartPlant(ProduceData option)
+    internal override void StartPlant(ProduceData option)
     {
         if (AllTasks.Count > 0)
         {

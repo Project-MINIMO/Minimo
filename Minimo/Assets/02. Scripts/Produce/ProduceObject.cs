@@ -86,17 +86,11 @@ public abstract class ProduceObject : BuildingObject
         
         if (task.CurrentState is CompletedState)
         {
-            CompleteActiveTask();
+            SetNextActiveTask();
         }
     }
     
-    protected virtual void CompleteActiveTask()
-    {
-        ActiveTask.ChangeState(CompletedState.Instance);
-        SetNextActiveTask();
-    }
-    
-    protected void SetNextActiveTask()
+    private void SetNextActiveTask()
     {
         if (ActiveTask != null) return;
 
@@ -105,7 +99,7 @@ public abstract class ProduceObject : BuildingObject
             ?.ChangeState(ActiveState.Instance);
     }
 
-    public virtual void StartPlant(ProduceData option)
+    internal virtual void StartPlant(ProduceData option)
     {
         if (!ProduceData.Contains(option)) return;
 
@@ -127,7 +121,7 @@ public abstract class ProduceObject : BuildingObject
         SetNextActiveTask();
     }
 
-    public virtual void StartHarvest()
+    internal virtual void StartHarvest()
     {
         for (var i = AllTasks.Count - 1; i >= 0; i--)
         {
@@ -139,7 +133,7 @@ public abstract class ProduceObject : BuildingObject
         }
     }
 
-    public virtual void HarvestEarly()
+    internal virtual void HarvestEarly()
     {
         ActiveTask?.ChangeState(CompletedState.Instance);
         SetNextActiveTask();

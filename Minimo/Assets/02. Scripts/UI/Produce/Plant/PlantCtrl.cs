@@ -17,11 +17,11 @@ public class PlantCtrl : MonoBehaviour
 
         if (isActive)
         {
-            InitOptionButtons();
+            InitHandlers();
         }
     }
 
-    private void InitOptionButtons()
+    private void InitHandlers()
     {
         var options = _produceManager.CurrentObject.ProduceData;
 
@@ -30,8 +30,9 @@ public class PlantCtrl : MonoBehaviour
         for (; i < options.Count; i++) 
         {
             var option = options[i];
-            _plantHandlers[i].gameObject.SetActive(true);
             _plantHandlers[i].SetOption(option);
+            
+            _plantHandlers[i].gameObject.SetActive(true);
         }
 
         for (; i < _plantHandlers.Length; i++) 

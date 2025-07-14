@@ -12,8 +12,6 @@ public enum BuildingTier
 public class ProduceManager : ManagerBase
 {
     public ProduceObject CurrentObject { get; private set; }
-    public event Action<ProduceObject> OnSelected;
-    public event Action OnDeselected;
     
     private Dictionary<BuildingTier, UIBase> _panelMap;
 
@@ -32,8 +30,6 @@ public class ProduceManager : ManagerBase
 
     public void Select(ProduceObject obj)
     {
-        if (CurrentObject == obj) return;
-        
         Deselect();
         
         CurrentObject = obj;
@@ -48,16 +44,34 @@ public class ProduceManager : ManagerBase
         CurrentObject = null;
     }
     
-    public void Plant()
+    public void Plant(ProduceData option)
     {
         if (CurrentObject == null) return;
         
-        // Current.StartTask();  // ProduceTask 생성 호출
+        CurrentObject.StartPlant(option);
+    }
+
+    public void Plant(ProduceObject obj, ProduceData option)
+    {
+        obj.StartPlant(option);
     }
 
     public void Harvest()
     {
         if (CurrentObject == null) return;
-        // Current.HarvestTask();
+
+        CurrentObject.StartHarvest();
+    }
+
+    public void Harvest(ProduceObject obj)
+    {
+        obj.StartHarvest();
+    }
+
+    public void HarvestEarly()
+    {
+        if (CurrentObject == null) return;
+
+        CurrentObject.HarvestEarly();
     }
 }
