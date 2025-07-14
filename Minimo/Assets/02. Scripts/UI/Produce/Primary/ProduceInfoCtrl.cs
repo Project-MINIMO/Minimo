@@ -20,7 +20,7 @@ public class ProduceInfoCtrl : MonoBehaviour
 
         if (isActive)
         {
-            var currentObject = _produceManager.CurrentProduceObject;
+            var currentObject = _produceManager.CurrentObject;
             
             _produceTask = currentObject.ActiveTask;
             _currentOption = currentObject.ActiveTask.Data;
@@ -31,7 +31,10 @@ public class ProduceInfoCtrl : MonoBehaviour
         }
         else
         {
+            if (_produceTask == null) return;
+            
             _produceTask.OnRemainTimeChanged -= SetRemainTime;
+            _produceTask = null;
         }
     }
 

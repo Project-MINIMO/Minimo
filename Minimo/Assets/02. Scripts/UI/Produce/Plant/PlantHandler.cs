@@ -99,7 +99,7 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             raycaster.Raycast(eventData, raycastResults);
             if (raycastResults.Any(result => result.gameObject.CompareTag("ProduceTaskBtn")))
             {
-                var currentObject = _produceManager.CurrentProduceObject;
+                var currentObject = _produceManager.CurrentObject;
                 currentObject.StartPlant(_currentOption);
             }
         }

@@ -23,7 +23,7 @@ public class PlantCtrl : MonoBehaviour
 
     private void InitOptionButtons()
     {
-        var options = _produceManager.CurrentProduceObject.ProduceData;
+        var options = _produceManager.CurrentObject.ProduceData;
 
         var i = 0;
         

@@ -1,21 +1,63 @@
+using System;
+using System.Collections.Generic;
+
+public enum BuildingTier
+{
+    Tier1,
+    Tier2,
+    Tier3,
+    Tier4,
+}
+
 public class ProduceManager : ManagerBase
 {
-    public ProduceObject CurrentProduceObject { get; private set; }
+    public ProduceObject CurrentObject { get; private set; }
+    public event Action<ProduceObject> OnSelected;
+    public event Action OnDeselected;
     
-    public void ActiveProduce(ProduceObject produceObject)
+    private Dictionary<BuildingTier, UIBase> _panelMap;
+
+    private void Start()
     {
-        if (CurrentProduceObject && CurrentProduceObject != produceObject)
-        {
-            CurrentProduceObject.CloseUI();
-        }
+        var uiManager = App.GetManager<UIManager>();
         
-        CurrentProduceObject = produceObject;
-        CurrentProduceObject.OpenUI();
+        _panelMap = new Dictionary<BuildingTier, UIBase>
+        {
+            { BuildingTier.Tier1, uiManager.GetPanel<PrimaryPanel>() },
+            { BuildingTier.Tier2, uiManager.GetPanel<PrimaryPanel>() },
+            { BuildingTier.Tier3, uiManager.GetPanel<AdvancedPanel>() },
+            { BuildingTier.Tier4, uiManager.GetPanel<WishPanel>() }
+        };
+    }
+
+    public void Select(ProduceObject obj)
+    {
+        if (CurrentObject == obj) return;
+        
+        Deselect();
+        
+        CurrentObject = obj;
+        _panelMap[(BuildingTier)obj.BuildingData.Type].OpenPanel();
+    }
+
+    public void Deselect()
+    {
+        if (CurrentObject == null) return;
+        
+        _panelMap[(BuildingTier)CurrentObject.BuildingData.Type].ClosePanel();
+        CurrentObject = null;
     }
     
-    public void DeactiveProduce()
+    public void Plant()
     {
-        CurrentProduceObject.CloseUI();
-        CurrentProduceObject = null;
+        if (CurrentObject == null) return;
+        
+        // Current.StartTask();  // ProduceTask 생성 호출
+    }
+
+    public void Harvest()
+    {
+        if (CurrentObject == null) return;
+        // Current.HarvestTask();
     }
 }

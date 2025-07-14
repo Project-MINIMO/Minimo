@@ -20,29 +20,30 @@ public class PrimaryPanel : UIBase
         _produceManager = App.GetManager<ProduceManager>();
         _placeMinimoPanel = App.GetManager<UIManager>().GetPanel<PlaceMinimoPanel>();
 
-        _closeBtn.onClick.AddListener(() => _produceManager.DeactiveProduce());
+        _closeBtn.onClick.AddListener(_produceManager.Deselect);
         _minimoBtn.onClick.AddListener(_placeMinimoPanel.OpenPanel);
     }
- 
-    public void OpenPanel(ProduceState state)
+
+    public override void OpenPanel()
     {
         base.OpenPanel();
-
-        SetPosition();
         
-        switch (state)
+        SetPosition();
+
+        if (_produceManager.CurrentObject.ActiveTask == null)
         {
-            case ProduceState.Idle:
+            if (_produceManager.CurrentObject.AllTasks.Count == 0)
+            {
                 ShowUI(_plantCtrl);
-                break;
-            
-            case ProduceState.Produce:
-                ShowUI(_infoCtrl);
-                break;
-            
-            case ProduceState.Complete:
+            }
+            else
+            {
                 ShowUI(_harvestCtrl);
-                break;
+            }
+        }
+        else
+        {
+            ShowUI(_infoCtrl);
         }
     }
 
@@ -55,7 +56,7 @@ public class PrimaryPanel : UIBase
     
     private void SetPosition()
     {
-        var position = _produceManager.CurrentProduceObject.transform.position;
+        var position = _produceManager.CurrentObject.transform.position;
         var screenPos = Camera.main.WorldToScreenPoint(position);
         screenPos.y -= 100;
         _rect.position = screenPos;

@@ -4,15 +4,6 @@ using UnityEngine;
 
 public class ProduceSecondary : ProduceAdvanced
 {
-    private PrimaryPanel _primaryPanel;
-    
-    protected override void Awake()
-    {
-        base.Awake();
-
-        _primaryPanel = App.GetManager<UIManager>().GetPanel<PrimaryPanel>();
-    }
-    
     public override void StartPlant(ProduceData option)
     {
         if (AllTasks.Count > 0)
@@ -31,29 +22,5 @@ public class ProduceSecondary : ProduceAdvanced
         {
             StartHarvest();
         }
-    }
-    
-    public override void OpenUI()
-    {
-        if (ActiveTask == null)
-        {
-            if (AllTasks.Count == 0)
-            {
-                _primaryPanel.OpenPanel(ProduceState.Idle);
-            }
-            else
-            {
-                _primaryPanel.ClosePanel();
-            }
-        }
-        else
-        {
-            _primaryPanel.OpenPanel(ProduceState.Produce);
-        }
-    }
-    
-    public override void CloseUI()
-    {
-        _primaryPanel.ClosePanel();
     }
 }

@@ -42,10 +42,10 @@ public class WishPanel : UIBase
         _placeMinimoPanel = App.GetManager<UIManager>().GetPanel<PlaceMinimoPanel>();
         
         _taskBtns = GetComponentsInChildren<ProduceSlot>(true);
-        _closeBtn.onClick.AddListener(()=> _produceManager.DeactiveProduce());
+        _closeBtn.onClick.AddListener(_produceManager.Deselect);
         _expandBtn.onClick.AddListener(() =>
         {
-            ((ProduceTertiary)_produceManager.CurrentProduceObject).AddSlotCount();
+            ((ProduceTertiary)_produceManager.CurrentObject).AddSlotCount();
             InitializeTaskBtns();
         });
         
@@ -81,14 +81,14 @@ public class WishPanel : UIBase
         base.OpenPanel();
         
         _titleTMP.text = App.GetData<TitleData>()
-            .GetString($"STR_BUILDING_{_produceManager.CurrentProduceObject.BuildingData.Name.ToUpper()}_NAME");
+            .GetString($"STR_BUILDING_{_produceManager.CurrentObject.BuildingData.Name.ToUpper()}_NAME");
 
         InitializeTaskBtns();
     }
 
     private void InitializeTaskBtns()
     {
-        var maxCount = ((ProduceTertiary)_produceManager.CurrentProduceObject).MaxSlotCount;
+        var maxCount = ((ProduceTertiary)_produceManager.CurrentObject).MaxSlotCount;
         var i = 0;
 
         for (; i < maxCount; i++)
@@ -117,7 +117,7 @@ public class WishPanel : UIBase
 
             if (_flower.Slot.Item != null)
             {
-                ((ProduceQuaternary)_produceManager.CurrentProduceObject).StartPlant(_food.Slot.Item.ID,  _flower.Slot.Item.ID);
+                ((ProduceQuaternary)_produceManager.CurrentObject).StartPlant(_food.Slot.Item.ID,  _flower.Slot.Item.ID);
                 
                 _food.Slot.Item = null;
                 _food.Slot.Icon.sprite = null;
@@ -136,7 +136,7 @@ public class WishPanel : UIBase
 
             if (_food.Slot.Item != null)
             {
-                ((ProduceQuaternary)_produceManager.CurrentProduceObject).StartPlant(_food.Slot.Item.ID,  _flower.Slot.Item.ID);
+                ((ProduceQuaternary)_produceManager.CurrentObject).StartPlant(_food.Slot.Item.ID,  _flower.Slot.Item.ID);
                 
                 _food.Slot.Item = null;
                 _food.Slot.Icon.sprite = null;

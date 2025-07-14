@@ -29,7 +29,7 @@ public class ProduceStarBtn : MonoBehaviour
     {
         _useCashPanel.OpenPanel(UseCashType.Produce, 
             _currentStarCount, 
-            ()=>_produceManager.CurrentProduceObject.HarvestEarly());
+            ()=>_produceManager.CurrentObject.HarvestEarly());
     }
 
     private void SetStarText(float remainTime)

@@ -17,15 +17,12 @@ public class ProducePrimary : ProduceObject
    
     private Sprite[] _currentCropSprites;
     private int _currentSpriteIndex;
-    
-    private PrimaryPanel _primaryPanel;
 
     protected override void Awake()
     {
         base.Awake();
         
         _cropSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
-        _primaryPanel = App.GetManager<UIManager>().GetPanel<PrimaryPanel>();
     }
     
     public override void Initialize(BuildingData data)
@@ -141,8 +138,6 @@ public class ProducePrimary : ProduceObject
         
         _currentSpriteIndex = 2;
         _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
-        
-        OpenUI();
     }
 
     private int GetCropType(int cropCode) => cropCode switch
@@ -151,21 +146,4 @@ public class ProducePrimary : ProduceObject
         4 or 49 or 50 => (int)CropType.Bean,
         5 or 51 or 52 => (int)CropType.Fruit,
     };
-
-    public override void OpenUI()
-    {
-        if (ActiveTask == null)
-        {
-            _primaryPanel.OpenPanel(AllTasks.Count == 0 ? ProduceState.Idle : ProduceState.Complete);
-        }
-        else
-        {
-            _primaryPanel.OpenPanel(ProduceState.Produce);
-        }
-    }
-    
-    public override void CloseUI()
-    {
-        _primaryPanel.ClosePanel();
-    }
 }

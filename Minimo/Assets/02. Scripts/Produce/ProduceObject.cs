@@ -151,7 +151,7 @@ public abstract class ProduceObject : BuildingObject
 
         if (!_editManager.IsEditing.Value)
         {
-            _produceManager.ActiveProduce(this);
+            _produceManager.Select(this);
         }
     }
     
@@ -176,7 +176,4 @@ public abstract class ProduceObject : BuildingObject
         }
     }
     #endregion
-
-    public abstract void OpenUI();
-    public abstract void CloseUI();
 }

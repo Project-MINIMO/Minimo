@@ -28,7 +28,7 @@ public class ProduceSlot : MonoBehaviour
     {
         if (_produceManager == null) return;
         
-        _produceObject = _produceManager.CurrentProduceObject as ProduceTertiary;
+        _produceObject = _produceManager.CurrentObject as ProduceTertiary;
         _lastUpdateTime = Time.time;
     }
 
@@ -79,7 +79,7 @@ public class ProduceSlot : MonoBehaviour
             var useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
             useCashPanel.OpenPanel(UseCashType.Produce, 
                 _produceTask.RemainTime, 
-                ()=>_produceManager.CurrentProduceObject.HarvestEarly());
+                ()=>_produceManager.CurrentObject.HarvestEarly());
         }
         else if (_produceTask?.CurrentState is CompletedState)
         {
