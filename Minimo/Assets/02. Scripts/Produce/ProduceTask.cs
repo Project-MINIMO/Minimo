@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 using Random = System.Random;
@@ -7,11 +8,12 @@ public class ProduceTask
     public ProduceData Data { get; }
     public ITaskState CurrentState { get; private set; }
     
+    public event Action<ITaskState> OnStateChanged;
+    public event Action<float> OnRemainTimeChanged;
+    
     public float RemainTime => Mathf.Max(0, _modifiedTime - ElapsedTime);
     public float ModifiedTime => _isModifiedDirty ? RecalculateModifiedTime() : _modifiedTime;
-    private float ElapsedTime => CurrentState is ActiveState activeState ? activeState.ElapsedTime : 0;
-    
-    public float HarvestRatio { get; private set; }
+    public float ElapsedTime;
     
     private readonly float _maxReducedTime;
     private readonly float _baseTime;
@@ -19,6 +21,8 @@ public class ProduceTask
     private float _reducedTime;
     private float _modifiedTime;
     private float _timeRatio;
+    
+    public float HarvestRatio { get; private set; }
     
     private bool _isModifiedDirty = true;
     
@@ -34,15 +38,27 @@ public class ProduceTask
 
         ChangeState(PendingState.Instance);
     }
+
+    public void Update()
+    {
+        CurrentState.OnUpdate(this);
+        
+        OnRemainTimeChanged?.Invoke(RemainTime);
+
+        if (CurrentState is ActiveState && RemainTime <= 0f)
+        {
+            ChangeState(CompletedState.Instance);
+        }
+    }
     
     public void ChangeState(ITaskState newState)
     {
         CurrentState?.OnExit(this);
         CurrentState = newState;
         CurrentState.OnEnter(this);
+        
+        OnStateChanged?.Invoke(newState);
     }
-    
-    public void Update() => CurrentState.OnUpdate(this);
     
     private float RecalculateModifiedTime()
     {
@@ -55,6 +71,8 @@ public class ProduceTask
     #region Apply Minimo Abilities
     public void ApplyTimeRatio(float reductionRatio)
     {
+        if (CurrentState is CompletedState or EndState) return;
+        
         _timeRatio = reductionRatio;
         _isModifiedDirty = true;
         
@@ -70,6 +88,8 @@ public class ProduceTask
 
     public void ApplyTimeReduction(float reductionAmount)
     {
+        if (CurrentState is CompletedState or EndState) return;
+        
         _reducedTime = Mathf.Max(0, _baseTime - reductionAmount);
         _isModifiedDirty = true;
     }
@@ -100,24 +120,20 @@ public class PendingState : ITaskState
 
 public class ActiveState : ITaskState
 {
-    public float ElapsedTime { get; private set; }
-
     public static readonly ActiveState Instance = new();
     private ActiveState() { }
-    
+
     public void OnEnter(ProduceTask task)
     {
-        ElapsedTime = 0f;
+        task.ElapsedTime = 0;
     }
-    
     public void OnUpdate(ProduceTask task)
     {
-        ElapsedTime += 0.1f;
+        task.ElapsedTime += 0.1f;
     }
-
     public void OnExit(ProduceTask task)
     {
-        ElapsedTime = task.ModifiedTime;
+        task.ElapsedTime = task.ModifiedTime;
     }
 }
 

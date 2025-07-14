@@ -8,27 +8,28 @@ public enum TaskState
 {
     Empty,
     Pending,
-    Produce,
     Complete,
+    Produce,
 }
 
 public class RemainTimeUpdater : MonoBehaviour
 {
     [SerializeField] private Image _remainTimeImg;
     [SerializeField] private TextMeshProUGUI _remainTimeTMP;
-    
-    private string _emptyString;
-    private string _pendingString;
-    private string _completeString;
+
+    private string[] _stateStrings;
     
     private void Awake()
     {
         _remainTimeTMP.text = string.Empty;
         
         var titleData = App.GetData<TitleData>();
-        _emptyString = titleData.GetString("STR_PRODUCE_SLOTSTATE_EMPTY");
-        _pendingString = titleData.GetString("STR_PRODUCE_SLOTSTATE_PENDING");
-        _completeString = titleData.GetString("STR_PRODUCE_SLOTSTATE_COMPLETE");
+        _stateStrings = new[]
+        {
+            titleData.GetString("STR_PRODUCE_SLOTSTATE_EMPTY"),
+            titleData.GetString("STR_PRODUCE_SLOTSTATE_PENDING"),
+            titleData.GetString("STR_PRODUCE_SLOTSTATE_COMPLETE"),
+        };
     }
     
     public void SetRemainTime(float remainTime, int fullTime)
@@ -49,9 +50,9 @@ public class RemainTimeUpdater : MonoBehaviour
                 if (remainTime < fullTime)
                 {
                     _remainTimeTMP.text = FormatTime(remainTime);
-                    _remainTimeImg.fillAmount = 1 - ((float)remainTime / fullTime);
+                    _remainTimeImg.fillAmount = 1 - remainTime / fullTime;
                 }
-                else if (remainTime == fullTime)
+                else if (Mathf.Approximately(remainTime, fullTime))
                 {
                     _remainTimeImg.fillAmount = 0;
                     SetRemainText(TaskState.Pending);
@@ -68,22 +69,8 @@ public class RemainTimeUpdater : MonoBehaviour
     
     private void SetRemainText(TaskState state)
     {
-        switch (state)
-        {
-            case TaskState.Empty:
-                _remainTimeTMP.text = _emptyString;
-                break;
-            
-            case TaskState.Pending:
-                _remainTimeTMP.text = _pendingString;
-                break;
-            
-            case TaskState.Produce:
-                break;
-            
-            case TaskState.Complete:
-                _remainTimeTMP.text = _completeString;
-                break;
-        }
+        if (state is TaskState.Produce) return;
+
+        _remainTimeTMP.text = _stateStrings[(int)state];
     }
 }

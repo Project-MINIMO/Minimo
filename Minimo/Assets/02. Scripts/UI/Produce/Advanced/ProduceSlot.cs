@@ -1,12 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
-public class ProduceTaskBtn : MonoBehaviour
+public class ProduceSlot : MonoBehaviour
 {
     [SerializeField] private Button _taskBtn;
-    [SerializeField] private TextMeshProUGUI _taskText;
-    
+
     [SerializeField] private ItemInfoUpdater _itemInfoUpdater;
     [SerializeField] private RemainTimeUpdater _remainTimeUpdater;
 
@@ -56,7 +54,7 @@ public class ProduceTaskBtn : MonoBehaviour
         if (!ReferenceEquals(_produceTask, currentTask))
         {
             _produceTask = currentTask;
-            _itemInfoUpdater.SetTaskItem(_produceTask);
+            _itemInfoUpdater.SetItem(_produceTask);
         }
         
         _remainTimeUpdater.SetRemainTime(_produceTask.RemainTime, _produceTask.Data.Time);
@@ -81,7 +79,7 @@ public class ProduceTaskBtn : MonoBehaviour
             var useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
             useCashPanel.OpenPanel(UseCashType.Produce, 
                 _produceTask.RemainTime, 
-                ()=>_produceManager.HarvestEarly());
+                ()=>_produceManager.CurrentProduceObject.HarvestEarly());
         }
         else if (_produceTask?.CurrentState is CompletedState)
         {

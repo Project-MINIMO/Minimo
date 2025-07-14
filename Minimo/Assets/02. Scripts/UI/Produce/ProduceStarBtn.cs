@@ -21,10 +21,7 @@ public class ProduceStarBtn : MonoBehaviour
         _starValue = 1;//App.GetData<TitleData>().Common["BlueStarValue"];
 
         _produceManager = App.GetManager<ProduceManager>();
-        _produceManager.CurrentRemainTime
-            .Subscribe(SetStarText)
-            .AddTo(gameObject);
-        
+
         _starBtn.onClick.AddListener(OnClickStarBtn);
     }
 
@@ -32,7 +29,7 @@ public class ProduceStarBtn : MonoBehaviour
     {
         _useCashPanel.OpenPanel(UseCashType.Produce, 
             _currentStarCount, 
-            ()=>_produceManager.HarvestEarly());
+            ()=>_produceManager.CurrentProduceObject.HarvestEarly());
     }
 
     private void SetStarText(float remainTime)

@@ -1,63 +1,51 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
 
 public class ItemInfoUpdater : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI[] _infoTMP;
-    [SerializeField] private Image[] _infoImages;
+    [SerializeField] private TextMeshProUGUI _infoTMP;
+    [SerializeField] private Image _infoImage;
     
     private TitleData _titleData;
-    
-    private ProduceData _currentOption;
     
     private void Awake()
     {
         _titleData = App.GetData<TitleData>();
     }
 
-    public void SetTaskItem(ProduceTask produceTask)
+    public void SetItem(ProduceTask produceTask)
     {
-        _currentOption = produceTask.Data;
+        var item = produceTask.Data.ResultItems[0];
         
-        SetInfo();
+        if (!_titleData.Item.TryGetValue(item.ID, out var itemData))
+        {
+            Debug.LogError($"Cannot find item data with code : {item.ID}");
+            return;
+        }
+
+        if (_infoTMP)
+        {
+            _infoTMP.text = _titleData.GetString($"STR_ITEM_{itemData.Name.ToUpper()}_NAME");
+        }
+
+        if (_infoImage)
+        {
+            _infoImage.sprite = Resources.Load<Sprite>($"Item/{itemData.Name}");
+            _infoImage.gameObject.SetActive(true);
+        }
     }
     
-    private void SetInfo()
-    {
-        var i = 0;
-        
-        for (; i < _currentOption.ResultItems.Length; i++) 
-        {
-            if (!_titleData.Item.TryGetValue(_currentOption.ResultItems[i].ID, out var itemData))
-            {
-                Debug.LogError($"Cannot find item data with code : {_currentOption.ResultItems[i].ID}");
-                return;
-            }
-           
-            _infoTMP[i].text = $"X{_currentOption.ResultItems[i].Amount}";
-
-            if (_infoImages[i] != null)
-            {
-                _infoImages[i].sprite = Resources.Load<Sprite>($"Item/{itemData.Name}");
-                _infoImages[i].gameObject.SetActive(true);
-            }
-        }
-
-        for (; i < _infoImages.Length; i++) 
-        {
-            if (_infoImages[i] != null)
-            {
-                _infoImages[i]?.gameObject.SetActive(false);
-            }
-            
-        }
-    }
-
     public void SetItemEmpty()
     {
-        _infoTMP[0].text = string.Empty;
-        _infoImages[0].sprite = null;
+        if (_infoTMP)
+        {
+            _infoTMP.text = string.Empty;
+        }
+
+        if (_infoImage)
+        {
+            _infoImage.sprite = null;
+        }
     }
 }

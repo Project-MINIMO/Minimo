@@ -80,10 +80,11 @@ public abstract class ProduceObject : BuildingObject
         _lastUpdateTime = Time.time;
 
         if (ActiveTask == null) return;
-   
-        ActiveTask.Update();
+
+        var task = ActiveTask;
+        task.Update();
         
-        if (ActiveTask is { RemainTime: <= 0 })
+        if (task.CurrentState is CompletedState)
         {
             CompleteActiveTask();
         }

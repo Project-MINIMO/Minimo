@@ -24,7 +24,7 @@ public class WishPanel : UIBase
     [SerializeField] private Button _closeBtn;
     [SerializeField] private TextMeshProUGUI _titleTMP;
     
-    private ProduceTaskBtn[] _taskBtns;
+    private ProduceSlot[] _taskBtns;
     [SerializeField] private Button _expandBtn;
     [SerializeField] private GameObject _back;
     
@@ -41,7 +41,7 @@ public class WishPanel : UIBase
         _produceManager = App.GetManager<ProduceManager>();
         _placeMinimoPanel = App.GetManager<UIManager>().GetPanel<PlaceMinimoPanel>();
         
-        _taskBtns = GetComponentsInChildren<ProduceTaskBtn>(true);
+        _taskBtns = GetComponentsInChildren<ProduceSlot>(true);
         _closeBtn.onClick.AddListener(()=> _produceManager.DeactiveProduce());
         _expandBtn.onClick.AddListener(() =>
         {
