@@ -102,9 +102,9 @@ public class ProducePrimary : ProduceObject
         base.StartPlant(option);
     }
 
-    protected override void OnPlant(ProduceTask task, int optionIndex)
+    internal override void OnPlant(ProduceTask task)
     {
-        base.OnPlant(task, optionIndex);
+        base.OnPlant(task);
         
         SetSpriteResources();
     }

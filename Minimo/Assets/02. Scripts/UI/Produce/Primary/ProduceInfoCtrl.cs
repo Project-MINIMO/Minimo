@@ -7,49 +7,36 @@ public class ProduceInfoCtrl : MonoBehaviour
     
     private ProduceManager _produceManager;
     private ProduceTask _produceTask;
-    private ProduceData _currentOption;
     
     private void Awake()
     {
         _produceManager = App.GetManager<ProduceManager>();
     }
 
-    public void SetActive(bool isActive)
+    private void OnEnable()
     {
-        gameObject.SetActive(isActive);
+        if (_produceManager == null) return;
+        
+        _produceTask = _produceManager.CurrentObject.ActiveTask;
+        _produceTask.OnRemainTimeChanged += SetRemainTime;
+        _itemInfoUpdater.SetItem(_produceTask.Data.ResultItems[0]);
+    }
 
-        if (isActive)
-        {
-            var currentObject = _produceManager.CurrentObject;
+    private void OnDisable()
+    {
+        if (_produceTask == null) return;
             
-            _produceTask = currentObject.ActiveTask;
-            _currentOption = currentObject.ActiveTask.Data;
-
-            _produceTask.OnRemainTimeChanged += SetRemainTime;
-            
-            _itemInfoUpdater.SetItem(_produceTask);
-        }
-        else
-        {
-            if (_produceTask == null) return;
-            
-            _produceTask.OnRemainTimeChanged -= SetRemainTime;
-            _produceTask = null;
-        }
+        _produceTask.OnRemainTimeChanged -= SetRemainTime;
+        _produceTask = null;
     }
 
     private void SetRemainTime(float remainTime)
     {
-        if (_currentOption == null)
+        if (_produceTask == null)
         {
             return;
         }
 
-        if (remainTime <= 0)
-        {
-            gameObject.SetActive(false);
-        }
-        
-        _remainTimeUpdater.SetRemainTime(remainTime, _currentOption.Time);
+        _remainTimeUpdater.SetRemainTime(remainTime, _produceTask.Data.Time);
     }
 }

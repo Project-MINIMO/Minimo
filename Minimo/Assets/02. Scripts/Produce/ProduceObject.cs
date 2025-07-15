@@ -4,18 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
-public enum ProduceState
-{
-    Idle,
-    Produce,
-    Complete
-}
-
 public abstract class ProduceObject : BuildingObject
 {
     public List<ProduceData> ProduceData { get; private set; }
     public List<ProduceTask> AllTasks { get; } = new(); 
     public ProduceTask ActiveTask => AllTasks.FirstOrDefault(t => t.CurrentState is ActiveState);
+    public ProduceState CurrentState => GetCurrentProduceState();
     
     private ProduceManager _produceManager;
     private PlantHelper _plantHelper;
@@ -98,21 +92,38 @@ public abstract class ProduceObject : BuildingObject
             .FirstOrDefault(task => task.CurrentState is PendingState)
             ?.ChangeState(ActiveState.Instance);
     }
+    
+    private ProduceState GetCurrentProduceState()
+    {
+        if (AllTasks.Any(x => x.CurrentState is CompletedState))
+        {
+            return ProduceState.Complete;
+        }
 
+        return ActiveTask != null 
+            ? ProduceState.Produce 
+            : ProduceState.Idle;
+    }
+    
+    public override void OnClickUp()
+    {
+        base.OnClickUp();
+
+        if (!_editManager.IsEditing.Value)
+        {
+            _produceManager.Select(this);
+        }
+    }
+
+    #region Plant
     internal virtual void StartPlant(ProduceData option)
     {
         if (!ProduceData.Contains(option)) return;
 
-        var optionIndex = ProduceData.IndexOf(option);
-        
-        _plantHelper.TryPlant(
-            option,
-            optionIndex,
-            OnPlant
-        );
+        _plantHelper.TryPlant(option, OnPlant);
     }
 
-    protected virtual void OnPlant(ProduceTask task, int optionIndex)
+    internal virtual void OnPlant(ProduceTask task)
     {
         task.ApplyTimeRatio(_timeRatio * _globalTimeRatio);
         task.ApplyHarvestRatio(_harvestRatio * _globalHarvestRatio); 
@@ -120,7 +131,9 @@ public abstract class ProduceObject : BuildingObject
         Debug.Log($"ProduceTask Added : {task.Data.ResultItems[0].ID}");
         SetNextActiveTask();
     }
-
+    #endregion
+    
+    #region Harvest
     internal virtual void StartHarvest()
     {
         for (var i = AllTasks.Count - 1; i >= 0; i--)
@@ -138,16 +151,7 @@ public abstract class ProduceObject : BuildingObject
         ActiveTask?.ChangeState(CompletedState.Instance);
         SetNextActiveTask();
     }
-
-    public override void OnClickUp()
-    {
-        base.OnClickUp();
-
-        if (!_editManager.IsEditing.Value)
-        {
-            _produceManager.Select(this);
-        }
-    }
+    #endregion
     
     #region Apply Minimo Abilities
     public void ApplyTimeRatio(float value)

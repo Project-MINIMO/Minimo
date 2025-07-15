@@ -42,7 +42,7 @@ public class QuestItemPickSlot : MonoBehaviour
     {
         if (!_submissionPanel.CanSelectItem(_item)) return;
         
-        AccountInfo.Instance.RemoveItem(_item.Data.ID, 1);
+        AccountInfo.Instance.RemoveItem(_item, 1);
         SetCount();
     }
 }

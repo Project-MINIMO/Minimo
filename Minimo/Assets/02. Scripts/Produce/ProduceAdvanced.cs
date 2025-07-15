@@ -48,9 +48,9 @@ public abstract class ProduceAdvanced : ProduceObject
         }
     }
     
-    protected override void OnPlant(ProduceTask task, int optionIndex)
+    internal override void OnPlant(ProduceTask task)
     {
         task.ApplyTimeReduction(_timeReduction);
-        base.OnPlant(task, optionIndex);
+        base.OnPlant(task);
     }
 }

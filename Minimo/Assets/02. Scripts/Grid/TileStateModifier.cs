@@ -1,11 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public enum TileState
-{
-    Empty,
-    Installed
-}
+
 
 public class TileStateModifier : MonoBehaviour
 {

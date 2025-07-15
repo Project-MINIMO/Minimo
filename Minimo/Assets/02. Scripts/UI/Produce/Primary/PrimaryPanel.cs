@@ -6,9 +6,7 @@ public class PrimaryPanel : UIBase
     [SerializeField] private Button _closeBtn;
     [SerializeField] private Button _minimoBtn;
     
-    [SerializeField] private PlantCtrl _plantCtrl;
-    [SerializeField] private ProduceInfoCtrl _infoCtrl;
-    [SerializeField] private HarvestHandler _harvestCtrl;
+    [SerializeField] private GameObject[] _stateCtrls;
     
     [SerializeField] private RectTransform _rect;
     
@@ -32,30 +30,42 @@ public class PrimaryPanel : UIBase
         
         SetPosition();
 
-        if (_produceManager.CurrentObject.ActiveTask == null)
+        ShowCtrls();
+    }
+
+    public override void ClosePanel()
+    {
+        base.ClosePanel();
+
+        if (_produceManager.CurrentObject.ActiveTask == null) return;
+        
+        _produceManager.CurrentObject.ActiveTask.OnStateChanged -= ShowCtrls;
+    }
+
+    private void ShowCtrls(ITaskState taskState = null)
+    {
+        if (_produceManager == null) return;
+        if (_produceManager.CurrentObject == null) return;
+        
+        var state = _produceManager.CurrentObject.CurrentState;
+        
+        for (var i = 0; i < _stateCtrls.Length; i++)
         {
-            if (_produceManager.CurrentObject.AllTasks.Count == 0)
-            {
-                ShowUI(_plantCtrl);
-            }
-            else
-            {
-                ShowUI(_harvestCtrl);
-            }
+            _stateCtrls[i].SetActive(i == (int)state);
         }
-        else
+
+        switch (state)
         {
-            ShowUI(_infoCtrl);
+            case ProduceState.Produce:
+                _produceManager.CurrentObject.ActiveTask.OnStateChanged += ShowCtrls;
+                break;
+            
+            case ProduceState.Complete:
+                _produceManager.CurrentObject.AllTasks[0].OnStateChanged -= ShowCtrls;
+                break;
         }
     }
 
-    private void ShowUI(MonoBehaviour targetUI)
-    {
-        _harvestCtrl.gameObject.SetActive(targetUI == _harvestCtrl);
-        _infoCtrl.SetActive(targetUI == _infoCtrl);
-        _plantCtrl.SetActive(targetUI == _plantCtrl);
-    }
-    
     private void SetPosition()
     {
         var position = _produceManager.CurrentObject.transform.position;

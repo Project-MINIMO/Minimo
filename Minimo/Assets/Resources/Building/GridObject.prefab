@@ -177,6 +177,7 @@ GameObject:
   - component: {fileID: 2186320831998741630}
   - component: {fileID: 7285702988359367251}
   - component: {fileID: 7251696516326011609}
+  - component: {fileID: 6860961171814234854}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -269,6 +270,22 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &6860961171814234854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3649019003594850197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82238b318560e0344a1a55bc9b15027a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateUIs:
+  - {fileID: 8022907538502304254}
+  - {fileID: 5869751014099753857}
+  - {fileID: 4101160730062376063}
 --- !u!1 &4101160730062376063
 GameObject:
   m_ObjectHideFlags: 0
@@ -649,7 +666,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6314677405763876296}
   - component: {fileID: 4899386999850288492}
-  - component: {fileID: 2047798984797677077}
   m_Layer: 6
   m_Name: GridObject
   m_TagString: GridObject
@@ -725,21 +741,6 @@ PolygonCollider2D:
       - {x: 0.5, y: -0.25}
       - {x: 0, y: 0}
   m_UseDelaunayMesh: 0
---- !u!114 &2047798984797677077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6314677405763876294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82238b318560e0344a1a55bc9b15027a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _idleBack: {fileID: 8022907538502304254}
-  _produceBack: {fileID: 5869751014099753857}
-  _completeBack: {fileID: 4101160730062376063}
 --- !u!1 &7679093566653465226
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,10 +5,7 @@ public class PlantHelper
 {
     private readonly UseCashPanel _useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
 
-    public void TryPlant(
-        ProduceData option,
-        int optionIndex,
-        Action<ProduceTask, int> onTaskCreated)
+    public void TryPlant(ProduceData option, Action<ProduceTask> onTaskCreated)
     {
         var lackItems = GetLackItems(option.MaterialItems);
 
@@ -18,15 +15,15 @@ public class PlantHelper
             {
                 foreach (var item in lackItems)
                 {
-                    AccountInfo.Instance.AddItem(item.Item1.Data.ID, item.Item2);
+                    AccountInfo.Instance.AddItem(item.Item1, item.Item2);
                 }
-                CreateTask(option, optionIndex, onTaskCreated);
+                CreateTask(option, onTaskCreated);
             });
 
             return;
         }
 
-        CreateTask(option, optionIndex, onTaskCreated);
+        CreateTask(option, onTaskCreated);
     }
     
     private List<(Item, int)> GetLackItems(ProduceMaterial[] materials)
@@ -45,15 +42,12 @@ public class PlantHelper
         return lackItems;
     }
     
-    private void CreateTask(
-        ProduceData option, 
-        int optionIndex, 
-        Action<ProduceTask, int> onTaskCreated)
+    private void CreateTask(ProduceData option, Action<ProduceTask> onTaskCreated)
     {
         ConsumeMaterials(option.MaterialItems);
 
         var newTask = new ProduceTask(option);
-        onTaskCreated?.Invoke(newTask, optionIndex);
+        onTaskCreated?.Invoke(newTask);
     }
 
     private void ConsumeMaterials(ProduceMaterial[] materials)

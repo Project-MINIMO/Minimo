@@ -4,13 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
-public enum UseCashType
-{
-    Produce,
-    ProduceExpand,
-    ProduceMaterial,
-}
-
 public class UseCashPanel : UIBase
 {
     [SerializeField] private UseCashBack _useBack;

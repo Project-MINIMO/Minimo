@@ -4,12 +4,6 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum ResourceType
-{
-    Resource,
-    SpecialResource
-}
-
 public class GetItemPanel : UIBase
 {
     [SerializeField] private GameObject _itemBack;

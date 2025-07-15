@@ -11,14 +11,12 @@ public class PlantCtrl : MonoBehaviour
         _produceManager = App.GetManager<ProduceManager>();
     }
 
-    public void SetActive(bool isActive)
+    private void OnEnable()
     {
-        gameObject.SetActive(isActive);
-
-        if (isActive)
-        {
-            InitHandlers();
-        }
+        if (_produceManager == null) return;
+        if (_produceManager.CurrentObject == null) return;
+        
+        InitHandlers();
     }
 
     private void InitHandlers()

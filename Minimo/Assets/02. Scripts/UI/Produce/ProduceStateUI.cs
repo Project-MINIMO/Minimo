@@ -1,13 +1,9 @@
-using System;
-using System.Linq;
-
 using UnityEngine;
+using UniRx;
 
 public class ProduceStateUI : MonoBehaviour
 {
-    [SerializeField] private GameObject _idleBack;
-    [SerializeField] private GameObject _produceBack;
-    [SerializeField] private GameObject _completeBack;
+    [SerializeField] private GameObject[] _stateUIs;
 
     private EditManager _editManager;
     private ProduceObject _object;
@@ -16,7 +12,13 @@ public class ProduceStateUI : MonoBehaviour
     private void Start()
     {
         _editManager = App.GetManager<EditManager>();
-        _object = GetComponent<ProduceObject>();
+        _object = GetComponentInParent<ProduceObject>();
+        
+        _editManager.IsEditing
+            .Subscribe((isEditing) =>
+            {
+                gameObject.SetActive(!isEditing);
+            }).AddTo(gameObject);
         
         _lastUpdateTime = Time.time;
         
@@ -32,43 +34,14 @@ public class ProduceStateUI : MonoBehaviour
 
         _lastUpdateTime = Time.time;
         
-        if (_editManager.IsEditing.Value || !_object.IsPlaced)
-        {
-            _idleBack.SetActive(false);
-            _produceBack.SetActive(false);
-            _completeBack.SetActive(false);
-            return;
-        }
-
-        var state = GetCurrentProduceState();
-        
-        UpdateStateUI(state);
-    }
-    
-    private ProduceState GetCurrentProduceState()
-    {
-        if (_object.AllTasks.Any(x => x.CurrentState is CompletedState))
-        {
-            return ProduceState.Complete;
-        }
-
-        return _object.ActiveTask != null 
-            ? ProduceState.Produce 
-            : ProduceState.Idle;
+        UpdateStateUI(_object.CurrentState);
     }
     
     private void UpdateStateUI(ProduceState state)
     {
-        if (state == ProduceState.Complete && _object.BuildingData.Type is 1)
+        for (var i = 0; i < _stateUIs.Length; i++)
         {
-            _idleBack.SetActive(false);
-            _produceBack.SetActive(false);
-            _completeBack.SetActive(true);
-            return;
+            _stateUIs[i].SetActive(i == (int)state);
         }
-        
-        _idleBack.SetActive(state == ProduceState.Idle);
-        _produceBack.SetActive(state == ProduceState.Produce);
-        _completeBack.SetActive(state == ProduceState.Complete);
     }
 }

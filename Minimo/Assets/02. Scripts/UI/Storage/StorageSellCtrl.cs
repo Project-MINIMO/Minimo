@@ -99,7 +99,7 @@ public class StorageSellCtrl : MonoBehaviour
 
     private void OnClickSell()
     {
-        AccountInfo.Instance.RemoveItem(_item.Data.ID, _currentCount);
+        AccountInfo.Instance.RemoveItem(_item, _currentCount);
 
         _storagePanel.Refresh();
         

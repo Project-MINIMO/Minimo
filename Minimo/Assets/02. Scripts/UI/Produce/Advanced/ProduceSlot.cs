@@ -3,10 +3,12 @@ using UnityEngine.UI;
 
 public class ProduceSlot : MonoBehaviour
 {
-    [SerializeField] private Button _taskBtn;
+    [SerializeField] private Button _slotBtn;
 
     [SerializeField] private ItemInfoUpdater _itemInfoUpdater;
     [SerializeField] private RemainTimeUpdater _remainTimeUpdater;
+
+    [SerializeField] private GameObject[] _stateImgs;
 
     private ProduceManager _produceManager;
     private ProduceTertiary _produceObject;
@@ -19,7 +21,7 @@ public class ProduceSlot : MonoBehaviour
     {
         _taskIndex = transform.GetSiblingIndex();
         
-        _taskBtn.onClick.AddListener(OnClickTask);
+        _slotBtn.onClick.AddListener(OnClickSlot);
         
         _produceManager = App.GetManager<ProduceManager>();
     }
@@ -54,7 +56,7 @@ public class ProduceSlot : MonoBehaviour
         if (!ReferenceEquals(_produceTask, currentTask))
         {
             _produceTask = currentTask;
-            _itemInfoUpdater.SetItem(_produceTask);
+            _itemInfoUpdater.SetItem(_produceTask.Data.ResultItems[0]);
         }
         
         _remainTimeUpdater.SetRemainTime(_produceTask.RemainTime, _produceTask.Data.Time);
@@ -68,7 +70,7 @@ public class ProduceSlot : MonoBehaviour
         _itemInfoUpdater.SetItemEmpty();
     }
     
-    private void OnClickTask()
+    private void OnClickSlot()
     {
         if (_produceTask?.CurrentState is PendingState)
         {

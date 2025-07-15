@@ -9,7 +9,6 @@ public class AdvancedPanel : UIBase
     
     private ProduceSlot[] _taskBtns;
     [SerializeField] private Button _expandBtn;
-    [SerializeField] private PlantCtrl _plantCtrl;
     
     [SerializeField] private Button _placeMinimoBtn;
 
@@ -41,7 +40,6 @@ public class AdvancedPanel : UIBase
             .GetString($"STR_BUILDING_{_produceManager.CurrentObject.BuildingData.Name.ToUpper()}_NAME");
 
         InitializeTaskBtns();
-        _plantCtrl.SetActive(true);
     }
 
     private void InitializeTaskBtns()

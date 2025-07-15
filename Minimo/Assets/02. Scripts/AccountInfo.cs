@@ -34,8 +34,18 @@ public class AccountInfo : Singleton<AccountInfo>
         Items[id].AddCount(amount);
     }
 
+    public void AddItem(Item item, int amount)
+    {
+        item.AddCount(amount);
+    }
+
     public void RemoveItem(int id, int amount)
     {
         Items[id].AddCount(-amount);
+    }
+    
+    public void RemoveItem(Item item, int amount)
+    {
+        item.AddCount(-amount);
     }
 }

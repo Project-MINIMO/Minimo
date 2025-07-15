@@ -2,14 +2,14 @@ using System.Linq;
 
 public class ProduceQuaternary : ProduceTertiary
 {
-    public void StartPlant(int food, int flower)
+    public void StartPlant(int flower, int food)
     {
-        var item = ProduceData
+        var options = ProduceData
             .Where(x => x.MaterialItems[0].ID == flower)
             .Where(x => x.MaterialItems[1].ID == food).ToList();
 
-        if (item.Count == 0)  return;
+        if (options.Count == 0)  return;
         
-        StartPlant(item[0]);
+        StartPlant(options[0]);
     }
 }
