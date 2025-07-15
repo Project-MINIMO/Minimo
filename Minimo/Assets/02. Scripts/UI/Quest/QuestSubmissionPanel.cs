@@ -223,7 +223,7 @@ public class QuestSubmissionPanel : UIBase
                 case ClearType.Wish:
                     if (_questData.Condition == QuestCondition.Normal)
                     {
-                        var item = _titleData.Item[clear.Target];
+                        var item = AccountInfo.Instance.Items[clear.Target];
                         info.Initialize(item, clear.Amount);
                     }
                     else
@@ -240,7 +240,7 @@ public class QuestSubmissionPanel : UIBase
         }
     }
 
-    public bool CanSelectItem(ItemData item)
+    public bool CanSelectItem(Item item)
     {
         if (_questData.Condition == QuestCondition.Normal)
         {

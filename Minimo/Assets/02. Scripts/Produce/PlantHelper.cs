@@ -37,11 +37,11 @@ public class PlantHelper
         foreach (var material in materials)
         {
             var item = _titleData.Item[material.ID];
-            if (AccountInfo.Instance.Items.TryGetValue(item, out var value))
+            if (AccountInfo.Instance.Items.TryGetValue(material.ID, out var value))
             {
-                if (value < material.Amount)
+                if (value.Count < material.Amount)
                 {
-                    lackItems.Add((item, material.Amount - value));
+                    lackItems.Add((item, material.Amount - value.Count));
                 }
             }
             else
@@ -68,8 +68,7 @@ public class PlantHelper
     {
         foreach (var material in materials)
         {
-            var item = _titleData.Item[material.ID];
-            AccountInfo.Instance.Items[item] -= material.Amount;
+            AccountInfo.Instance.RemoveItem(material.ID, material.Amount);
         }
     }
 }

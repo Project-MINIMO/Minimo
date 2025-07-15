@@ -27,6 +27,7 @@ public class ItemInfoUpdater : MonoBehaviour
 
     private void SetItem(ProduceResult result)
     {
+        var item = AccountInfo.Instance.Items[result.ID];
         if (!_titleData.Item.TryGetValue(result.ID, out var itemData))
         {
             Debug.LogError($"Cannot find item data with code : {result.ID}");
@@ -35,7 +36,7 @@ public class ItemInfoUpdater : MonoBehaviour
 
         if (_itemNameTMP)
         {
-            _itemNameTMP.text = _titleData.GetString($"STR_ITEM_{itemData.Name.ToUpper()}_NAME");
+            _itemNameTMP.text = item.Name;
         }
 
         if (_itemCountTMP)
@@ -45,7 +46,7 @@ public class ItemInfoUpdater : MonoBehaviour
 
         if (_iconImg)
         {
-            _iconImg.sprite = Resources.Load<Sprite>($"Item/{itemData.Name}");
+            _iconImg.sprite = item.Icon;
             _iconImg.gameObject.SetActive(true);
         }
     }

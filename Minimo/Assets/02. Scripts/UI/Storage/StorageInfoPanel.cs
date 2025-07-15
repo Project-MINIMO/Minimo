@@ -39,11 +39,11 @@ public class StorageInfoPanel : UIBase
         //_infoRect.position = newPosition;
     }
 
-    private void SetInfo(ItemData item)
+    private void SetInfo(Item item)
     {
-        _nameTMP.text = _titleData.GetString(item.Name);
-        _descriptionTMP.text = _titleData.GetString(item.Name);
-        _iconImg.sprite = Resources.Load<Sprite>($"Item/{item.Name}");
+        _nameTMP.text = item.Name;
+        _descriptionTMP.text = item.Name;
+        _iconImg.sprite = item.Icon;
     }
 
     private int GetPositionBySiblingIndex(int index) => index switch

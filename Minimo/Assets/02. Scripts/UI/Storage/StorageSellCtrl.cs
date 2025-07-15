@@ -14,7 +14,7 @@ public class StorageSellCtrl : MonoBehaviour
     private StoragePanel _storagePanel;
     private StorageInfoPanel _infoPanel;
     
-    private ItemData _item;
+    private Item _item;
     
     private int _currentCount;
     private string _sellText;
@@ -41,18 +41,12 @@ public class StorageSellCtrl : MonoBehaviour
         _sellBtn.onClick.AddListener(OnClickSell);
     }
 
-    public void Initialize(ItemData item)
+    public void Initialize(Item item)
     {
         _item = item;
         
-        if (AccountInfo.Instance.Items.TryGetValue(item, out var value))
-        {
-            _currentCount = (value / 2) + 1;
-        }
-        else
-        {
-            _currentCount = 0;
-        }
+        _currentCount = (item.Count / 2) + 1;
+      
         UpdateCurrentCount();
     }
     
@@ -60,7 +54,7 @@ public class StorageSellCtrl : MonoBehaviour
     {
         _countText.text = $"X{_currentCount}";
 
-        var price = Mathf.Max(_item.SellCost * _currentCount, 0);
+        var price = Mathf.Max(_item.Data.SellCost * _currentCount, 0);
         var modifiedPrice = price * _globalSellCostRatio;
         var roundedPrice = Mathf.RoundToInt(modifiedPrice);
         _priceText.text = string.Format(_sellText, roundedPrice);
@@ -93,22 +87,19 @@ public class StorageSellCtrl : MonoBehaviour
             _decreaseBtn.gameObject.SetActive(true);
         }
 
-        if (AccountInfo.Instance.Items.TryGetValue(_item, out var value))
+        if (_currentCount >= _item.Count) 
         {
-            if (_currentCount >= value) 
-            {
-                _increaseBtn.gameObject.SetActive(false);
-            }
-            else
-            {
-                _increaseBtn.gameObject.SetActive(true);
-            }
+            _increaseBtn.gameObject.SetActive(false);
+        }
+        else
+        {
+            _increaseBtn.gameObject.SetActive(true);
         }
     }
 
     private void OnClickSell()
     {
-        AccountInfo.Instance.RemoveItem(_item, _currentCount);
+        AccountInfo.Instance.RemoveItem(_item.Data.ID, _currentCount);
 
         _storagePanel.Refresh();
         
