@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 
 using UnityEngine;
@@ -11,26 +12,27 @@ public class ProduceStateUI : MonoBehaviour
     private EditManager _editManager;
     private ProduceObject _object;
     private float _lastUpdateTime;
-    
+
     private void Start()
     {
         _editManager = App.GetManager<EditManager>();
         _object = GetComponent<ProduceObject>();
+        
         _lastUpdateTime = Time.time;
-
+        
         if (_object.BuildingData.Type == 0)
         {
             enabled = false;
         }
     }
-    
+
     private void Update()
     {
         if (Time.time - _lastUpdateTime < 0.1f) return;
 
         _lastUpdateTime = Time.time;
         
-        if (_editManager.IsEditing.Value)
+        if (_editManager.IsEditing.Value || !_object.IsPlaced)
         {
             _idleBack.SetActive(false);
             _produceBack.SetActive(false);
