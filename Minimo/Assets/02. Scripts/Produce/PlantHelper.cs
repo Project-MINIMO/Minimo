@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class PlantHelper
 {
-    private readonly TitleData _titleData = App.GetData<TitleData>();
     private readonly UseCashPanel _useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
 
     public void TryPlant(
@@ -15,45 +14,38 @@ public class PlantHelper
 
         if (lackItems.Count > 0)
         {
-            _useCashPanel.OpenPanel(lackItems, async () =>
+            _useCashPanel.OpenPanel(lackItems, () =>
             {
                 foreach (var item in lackItems)
                 {
-                    AccountInfo.Instance.AddItem(item.Item1.ID, item.Item2);
+                    AccountInfo.Instance.AddItem(item.Item1.Data.ID, item.Item2);
                 }
-                CreateTaskAsync(option, optionIndex, onTaskCreated);
+                CreateTask(option, optionIndex, onTaskCreated);
             });
 
             return;
         }
 
-        CreateTaskAsync(option, optionIndex, onTaskCreated);
+        CreateTask(option, optionIndex, onTaskCreated);
     }
     
-    private List<(ItemData, int)> GetLackItems(ProduceMaterial[] materials)
+    private List<(Item, int)> GetLackItems(ProduceMaterial[] materials)
     {
-        var lackItems = new List<(ItemData, int)>();
+        var lackItems = new List<(Item, int)>();
 
         foreach (var material in materials)
         {
-            var item = _titleData.Item[material.ID];
-            if (AccountInfo.Instance.Items.TryGetValue(material.ID, out var value))
+            var item = AccountInfo.Instance.Items[material.ID];
+            if (item.Count < material.Amount)
             {
-                if (value.Count < material.Amount)
-                {
-                    lackItems.Add((item, material.Amount - value.Count));
-                }
-            }
-            else
-            {
-                lackItems.Add((item, material.Amount));
+                lackItems.Add((item, material.Amount - item.Count));
             }
         }
 
         return lackItems;
     }
     
-    private void CreateTaskAsync(
+    private void CreateTask(
         ProduceData option, 
         int optionIndex, 
         Action<ProduceTask, int> onTaskCreated)

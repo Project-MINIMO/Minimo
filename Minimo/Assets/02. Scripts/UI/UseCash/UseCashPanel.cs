@@ -63,7 +63,7 @@ public class UseCashPanel : UIBase
         Debug.Log($"\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518");
     }
 
-    public void OpenPanel(List<(ItemData, int)> lackItems, Action useAction)
+    public void OpenPanel(List<(Item, int)> lackItems, Action useAction)
     {
         base.OpenPanel();
         

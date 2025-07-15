@@ -7,17 +7,10 @@ public class CashMaterialSlot : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _nameTMP;
     [SerializeField] private TextMeshProUGUI _countTMP;
     [SerializeField] private Image _iconImage;
-    
-    private TitleData _titleData;
 
-    private void Awake()
+    public void SetData(Item material, int count)
     {
-        _titleData = App.GetData<TitleData>();
-    }
-    
-    public void SetData(ItemData material, int count)
-    {
-        _nameTMP.text = _titleData.GetString(material.Name);
+        _nameTMP.text = material.Name;
         _countTMP.text = count.ToString();
         _iconImage.sprite = null;//material.Icon;
         

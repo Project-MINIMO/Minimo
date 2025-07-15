@@ -83,7 +83,7 @@ public class ProduceSlot : MonoBehaviour
         }
         else if (_produceTask?.CurrentState is CompletedState)
         {
-            _produceObject.StartHarvest();
+            _produceManager.Harvest();
         }
     }
 }
