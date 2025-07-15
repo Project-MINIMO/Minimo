@@ -11,7 +11,7 @@ public class ProduceTask
     public event Action<ITaskState> OnStateChanged;
     public event Action<float> OnRemainTimeChanged;
     
-    public float RemainTime => Mathf.Max(0, _modifiedTime - ElapsedTime);
+    public float RemainTime => Mathf.Max(0, ModifiedTime - ElapsedTime);
     public float ModifiedTime => _isModifiedDirty ? RecalculateModifiedTime() : _modifiedTime;
     public float ElapsedTime;
     
