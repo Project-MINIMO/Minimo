@@ -50,6 +50,14 @@ public class UIManager : ManagerBase
         
         FadeOut(1);
     }
+    
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Back();
+        }
+    }
 
     #region Get Panel
     public T GetPanel<T>() where T : UIBase
@@ -68,8 +76,7 @@ public class UIManager : ManagerBase
     public void PushPanel(UIBase panel)
     {
         if (_uiStack.Count > 0 && _uiStack.Peek() == panel) return;
-
-        Debug.LogError($"Panel of type {panel.GetType()}.");
+        
         foreach (var peek in _uiStack)
         {
             peek.Hide(false);
