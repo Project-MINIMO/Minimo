@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 
+using UnityEngine;
+using DG.Tweening;
+
 public enum BuildingTier
 {
     Tier1,
@@ -14,6 +17,7 @@ public class ProduceManager : ManagerBase
     public ProduceObject CurrentObject { get; private set; }
     
     private Dictionary<BuildingTier, UIBase> _panelMap;
+    private Camera _camera;
 
     private void Start()
     {
@@ -26,6 +30,8 @@ public class ProduceManager : ManagerBase
             { BuildingTier.Tier3, uiManager.GetPanel<AdvancedPanel>() },
             { BuildingTier.Tier4, uiManager.GetPanel<WishPanel>() }
         };
+        
+        _camera = Camera.main;
     }
 
     public void Select(ProduceObject obj)
@@ -33,7 +39,7 @@ public class ProduceManager : ManagerBase
         Deselect();
         
         CurrentObject = obj;
-        _panelMap[(BuildingTier)obj.BuildingData.Type].OpenPanel();
+        MoveCamera(_panelMap[(BuildingTier)obj.BuildingData.Type].OpenPanel);
     }
 
     public void Deselect()
@@ -42,6 +48,28 @@ public class ProduceManager : ManagerBase
         
         _panelMap[(BuildingTier)CurrentObject.BuildingData.Type].ClosePanel();
         CurrentObject = null;
+    }
+
+    private void MoveCamera(Action onComplete = null)
+    {
+        if (CurrentObject == null) return;
+        
+        var targetPos = new Vector3(
+            CurrentObject.transform.position.x,
+            CurrentObject.transform.position.y,
+            _camera.transform.position.z
+        );
+
+        if (_camera.transform.position == targetPos)
+        {
+            onComplete?.Invoke();
+            return;
+        }
+
+        _camera.transform
+            .DOMove(targetPos, 0.5f)
+            .SetEase(Ease.OutCubic)
+            .OnComplete(() => onComplete?.Invoke());
     }
     
     public void Plant(ProduceData option)
