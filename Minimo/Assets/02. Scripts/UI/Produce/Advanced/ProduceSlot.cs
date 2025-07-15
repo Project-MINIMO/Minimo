@@ -4,26 +4,25 @@ using UnityEngine.UI;
 public class ProduceSlot : MonoBehaviour
 {
     [SerializeField] private Button _slotBtn;
-
+    [SerializeField] private GameObject[] _stateImgs;
+    
     [SerializeField] private ItemInfoUpdater _itemInfoUpdater;
     [SerializeField] private RemainTimeUpdater _remainTimeUpdater;
-
-    [SerializeField] private GameObject[] _stateImgs;
-
+    
     private ProduceManager _produceManager;
     private ProduceTertiary _produceObject;
     private ProduceTask _produceTask;
+    private UseCashPanel _useCashPanel;
     
     private int _taskIndex;
-    private float _lastUpdateTime;
 
     private void Awake()
     {
+        _produceManager = App.GetManager<ProduceManager>();
+        _useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
         _taskIndex = transform.GetSiblingIndex();
         
         _slotBtn.onClick.AddListener(OnClickSlot);
-        
-        _produceManager = App.GetManager<ProduceManager>();
     }
 
     private void OnEnable()
@@ -31,61 +30,97 @@ public class ProduceSlot : MonoBehaviour
         if (_produceManager == null) return;
         
         _produceObject = _produceManager.CurrentObject as ProduceTertiary;
-        _lastUpdateTime = Time.time;
+        if (_produceObject == null) return;
+        
+        _produceObject.OnTaskCountChanged += UpdateSlots;
+        UpdateSlots(_produceObject.AllTasks.Count);
     }
 
-    private void Update()
+    private void OnDisable()
     {
-        if (Time.time - _lastUpdateTime < 0.1f) return;
+        if (_produceObject == null) return;
 
-        _lastUpdateTime = Time.time;
-
-        SetSlot();
+        UnbindTask();
+        
+        _produceObject.OnTaskCountChanged -= UpdateSlots;
+        _produceObject = null;
     }
 
-    public void SetSlot()
+    private void UpdateSlots(int taskCount)
     {
-        if (_produceObject == null || _produceObject.AllTasks.Count <= _taskIndex)
+        if (taskCount > _taskIndex)
         {
-            SetEmpty();
-            return;
+            BindTask(_produceObject.AllTasks[_taskIndex]);
         }
-        
-        var currentTask = _produceObject.AllTasks[_taskIndex];
-        
-        if (!ReferenceEquals(_produceTask, currentTask))
+        else
         {
-            _produceTask = currentTask;
-            _itemInfoUpdater.SetItem(_produceTask.Data.ResultItems[0]);
+            UnbindTask();
         }
-        
-        _remainTimeUpdater.SetRemainTime(_produceTask.RemainTime, _produceTask.Data.Time);
-    }
-
-    private void SetEmpty()
-    {
-        _produceTask = null;
-
-        _remainTimeUpdater.SetRemainTime(-1, 1);
-        _itemInfoUpdater.SetItemEmpty();
     }
     
+    private void BindTask(ProduceTask task)
+    {
+        if (_produceTask != null)
+        {
+            _produceTask.OnRemainTimeChanged -= OnRemainChanged;
+            _produceTask.OnStateChanged -= OnStateChanged;
+        }
+        
+        _produceTask = task;
+        _produceTask.OnRemainTimeChanged += OnRemainChanged;
+        _produceTask.OnStateChanged += OnStateChanged;
+
+        _itemInfoUpdater.UpdateItem(_produceTask.Data.ResultItems[0]);
+        OnRemainChanged(_produceTask.RemainTime);
+        OnStateChanged(_produceTask.CurrentState);
+    }
+
+    private void UnbindTask()
+    {
+        if (_produceTask != null)
+        {
+            _produceTask.OnRemainTimeChanged -= OnRemainChanged;
+            _produceTask.OnStateChanged -= OnStateChanged;
+            _produceTask = null;
+        }
+        
+        _itemInfoUpdater.UpdateItem(null);
+        _remainTimeUpdater.UpdateTime(-1, 1);
+        OnStateChanged(PendingState.Instance);
+    }
+
+    private void OnRemainChanged(float remain)
+    {
+        if (_produceTask == null) return;
+        
+        _remainTimeUpdater.UpdateTime(remain, _produceTask.Data.Time);
+    }
+
+    private void OnStateChanged(ITaskState state)
+    {
+        _stateImgs[0].SetActive(state is ActiveState);
+        _stateImgs[1].SetActive(state is CompletedState);
+    }
+
     private void OnClickSlot()
     {
-        if (_produceTask?.CurrentState is PendingState)
+        switch (_produceTask?.CurrentState)
         {
-            //취소?
-        }
-        else if (_produceTask?.CurrentState is ActiveState)
-        {
-            var useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
-            useCashPanel.OpenPanel(UseCashType.Produce, 
-                _produceTask.RemainTime, 
-                _produceManager.HarvestEarly);
-        }
-        else if (_produceTask?.CurrentState is CompletedState)
-        {
-            _produceManager.Harvest();
+            case PendingState:
+                //취소?
+                break;
+            
+            case ActiveState:
+            {
+                _useCashPanel.OpenPanel(UseCashType.Produce, 
+                    _produceTask.RemainTime, 
+                    _produceManager.HarvestEarly);
+                break;
+            }
+            
+            case CompletedState:
+                _produceManager.Harvest();
+                break;
         }
     }
 }

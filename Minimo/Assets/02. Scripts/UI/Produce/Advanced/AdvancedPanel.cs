@@ -50,7 +50,6 @@ public class AdvancedPanel : UIBase
         for (; i < maxCount; i++)
         {
             _taskBtns[i].gameObject.SetActive(true);
-            _taskBtns[i].SetSlot();
         }
 
         for (; i < _taskBtns.Length; i++)

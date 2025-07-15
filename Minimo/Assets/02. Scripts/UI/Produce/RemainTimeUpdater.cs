@@ -26,7 +26,7 @@ public class RemainTimeUpdater : MonoBehaviour
         };
     }
     
-    public void SetRemainTime(float remainTime, int fullTime)
+    public void UpdateTime(float remainTime, int fullTime)
     {
         _remainTime = remainTime;
         _fullTime = fullTime;

@@ -45,7 +45,7 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     {
         _currentOption = option;
         
-        _infoUpdater.SetItem(option.ResultItems[0]);
+        _infoUpdater.UpdateItem(option.ResultItems[0]);
     }
     
     public void OnBeginDrag(PointerEventData eventData)
