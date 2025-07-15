@@ -15,8 +15,10 @@ public class StorageInfoPanel : UIBase
     
     private TitleData _titleData;
     
-    public override void Initialize()
+    public override void Initialize(UIManager manager)
     {
+        base.Initialize(manager);
+
         _titleData = App.GetData<TitleData>();
         _closeBtn.onClick.AddListener(ClosePanel);
 

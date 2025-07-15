@@ -15,8 +15,7 @@ public class QuestSubmissionPanel : UIBase
         public Image Icon;
         public TextMeshProUGUI Amount;
     }
-    
-    [SerializeField] private QuestUIGrouper _grouper;
+
     [SerializeField] private Button _closeBtn;
 
     [SerializeField] private TextMeshProUGUI _titleTMP;
@@ -39,14 +38,14 @@ public class QuestSubmissionPanel : UIBase
 
     private TitleData _titleData;
     private DetailQuestData _questData;
-    private QuestConsPanel _consPanel;
     
     private string[] _clearStrings;
 
-    public override void Initialize()
+    public override void Initialize(UIManager manager)
     {
+        base.Initialize(manager);
+
         _titleData = App.GetData<TitleData>();
-        _consPanel = App.GetManager<UIManager>().GetPanel<QuestConsPanel>();
         
         _clearStrings = new[]
         {
@@ -58,20 +57,7 @@ public class QuestSubmissionPanel : UIBase
             _titleData.GetString("STR_QUEST_CLEAR_BUILD"),
         };
   
-        _closeBtn.onClick.AddListener(() =>
-        {
-            ClosePanel(() =>
-            {
-                if (_questData.Type == QuestType.Constellation)
-                {
-                    _consPanel.OpenPanel2(_questData);
-                }
-                else
-                {
-                    _grouper.OpenListPanel();
-                }
-            });
-        });
+        _closeBtn.onClick.AddListener(ClosePanel);
     }
 
     public override void OpenPanel()
@@ -92,24 +78,8 @@ public class QuestSubmissionPanel : UIBase
             });
     }
    
-    public void ClosePanel(Action callback = null)
-    {
-        _canvasGroup2.blocksRaycasts = false;
-        _canvasRect.anchoredPosition = new Vector2(160, 0);
-        _canvasRect.DOAnchorPosX(120, 0.3f).SetEase(Ease.Linear);
-        _canvasGroup.DOFade(0, 0.3f).SetEase(Ease.Linear)
-            .OnComplete(() =>
-            {
-                _canvasGroup2.blocksRaycasts = true;
-                callback?.Invoke();
-                base.ClosePanel();
-            });
-    }
-
     public void OpenPanel(DetailQuestData questData)
     {
-        _grouper.CloseAllExcept(this);
-        
         OpenPanel();
 
         _questData = questData;

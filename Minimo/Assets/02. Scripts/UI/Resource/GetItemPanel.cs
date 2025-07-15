@@ -19,8 +19,10 @@ public class GetItemPanel : UIBase
     
     private Vector2[] _startPosition = new Vector2[8];
 
-    public override void Initialize()
+    public override void Initialize(UIManager manager)
     {
+        base.Initialize(manager);
+
         _closeBtn.onClick.AddListener(ClosePanel);
         
         for (var i = 0; i < _iconImgs.Length; i++)

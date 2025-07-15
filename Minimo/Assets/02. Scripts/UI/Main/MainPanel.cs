@@ -1,10 +1,11 @@
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
 public class MainPanel : UIBase
 {
+    public override bool IsDefaultPanel => true;
+    
     [SerializeField] private RectTransform[] _btnRects;
     [SerializeField] private float _openYPosition = -294;
     [SerializeField] private float _openSize = 2;
@@ -19,20 +20,9 @@ public class MainPanel : UIBase
     
     private bool _isOpened;
 
-    public override void Initialize()
+    public override void Initialize(UIManager manager)
     {
-        var screenStateManager = App.GetManager<ScreenStateManager>();
-        screenStateManager.CurrentState.Subscribe((currentState) =>
-        {
-            if (currentState is ScreenState.Sky)
-            {
-                OpenPanel();
-            }
-            else
-            {
-                ClosePanel();
-            }
-        }).AddTo(gameObject);
+        base.Initialize(manager);
         
         _mainRect = _mainBtn.GetComponent<RectTransform>();
         _closeYPosition = _mainRect.anchoredPosition.y;
@@ -40,22 +30,27 @@ public class MainPanel : UIBase
 
         for (var i = 0; i < _btnRects.Length; i++)
         {
-            _btnRects[i].GetComponent<Button>().onClick.AddListener(Close);
-            
             _btnPositions[i] = _btnRects[i].anchoredPosition;
             _btnRects[i].DOAnchorPos(Vector2.zero, 0).SetEase(Ease.Linear);
             _btnRects[i].gameObject.SetActive(false);
         }
         
         _mainBtn.onClick.AddListener(Toggle);
-        _closeBtn.onClick.AddListener(Close);
+        _closeBtn.onClick.AddListener(() => Close(_duration));
     }
-   
+
+    public override void Show(bool isNew)
+    {
+        base.Show(isNew);
+
+        Close(0);
+    }
+
     private void Toggle()
     {
         if (_isOpened)
         {
-            Close();
+            Close(_duration);
         }
         else
         {
@@ -83,13 +78,13 @@ public class MainPanel : UIBase
         _mainRect.DOAnchorPosY(_openYPosition, _duration).SetEase(Ease.Linear);
     }
 
-    private void Close()
+    private void Close(float duration)
     {
         if (!_isOpened) return;
         
         _isOpened = false;
         _mainRect.DOKill();
-        _mainRect.DOScale(Vector3.one, _duration).SetEase(Ease.Linear)
+        _mainRect.DOScale(Vector3.one, duration).SetEase(Ease.Linear)
             .OnPlay(() =>
             {
                 foreach (var rect in _btnRects)
@@ -104,6 +99,6 @@ public class MainPanel : UIBase
                 _closeBtn.gameObject.SetActive(false);
             });
         
-        _mainRect.DOAnchorPosY(_closeYPosition, _duration).SetEase(Ease.Linear);
+        _mainRect.DOAnchorPosY(_closeYPosition, duration).SetEase(Ease.Linear);
     }
 }

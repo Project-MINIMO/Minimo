@@ -15,10 +15,12 @@ public class PrimaryPanel : UIBase
     private ProduceManager _produceManager;
     private PlaceMinimoPanel _placeMinimoPanel;
 
-    public override void Initialize()
+    public override void Initialize(UIManager manager)
     {
+        base.Initialize(manager);
+
         _produceManager = App.GetManager<ProduceManager>();
-        _placeMinimoPanel = App.GetManager<UIManager>().GetPanel<PlaceMinimoPanel>();
+        _placeMinimoPanel = manager.GetPanel<PlaceMinimoPanel>();
 
         _closeBtn.onClick.AddListener(_produceManager.Deselect);
         _minimoBtn.onClick.AddListener(_placeMinimoPanel.OpenPanel);

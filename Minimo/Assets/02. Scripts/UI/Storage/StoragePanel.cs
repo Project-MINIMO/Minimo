@@ -28,8 +28,10 @@ public class StoragePanel : UIBase
     
     private List<StorageBtn> _storageBtns;
 
-    public override void Initialize()
+    public override void Initialize(UIManager manager)
     {
+        base.Initialize(manager);
+
         SetString();
         SetButtonEvent();
         

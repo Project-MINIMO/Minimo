@@ -2852,7 +2852,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eed97f4d0c23b2b4a905550c7ca62faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grouper: {fileID: 765153414881160365}
   _closeBtn: {fileID: 3566290402905709008}
   _titleTMP: {fileID: 3909621440595480463}
   _iconImg: {fileID: 8452893378164215151}
@@ -53377,7 +53376,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -64309,7 +64308,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa4b51512f8484948b48d358aaed5e10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grouper: {fileID: 765153414881160365}
   _closeBtn: {fileID: 4251670400789516536}
   _menuBtns:
   - {fileID: 2483455342950885615}
@@ -67718,7 +67716,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 163faca80b92628418ee7ea76968b001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grouper: {fileID: 765153414881160365}
   _closeBtn: {fileID: 2913523373338585926}
   _titleTMP: {fileID: 3782448288724635597}
   _descriptionTMP: {fileID: 6717019152874962573}
@@ -101137,7 +101134,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1ab900ff193aee46b31ba7460490c99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grouper: {fileID: 765153414881160365}
   _questParent: {fileID: 8348236140958016501}
   _questPrefab: {fileID: 2469749580603384524}
   _longPressDetector: {fileID: 1494365275340109676}
@@ -101758,7 +101754,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9150939640446390490}
-  - component: {fileID: 765153414881160365}
   m_Layer: 5
   m_Name: Panel_Quest
   m_TagString: Untagged
@@ -101789,22 +101784,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &765153414881160365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7820313463763343198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7225537df2417b440b0d9dae9eda0c6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _summaryPanel: {fileID: 2674204393497377316}
-  _listPanel: {fileID: 5714366266684596037}
-  _submissionPanel: {fileID: 8059082391034116618}
-  _consPanel: {fileID: 8223713966032729243}
 --- !u!1 &7828943262235084892
 GameObject:
   m_ObjectHideFlags: 0
@@ -102356,26 +102335,12 @@ MonoBehaviour:
     Slot:
       Button: {fileID: 6105802801472620410}
       Icon: {fileID: 3801911918838807048}
-      Item:
-        ID: 0
-        Type: 0
-        Level: 0
-        SellCost: 0
-        BuyCost: 0
-        Name: 
     CloseBtn: {fileID: 5836728732229891842}
     OptionsBack: {fileID: 7115722176360112179}
   _flower:
     Slot:
       Button: {fileID: 7702214319938715769}
       Icon: {fileID: 6633796023033933945}
-      Item:
-        ID: 0
-        Type: 0
-        Level: 0
-        SellCost: 0
-        BuyCost: 0
-        Name: 
     CloseBtn: {fileID: 6542688629484284457}
     OptionsBack: {fileID: 817100670595243615}
   _placeMinimoBtn: {fileID: 4864058114631777115}

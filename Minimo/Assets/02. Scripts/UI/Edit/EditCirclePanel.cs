@@ -12,8 +12,10 @@ public class EditCirclePanel : UIBase
     private EditManager _editManager;
     private Transform _target;
 
-    public override void Initialize()
+    public override void Initialize(UIManager manager)
     {
+        base.Initialize(manager);
+
         _editManager = App.GetManager<EditManager>();
         
         _editManager.IsEditing

@@ -3,14 +3,18 @@ using UnityEngine.EventSystems;
 
 public class SwitchPanel : UIBase, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    public override bool IsDefaultPanel => true;
+    
     [SerializeField] private float _dragThreshold = 30f;
     
     private ScreenStateManager _screenStateManager;
     private Vector2 _startPos;
     private bool _isDrag;
 
-    public override void Initialize()
+    public override void Initialize(UIManager manager)
     {
+        base.Initialize(manager);
+
         _screenStateManager = App.GetManager<ScreenStateManager>();
     }
     

@@ -23,8 +23,10 @@ public class StorageExpandPanel : UIBase
     
     private string _expandString;
     
-    public override void Initialize()
+    public override void Initialize(UIManager manager)
     {
+        base.Initialize(manager);
+
         var titleData = App.GetData<TitleData>();
 
         _expandCost = titleData.Common["StorageExpandCost"];

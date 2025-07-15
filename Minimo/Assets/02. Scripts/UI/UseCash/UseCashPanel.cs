@@ -26,8 +26,10 @@ public class UseCashPanel : UIBase
 
     private float _globalTimeSkipCostRatio;
     
-    public override void Initialize()
+    public override void Initialize(UIManager manager)
     {
+        base.Initialize(manager);
+
         _titleData = App.GetData<TitleData>();
 
         _useBack.Initialize(_titleData, ClosePanel, OpenCharge);
