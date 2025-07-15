@@ -34,7 +34,7 @@ public class BuildingObject : InteractObject
             
             PreviousPosition = transform.position;
             
-            _editManager.StartEdit(this);
+            _editManager.StartEdit(this, true);
         }
         catch (Exception e)
         {
@@ -155,7 +155,7 @@ public class BuildingObject : InteractObject
         return true;
     }
   
-    public void Cancel()
+    public bool Cancel()
     {
         if (IsPlaced)
         {
@@ -166,6 +166,8 @@ public class BuildingObject : InteractObject
         {
             Destroy(gameObject);
         }
+
+        return IsPlaced;
     }
 
     public void Rotate()

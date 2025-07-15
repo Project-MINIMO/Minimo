@@ -27,8 +27,8 @@ public class EditCirclePanel : UIBase
         _editManager.CurrentCellPosition
             .Subscribe(SetPosition).AddTo(gameObject);
         
-        _confirmBtn.onClick.AddListener(() => _editManager.ConfirmEdit());
-        _cancelBtn.onClick.AddListener(() => _editManager.CancelEdit());
+        _confirmBtn.onClick.AddListener(_editManager.ConfirmEdit);
+        _cancelBtn.onClick.AddListener(_editManager.CancelEdit);
     }
     
     private void SetPosition(Vector3 position)
