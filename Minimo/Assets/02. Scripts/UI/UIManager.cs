@@ -10,6 +10,10 @@ public class UIManager : ManagerBase
 {
     [SerializeField] private Image _blackBlur;
 
+    public bool IsOnlyDefaultPanelsInStack =>
+        _uiStack.Count > 0 &&
+        _uiStack.All(panel => panel.IsDefaultPanel);
+    
     private Dictionary<Type, UIBase> _uiDictionary;
     private Stack<UIBase> _uiStack;
 

@@ -42,9 +42,7 @@ public class EditCirclePanel : UIBase
         if (!gameObject.activeSelf) return;
         
         var target = _editManager.CurrentEditObject;
-        var position = target.transform.position;
-        position.y += 0.5f;
-        var screenPos = Camera.main.WorldToScreenPoint(position);
+        var screenPos = Camera.main.WorldToScreenPoint(target.transform.position);
         _rect.position = screenPos;
     }
 }
