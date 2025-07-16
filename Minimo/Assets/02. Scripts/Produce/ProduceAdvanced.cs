@@ -9,6 +9,7 @@ public abstract class ProduceAdvanced : ProduceObject
 
     private Minimo _placedMinimo;
     private float _timeReduction;
+    private float _globalTimeReduction;
     
     protected override void Awake()
     {
@@ -20,10 +21,11 @@ public abstract class ProduceAdvanced : ProduceObject
             .GlobalTimeReduction
             .Subscribe(value =>
             {
-                _timeReduction = value;
+                _globalTimeReduction = value;
+                
                 foreach (var task in AllTasks)
                 {
-                    task.ApplyTimeReduction(value); 
+                    task.ApplyTimeReduction(_timeReduction + _globalTimeReduction); 
                 }
             })
             .AddTo(this);
@@ -31,11 +33,7 @@ public abstract class ProduceAdvanced : ProduceObject
 
     public void PlaceMinimo(Minimo minimo)
     {
-        if (_placedMinimo != null)
-        {
-            _placedMinimo.SetChillState();
-        }
-        
+        _placedMinimo?.SetChillState();
         _placedMinimo = minimo;
     }
 
@@ -45,7 +43,7 @@ public abstract class ProduceAdvanced : ProduceObject
         
         foreach (var task in AllTasks)
         {
-            task.ApplyTimeReduction(reduction); 
+            task.ApplyTimeReduction(_timeReduction + _globalTimeReduction); 
         }
     }
     

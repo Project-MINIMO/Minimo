@@ -35,16 +35,17 @@ public class PrimaryPanel : UIBase
 
     public override void ClosePanel()
     {
-        base.ClosePanel();
-
         foreach (var ctrl in _stateCtrls)
         {
             ctrl.SetActive(false);
         }
+
+        if (_produceManager.CurrentObject.ActiveTask != null)
+        {
+            _produceManager.CurrentObject.ActiveTask.OnStateChanged -= ShowCtrls;
+        }
         
-        if (_produceManager.CurrentObject.ActiveTask == null) return;
-        
-        _produceManager.CurrentObject.ActiveTask.OnStateChanged -= ShowCtrls;
+        base.ClosePanel();
     }
 
     private void ShowCtrls(ITaskState taskState)

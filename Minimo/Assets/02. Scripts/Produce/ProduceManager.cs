@@ -96,10 +96,10 @@ public class ProduceManager : ManagerBase
         obj.StartHarvest();
     }
 
-    public void HarvestEarly()
+    public void Skip()
     {
         if (CurrentObject == null) return;
 
-        CurrentObject.HarvestEarly();
+        CurrentObject.Skip();
     }
 }

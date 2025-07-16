@@ -115,8 +115,8 @@ public abstract class ProduceObject : BuildingObject
             _produceManager.Select(this);
         }
     }
-
-    #region Plant
+    
+    #region Produce
     internal virtual void StartPlant(ProduceData option)
     {
         if (AllTasks.Count >= MaxSlotCount) return;
@@ -132,9 +132,7 @@ public abstract class ProduceObject : BuildingObject
         AllTasks.Add(task);
         SetNextActiveTask();
     }
-    #endregion
     
-    #region Harvest
     internal virtual void StartHarvest()
     {
         for (var i = AllTasks.Count - 1; i >= 0; i--)
@@ -147,7 +145,7 @@ public abstract class ProduceObject : BuildingObject
         }
     }
 
-    internal void HarvestEarly()
+    internal void Skip()
     {
         ActiveTask?.ChangeState(CompletedState.Instance);
         SetNextActiveTask();

@@ -8,25 +8,28 @@ public class ProduceSlot : MonoBehaviour
     
     [SerializeField] private ItemInfoUpdater _itemInfoUpdater;
     [SerializeField] private RemainTimeUpdater _remainTimeUpdater;
+    [SerializeField] private GameObject _infoBack;
+    [SerializeField] private Button _infoCloseBtn;
     
     private ProduceManager _produceManager;
     private ProduceTertiary _produceObject;
     private ProduceTask _produceTask;
-    private UseCashPanel _useCashPanel;
     
     private int _taskIndex;
 
     private void Awake()
     {
         _produceManager = App.GetManager<ProduceManager>();
-        _useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
         _taskIndex = transform.GetSiblingIndex();
         
         _slotBtn.onClick.AddListener(OnClickSlot);
+        _infoCloseBtn.onClick.AddListener((() => _infoBack.SetActive(false)));
     }
 
     private void OnEnable()
     {
+        _infoBack.SetActive(false);
+        
         if (_produceManager == null) return;
         
         _produceObject = _produceManager.CurrentObject as ProduceTertiary;
@@ -38,6 +41,8 @@ public class ProduceSlot : MonoBehaviour
 
     private void OnDisable()
     {
+        _infoBack.SetActive(false);
+        
         if (_produceObject == null) return;
 
         UnbindTask();
@@ -98,6 +103,8 @@ public class ProduceSlot : MonoBehaviour
 
     private void OnStateChanged(ITaskState state)
     {
+        _infoBack.SetActive(false);
+        
         _stateImgs[0].SetActive(state is ActiveState);
         _stateImgs[1].SetActive(state is CompletedState);
     }
@@ -111,12 +118,8 @@ public class ProduceSlot : MonoBehaviour
                 break;
             
             case ActiveState:
-            {
-                _useCashPanel.OpenPanel(UseCashType.Produce, 
-                    _produceTask.RemainTime, 
-                    _produceManager.HarvestEarly);
+                _infoBack.SetActive(true);
                 break;
-            }
             
             case CompletedState:
                 _produceManager.Harvest();

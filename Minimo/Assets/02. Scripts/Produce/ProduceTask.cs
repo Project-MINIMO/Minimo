@@ -56,6 +56,7 @@ public class ProduceTask
         CurrentState = newState;
         CurrentState.OnEnter(this);
         
+        OnRemainTimeChanged?.Invoke(RemainTime);
         OnStateChanged?.Invoke(newState);
     }
     
