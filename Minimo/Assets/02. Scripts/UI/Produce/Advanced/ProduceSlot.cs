@@ -97,7 +97,6 @@ public class ProduceSlot : MonoBehaviour
     private void OnRemainTimeChanged(float remain)
     {
         if (_produceTask == null) return;
-        
         _remainTimeUpdater.UpdateTime(remain, _produceTask.ModifiedTime);
     }
 
@@ -107,7 +106,8 @@ public class ProduceSlot : MonoBehaviour
         
         _stateImgs[0].SetActive(state is ActiveState);
         _stateImgs[1].SetActive(state is CompletedState);
-        
+
+        if (_produceTask == null) return;
         OnRemainTimeChanged(_produceTask.RemainTime);
     }
 

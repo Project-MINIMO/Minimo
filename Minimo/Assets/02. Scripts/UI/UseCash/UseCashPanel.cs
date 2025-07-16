@@ -31,7 +31,7 @@ public class UseCashPanel : UIBase
     {
         base.OpenPanel();
 
-        ActiveBacks(isActiveUse: true);
+        ActiveBacks(true);
         
         _useBack.gameObject.SetActive(true);
         _useBack.Setup(type, amount, useAction);
@@ -41,7 +41,7 @@ public class UseCashPanel : UIBase
     {
         base.OpenPanel();
         
-        ActiveBacks(isActiveUse: true);
+        ActiveBacks(true);
         
         _useMaterialBack.gameObject.SetActive(true);
         _useMaterialBack.Setup(lackItems, useAction);

@@ -46,6 +46,13 @@ public abstract class ProduceAdvanced : ProduceObject
             task.ApplyTimeReduction(_timeReduction + _globalTimeReduction); 
         }
     }
+
+    internal override void StartPlant(ProduceData option)
+    {
+        if (_placedMinimo == null) return;
+        
+        base.StartPlant(option);
+    }
     
     internal override void OnPlant(ProduceTask task)
     {

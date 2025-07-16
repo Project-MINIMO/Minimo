@@ -8,7 +8,9 @@ public class AdvancedPanel : UIBase
 {
     [SerializeField] private Button _closeBtn;
     [SerializeField] private TextMeshProUGUI _titleTMP;
-    
+
+    [SerializeField] private Button _prevBtn;
+    [SerializeField] private Button _nextBtn;
     [SerializeField] private GameObject _expandHandler;
     [SerializeField] private Button _placeMinimoBtn;
 
@@ -30,6 +32,8 @@ public class AdvancedPanel : UIBase
         
         _closeBtn.onClick.AddListener(_produceManager.Deselect);
         _placeMinimoBtn.onClick.AddListener(_placeMinimoPanel.OpenPanel);
+        _prevBtn.onClick.AddListener(() => _produceManager.MoveToNextTertiary(-1));
+        _nextBtn.onClick.AddListener(() => _produceManager.MoveToNextTertiary(1));
     }
 
     public override void OpenPanel()

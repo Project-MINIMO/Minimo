@@ -14,7 +14,7 @@ public abstract class ProduceObject : BuildingObject
     public event Action<ProduceState> OnProduceStateChanged;
     public int MaxSlotCount { get; protected set; } = 1;
     
-    private ProduceManager _produceManager;
+    protected ProduceManager _produceManager;
     private PlantHelper _plantHelper;
     private PlantEffectCtrl _plantEffect;
     

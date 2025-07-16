@@ -16,6 +16,9 @@ public class ProduceManager : ManagerBase
 {
     public ProduceObject CurrentObject { get; private set; }
     
+    private readonly List<ProduceTertiary> _tertiaryBuildings = new();
+    public IReadOnlyList<ProduceTertiary> TertiaryBuildings => _tertiaryBuildings;
+    
     private Dictionary<BuildingTier, UIBase> _panelMap;
     private Camera _camera;
 
@@ -33,6 +36,9 @@ public class ProduceManager : ManagerBase
         
         _camera = Camera.main;
     }
+    
+    public void RegisterTertiary(ProduceTertiary tertiary)   => _tertiaryBuildings.Add(tertiary);
+    public void UnregisterTertiary(ProduceTertiary tertiary) => _tertiaryBuildings.Remove(tertiary);
 
     public void Select(ProduceObject obj)
     {
@@ -56,7 +62,7 @@ public class ProduceManager : ManagerBase
         
         var targetPos = new Vector3(
             CurrentObject.transform.position.x,
-            CurrentObject.transform.position.y,
+            CurrentObject.transform.position.y - 0.5f,
             _camera.transform.position.z
         );
 
@@ -101,5 +107,13 @@ public class ProduceManager : ManagerBase
         if (CurrentObject == null) return;
 
         CurrentObject.Skip();
+    }
+
+    public void MoveToNextTertiary(int num)
+    {
+        var index = _tertiaryBuildings.IndexOf(CurrentObject as ProduceTertiary);
+        var nextIndex = (index + num + _tertiaryBuildings.Count) % _tertiaryBuildings.Count;
+        var nextObject = _tertiaryBuildings[nextIndex];
+        Select(nextObject);
     }
 }

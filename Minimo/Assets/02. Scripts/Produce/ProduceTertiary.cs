@@ -5,6 +5,18 @@ public class ProduceTertiary : ProduceAdvanced
     public event Action<int> OnTaskCountChanged;
     public event Action OnMaxSlotCountChanged;
 
+    protected override bool CreateBuilding()
+    {
+        _produceManager.RegisterTertiary(this);
+        return base.CreateBuilding();
+    }
+
+    protected override void Destroy()
+    {
+        _produceManager.UnregisterTertiary(this);
+        base.Destroy();
+    }
+    
     public void AddSlotCount()
     {
         MaxSlotCount++;

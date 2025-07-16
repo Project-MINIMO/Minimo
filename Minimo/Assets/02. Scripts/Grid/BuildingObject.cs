@@ -13,7 +13,7 @@ public class BuildingObject : InteractObject
     public BuildingData BuildingData { get; private set; }
     public BuildingPositionData PositionData { get; private set; }
 
-    public bool IsPlaced { get; private set; } 
+    private bool _isPlaced;
     private bool _isFlipped = false;
     
     protected EditManager _editManager;
@@ -44,7 +44,7 @@ public class BuildingObject : InteractObject
     
     public virtual void Initialize(int id)
     {
-        IsPlaced = true;
+        _isPlaced = true;
         
         var buildingData = App.GetData<TitleData>().Building[id];
         Initialize(buildingData);
@@ -130,7 +130,7 @@ public class BuildingObject : InteractObject
 
     public bool Install()
     {
-        if (IsPlaced)
+        if (_isPlaced)
         {
             return UpdateBuilding();
         }
@@ -140,9 +140,9 @@ public class BuildingObject : InteractObject
         }
     }
 
-    private bool CreateBuilding()
+    protected virtual bool CreateBuilding()
     {
-        IsPlaced = true;
+        _isPlaced = true;
         PreviousPosition = transform.position;
         EndEdit();
         return true;
@@ -157,17 +157,22 @@ public class BuildingObject : InteractObject
   
     public bool Cancel()
     {
-        if (IsPlaced)
+        if (_isPlaced)
         {
             _editManager.MoveObject(PreviousPosition);
             EndEdit();
         }
         else
         {
-            Destroy(gameObject);
+            Destroy();
         }
 
-        return IsPlaced;
+        return _isPlaced;
+    }
+
+    protected virtual void Destroy()
+    {
+        Destroy(gameObject);
     }
 
     public void Rotate()

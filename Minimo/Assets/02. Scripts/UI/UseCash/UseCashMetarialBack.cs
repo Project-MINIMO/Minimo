@@ -19,7 +19,7 @@ public class UseCashMaterialBack : UseCashBack
 
     private int CalculatePrice(List<(Item, int)> lackItems)
     {
-        return 0; //lackItems.Sum(lackItem => lackItem.Item1.Data.CashCost * lackItem.Item2);
+        return lackItems.Sum(lackItem => lackItem.Item1.Data.BuyCost * lackItem.Item2);
     }
 
     private void SetMaterialSlots(List<(Item, int)> lackItems)
