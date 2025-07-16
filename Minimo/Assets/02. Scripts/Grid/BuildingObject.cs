@@ -164,15 +164,10 @@ public class BuildingObject : InteractObject
         }
         else
         {
-            Destroy();
+            Destroy(gameObject);
         }
 
         return _isPlaced;
-    }
-
-    protected virtual void Destroy()
-    {
-        Destroy(gameObject);
     }
 
     public void Rotate()

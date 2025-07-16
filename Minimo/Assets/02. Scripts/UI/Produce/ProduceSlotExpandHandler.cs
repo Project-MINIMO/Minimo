@@ -13,7 +13,7 @@ public class ProduceSlotExpandHandler : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _priceTMP;
     
     private ProduceManager _produceManager;
-    private ProduceTertiary _produceObject;
+    private ProduceElevated _produceObject;
     private UseCashPanel _useCashPanel;
 
 
@@ -38,7 +38,7 @@ public class ProduceSlotExpandHandler : MonoBehaviour
         if (_produceManager == null) return;
         if (_produceManager.CurrentObject == null) return;
 
-        _produceObject = _produceManager.CurrentObject as ProduceTertiary;
+        _produceObject = _produceManager.CurrentObject as ProduceElevated;
         
         _expandBtn.gameObject.SetActive(true);
         _confirmBack.SetActive(false);

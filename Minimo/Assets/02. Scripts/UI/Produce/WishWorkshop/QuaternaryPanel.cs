@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class WishPanel : UIBase
+public class QuaternaryPanel : UIBase
 {
     [Serializable]
     public struct WishOption
@@ -47,7 +47,7 @@ public class WishPanel : UIBase
         _closeBtn.onClick.AddListener(_produceManager.Deselect);
         _expandBtn.onClick.AddListener(() =>
         {
-            ((ProduceTertiary)_produceManager.CurrentObject).AddSlotCount();
+            ((ProduceElevated)_produceManager.CurrentObject).AddSlotCount();
             InitializeTaskBtns();
         });
         
@@ -90,7 +90,7 @@ public class WishPanel : UIBase
 
     private void InitializeTaskBtns()
     {
-        var maxCount = ((ProduceTertiary)_produceManager.CurrentObject).MaxSlotCount;
+        var maxCount = ((ProduceElevated)_produceManager.CurrentObject).MaxSlotCount;
         var i = 0;
 
         for (; i < maxCount; i++)

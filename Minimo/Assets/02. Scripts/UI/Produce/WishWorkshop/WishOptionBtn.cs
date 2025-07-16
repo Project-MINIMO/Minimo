@@ -12,12 +12,12 @@ public class WishOptionBtn : MonoBehaviour
     [SerializeField] private Image _iconImg;
     [SerializeField] private TextMeshProUGUI _countTMP;
 
-    private WishPanel _wishPanel;
+    private QuaternaryPanel _wishPanel;
     
     private void Awake()
     {
         _choiceBtn.onClick.AddListener(OnClickChoiceBtn);
-        _wishPanel = App.GetManager<UIManager>().GetPanel<WishPanel>();
+        _wishPanel = App.GetManager<UIManager>().GetPanel<QuaternaryPanel>();
     }
 
     private void OnEnable()

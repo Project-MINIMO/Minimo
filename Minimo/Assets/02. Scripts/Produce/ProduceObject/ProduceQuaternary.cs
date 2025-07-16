@@ -1,6 +1,6 @@
 using System.Linq;
 
-public class ProduceQuaternary : ProduceTertiary
+public class ProduceQuaternary : ProduceElevated
 {
     public void StartPlant(int flower, int food)
     {

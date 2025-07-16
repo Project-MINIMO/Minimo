@@ -12,7 +12,7 @@ public class ProduceSlot : MonoBehaviour
     [SerializeField] private Button _infoCloseBtn;
     
     private ProduceManager _produceManager;
-    private ProduceTertiary _produceObject;
+    private ProduceElevated _produceObject;
     private ProduceTask _produceTask;
     
     private int _taskIndex;
@@ -32,7 +32,7 @@ public class ProduceSlot : MonoBehaviour
         
         if (_produceManager == null) return;
         
-        _produceObject = _produceManager.CurrentObject as ProduceTertiary;
+        _produceObject = _produceManager.CurrentObject as ProduceElevated;
         if (_produceObject == null) return;
         
         _produceObject.OnTaskCountChanged += UpdateSlots;
