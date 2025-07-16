@@ -4,13 +4,6 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public enum ItemType
-{
-    None,
-    Food,
-    Flower,
-    Amulet,
-}
 
 [Serializable]
 public class CommonData
@@ -110,10 +103,10 @@ public class QuestReward
 [Serializable]
 public class RawProduceData
 {
-    public int    ID;        // 예: 빌딩 enum 값을 int로
-    public string Building;  // 예: "StarCropFarm"
-    public string MaterialItems; // "StarCrop:1,Water:5"
-    public string ResultItems;   // "Sugar:2"
+    public int    ID;       
+    public string Building; 
+    public string MaterialItems;
+    public string ResultItems; 
     public int    Time;      
     public int    EXP;
 }

@@ -32,7 +32,7 @@ public class WishOptionBack : MonoBehaviour
                 ? existingButtons[i] 
                 : Instantiate(_buttonPrefab, _buttonParent).GetComponent<WishOptionBtn>();
 
-            optionBtn.Initialize(filteredItems[i]);
+            optionBtn.Initialize(filteredItems[i].ID);
             _optionBtns.Add(optionBtn);
             
             optionBtn.gameObject.SetActive(false);

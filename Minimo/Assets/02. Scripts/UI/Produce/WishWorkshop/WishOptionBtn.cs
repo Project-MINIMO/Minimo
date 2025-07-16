@@ -4,20 +4,20 @@ using TMPro;
 
 public class WishOptionBtn : MonoBehaviour
 {
-    private bool _canShow => _item != null && AccountInfo.Instance.Items.ContainsKey(_item) && AccountInfo.Instance.Items[_item] > 0;
-    private ItemData _item; 
+    private bool _canShow => _item is { Count: > 0 };
+    private Item _item; 
     
     [SerializeField] private Button _choiceBtn;
     
     [SerializeField] private Image _iconImg;
     [SerializeField] private TextMeshProUGUI _countTMP;
 
-    private WishPanel _wishPanel;
+    private QuaternaryPanel _wishPanel;
     
     private void Awake()
     {
         _choiceBtn.onClick.AddListener(OnClickChoiceBtn);
-        _wishPanel = App.GetManager<UIManager>().GetPanel<WishPanel>();
+        _wishPanel = App.GetManager<UIManager>().GetPanel<QuaternaryPanel>();
     }
 
     private void OnEnable()
@@ -25,11 +25,11 @@ public class WishOptionBtn : MonoBehaviour
         SetCount();
     }
 
-    public void Initialize(ItemData item)
+    public void Initialize(int id)
     {
+        var item = AccountInfo.Instance.Items[id];
         _item = item;
-        
-        _iconImg.sprite = Resources.Load<Sprite>($"Item/{item.Name}");
+        _iconImg.sprite = item.Icon;
     }
     
     private void OnClickChoiceBtn()
@@ -42,10 +42,6 @@ public class WishOptionBtn : MonoBehaviour
         if (_item == null) return;
         
         gameObject.SetActive(_canShow);
-
-        if (AccountInfo.Instance.Items.TryGetValue(_item, out var value))
-        {
-            _countTMP.text = value.ToString();
-        }
+        _countTMP.text = _item.Count.ToString();
     }
 }

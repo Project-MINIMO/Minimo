@@ -36,7 +36,7 @@ public class PlaceMinimoHandler : MonoBehaviour
   
         _placeBtn.onClick.AddListener(() =>
         {
-            var currentBuilding = (ProduceAdvanced)_produceManager.CurrentProduceObject;
+            var currentBuilding = (ProduceAdvanced)_produceManager.CurrentObject;
             //currentBuilding.;
             _minimo.SetWorkState(currentBuilding);
             _minimoPanel.ClosePanel();

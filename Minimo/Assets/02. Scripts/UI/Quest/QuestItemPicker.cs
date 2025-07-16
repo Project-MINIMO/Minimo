@@ -30,7 +30,7 @@ public class QuestItemPicker : MonoBehaviour
 
     private void InitSlots()
     {
-        var itemDataList = App.GetData<TitleData>().Item;
+        var itemDataList = AccountInfo.Instance.Items;
         var existingSlots = GetComponentsInChildren<QuestItemPickSlot>(true);
 
         _slots = new List<QuestItemPickSlot>(itemDataList.Count);

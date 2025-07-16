@@ -4,58 +4,73 @@ using UnityEngine.UI;
 public class PrimaryPanel : UIBase
 {
     [SerializeField] private Button _closeBtn;
-    [SerializeField] private Button _minimoBtn;
     
-    [SerializeField] private PlantCtrl _plantCtrl;
-    [SerializeField] private ProduceInfoCtrl _infoCtrl;
-    [SerializeField] private HarvestHandler _harvestCtrl;
+    [SerializeField] private GameObject[] _stateCtrls;
     
     [SerializeField] private RectTransform _rect;
     
     private ProduceManager _produceManager;
-    private PlaceMinimoPanel _placeMinimoPanel;
 
-    public override void Initialize()
+    public override void Initialize(UIManager manager)
     {
-        _produceManager = App.GetManager<ProduceManager>();
-        _placeMinimoPanel = App.GetManager<UIManager>().GetPanel<PlaceMinimoPanel>();
+        base.Initialize(manager);
 
-        _closeBtn.onClick.AddListener(() => _produceManager.DeactiveProduce());
-        _minimoBtn.onClick.AddListener(_placeMinimoPanel.OpenPanel);
+        _produceManager = App.GetManager<ProduceManager>();
+
+        _closeBtn.onClick.AddListener(_produceManager.Deselect);
     }
- 
-    public void OpenPanel(ProduceState state)
+
+    public override void OpenPanel()
     {
         base.OpenPanel();
-
-        SetPosition();
         
+        SetPosition();
+
+        ShowCtrls(null);
+    }
+
+    public override void ClosePanel()
+    {
+        foreach (var ctrl in _stateCtrls)
+        {
+            ctrl.SetActive(false);
+        }
+
+        if (_produceManager.CurrentObject.ActiveTask != null)
+        {
+            _produceManager.CurrentObject.ActiveTask.OnStateChanged -= ShowCtrls;
+        }
+        
+        base.ClosePanel();
+    }
+
+    private void ShowCtrls(ITaskState taskState)
+    {
+        if (_produceManager == null) return;
+        if (_produceManager.CurrentObject == null) return;
+        
+        var state = _produceManager.CurrentObject.CurrentState;
+        
+        for (var i = 0; i < _stateCtrls.Length; i++)
+        {
+            _stateCtrls[i].SetActive(i == (int)state);
+        }
+
         switch (state)
         {
-            case ProduceState.Idle:
-                ShowUI(_plantCtrl);
-                break;
-            
             case ProduceState.Produce:
-                ShowUI(_infoCtrl);
+                _produceManager.CurrentObject.ActiveTask.OnStateChanged += ShowCtrls;
                 break;
             
             case ProduceState.Complete:
-                ShowUI(_harvestCtrl);
+                _produceManager.CurrentObject.AllTasks[0].OnStateChanged -= ShowCtrls;
                 break;
         }
     }
 
-    private void ShowUI(MonoBehaviour targetUI)
-    {
-        _harvestCtrl.gameObject.SetActive(targetUI == _harvestCtrl);
-        _infoCtrl.SetActive(targetUI == _infoCtrl);
-        _plantCtrl.SetActive(targetUI == _plantCtrl);
-    }
-    
     private void SetPosition()
     {
-        var position = _produceManager.CurrentProduceObject.transform.position;
+        var position = _produceManager.CurrentObject.transform.position;
         var screenPos = Camera.main.WorldToScreenPoint(position);
         screenPos.y -= 100;
         _rect.position = screenPos;

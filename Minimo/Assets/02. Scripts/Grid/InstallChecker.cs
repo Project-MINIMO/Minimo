@@ -4,12 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public enum TileType
-{
-    Ground,
-    Water
-}
-
 public class InstallChecker : MonoBehaviour
 {
     [SerializeField] private Tilemap _checkTilemap;

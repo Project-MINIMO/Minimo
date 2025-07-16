@@ -1,63 +1,36 @@
+#nullable enable
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
 
 public class ItemInfoUpdater : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI[] _infoTMP;
-    [SerializeField] private Image[] _infoImages;
-    
-    private TitleData _titleData;
-    
-    private ProduceData _currentOption;
-    
-    private void Awake()
-    {
-        _titleData = App.GetData<TitleData>();
-    }
+    [SerializeField] private TextMeshProUGUI _itemNameTMP;
+    [SerializeField] private TextMeshProUGUI _itemCountTMP;
+    [SerializeField] private Image _iconImg;
 
-    public void SetTaskItem(ProduceTask produceTask)
+    public void UpdateItem(int itemId, int amount)
     {
-        _currentOption = produceTask.Data;
-        
-        SetInfo();
-    }
-    
-    private void SetInfo()
-    {
-        var i = 0;
-        
-        for (; i < _currentOption.ResultItems.Length; i++) 
+        if (itemId == -1)
         {
-            if (!_titleData.Item.TryGetValue(_currentOption.ResultItems[i].ID, out var itemData))
-            {
-                Debug.LogError($"Cannot find item data with code : {_currentOption.ResultItems[i].ID}");
-                return;
-            }
-           
-            _infoTMP[i].text = $"X{_currentOption.ResultItems[i].Amount}";
-
-            if (_infoImages[i] != null)
-            {
-                _infoImages[i].sprite = Resources.Load<Sprite>($"Item/{itemData.Name}");
-                _infoImages[i].gameObject.SetActive(true);
-            }
+            _itemNameTMP?.SetText(string.Empty);
+            _itemCountTMP?.SetText(string.Empty);
+            if (_iconImg) _iconImg.gameObject.SetActive(false);
         }
-
-        for (; i < _infoImages.Length; i++) 
+        else
         {
-            if (_infoImages[i] != null)
-            {
-                _infoImages[i]?.gameObject.SetActive(false);
-            }
-            
+            var itemData = AccountInfo.Instance.Items[itemId];
+            UpdateItem(itemData, amount);
         }
     }
 
-    public void SetItemEmpty()
+    public void UpdateItem(Item item, int amount)
     {
-        _infoTMP[0].text = string.Empty;
-        _infoImages[0].sprite = null;
+        _itemNameTMP?.SetText(item.Name);
+        _itemCountTMP?.SetText(amount.ToString());
+
+        if (!_iconImg) return;
+        _iconImg.sprite = item.Icon;
+        _iconImg.gameObject.SetActive(true);
     }
 }

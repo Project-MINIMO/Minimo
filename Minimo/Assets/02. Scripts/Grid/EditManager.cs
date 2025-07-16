@@ -47,14 +47,17 @@ public class EditManager : ManagerBase
         */
     }
     
-    public void StartEdit(BuildingObject gridObject)
+    public void StartEdit(BuildingObject gridObject, bool isNew = false)
     {
         if (CurrentEditObject && CurrentEditObject != gridObject)
         {
             CancelEdit();
         }
-        
-        _tileStateModifier.ModifyTileState(gridObject, TileState.Empty);
+
+        if (!isNew)
+        {
+            _tileStateModifier.ModifyTileState(gridObject, TileState.Empty);
+        }
         
         CurrentEditObject = gridObject;
         IsEditing.Value = true;
@@ -65,9 +68,10 @@ public class EditManager : ManagerBase
 
     public void CancelEdit()
     {
-        CurrentEditObject.Cancel();
-        
-        _tileStateModifier.ModifyTileState(CurrentEditObject, TileState.Installed);
+        if (CurrentEditObject.Cancel())
+        {
+            _tileStateModifier.ModifyTileState(CurrentEditObject, TileState.Installed);
+        }
         
         CurrentEditObject = null;
         IsEditing.Value = false;

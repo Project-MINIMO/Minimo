@@ -1,24 +1,22 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
 using UniRx;
 
-public enum ProduceState
-{
-    Idle,
-    Produce,
-    Complete
-}
-
 public abstract class ProduceObject : BuildingObject
 {
     public List<ProduceData> ProduceData { get; private set; }
     public List<ProduceTask> AllTasks { get; } = new(); 
     public ProduceTask ActiveTask => AllTasks.FirstOrDefault(t => t.CurrentState is ActiveState);
+    public ProduceState CurrentState => GetCurrentProduceState();
+    public event Action<ProduceState> OnProduceStateChanged;
+    public int MaxSlotCount { get; protected set; } = 1;
     
-    private ProduceManager _produceManager;
+    protected ProduceManager _produceManager;
     private PlantHelper _plantHelper;
+    private PlantEffectCtrl _plantEffect;
     
     private float _lastUpdateTime;
     
@@ -68,6 +66,7 @@ public abstract class ProduceObject : BuildingObject
         ProduceData = App.GetData<TitleData>().GroupedProduce[data.Name];
 
         _plantHelper = new PlantHelper();
+        _plantEffect = GetComponentInChildren<PlantEffectCtrl>();
         
         _produceManager = App.GetManager<ProduceManager>();
         _lastUpdateTime = Time.time;
@@ -80,53 +79,78 @@ public abstract class ProduceObject : BuildingObject
         _lastUpdateTime = Time.time;
 
         if (ActiveTask == null) return;
-   
-        ActiveTask.Update();
+
+        var task = ActiveTask;
+        task.Update();
         
-        if (ActiveTask is { RemainTime: <= 0 })
+        if (task.CurrentState is CompletedState)
         {
-            CompleteActiveTask();
+            SetNextActiveTask();
         }
     }
     
-    protected virtual void CompleteActiveTask()
-    {
-        ActiveTask.ChangeState(CompletedState.Instance);
-        SetNextActiveTask();
-    }
-    
-    protected void SetNextActiveTask()
+    private void SetNextActiveTask()
     {
         if (ActiveTask != null) return;
 
         AllTasks
             .FirstOrDefault(task => task.CurrentState is PendingState)
             ?.ChangeState(ActiveState.Instance);
-    }
 
-    public virtual void StartPlant(ProduceData option)
+        GetCurrentProduceState();
+    }
+    
+    private ProduceState GetCurrentProduceState()
     {
+        if (AllTasks.Any(x => x.CurrentState is CompletedState))
+        {
+            OnProduceStateChanged?.Invoke(ProduceState.Complete);
+            return ProduceState.Complete;
+        }
+
+        if (ActiveTask != null)
+        {
+            OnProduceStateChanged?.Invoke(ProduceState.Produce);
+            return ProduceState.Produce;
+        }
+        else
+        {
+            OnProduceStateChanged?.Invoke(ProduceState.Idle);
+            return ProduceState.Idle;
+        }
+    }
+    
+    public override void OnClickUp()
+    {
+        base.OnClickUp();
+
+        if (!_editManager.IsEditing.Value)
+        {
+            _produceManager.Select(this);
+        }
+    }
+    
+    #region Produce
+    internal virtual void StartPlant(ProduceData option)
+    {
+        if (AllTasks.Count >= MaxSlotCount) return;
         if (!ProduceData.Contains(option)) return;
 
-        var optionIndex = ProduceData.IndexOf(option);
-        
-        _plantHelper.TryPlant(
-            option,
-            optionIndex,
-            OnPlant
-        );
+        _plantHelper.TryPlant(option, OnPlant);
     }
 
-    protected virtual void OnPlant(ProduceTask task, int optionIndex)
+    internal virtual void OnPlant(ProduceTask task)
     {
         task.ApplyTimeRatio(_timeRatio * _globalTimeRatio);
         task.ApplyHarvestRatio(_harvestRatio * _globalHarvestRatio); 
         AllTasks.Add(task);
-        Debug.Log($"ProduceTask Added : {task.Data.ResultItems[0].ID}");
+        
+        _plantEffect.PlayEffect(task.Materials.Select(x => x.ID).ToArray());
+        
         SetNextActiveTask();
     }
-
-    public virtual void StartHarvest()
+    
+    internal virtual void StartHarvest()
     {
         for (var i = AllTasks.Count - 1; i >= 0; i--)
         {
@@ -136,23 +160,16 @@ public abstract class ProduceObject : BuildingObject
             task.ChangeState(EndState.Instance);
             AllTasks.RemoveAt(i);
         }
+
+        GetCurrentProduceState();
     }
 
-    public virtual void HarvestEarly()
+    internal void Skip()
     {
         ActiveTask?.ChangeState(CompletedState.Instance);
         SetNextActiveTask();
     }
-
-    public override void OnClickUp()
-    {
-        base.OnClickUp();
-
-        if (!_editManager.IsEditing.Value)
-        {
-            _produceManager.ActiveProduce(this);
-        }
-    }
+    #endregion
     
     #region Apply Minimo Abilities
     public void ApplyTimeRatio(float value)
@@ -175,7 +192,4 @@ public abstract class ProduceObject : BuildingObject
         }
     }
     #endregion
-
-    public abstract void OpenUI();
-    public abstract void CloseUI();
 }
