@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class UseCashMaterialBack : UseCashBack
 {
-    [SerializeField] private CashMaterialSlot[] _materialSlots;
+    [SerializeField] private ItemInfoUpdater[] _materialSlots;
     
     public void Setup(List<(Item, int)> lackItems, Action useAction)
     {
@@ -28,12 +28,13 @@ public class UseCashMaterialBack : UseCashBack
         
         for (; i < lackItems.Count; i++) 
         {
-            _materialSlots[i].SetData(lackItems[i].Item1, lackItems[i].Item2);
+            _materialSlots[i].gameObject.SetActive(true);
+            _materialSlots[i].UpdateItem(lackItems[i].Item1, lackItems[i].Item2);
         }
 
         for (; i < _materialSlots.Length; i++) 
         {
-            _materialSlots[i].SetNull();
+            _materialSlots[i].gameObject.SetActive(false);
         }
     }
 }

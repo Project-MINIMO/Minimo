@@ -10,7 +10,6 @@ public class ChargeCashBack : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _descriptionTMP;
     [SerializeField] private Button _yesBtn;
     [SerializeField] private Button _noBtn;
-    [SerializeField] private Button _closeBtn;
     
     private TitleData _titleData;
     private Action _closeAction;
@@ -28,7 +27,6 @@ public class ChargeCashBack : MonoBehaviour
 
         _yesBtn.onClick.AddListener(OnClickChargeYes);
         _noBtn.onClick.AddListener(() => _closeAction?.Invoke());
-        _closeBtn.onClick.AddListener(() => _closeAction?.Invoke());
     }
 
     private void OnClickChargeYes()

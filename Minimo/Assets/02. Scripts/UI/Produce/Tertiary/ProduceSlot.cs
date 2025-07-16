@@ -75,7 +75,8 @@ public class ProduceSlot : MonoBehaviour
         _produceTask.OnRemainTimeChanged += OnRemainTimeChanged;
         _produceTask.OnStateChanged += OnStateChanged;
 
-        _itemInfoUpdater.UpdateItem(_produceTask.Result);
+        var result = _produceTask.Result;
+        _itemInfoUpdater.UpdateItem(result.ID, result.Amount);
         OnRemainTimeChanged(_produceTask.RemainTime);
         OnStateChanged(_produceTask.CurrentState);
     }
@@ -89,7 +90,7 @@ public class ProduceSlot : MonoBehaviour
             _produceTask = null;
         }
         
-        _itemInfoUpdater.UpdateItem(null);
+        _itemInfoUpdater.UpdateItem(-1, -1);
         _remainTimeUpdater.UpdateTime(-1, 1);
         OnStateChanged(PendingState.Instance);
     }

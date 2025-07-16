@@ -9,9 +9,9 @@ public class ItemInfoUpdater : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _itemCountTMP;
     [SerializeField] private Image _iconImg;
 
-    public void UpdateItem(ProduceResult? result)
+    public void UpdateItem(int itemId, int amount)
     {
-        if (result is null)
+        if (itemId == -1)
         {
             _itemNameTMP?.SetText(string.Empty);
             _itemCountTMP?.SetText(string.Empty);
@@ -19,13 +19,18 @@ public class ItemInfoUpdater : MonoBehaviour
         }
         else
         {
-            var itemData = AccountInfo.Instance.Items[result.ID];
-            _itemNameTMP?.SetText(itemData.Name);
-            _itemCountTMP?.SetText(result.Amount.ToString());
-
-            if (!_iconImg) return;
-            _iconImg.sprite = itemData.Icon;
-            _iconImg.gameObject.SetActive(true);
+            var itemData = AccountInfo.Instance.Items[itemId];
+            UpdateItem(itemData, amount);
         }
+    }
+
+    public void UpdateItem(Item item, int amount)
+    {
+        _itemNameTMP?.SetText(item.Name);
+        _itemCountTMP?.SetText(amount.ToString());
+
+        if (!_iconImg) return;
+        _iconImg.sprite = item.Icon;
+        _iconImg.gameObject.SetActive(true);
     }
 }
