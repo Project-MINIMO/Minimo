@@ -4,8 +4,8 @@ using TMPro;
 
 public class WishOptionBtn : MonoBehaviour
 {
-    private bool _canShow => _item is { Count: > 0 };
-    private Item _item; 
+    private bool _canShow => Item is { Count: > 0 };
+    public Item Item; 
     
     [SerializeField] private Button _choiceBtn;
     
@@ -28,20 +28,20 @@ public class WishOptionBtn : MonoBehaviour
     public void Initialize(int id)
     {
         var item = AccountInfo.Instance.Items[id];
-        _item = item;
+        Item = item;
         _iconImg.sprite = item.Icon;
     }
     
     private void OnClickChoiceBtn()
     {
-        _wishPanel.SetItemOnSlot(_item);
+        _wishPanel.SetItemOnSlot(Item);
     }
 
     private void SetCount()
     {
-        if (_item == null) return;
+        if (Item == null) return;
         
         gameObject.SetActive(_canShow);
-        _countTMP.text = _item.Count.ToString();
+        _countTMP.text = Item.Count.ToString();
     }
 }

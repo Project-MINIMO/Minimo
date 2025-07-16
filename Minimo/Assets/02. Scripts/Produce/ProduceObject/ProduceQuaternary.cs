@@ -2,11 +2,11 @@ using System.Linq;
 
 public class ProduceQuaternary : ProduceElevated
 {
-    public void StartPlant(int flower, int food)
+    public void StartPlant(Item[] materials)
     {
         var options = ProduceData
-            .Where(x => x.MaterialItems[0].ID == flower)
-            .Where(x => x.MaterialItems[1].ID == food).ToList();
+            .Where(x => x.MaterialItems[0].ID == materials[1].Data.ID)
+            .Where(x => x.MaterialItems[1].ID == materials[0].Data.ID).ToList();
 
         if (options.Count == 0)  return;
         
