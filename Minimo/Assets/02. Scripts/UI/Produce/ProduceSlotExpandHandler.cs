@@ -54,13 +54,7 @@ public class ProduceSlotExpandHandler : MonoBehaviour
         }
         else
         {
-            _useCashPanel.OpenPanel(UseCashType.ProduceExpand,
-                _currentPrice,
-                () =>
-                {
-                    _expandBtn.gameObject.SetActive(false);
-                    _confirmBack.SetActive(true);
-                });
+            _useCashPanel.OpenPanel();
         }
     }
 

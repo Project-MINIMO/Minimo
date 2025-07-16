@@ -77,13 +77,7 @@ public class ProduceSkipHandler : MonoBehaviour
         }
         else
         {
-            _useCashPanel.OpenPanel(UseCashType.Produce,
-                _modifiedPrice,
-                () =>
-                {
-                    _skipBtn.gameObject.SetActive(false);
-                    _confirmBack.SetActive(true);
-                });
+            _useCashPanel.OpenPanel();
         }
     }
 

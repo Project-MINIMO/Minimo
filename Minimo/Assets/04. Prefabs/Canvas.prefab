@@ -9394,12 +9394,8 @@ MonoBehaviour:
   _titleTMP: {fileID: 1593695477058827026}
   _descriptionTMP: {fileID: 4888344458805682880}
   _priceTMP: {fileID: 6973063469523501480}
-  _useBtn: {fileID: 929901819750375345}
-  _closeBtn: {fileID: 8756596565078721596}
-  _materialSlots:
-  - {fileID: 2191955891494399440}
-  - {fileID: 5590168866033947762}
-  - {fileID: 2815935868971103620}
+  _confirmBtn: {fileID: 929901819750375345}
+  _cancelBtn: {fileID: 8756596565078721596}
 --- !u!1 &703023819145786538
 GameObject:
   m_ObjectHideFlags: 0
@@ -55811,8 +55807,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _titleTMP: {fileID: 7827346458620166647}
   _descriptionTMP: {fileID: 5481102430371385139}
-  _yesBtn: {fileID: 143642430571206219}
-  _noBtn: {fileID: 3789318473907348525}
+  _confirmBtn: {fileID: 143642430571206219}
+  _cancelBtn: {fileID: 3789318473907348525}
 --- !u!1 &4199303418786992647
 GameObject:
   m_ObjectHideFlags: 0
@@ -60770,7 +60766,6 @@ GameObject:
   - component: {fileID: 9200163458347398374}
   - component: {fileID: 1142607743137899087}
   - component: {fileID: 6068965110371377593}
-  - component: {fileID: 2359642590513554989}
   m_Layer: 5
   m_Name: Back_Default
   m_TagString: Untagged
@@ -60839,23 +60834,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2359642590513554989
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4598542015298296679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dceb6c976a9a13a4984b8773e9fe3e99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _titleTMP: {fileID: 4506929654142378940}
-  _descriptionTMP: {fileID: 8231258258610442624}
-  _priceTMP: {fileID: 2118730940675965636}
-  _useBtn: {fileID: 6290327615052380118}
-  _closeBtn: {fileID: 330031595950956297}
 --- !u!1 &4599027966164389711
 GameObject:
   m_ObjectHideFlags: 0
@@ -118127,8 +118105,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1397085620671691805}
   - {fileID: 9200163458347398374}
+  - {fileID: 1397085620671691805}
   - {fileID: 6726196547756962194}
   m_Father: {fileID: 2114228335018892093}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -118187,7 +118165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24f5ce084a570b64ea21600a901504b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useBack: {fileID: 2359642590513554989}
   _useMaterialBack: {fileID: 7193301552632312695}
   _chargeBack: {fileID: 8018990391505288340}
 --- !u!1 &9020093720072528151
