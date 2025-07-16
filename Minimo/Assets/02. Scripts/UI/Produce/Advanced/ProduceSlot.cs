@@ -107,6 +107,8 @@ public class ProduceSlot : MonoBehaviour
         
         _stateImgs[0].SetActive(state is ActiveState);
         _stateImgs[1].SetActive(state is CompletedState);
+        
+        OnRemainTimeChanged(_produceTask.RemainTime);
     }
 
     private void OnClickSlot()

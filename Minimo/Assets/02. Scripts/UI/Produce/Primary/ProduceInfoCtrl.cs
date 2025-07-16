@@ -19,8 +19,8 @@ public class ProduceInfoCtrl : MonoBehaviour
 
         _produceTask = _produceManager.CurrentObject.ActiveTask;
         _produceTask.OnRemainTimeChanged += OnRemainTimeChanged;
-        OnRemainTimeChanged(_produceTask.RemainTime);
         _itemInfoUpdater.UpdateItem(_produceTask.Result);
+        OnRemainTimeChanged(_produceTask.RemainTime);
     }
 
     private void OnDisable()

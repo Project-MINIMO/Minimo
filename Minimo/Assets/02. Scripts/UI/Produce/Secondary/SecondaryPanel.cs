@@ -1,23 +1,28 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PrimaryPanel : UIBase
+public class SecondaryPanel : UIBase
 {
     [SerializeField] private Button _closeBtn;
+    [SerializeField] private Button _minimoBtn;
     
     [SerializeField] private GameObject[] _stateCtrls;
     
     [SerializeField] private RectTransform _rect;
     
     private ProduceManager _produceManager;
+    private ProduceObject _produceObject;
+    private PlaceMinimoPanel _placeMinimoPanel;
 
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
 
         _produceManager = App.GetManager<ProduceManager>();
+        _placeMinimoPanel = manager.GetPanel<PlaceMinimoPanel>();
 
         _closeBtn.onClick.AddListener(_produceManager.Deselect);
+        _minimoBtn.onClick.AddListener(_placeMinimoPanel.OpenPanel);
     }
 
     public override void OpenPanel()
@@ -26,7 +31,10 @@ public class PrimaryPanel : UIBase
         
         SetPosition();
 
-        ShowCtrls(null);
+        _produceObject = _produceManager.CurrentObject;
+        _produceObject.OnProduceStateChanged += ShowCtrls;
+        
+        ShowCtrls(_produceManager.CurrentObject.CurrentState);
     }
 
     public override void ClosePanel()
@@ -36,35 +44,28 @@ public class PrimaryPanel : UIBase
             ctrl.SetActive(false);
         }
 
-        if (_produceManager.CurrentObject.ActiveTask != null)
+        if (_produceObject != null)
         {
-            _produceManager.CurrentObject.ActiveTask.OnStateChanged -= ShowCtrls;
+            _produceObject.OnProduceStateChanged -= ShowCtrls;
+            _produceObject = null;
         }
         
         base.ClosePanel();
     }
 
-    private void ShowCtrls(ITaskState taskState)
+    private void ShowCtrls(ProduceState state)
     {
         if (_produceManager == null) return;
         if (_produceManager.CurrentObject == null) return;
-        
-        var state = _produceManager.CurrentObject.CurrentState;
         
         for (var i = 0; i < _stateCtrls.Length; i++)
         {
             _stateCtrls[i].SetActive(i == (int)state);
         }
 
-        switch (state)
+        if (state == ProduceState.Complete)
         {
-            case ProduceState.Produce:
-                _produceManager.CurrentObject.ActiveTask.OnStateChanged += ShowCtrls;
-                break;
-            
-            case ProduceState.Complete:
-                _produceManager.CurrentObject.AllTasks[0].OnStateChanged -= ShowCtrls;
-                break;
+            _produceManager.Deselect();
         }
     }
 

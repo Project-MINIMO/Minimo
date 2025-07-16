@@ -26,7 +26,7 @@ public class ProduceManager : ManagerBase
         _panelMap = new Dictionary<BuildingTier, UIBase>
         {
             { BuildingTier.Tier1, uiManager.GetPanel<PrimaryPanel>() },
-            { BuildingTier.Tier2, uiManager.GetPanel<PrimaryPanel>() },
+            { BuildingTier.Tier2, uiManager.GetPanel<SecondaryPanel>() },
             { BuildingTier.Tier3, uiManager.GetPanel<AdvancedPanel>() },
             { BuildingTier.Tier4, uiManager.GetPanel<WishPanel>() }
         };

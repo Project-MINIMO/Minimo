@@ -6,6 +6,7 @@ using Random = System.Random;
 public class ProduceTask
 {
     public ProduceResult Result { get; }
+    public ProduceMaterial[] Materials { get; }
     public ITaskState CurrentState { get; private set; }
     
     public event Action<ITaskState> OnStateChanged;
@@ -29,6 +30,8 @@ public class ProduceTask
     public ProduceTask(ProduceData produceOption)
     {
         Result = produceOption.ResultItems[0];
+        Materials = produceOption.MaterialItems;
+        
         _baseTime = produceOption.Time;
         _reducedTime = produceOption.Time;
         _modifiedTime = _baseTime;
@@ -55,8 +58,7 @@ public class ProduceTask
         CurrentState?.OnExit(this);
         CurrentState = newState;
         CurrentState.OnEnter(this);
-        
-        OnRemainTimeChanged?.Invoke(RemainTime);
+
         OnStateChanged?.Invoke(newState);
     }
     

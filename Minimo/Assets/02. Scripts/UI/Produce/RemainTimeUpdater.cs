@@ -58,7 +58,7 @@ public class RemainTimeUpdater : MonoBehaviour
         
         _remainTimeTMP.text = state switch
         {
-            TaskState.Empty or TaskState.Pending or TaskState.Complete => _stateStrings[(int)state],
+            TaskState.Empty or TaskState.Pending or TaskState.Complete => _stateStrings?[(int)state],
             TaskState.Produce => FormatTime(remain),
             _ => _remainTimeTMP.text
         };

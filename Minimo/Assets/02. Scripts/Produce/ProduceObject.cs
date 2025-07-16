@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -10,10 +11,12 @@ public abstract class ProduceObject : BuildingObject
     public List<ProduceTask> AllTasks { get; } = new(); 
     public ProduceTask ActiveTask => AllTasks.FirstOrDefault(t => t.CurrentState is ActiveState);
     public ProduceState CurrentState => GetCurrentProduceState();
+    public event Action<ProduceState> OnProduceStateChanged;
     public int MaxSlotCount { get; protected set; } = 1;
     
     private ProduceManager _produceManager;
     private PlantHelper _plantHelper;
+    private PlantEffectCtrl _plantEffect;
     
     private float _lastUpdateTime;
     
@@ -63,6 +66,7 @@ public abstract class ProduceObject : BuildingObject
         ProduceData = App.GetData<TitleData>().GroupedProduce[data.Name];
 
         _plantHelper = new PlantHelper();
+        _plantEffect = GetComponentInChildren<PlantEffectCtrl>();
         
         _produceManager = App.GetManager<ProduceManager>();
         _lastUpdateTime = Time.time;
@@ -92,18 +96,28 @@ public abstract class ProduceObject : BuildingObject
         AllTasks
             .FirstOrDefault(task => task.CurrentState is PendingState)
             ?.ChangeState(ActiveState.Instance);
+
+        GetCurrentProduceState();
     }
     
     private ProduceState GetCurrentProduceState()
     {
         if (AllTasks.Any(x => x.CurrentState is CompletedState))
         {
+            OnProduceStateChanged?.Invoke(ProduceState.Complete);
             return ProduceState.Complete;
         }
 
-        return ActiveTask != null 
-            ? ProduceState.Produce 
-            : ProduceState.Idle;
+        if (ActiveTask != null)
+        {
+            OnProduceStateChanged?.Invoke(ProduceState.Produce);
+            return ProduceState.Produce;
+        }
+        else
+        {
+            OnProduceStateChanged?.Invoke(ProduceState.Idle);
+            return ProduceState.Idle;
+        }
     }
     
     public override void OnClickUp()
@@ -130,6 +144,9 @@ public abstract class ProduceObject : BuildingObject
         task.ApplyTimeRatio(_timeRatio * _globalTimeRatio);
         task.ApplyHarvestRatio(_harvestRatio * _globalHarvestRatio); 
         AllTasks.Add(task);
+        
+        _plantEffect.PlayEffect(task.Materials.Select(x => x.ID).ToArray());
+        
         SetNextActiveTask();
     }
     
@@ -143,6 +160,8 @@ public abstract class ProduceObject : BuildingObject
             task.ChangeState(EndState.Instance);
             AllTasks.RemoveAt(i);
         }
+
+        GetCurrentProduceState();
     }
 
     internal void Skip()
