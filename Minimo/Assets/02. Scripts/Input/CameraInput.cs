@@ -16,27 +16,24 @@ public class CameraInput : MonoBehaviour
     [SerializeField] private Vector2 _maxBounds; 
     
     private InputManager _input;
+    private UIManager _ui;
     private Camera _mainCamera;
-    
-    private bool _isActive;
+
     private EditCirclePanel _editCirclePanel;
     
     private void Start()
     {
         _input = App.GetManager<InputManager>();
-        var screenStateManager = App.GetManager<ScreenStateManager>();
-        screenStateManager.CurrentState.Subscribe((currentState) =>
-        {
-            _isActive = currentState is ScreenState.Sky;
-        }).AddTo(gameObject);
+        _ui = App.GetManager<UIManager>();
+
         _mainCamera = Camera.main;
         
-        _editCirclePanel = App.GetManager<UIManager>().GetPanel<EditCirclePanel>();
+        _editCirclePanel = _ui.GetPanel<EditCirclePanel>();
     }
     
     private void Update()
     {
-        if (!_isActive) return;
+        if (!_ui.IsOnlyDefaultPanelsInStack) return;
         
         if (_input.CurrentState == InputState.Drag)
         {

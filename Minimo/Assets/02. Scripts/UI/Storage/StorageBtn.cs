@@ -4,8 +4,8 @@ using TMPro;
 
 public class StorageBtn : MonoBehaviour
 {
-    public bool CanShow => Item != null && AccountInfo.Instance.Items.ContainsKey(Item) && AccountInfo.Instance.Items[Item] > 0;
-    public ItemData Item { get; private set; }
+    public bool CanShow => Item != null && Item.Count > 0;
+    public Item Item { get; private set; }
     public Vector2 Position { get; private set; }
     public int SibilingsIndex => transform.GetSiblingIndex() % 4;
     
@@ -28,12 +28,12 @@ public class StorageBtn : MonoBehaviour
         SetCount();
     }
 
-    public void Initialize(ItemData item)
+    public void Initialize(Item item)
     {
         Item = item;
         Position = GetComponent<RectTransform>().position;
 
-        _iconImg.sprite = Resources.Load<Sprite>($"Item/{item.Name}");
+        _iconImg.sprite = item.Icon;
     }
     
     private void OnClickInfoBtn()
@@ -46,10 +46,6 @@ public class StorageBtn : MonoBehaviour
         if (Item == null) return;
         
         gameObject.SetActive(CanShow);
-
-        if (AccountInfo.Instance.Items.TryGetValue(Item, out var value))
-        {
-            _countTMP.text = value.ToString();
-        }
+        _countTMP.text = Item.Count.ToString();
     }
 }

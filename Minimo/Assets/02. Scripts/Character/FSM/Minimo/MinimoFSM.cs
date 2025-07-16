@@ -1,11 +1,3 @@
-public enum MinimoState
-{
-    Idle,
-    Walk,
-    Work,
-    Drag
-}
-
 public class MinimoFSM : FSM<Minimo, MinimoState>
 {
     public MinimoFSM(Minimo owner)

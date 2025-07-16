@@ -3,8 +3,6 @@ using UnityEngine.UI;
 
 public class QuestListPanel : UIBase
 {
-    [SerializeField] private QuestUIGrouper _grouper;
-    
     [SerializeField] private Button _closeBtn;
     
     [SerializeField] private Button[] _menuBtns;
@@ -14,15 +12,13 @@ public class QuestListPanel : UIBase
 
     private QuestSummaryPanel _questSummaryPanel;
     
-    public override void Initialize()
+    public override void Initialize(UIManager manager)
     {
-        _questSummaryPanel = App.GetManager<UIManager>().GetPanel<QuestSummaryPanel>();
+        base.Initialize(manager);
+
+        _questSummaryPanel = manager.GetPanel<QuestSummaryPanel>();
         
-        _closeBtn.onClick.AddListener(() =>
-        {
-            _grouper.OpenSummaryPanel();
-            ClosePanel();
-        });
+        _closeBtn.onClick.AddListener(ClosePanel);
         
         SetButtonEvent();
     }
@@ -59,8 +55,6 @@ public class QuestListPanel : UIBase
 
     public override void OpenPanel()
     {
-        _grouper.CloseAllExcept(this);
-        
         base.OpenPanel();
         
         OnClickMenuBtn(0);

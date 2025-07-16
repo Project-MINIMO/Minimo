@@ -1,0 +1,97 @@
+using System.Linq;
+
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class TertiaryPanel : UIBase
+{
+    [SerializeField] private Button _closeBtn;
+    [SerializeField] private TextMeshProUGUI _titleTMP;
+
+    [SerializeField] private ItemInfoUpdater _resultInfo;
+    [SerializeField] private Button _prevBtn;
+    [SerializeField] private Button _nextBtn;
+    [SerializeField] private GameObject _expandHandler;
+    [SerializeField] private Button _placeMinimoBtn;
+
+    private ProduceManager _produceManager;
+    private ProduceTertiary _produceObject;
+    private PlaceMinimoPanel _placeMinimoPanel;
+    
+    private GameObject[] _slots;
+    
+    public override void Initialize(UIManager manager)
+    {
+        base.Initialize(manager);
+
+        _produceManager = App.GetManager<ProduceManager>();
+        _placeMinimoPanel = manager.GetPanel<PlaceMinimoPanel>();
+        
+        var produceSlots = GetComponentsInChildren<ProduceSlot>(true);
+        _slots = produceSlots.Select(slot => slot.gameObject).ToArray();
+        
+        _closeBtn.onClick.AddListener(_produceManager.Deselect);
+        _placeMinimoBtn.onClick.AddListener(_placeMinimoPanel.OpenPanel);
+        _prevBtn.onClick.AddListener(() => _produceManager.MoveToNextTertiary(-1));
+        _nextBtn.onClick.AddListener(() => _produceManager.MoveToNextTertiary(1));
+    }
+
+    public override void OpenPanel()
+    {
+        base.OpenPanel();
+        
+        _titleTMP.text = App.GetData<TitleData>()
+            .GetString($"STR_BUILDING_{_produceManager.CurrentObject.BuildingData.Name.ToUpper()}_NAME");
+        
+        _produceObject = _produceManager.CurrentObject as ProduceTertiary;
+        if (_produceObject == null) return;
+        
+        _produceObject.OnMaxSlotCountChanged += UpdateSlots;
+        _produceObject.OnProduceStateChanged += UpdateResultInfo;
+        UpdateSlots();
+    }
+
+    public override void ClosePanel()
+    {
+        if (_produceObject != null)
+        {
+            _produceObject.OnMaxSlotCountChanged -= UpdateSlots;
+            _produceObject.OnProduceStateChanged -= UpdateResultInfo;
+            _produceObject = null;
+        }
+        
+        base.ClosePanel();
+    }
+
+    private void UpdateSlots()
+    {
+        var maxCount = _produceObject.MaxSlotCount;
+        var i = 0;
+
+        for (; i < maxCount; i++)
+        {
+            _slots[i].SetActive(true);
+        }
+
+        for (; i < _slots.Length; i++)
+        {
+            _slots[i].SetActive(false);
+        }
+        
+        _expandHandler.SetActive(maxCount < 5);
+    }
+
+    private void UpdateResultInfo(ProduceState state)
+    {
+        if (state == ProduceState.Complete)
+        {
+            _resultInfo.gameObject.SetActive(true);
+            _resultInfo.UpdateItem(_produceObject.AllTasks[0].Result.ID, -1);
+        }
+        else
+        {
+            _resultInfo.gameObject.SetActive(false);
+        }
+    }
+}

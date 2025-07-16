@@ -5,7 +5,7 @@ using TMPro;
 public class QuestItemSelectedSlot : MonoBehaviour
 {
     public bool CanSelected => _count < _maxCount;
-    public ItemData Item { get; private set; }
+    public Item Item { get; private set; }
     
     [SerializeField] private Button _choiceBtn;
     
@@ -20,12 +20,12 @@ public class QuestItemSelectedSlot : MonoBehaviour
         _choiceBtn.onClick.AddListener(OnClickChoice);
     }
 
-    public void Initialize(ItemData item, int amount)
+    public void Initialize(Item item, int amount)
     {
         Item = item;
         
         _iconImg.gameObject.SetActive(true);
-        _iconImg.sprite = Resources.Load<Sprite>($"Item/{item.Name}");
+        _iconImg.sprite = item.Icon;
         
         _countTMP.gameObject.SetActive(true);
         _count = 0;
@@ -47,7 +47,7 @@ public class QuestItemSelectedSlot : MonoBehaviour
         _choiceBtn.gameObject.SetActive(isChoice);
     }
 
-    public void AddItem(ItemData item)
+    public void AddItem(Item item)
     {
         if (Item == null)
         {

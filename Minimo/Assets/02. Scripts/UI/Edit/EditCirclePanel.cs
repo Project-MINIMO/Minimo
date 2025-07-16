@@ -12,8 +12,10 @@ public class EditCirclePanel : UIBase
     private EditManager _editManager;
     private Transform _target;
 
-    public override void Initialize()
+    public override void Initialize(UIManager manager)
     {
+        base.Initialize(manager);
+
         _editManager = App.GetManager<EditManager>();
         
         _editManager.IsEditing
@@ -25,8 +27,8 @@ public class EditCirclePanel : UIBase
         _editManager.CurrentCellPosition
             .Subscribe(SetPosition).AddTo(gameObject);
         
-        _confirmBtn.onClick.AddListener(() => _editManager.ConfirmEdit());
-        _cancelBtn.onClick.AddListener(() => _editManager.CancelEdit());
+        _confirmBtn.onClick.AddListener(_editManager.ConfirmEdit);
+        _cancelBtn.onClick.AddListener(_editManager.CancelEdit);
     }
     
     private void SetPosition(Vector3 position)
@@ -40,9 +42,7 @@ public class EditCirclePanel : UIBase
         if (!gameObject.activeSelf) return;
         
         var target = _editManager.CurrentEditObject;
-        var position = target.transform.position;
-        position.y += 0.5f;
-        var screenPos = Camera.main.WorldToScreenPoint(position);
+        var screenPos = Camera.main.WorldToScreenPoint(target.transform.position);
         _rect.position = screenPos;
     }
 }

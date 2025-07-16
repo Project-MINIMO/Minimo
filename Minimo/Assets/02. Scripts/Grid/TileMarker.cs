@@ -52,19 +52,19 @@ public class TileMarker : MonoBehaviour
     {
         ClearMarkTiles();
 
-        Vector3Int baseCell = _markTilemap.WorldToCell(gridObject.transform.position);
+        var baseCell = _markTilemap.WorldToCell(gridObject.transform.position);
         
         foreach (var relativePos in gridObject.PositionData.GroundTilePositions)
         {
-            Vector3Int cellPos = baseCell + new Vector3Int(relativePos.x, relativePos.y, 0);
-            bool canInstall = _installChecker.CheckCanInstall(cellPos, TileType.Ground);
+            var cellPos = baseCell + new Vector3Int(relativePos.x, relativePos.y, 0);
+            var canInstall = _installChecker.CheckCanInstall(cellPos, TileType.Ground);
             _markTilemap.SetTile(cellPos, canInstall ? _possibleTile : _impossibleTile);
         }
         
         foreach (var relativePos in gridObject.PositionData.WaterTilePositions)
         {
-            Vector3Int cellPos = baseCell + new Vector3Int(relativePos.x, relativePos.y, 0);
-            bool canInstall = _installChecker.CheckCanInstall(cellPos, TileType.Water);
+            var cellPos = baseCell + new Vector3Int(relativePos.x, relativePos.y, 0);
+            var canInstall = _installChecker.CheckCanInstall(cellPos, TileType.Water);
             _markTilemap.SetTile(cellPos, canInstall ? _possibleTile : _impossibleTile);
         }
     }

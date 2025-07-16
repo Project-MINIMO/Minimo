@@ -28,8 +28,10 @@ public class StoragePanel : UIBase
     
     private List<StorageBtn> _storageBtns;
 
-    public override void Initialize()
+    public override void Initialize(UIManager manager)
     {
+        base.Initialize(manager);
+
         SetString();
         SetButtonEvent();
         
@@ -40,7 +42,7 @@ public class StoragePanel : UIBase
     {
         var existingButtons = GetComponentsInChildren<StorageBtn>(true);
 
-        var items = App.GetData<TitleData>().Item;
+        var items = AccountInfo.Instance.Items;
         _storageBtns = new List<StorageBtn>(items.Count);
 
         var i = 0;
@@ -117,7 +119,7 @@ public class StoragePanel : UIBase
         {
             var isActive = 
                 targetType == StorageType.Entire 
-                || index == button.Item.Type;
+                || index == button.Item.Data.Type;
             
             button.gameObject.SetActive(isActive);
         }

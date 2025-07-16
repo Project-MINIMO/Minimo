@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -8,8 +9,15 @@ using DG.Tweening;
 public class UIManager : ManagerBase
 {
     [SerializeField] private Image _blackBlur;
-
+    [SerializeField] private GetItemPanel _getItem;
+    public GetItemPanel GetItem => _getItem;
+    
+    public bool IsOnlyDefaultPanelsInStack =>
+        _uiStack.Count > 0 &&
+        _uiStack.All(panel => panel.IsDefaultPanel);
+    
     private Dictionary<Type, UIBase> _uiDictionary;
+    private Stack<UIBase> _uiStack;
 
     protected override void Awake()
     {
@@ -18,43 +26,101 @@ public class UIManager : ManagerBase
         var uiPanels = GetComponentsInChildren<UIBase>(true);
 
         _uiDictionary = new(uiPanels.Length);
+        _uiStack = new(uiPanels.Length);
 
-        foreach (var panel in uiPanels)
-        {
-            _uiDictionary.Add(panel.GetType(), panel);
-        }
+        _uiDictionary = uiPanels.ToDictionary(p => p.GetType(), p => p);
     }
 
     private void Start()
     {
-        _blackBlur.DOFade(1, 0);
-        
-        foreach (var UI in _uiDictionary.Values)
+        foreach (var panel in _uiDictionary.Values)
         {
-            if (!UI.gameObject.activeSelf) //wake up panels
+            try
             {
-                UI.gameObject.SetActive(true);
-                UI.gameObject.SetActive(false);
+                panel.gameObject.SetActive(true);
+                
+                panel.Initialize(this); 
+                
+                if (panel.IsDefaultPanel)
+                {
+                    _uiStack.Push(panel);
+                }
+                else
+                {
+                    panel.gameObject.SetActive(false);
+                }
             }
-
-            try { UI.Initialize(); }
             catch (Exception error)
             { Debug.LogError($"ERROR: {error.Message}\n{error.StackTrace}"); }
         }
         
         FadeOut(1);
     }
+    
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Back();
+        }
+    }
 
     #region Get Panel
     public T GetPanel<T>() where T : UIBase
     {
-        if (_uiDictionary.TryGetValue(typeof(T), out UIBase panel))
+        if (_uiDictionary.TryGetValue(typeof(T), out var panel))
         {
             return panel as T;
         }
 
         Debug.LogError($"Panel of type {typeof(T)} not found.");
         return null;
+    }
+    #endregion
+
+    #region Manage Stack
+    public void PushPanel(UIBase panel)
+    {
+        if (_uiStack.Count > 0 && _uiStack.Peek() == panel) return;
+        
+        foreach (var peek in _uiStack)
+        {
+            peek.Hide(false);
+        }
+        
+        panel.Show(true);
+        _uiStack.Push(panel);
+    }
+    
+    public void PopPanel(UIBase panel)
+    {
+        if (_uiStack.Count == 0 || _uiStack.Peek() != panel) return;
+
+        _uiStack.Pop();
+        panel.Hide(true);
+
+        if (_uiStack.Count > 0)
+        {
+            if (_uiStack.Peek().IsDefaultPanel)
+            {
+                foreach (var peek in _uiStack)
+                {
+                    peek.Show(false);
+                }
+            }
+            else
+            {
+                _uiStack.Peek().Show(false);
+            }
+        }
+    }
+
+    public void Back()
+    {
+        if (_uiStack.Count == 0) return;
+        if (_uiStack.Peek().IsDefaultPanel) return;
+        
+        PopPanel(_uiStack.Peek());
     }
     #endregion
     

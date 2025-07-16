@@ -9,6 +9,11 @@ public class TeamLogo : MonoBehaviour
     
     private void Start()
     {
+        App.LoadScene(SceneName.Title);
+    }
+
+    private void Show()
+    {
         Sequence sequence = DOTween.Sequence();
         sequence.AppendInterval(0.5f)
             .Append(_logoImg.DOFade(1, 1))

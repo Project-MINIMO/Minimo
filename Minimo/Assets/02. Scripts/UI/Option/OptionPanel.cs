@@ -24,8 +24,10 @@ public class OptionPanel : UIBase
     private OptionBase[] _optionBases;
 
     #region Override
-    public override void Initialize()
+    public override void Initialize(UIManager manager)
     {
+        base.Initialize(manager);
+
         _optionBases = GetComponentsInChildren<OptionBase>(true);
 
         SetString();

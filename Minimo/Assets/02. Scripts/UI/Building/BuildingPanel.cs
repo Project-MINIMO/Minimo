@@ -14,8 +14,10 @@ public class BuildingPanel : UIBase
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
 
-    public override void Initialize()
+    public override void Initialize(UIManager manager)
     {
+        base.Initialize(manager);
+
         SetString();
         SetButtonEvent();
     }
