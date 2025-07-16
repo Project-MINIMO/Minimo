@@ -8,7 +8,7 @@ public class GetItemPanel : MonoBehaviour
 {
     [SerializeField] private Image[] _iconImgs;
     [SerializeField] private RectTransform _storageRect;
-    [SerializeField] private float _spawnInterval = 0.1f;
+    [SerializeField] private float _spawnInterval = 0.8f;
     
     private readonly Queue<int> _itemQueue = new(); 
     private readonly Queue<Image> _iconPool = new();
@@ -16,21 +16,20 @@ public class GetItemPanel : MonoBehaviour
     private float _nextSpawnTime;
     private Dictionary<Image, Vector2> _startPositionMap;
     
-    private bool _storageVisible;
+    private int _storageVisible;
 
     private void Awake()
     {
         _startPositionMap = new Dictionary<Image, Vector2>(_iconImgs.Length);
-        foreach (var icon in _iconImgs)
-        {
-            _startPositionMap[icon] = icon.rectTransform.anchoredPosition;
-        }
-        
+
         foreach (var img in _iconImgs)
         {
             img.gameObject.SetActive(false);
+            _startPositionMap[img] = img.rectTransform.anchoredPosition;
             _iconPool.Enqueue(img);
         }
+        
+        _storageRect.localScale = Vector3.zero; 
     }
     
     private void Update()
@@ -42,12 +41,6 @@ public class GetItemPanel : MonoBehaviour
             SpawnNext();
             _nextSpawnTime = Time.time + _spawnInterval;
         }
-        
-        var shouldShow = _iconPool.Count < _iconImgs.Length;
-        if (shouldShow == _storageVisible) return;
-        
-        _storageVisible = shouldShow;
-        _storageRect.gameObject.SetActive(_storageVisible);
     }
     
     public void EnqueueItem(int id) => _itemQueue.Enqueue(id);
@@ -58,24 +51,31 @@ public class GetItemPanel : MonoBehaviour
     
     private void SpawnNext()
     {
+        if (_storageVisible++ == 0)
+        {
+            _storageRect.DOKill();
+            _storageRect.DOScale(1f, 0.1f).SetEase(Ease.OutCirc);
+        } 
+
         var itemId = _itemQueue.Dequeue();
         var img = _iconPool.Dequeue();
-
         SetItemIcon(itemId, img);
-
-        img.rectTransform
-            .DOScale(1f, 0.5f).SetEase(Ease.OutElastic)
-            .OnComplete(() =>
+        
+        var rect = img.rectTransform;
+        var sequence = DOTween.Sequence();
+        sequence
+            .Append(rect.DOScale(1f, 0.5f).SetEase(Ease.OutElastic))
+            .AppendInterval(0.3f)
+            .Append(rect.DOAnchorPos(_storageRect.anchoredPosition, 0.5f).SetEase(Ease.InBack))
+            .Join(rect.DOScale(0f, 0.3f).SetEase(Ease.InCubic).SetDelay(0.2f))
+            .AppendCallback(() =>
             {
-                img.rectTransform.DOAnchorPos(_storageRect.anchoredPosition, 0.5f).SetEase(Ease.InBack);
-                img.rectTransform.DOScale(0f, 0.3f).SetEase(Ease.InCubic).SetDelay(0.2f);
-                img.rectTransform.DOScale(0f, 0.3f).SetEase(Ease.InCubic).SetDelay(0.2f)
-                    .OnComplete(() =>
-                    {
-                        img.gameObject.SetActive(false);
-                        _iconPool.Enqueue(img);
-                    });
-            });
+                img.gameObject.SetActive(false);
+                _iconPool.Enqueue(img);
+                _storageVisible--;
+                AnimateStorageBounce();
+            })
+            .Play();
     }
     
     private void SetItemIcon(int itemId, Image image)
@@ -85,5 +85,21 @@ public class GetItemPanel : MonoBehaviour
         image.rectTransform.localScale = Vector3.zero;  
         
         image.gameObject.SetActive(true);
+    }
+    
+    private void AnimateStorageBounce()
+    {
+        var sequence = DOTween.Sequence();
+        sequence
+            .Append(_storageRect.DOScale(1.5f, 0.05f).SetEase(Ease.OutCirc))
+            .Append(_storageRect.DOScale(1f, 0.05f).SetEase(Ease.Linear))
+            .OnComplete(() =>
+            {
+                if (_storageVisible == 0)
+                {
+                    _storageRect.DOScale(0f, 0.1f).SetEase(Ease.Linear);
+                }
+            })
+            .Play();
     }
 }

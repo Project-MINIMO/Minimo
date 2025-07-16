@@ -23,12 +23,11 @@ public class PlantEffectCtrl : MonoBehaviour
                 _iconRect.sizeDelta = Vector2.one;
                 _canvasGroup.alpha = 1;
             })
-            .Append(_iconRect.DOScale(1.2f, 0.2f).SetEase(Ease.OutBack))
-            .Append(_iconRect.DOScale(1f, 0.1f).SetEase(Ease.OutQuad))
-            .AppendInterval(0.5f)
-            .Append(_iconRect.DOAnchorPos(Vector2.zero, 0.3f).SetEase(Ease.InOutQuad))
+            .Append(_iconRect.DOScale(1f, 0.2f).SetEase(Ease.OutElastic))
+            .AppendInterval(0.3f)
+            .Append(_iconRect.DOAnchorPos(Vector2.zero, 0.3f).SetEase(Ease.InQuad))
             .Join(_iconRect.DOScale(0f, 0.3f).SetEase(Ease.InQuad))
-            .Join(_canvasGroup.DOFade(0, 0.3f).SetEase(Ease.Linear));
+            .Join(_canvasGroup.DOFade(0, 0.2f).SetEase(Ease.InQuad));
     }
 
     public void PlayEffect(int[] itemID)
