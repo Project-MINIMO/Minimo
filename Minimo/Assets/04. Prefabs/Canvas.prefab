@@ -10315,7 +10315,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 622751018646080438}
   - {fileID: 8014842688470516943}
   - {fileID: 8999194656245726744}
   m_Father: {fileID: 4184506015099710756}
@@ -52971,7 +52970,7 @@ GameObject:
   - component: {fileID: 1528949923075226077}
   - component: {fileID: 3181055072947694318}
   m_Layer: 5
-  m_Name: Back_Complete
+  m_Name: Back_Result
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52990,11 +52989,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7751554682471439671}
-  m_Father: {fileID: 7305170677428800327}
+  m_Father: {fileID: 4184506015099710756}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 55}
+  m_AnchoredPosition: {x: 0, y: 138}
   m_SizeDelta: {x: 347, y: 347}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1528949923075226077
@@ -56834,8 +56833,9 @@ GameObject:
   - component: {fileID: 7751554682471439671}
   - component: {fileID: 7747129904488457786}
   - component: {fileID: 7032083752815510481}
+  - component: {fileID: 467239904621333924}
   m_Layer: 5
-  m_Name: Img_Icon
+  m_Name: Img_Result
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56898,6 +56898,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &467239904621333924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4255133170296082276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bec6e2dcb99c3064f81508026ee66d94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemNameTMP: {fileID: 0}
+  _itemCountTMP: {fileID: 0}
+  _iconImg: {fileID: 7032083752815510481}
 --- !u!1 &4257990873933523328
 GameObject:
   m_ObjectHideFlags: 0
@@ -109948,6 +109963,7 @@ RectTransform:
   - {fileID: 5203181594636246161}
   - {fileID: 5098907113572806842}
   - {fileID: 598234970669229372}
+  - {fileID: 622751018646080438}
   - {fileID: 7305170677428800327}
   m_Father: {fileID: 2114228335018892093}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -109970,6 +109986,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _closeBtn: {fileID: 6711386321642459125}
   _titleTMP: {fileID: 1409840431844544713}
+  _resultInfo: {fileID: 467239904621333924}
   _prevBtn: {fileID: 2569360886087049546}
   _nextBtn: {fileID: 5638172106865528691}
   _expandHandler: {fileID: 604372276552478796}
@@ -126068,7 +126085,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 284614575789912889, guid: e15831ce93c7397468dd6dc2485f282b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 284614575789912889, guid: e15831ce93c7397468dd6dc2485f282b, type: 3}
       propertyPath: m_AnchorMin.x
@@ -126076,7 +126093,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 284614575789912889, guid: e15831ce93c7397468dd6dc2485f282b, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 284614575789912889, guid: e15831ce93c7397468dd6dc2485f282b, type: 3}
       propertyPath: m_SizeDelta.x
@@ -126116,11 +126133,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 284614575789912889, guid: e15831ce93c7397468dd6dc2485f282b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 181
       objectReference: {fileID: 0}
     - target: {fileID: 284614575789912889, guid: e15831ce93c7397468dd6dc2485f282b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -34.5
       objectReference: {fileID: 0}
     - target: {fileID: 284614575789912889, guid: e15831ce93c7397468dd6dc2485f282b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
