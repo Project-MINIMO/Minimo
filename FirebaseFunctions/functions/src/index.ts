@@ -119,48 +119,36 @@ onCall(
   });
 
 // --- 계정 생성 시 UserData 문서 생성 트리거 ---
-export const createUserDocument = functions
-  .auth.user().onCreate(
-    async (user: admin.auth.UserRecord) => {
-      const uid = user.uid;
-      const displayName = user.displayName;
+export const createUserAccount = onCall(
+  { region: "asia-northeast3" },
+  async (request) => {
+    const uid = request.auth?.uid;
+    if (!uid) {
+      throw new HttpsError("unauthenticated", "로그인이 필요합니다.");
+    }
 
-      console.log(`User created: ${uid}`);
+    const userDocRef = admin.firestore().collection("users").doc(uid);
+    const userDoc = await userDocRef.get();
 
-      try {
-        const userDocRef = admin.firestore().collection("users").doc(uid);
+    if (userDoc.exists) {
+      throw new HttpsError("already-exists", "이미 계정이 생성되었습니다.");
+    }
 
-        const userDoc = await userDocRef.get();
-        if (userDoc.exists) {
-          console.warn(`User document already exists ${uid}.`);
-          return null;
-        }
+    const nickname = request.data.nickname || `user_${uid.substring(0, 6)}`;
 
-        const initialUserData: UserData = {
-          uid: uid,
-          nickname: displayName || `user_${uid.substring(0, 6)}`,
-          createdAt: admin.firestore.FieldValue
-            .serverTimestamp() as admin.firestore.Timestamp,
-          lastLoginAt: admin.firestore.FieldValue
-            .serverTimestamp() as admin.firestore.Timestamp,
-          currencies: {
-            SDC: 0,
-            SLP: 0,
-            WSD: 0,
-            HDP: 0,
-          },
-        };
+    const userData: UserData = {
+      uid,
+      nickname,
+      createdAt: admin.firestore.FieldValue.serverTimestamp() as any,
+      lastLoginAt: admin.firestore.FieldValue.serverTimestamp() as any,
+      currencies: { SDC: 0, SLP: 0, WSD: 0, HDP: 0 },
+    };
 
-        await userDocRef.set(initialUserData);
-        console.log(`Created user document for uid: ${uid}`);
-        return { success: true, uid: uid };
-      } catch (error) {
-        console.error(`Error creating user document for uid: ${uid}`, error);
-        // In a background trigger like onCreate, you typically log the error
-        // instead of throwing an HttpsError back to a client.
-        throw new Error(`Failed to create user document: ${error}`);
-      }
-    });
+    await userDocRef.set(userData);
+    return { success: true };
+  }
+);
+
 
 // --- 계정 삭제 시 UserData 문서 및 서브컬렉션 삭제 ---
 export const deleteUserDocument = functions

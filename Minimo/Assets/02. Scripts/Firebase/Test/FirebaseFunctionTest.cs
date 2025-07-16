@@ -21,8 +21,6 @@ public class FirebaseFunctionTest : MonoBehaviour
 #endif
         _auth = FirebaseAuth.DefaultInstance;
         await _auth.SignInAnonymouslyAsync();
-        // 1초 대기
-        await Task.Delay(3000);
         
         var user = FirebaseAuth.DefaultInstance.CurrentUser;
         if (user == null) {
@@ -30,14 +28,24 @@ public class FirebaseFunctionTest : MonoBehaviour
             return;
         }
         
-        var callable = _functions.GetHttpsCallable("getUserAccountInfo");
-        
         var data = new Dictionary<string, object>
         {
             //{ "text", "Hello World" }
         };
-
-        await callable.CallAsync(data).ContinueWith(task => {
+        
+        var createUserAccount = _functions.GetHttpsCallable("createUserAccount");
+        await createUserAccount.CallAsync(data).ContinueWith(task => {
+            if (task.IsFaulted) {
+                Debug.LogError("Function call failed: " + task.Exception);
+            } else {
+                var result = task.Result.Data;
+                Debug.Log("Raw JSON result: " + JsonConvert.SerializeObject(result));
+            }
+        });
+        
+        
+        var getUserAccountInfo = _functions.GetHttpsCallable("getUserAccountInfo");
+        await getUserAccountInfo.CallAsync(data).ContinueWith(task => {
             if (task.IsFaulted) {
                 Debug.LogError("Function call failed: " + task.Exception);
             } else {
