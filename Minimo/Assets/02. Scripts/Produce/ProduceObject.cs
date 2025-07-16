@@ -10,6 +10,7 @@ public abstract class ProduceObject : BuildingObject
     public List<ProduceTask> AllTasks { get; } = new(); 
     public ProduceTask ActiveTask => AllTasks.FirstOrDefault(t => t.CurrentState is ActiveState);
     public ProduceState CurrentState => GetCurrentProduceState();
+    public int MaxSlotCount { get; protected set; } = 1;
     
     private ProduceManager _produceManager;
     private PlantHelper _plantHelper;
@@ -118,6 +119,7 @@ public abstract class ProduceObject : BuildingObject
     #region Plant
     internal virtual void StartPlant(ProduceData option)
     {
+        if (AllTasks.Count >= MaxSlotCount) return;
         if (!ProduceData.Contains(option)) return;
 
         _plantHelper.TryPlant(option, OnPlant);
@@ -128,7 +130,6 @@ public abstract class ProduceObject : BuildingObject
         task.ApplyTimeRatio(_timeRatio * _globalTimeRatio);
         task.ApplyHarvestRatio(_harvestRatio * _globalHarvestRatio); 
         AllTasks.Add(task);
-        Debug.Log($"ProduceTask Added : {task.Data.ResultItems[0].ID}");
         SetNextActiveTask();
     }
     #endregion
@@ -146,7 +147,7 @@ public abstract class ProduceObject : BuildingObject
         }
     }
 
-    internal virtual void HarvestEarly()
+    internal void HarvestEarly()
     {
         ActiveTask?.ChangeState(CompletedState.Instance);
         SetNextActiveTask();

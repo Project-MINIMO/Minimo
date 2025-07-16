@@ -42,6 +42,7 @@ public abstract class ProduceAdvanced : ProduceObject
     public void ApplyTimeReduction(float reduction)
     { 
         _timeReduction = reduction;
+        
         foreach (var task in AllTasks)
         {
             task.ApplyTimeReduction(reduction); 
@@ -51,6 +52,7 @@ public abstract class ProduceAdvanced : ProduceObject
     internal override void OnPlant(ProduceTask task)
     {
         task.ApplyTimeReduction(_timeReduction);
+        
         base.OnPlant(task);
     }
 }

@@ -7,11 +7,7 @@ using UnityEngine.EventSystems;
 
 public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    private enum PlantType
-    {
-        Object,
-        UI
-    }
+    private enum PlantType { Object, UI }
     
     [SerializeField] private PlantType _plantType;
     
@@ -23,11 +19,12 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private RectTransform _rect;
     private Image _image;
     private Canvas _canvas;
-    
     private Vector3 _startPosition;
 
     private ProduceData _currentOption;
     private ProduceManager _produceManager;
+    
+    private HashSet<ProduceObject> _plantedThisDrag;
     
     private void Awake()
     {
@@ -39,6 +36,8 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         _canvas = GetComponentInParent<Canvas>();
         
         _startPosition = _rect.anchoredPosition;
+        
+        _plantedThisDrag = new HashSet<ProduceObject>();
     }
 
     public void SetOption(ProduceData option)
@@ -53,6 +52,7 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         _image.raycastTarget = false;
         
         _amountObj.gameObject.SetActive(false);
+        _plantedThisDrag.Clear();
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -61,12 +61,16 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         if (_plantType == PlantType.Object)
         {
-            var worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        
+            var worldPosition = Camera.main.ScreenToWorldPoint(eventData.position);
+            worldPosition.z = 0;
+            
             var hit = Physics2D.OverlapPoint(worldPosition, _targetLayerMask);
-            if (hit != null && hit.TryGetComponent<ProduceObject>(out var component))
+            if (hit != null
+                && hit.TryGetComponent<ProduceObject>(out var component)
+                && !_plantedThisDrag.Contains(component))
             {
                 _produceManager.Plant(component, _currentOption);
+                _plantedThisDrag.Add(component);
             }
         }
     }
@@ -88,5 +92,6 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         }
         
         _amountObj.gameObject.SetActive(true);
+        _plantedThisDrag.Clear();
     }
 }

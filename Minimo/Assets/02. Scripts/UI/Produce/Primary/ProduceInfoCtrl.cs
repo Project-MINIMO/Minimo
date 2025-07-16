@@ -16,28 +16,28 @@ public class ProduceInfoCtrl : MonoBehaviour
     private void OnEnable()
     {
         if (_produceManager == null) return;
-        
+
         _produceTask = _produceManager.CurrentObject.ActiveTask;
-        _produceTask.OnRemainTimeChanged += SetRemainTime;
-        SetRemainTime(_produceTask.RemainTime);
-        _itemInfoUpdater.UpdateItem(_produceTask.Data.ResultItems[0]);
+        _produceTask.OnRemainTimeChanged += OnRemainTimeChanged;
+        OnRemainTimeChanged(_produceTask.RemainTime);
+        _itemInfoUpdater.UpdateItem(_produceTask.Result);
     }
 
     private void OnDisable()
     {
         if (_produceTask == null) return;
-            
-        _produceTask.OnRemainTimeChanged -= SetRemainTime;
+        
+        _produceTask.OnRemainTimeChanged -= OnRemainTimeChanged;
         _produceTask = null;
     }
 
-    private void SetRemainTime(float remainTime)
+    private void OnRemainTimeChanged(float remainTime)
     {
         if (_produceTask == null)
         {
             return;
         }
 
-        _remainTimeUpdater.UpdateTime(remainTime, _produceTask.Data.Time);
+        _remainTimeUpdater.UpdateTime(remainTime, _produceTask.ModifiedTime);
     }
 }

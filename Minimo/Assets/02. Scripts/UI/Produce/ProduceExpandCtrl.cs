@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class ProduceExpandCtrl : MonoBehaviour
+public class ProduceSlotExpandCtrl : MonoBehaviour
 {
     [SerializeField] private Button _expandBtn;
     [SerializeField] private GameObject _expandBack;
@@ -11,16 +11,12 @@ public class ProduceExpandCtrl : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _priceTMP;
     
     private UseCashPanel _useCashPanel;
-    private AdvancedPanel _advancedPanel;
 
     private int _currentPrice = 100;
 
     private void Start()
     {
-        var uiManager = App.GetManager<UIManager>();
-        
-        _useCashPanel = uiManager.GetPanel<UseCashPanel>();
-        _advancedPanel = uiManager.GetPanel<AdvancedPanel>();
+        _useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
         
         _expandBtn.onClick.AddListener(OnClickConfirm);
         

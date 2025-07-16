@@ -62,16 +62,16 @@ public class ProduceSlot : MonoBehaviour
     {
         if (_produceTask != null)
         {
-            _produceTask.OnRemainTimeChanged -= OnRemainChanged;
+            _produceTask.OnRemainTimeChanged -= OnRemainTimeChanged;
             _produceTask.OnStateChanged -= OnStateChanged;
         }
         
         _produceTask = task;
-        _produceTask.OnRemainTimeChanged += OnRemainChanged;
+        _produceTask.OnRemainTimeChanged += OnRemainTimeChanged;
         _produceTask.OnStateChanged += OnStateChanged;
 
-        _itemInfoUpdater.UpdateItem(_produceTask.Data.ResultItems[0]);
-        OnRemainChanged(_produceTask.RemainTime);
+        _itemInfoUpdater.UpdateItem(_produceTask.Result);
+        OnRemainTimeChanged(_produceTask.RemainTime);
         OnStateChanged(_produceTask.CurrentState);
     }
 
@@ -79,7 +79,7 @@ public class ProduceSlot : MonoBehaviour
     {
         if (_produceTask != null)
         {
-            _produceTask.OnRemainTimeChanged -= OnRemainChanged;
+            _produceTask.OnRemainTimeChanged -= OnRemainTimeChanged;
             _produceTask.OnStateChanged -= OnStateChanged;
             _produceTask = null;
         }
@@ -89,11 +89,11 @@ public class ProduceSlot : MonoBehaviour
         OnStateChanged(PendingState.Instance);
     }
 
-    private void OnRemainChanged(float remain)
+    private void OnRemainTimeChanged(float remain)
     {
         if (_produceTask == null) return;
         
-        _remainTimeUpdater.UpdateTime(remain, _produceTask.Data.Time);
+        _remainTimeUpdater.UpdateTime(remain, _produceTask.ModifiedTime);
     }
 
     private void OnStateChanged(ITaskState state)

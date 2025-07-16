@@ -22,12 +22,10 @@ public class ItemInfoUpdater : MonoBehaviour
             var itemData = AccountInfo.Instance.Items[result.ID];
             _itemNameTMP?.SetText(itemData.Name);
             _itemCountTMP?.SetText(result.Amount.ToString());
-            
-            if (_iconImg)
-            {
-                _iconImg.sprite = itemData.Icon;
-                _iconImg.gameObject.SetActive(true);
-            }
+
+            if (!_iconImg) return;
+            _iconImg.sprite = itemData.Icon;
+            _iconImg.gameObject.SetActive(true);
         }
     }
 }

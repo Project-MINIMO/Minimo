@@ -5,7 +5,7 @@ using Random = System.Random;
 
 public class ProduceTask
 {
-    public ProduceData Data { get; }
+    public ProduceResult Result { get; }
     public ITaskState CurrentState { get; private set; }
     
     public event Action<ITaskState> OnStateChanged;
@@ -28,8 +28,7 @@ public class ProduceTask
     
     public ProduceTask(ProduceData produceOption)
     {
-        Data = produceOption;
-        
+        Result = produceOption.ResultItems[0];
         _baseTime = produceOption.Time;
         _reducedTime = produceOption.Time;
         _modifiedTime = _baseTime;
@@ -152,7 +151,7 @@ public class CompletedState : ITaskState
     
     private void TryHarvest(ProduceTask task)
     {
-        var result = task.Data.ResultItems[0];
+        var result = task.Result;
         var bonus = CalculateBonus(result.Amount, task.HarvestRatio);
 
         AccountInfo.Instance.AddItem(result.ID, result.Amount + bonus);

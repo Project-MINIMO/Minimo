@@ -4,139 +4,102 @@ using UnityEngine;
 
 public class ProducePrimary : ProduceObject
 {
-    private enum CropType
-    {
-        Grain,
-        Bean,
-        Fruit,
-    }
+    private SpriteRenderer _cropRenderer;
+    private Dictionary<int, Sprite[]> _spritesMap;
     
-    private SpriteRenderer _cropSpriteRenderer;
-    
-    private List<Sprite[]> _cropSprites;
-   
-    private Sprite[] _currentCropSprites;
-    private int _currentSpriteIndex;
+    private int _currentID;
+    private int _currentIndex;
 
     protected override void Awake()
     {
         base.Awake();
-        
-        _cropSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
+      
+        _cropRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
     }
     
     public override void Initialize(BuildingData data)
     {
         base.Initialize(data);
 
-        if (AllTasks.Count > 0)
+        var config = Resources.Load<ProduceVisualConfig>($"Building/Config/{data.Name}");
+        if (config == null)
         {
-            SetSpriteResources();
-            SetCropSprite();
-        }
-        
-        _cropSprites = new List<Sprite[]>(ProduceData.Count)
-        {
-            Resources.LoadAll<Sprite>("Produce/Farm/Wheat"),
-            Resources.LoadAll<Sprite>("Produce/Farm/Corn"),
-            Resources.LoadAll<Sprite>("Produce/Farm/Pumpkin"),
-        };
-    }
-    
-    protected override void Update()
-    {
-        base.Update();
-
-        if (AllTasks.Count == 0) 
-        {
-            return;
-        }
-        
-        if (_currentCropSprites == null) 
-        {
-            return;
-        }
-
-        if (_currentSpriteIndex == 2)
-        {
-            return;
-        }
-
-        SetCropSprite();
-    }
-
-    private void SetCropSprite()
-    {
-        float remainPercent;
-
-        if (ActiveTask == null)
-        {
-            remainPercent = 0;
+            Debug.LogError($"[ProducePrimary] Config not found for '{data.Name}'");
+            _spritesMap = new Dictionary<int, Sprite[]>();
         }
         else
         {
-            remainPercent = (float)ActiveTask.RemainTime / ActiveTask.Data.Time;
-        }
-
-        var newSpriteIndex = remainPercent switch
-        {
-            >= 0.5f => 0,
-            >= 0.01f => 1,
-            _ => 2
-        };
-
-        if (newSpriteIndex != _currentSpriteIndex)
-        {
-            _currentSpriteIndex = newSpriteIndex;
-            _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
-        }
-    }
-
-    internal override void StartPlant(ProduceData option)
-    {
-        if (AllTasks.Count > 0)
-        {
-            return;
+            _spritesMap = new Dictionary<int, Sprite[]>(config.Sets.Length);
+            foreach (var set in config.Sets)
+            {
+                _spritesMap[set.ID] = set.Sprites;
+            }
         }
         
-        base.StartPlant(option);
+        if (ActiveTask != null)
+        {
+            BindTask(ActiveTask);
+        }
     }
-
+    
     internal override void OnPlant(ProduceTask task)
     {
         base.OnPlant(task);
         
-        SetSpriteResources();
+        BindTask(task);
     }
 
-    private void SetSpriteResources()
+    private void OnDisable()
     {
-        _currentSpriteIndex = 0;
-
-        var cropCode = AllTasks[0].Data.ResultItems[0].ID;
-        _currentCropSprites = _cropSprites[GetCropType(cropCode)];
-        _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
-    }
-    
-    internal override void StartHarvest()
-    {
-        base.StartHarvest();
-
-        _cropSpriteRenderer.sprite = null;
-    }
-    
-    internal override void HarvestEarly()
-    {
-        base.HarvestEarly();
+        if (ActiveTask == null) return;
         
-        _currentSpriteIndex = 2;
-        _cropSpriteRenderer.sprite = _currentCropSprites[_currentSpriteIndex];
+        ActiveTask.OnRemainTimeChanged -= OnRemainTimeChanged;
+        ActiveTask.OnStateChanged -= OnStateChanged;
     }
 
-    private int GetCropType(int cropCode) => cropCode switch
+    private void BindTask(ProduceTask task)
     {
-        3 or 47 or 48 => (int)CropType.Grain,
-        4 or 49 or 50 => (int)CropType.Bean,
-        5 or 51 or 52 => (int)CropType.Fruit,
-    };
+        task.OnRemainTimeChanged += OnRemainTimeChanged;
+        task.OnStateChanged += OnStateChanged;
+
+        SetupSprites(task);
+    }
+    
+    private void SetupSprites(ProduceTask task)
+    {
+        _currentID = task.Result.ID;
+        _currentIndex = -1;
+        SetCropSprite(ActiveTask.RemainTime, ActiveTask.ModifiedTime);
+    }
+
+    private void SetCropSprite(float remain, float full)
+    {
+        var ratio = full > 0 ? remain / full : 0f;
+        var idx = ratio >= 0.5f ? 0
+            : ratio > 0 ? 1
+            : 2;
+
+        if (idx == _currentIndex) return;
+        
+        _currentIndex = idx;
+        _cropRenderer.sprite = _spritesMap[_currentID][_currentIndex];
+    }
+    
+    private void OnRemainTimeChanged(float remain)
+    {
+        SetCropSprite(remain, ActiveTask.ModifiedTime);
+    }
+    
+    private void OnStateChanged(ITaskState state)
+    {
+        if (state == CompletedState.Instance)
+        {
+            AllTasks[0].OnRemainTimeChanged -= OnRemainTimeChanged;
+        }
+        else if (state == EndState.Instance)
+        {
+            _cropRenderer.sprite = null;
+            AllTasks[0].OnStateChanged -= OnStateChanged;
+        }
+    }
 }

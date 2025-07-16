@@ -10,8 +10,6 @@ public class RemainTimeUpdater : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _remainTimeTMP;
 
     private string[] _stateStrings;
-    private float _remainTime;
-    private float _fullTime;
     
     private void Awake()
     {
@@ -26,60 +24,42 @@ public class RemainTimeUpdater : MonoBehaviour
         };
     }
     
-    public void UpdateTime(float remainTime, int fullTime)
+    public void UpdateTime(float remainTime, float fullTime)
     {
-        _remainTime = remainTime;
-        _fullTime = fullTime;
+        var state = DetermineState(remainTime, fullTime);
         
-        switch (remainTime)
-        {
-            case < 0:
-                SetRemainImg(TaskState.Empty);
-                SetRemainText(TaskState.Empty);
-                break;
-            
-            case 0:
-                SetRemainImg(TaskState.Complete);
-                SetRemainText(TaskState.Complete);
-                break;
-            
-            case > 0:
-                if (remainTime < fullTime)
-                {
-                    SetRemainImg(TaskState.Produce);
-                    SetRemainText(TaskState.Produce);
-                }
-                else if (Mathf.Approximately(remainTime, fullTime))
-                {
-                    SetRemainImg(TaskState.Pending);
-                    SetRemainText(TaskState.Pending);
-                }
-                break;
-        }
+        SetRemainImg(state, remainTime, fullTime);
+        SetRemainText(state, remainTime);
+    }
+    
+    private TaskState DetermineState(float remain, float full)
+    {
+        if (remain < 0) return TaskState.Empty;
+        if (Mathf.Approximately(remain, 0)) return TaskState.Complete;
+        return remain < full ? TaskState.Produce : TaskState.Pending;
     }
 
-    private void SetRemainImg(TaskState state)
+    private void SetRemainImg(TaskState state, float remain, float full)
     {
         if (_remainTimeImg == null) return;
 
         _remainTimeImg.fillAmount = state switch
         {
-            TaskState.Empty => 0,
-            TaskState.Pending => 0,
-            TaskState.Produce => 1 - _remainTime / _fullTime,
+            TaskState.Empty or TaskState.Pending => 0,
+            TaskState.Produce => 1 - remain / full,
             TaskState.Complete => 1,
             _ => _remainTimeImg.fillAmount
         };
     }
     
-    private void SetRemainText(TaskState state)
+    private void SetRemainText(TaskState state, float remain)
     {
         if (_remainTimeTMP == null) return;
         
         _remainTimeTMP.text = state switch
         {
             TaskState.Empty or TaskState.Pending or TaskState.Complete => _stateStrings[(int)state],
-            TaskState.Produce => FormatTime(_remainTime),
+            TaskState.Produce => FormatTime(remain),
             _ => _remainTimeTMP.text
         };
     }
