@@ -231,6 +231,12 @@ public class FirebaseUnitTest : MonoBehaviour
             Debug.Log("사용자 로그인 대기 중...");
         }
         
+        if (FirebaseAuth.DefaultInstance.CurrentUser == null)
+        {
+            Debug.LogError("로그인이 필요합니다.");
+            return;
+        }
+        
         // Firebase Functions 테스트
         Debug.Log("Firestore Function 테스트 시작...");
         bool result = await functionsManager.TestFirestore();

@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
 
@@ -18,26 +15,11 @@ public class FirebaseAuthManager : ManagerBase
     private bool isInitialized = false;
 
     // 이벤트
-    /// <summary>
-    /// 사용자가 로그인했을 때 발생하는 이벤트
-    /// </summary>
     public event Action<FirebaseUser> OnUserSignedIn;
-    /// <summary>
-    /// 사용자가 로그아웃했을 때 발생하는 이벤트
-    /// </summary>
     public event Action OnUserSignedOut;
-    /// <summary>
-    /// 인증 과정에서 오류가 발생했을 때 발생하는 이벤트
-    /// </summary>
     public event Action<string> OnError;
 
-    /// <summary>
-    /// 현재 로그인된 사용자 정보를 반환합니다.
-    /// </summary>
     public FirebaseUser CurrentUser => user;
-    /// <summary>
-    /// 현재 로그인 상태를 반환합니다.
-    /// </summary>
     public bool IsSignedIn => user != null;
 
     protected override void Awake()
@@ -46,19 +28,35 @@ public class FirebaseAuthManager : ManagerBase
         InitializeFirebase();
     }
 
-    /// <summary>
-    /// Firebase Authentication을 초기화합니다.
-    /// </summary>
     private void InitializeFirebase()
     {
         auth = FirebaseAuth.DefaultInstance;
         auth.StateChanged += AuthStateChanged;
         AuthStateChanged(this, null);
+
+        if (auth.CurrentUser == null && !isInitialized)
+        {
+            SignInAnonymouslyAsync().ContinueWithOnMainThread(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    Debug.LogError("익명 로그인 실패: " + task.Exception);
+                }
+                else
+                {
+                    isInitialized = true;
+                    Debug.Log("익명 로그인 성공");
+                }
+            });
+        }
+        else
+        {
+            Debug.Log($"자동 로그인 성공: {auth.CurrentUser?.Email ?? "익명 사용자"}");
+            user = auth.CurrentUser;
+            isInitialized = true;
+        }
     }
 
-    /// <summary>
-    /// 인증 상태가 변경될 때 호출되는 콜백 메서드
-    /// </summary>
     private void AuthStateChanged(object sender, EventArgs args)
     {
         if (auth.CurrentUser != user)
@@ -77,20 +75,15 @@ public class FirebaseAuthManager : ManagerBase
         }
     }
 
-    // 사용자 관리 기능
-    /// <summary>
-    /// 이메일과 비밀번호로 새 사용자를 생성합니다.
-    /// </summary>
-    /// <param name="email">사용자 이메일</param>
-    /// <param name="password">사용자 비밀번호</param>
-    /// <returns>생성 성공 여부</returns>
-    public async Task<bool> CreateUserWithEmailAndPasswordAsync(string email, string password)
+    // ===================== //
+    //      유틸 메서드      //
+    // ===================== //
+
+    private async Task<bool> Try(Func<Task> action)
     {
         try
         {
-            var result = await auth.CreateUserWithEmailAndPasswordAsync(email, password);
-            user = result.User;
-            OnUserSignedIn?.Invoke(user);
+            await action();
             return true;
         }
         catch (Exception e)
@@ -100,19 +93,12 @@ public class FirebaseAuthManager : ManagerBase
         }
     }
 
-    /// <summary>
-    /// 이메일과 비밀번호로 로그인합니다.
-    /// </summary>
-    /// <param name="email">사용자 이메일</param>
-    /// <param name="password">사용자 비밀번호</param>
-    /// <returns>로그인 성공 여부</returns>
-    public async Task<bool> SignInWithEmailAndPasswordAsync(string email, string password)
+    private async Task<bool> Try<T>(Func<Task<T>> action, Action<T> onSuccess = null)
     {
         try
         {
-            var result = await auth.SignInWithEmailAndPasswordAsync(email, password);
-            user = result.User;
-            OnUserSignedIn?.Invoke(user);
+            var result = await action();
+            onSuccess?.Invoke(result);
             return true;
         }
         catch (Exception e)
@@ -122,181 +108,105 @@ public class FirebaseAuthManager : ManagerBase
         }
     }
 
-    /// <summary>
-    /// 현재 로그인된 사용자를 로그아웃합니다.
-    /// </summary>
+    // ===================== //
+    //     사용자 인증 관련    //
+    // ===================== //
+
+    public Task<bool> SignInAnonymouslyAsync()
+    {
+        return Try(() => auth.SignInAnonymouslyAsync(), result =>
+        {
+            user = result.User;
+            OnUserSignedIn?.Invoke(user);
+        });
+    }
+
+    public Task<bool> CreateUserWithEmailAndPasswordAsync(string email, string password)
+    {
+        return Try(() => auth.CreateUserWithEmailAndPasswordAsync(email, password), result =>
+        {
+            user = result.User;
+            OnUserSignedIn?.Invoke(user);
+        });
+    }
+
+    public Task<bool> SignInWithEmailAndPasswordAsync(string email, string password)
+    {
+        return Try(() => auth.SignInWithEmailAndPasswordAsync(email, password), result =>
+        {
+            user = result.User;
+            OnUserSignedIn?.Invoke(user);
+        });
+    }
+
+    public Task<bool> SignInWithGoogleAsync(string idToken, string accessToken)
+    {
+        var credential = GoogleAuthProvider.GetCredential(idToken, accessToken);
+        return Try(() => auth.SignInWithCredentialAsync(credential), result =>
+        {
+            user = result;
+            OnUserSignedIn?.Invoke(user);
+        });
+    }
+
     public void SignOut()
     {
         auth.SignOut();
     }
 
-    // 프로필 관리
-    /// <summary>
-    /// 사용자의 프로필 정보를 업데이트합니다.
-    /// </summary>
-    /// <param name="displayName">표시 이름</param>
-    /// <param name="photoUrl">프로필 사진 URL (선택사항)</param>
-    /// <returns>업데이트 성공 여부</returns>
-    public async Task<bool> UpdateUserProfileAsync(string displayName, string photoUrl = null)
+    // ===================== //
+    //     계정 정보 관리     //
+    // ===================== //
+
+    public Task<bool> UpdateUserProfileAsync(string displayName, string photoUrl = null)
     {
-        try
+        if (user == null) return Task.FromResult(false);
+
+        var profile = new UserProfile
         {
-            var profile = new UserProfile
-            {
-                DisplayName = displayName,
-                PhotoUrl = photoUrl != null ? new Uri(photoUrl) : null
-            };
-            await user.UpdateUserProfileAsync(profile);
-            return true;
-        }
-        catch (Exception e)
-        {
-            OnError?.Invoke(e.Message);
-            return false;
-        }
+            DisplayName = displayName,
+            PhotoUrl = photoUrl != null ? new Uri(photoUrl) : null
+        };
+
+        return Try(() => user.UpdateUserProfileAsync(profile));
     }
 
-    // 계정 관리
-    /// <summary>
-    /// 사용자의 이메일 주소를 업데이트합니다.
-    /// </summary>
-    /// <param name="newEmail">새 이메일 주소</param>
-    /// <returns>업데이트 성공 여부</returns>
-    public async Task<bool> UpdateEmailAsync(string newEmail)
+    public Task<bool> UpdateEmailAsync(string newEmail)
     {
-        try
-        {
-            await user.UpdateEmailAsync(newEmail);
-            return true;
-        }
-        catch (Exception e)
-        {
-            OnError?.Invoke(e.Message);
-            return false;
-        }
+        if (user == null) return Task.FromResult(false);
+        return Try(() => user.UpdateEmailAsync(newEmail));
     }
 
-    /// <summary>
-    /// 사용자의 이메일 주소로 인증 메일을 발송합니다.
-    /// </summary>
-    /// <returns>메일 발송 성공 여부</returns>
-    public async Task<bool> SendEmailVerificationAsync()
+    public Task<bool> UpdatePasswordAsync(string newPassword)
     {
-        try
-        {
-            await user.SendEmailVerificationAsync();
-            return true;
-        }
-        catch (Exception e)
-        {
-            OnError?.Invoke(e.Message);
-            return false;
-        }
+        if (user == null) return Task.FromResult(false);
+        return Try(() => user.UpdatePasswordAsync(newPassword));
     }
 
-    /// <summary>
-    /// 사용자의 비밀번호를 업데이트합니다.
-    /// </summary>
-    /// <param name="newPassword">새 비밀번호</param>
-    /// <returns>업데이트 성공 여부</returns>
-    public async Task<bool> UpdatePasswordAsync(string newPassword)
+    public Task<bool> SendEmailVerificationAsync()
     {
-        try
-        {
-            await user.UpdatePasswordAsync(newPassword);
-            return true;
-        }
-        catch (Exception e)
-        {
-            OnError?.Invoke(e.Message);
-            return false;
-        }
+        if (user == null) return Task.FromResult(false);
+        return Try(() => user.SendEmailVerificationAsync());
     }
 
-    /// <summary>
-    /// 비밀번호 재설정 메일을 발송합니다.
-    /// </summary>
-    /// <param name="email">사용자 이메일</param>
-    /// <returns>메일 발송 성공 여부</returns>
-    public async Task<bool> SendPasswordResetEmailAsync(string email)
+    public Task<bool> SendPasswordResetEmailAsync(string email)
     {
-        try
-        {
-            await auth.SendPasswordResetEmailAsync(email);
-            return true;
-        }
-        catch (Exception e)
-        {
-            OnError?.Invoke(e.Message);
-            return false;
-        }
+        return Try(() => auth.SendPasswordResetEmailAsync(email));
     }
 
-    /// <summary>
-    /// 사용자를 재인증합니다. 보안에 민감한 작업 전에 필요합니다.
-    /// </summary>
-    /// <param name="email">사용자 이메일</param>
-    /// <param name="password">사용자 비밀번호</param>
-    /// <returns>재인증 성공 여부</returns>
-    public async Task<bool> ReauthenticateAsync(string email, string password)
+    public Task<bool> ReauthenticateAsync(string email, string password)
     {
-        try
-        {
-            var credential = EmailAuthProvider.GetCredential(email, password);
-            await user.ReauthenticateAsync(credential);
-            return true;
-        }
-        catch (Exception e)
-        {
-            OnError?.Invoke(e.Message);
-            return false;
-        }
+        if (user == null) return Task.FromResult(false);
+        var credential = EmailAuthProvider.GetCredential(email, password);
+        return Try(() => user.ReauthenticateAsync(credential));
     }
 
-    /// <summary>
-    /// 현재 로그인된 사용자의 계정을 삭제합니다.
-    /// </summary>
-    /// <returns>삭제 성공 여부</returns>
-    public async Task<bool> DeleteUserAsync()
+    public Task<bool> DeleteUserAsync()
     {
-        try
-        {
-            await user.DeleteAsync();
-            return true;
-        }
-        catch (Exception e)
-        {
-            OnError?.Invoke(e.Message);
-            return false;
-        }
+        if (user == null) return Task.FromResult(false);
+        return Try(() => user.DeleteAsync());
     }
 
-    // 제공업체별 인증
-    /// <summary>
-    /// Google 계정으로 로그인합니다.
-    /// </summary>
-    /// <param name="idToken">Google ID 토큰</param>
-    /// <param name="accessToken">Google 액세스 토큰</param>
-    /// <returns>로그인 성공 여부</returns>
-    public async Task<bool> SignInWithGoogleAsync(string idToken, string accessToken)
-    {
-        try
-        {
-            var credential = GoogleAuthProvider.GetCredential(idToken, accessToken);
-            user = await auth.SignInWithCredentialAsync(credential);
-            OnUserSignedIn?.Invoke(user);
-            return true;
-        }
-        catch (Exception e)
-        {
-            OnError?.Invoke(e.Message);
-            return false;
-        }
-    }
-
-    /// <summary>
-    /// 컴포넌트가 파괴될 때 이벤트 구독을 해제합니다.
-    /// </summary>
     private void OnDestroy()
     {
         if (auth != null)

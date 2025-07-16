@@ -15,14 +15,14 @@ public class FirebaseFunctionTest : MonoBehaviour
     
     async void Awake()
     {
-        _functions = FirebaseFunctions.DefaultInstance;
+        _functions = FirebaseFunctions.GetInstance("asia-northeast3");
 #if USE_EMULATOR
         _functions.UseFunctionsEmulator("http://localhost:5001");
 #endif
         _auth = FirebaseAuth.DefaultInstance;
         await _auth.SignInAnonymouslyAsync();
         // 1초 대기
-        await Task.Delay(1000);
+        await Task.Delay(3000);
         
         var user = FirebaseAuth.DefaultInstance.CurrentUser;
         if (user == null) {
