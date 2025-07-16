@@ -1,92 +1,89 @@
-using System.Collections;
 using System.Collections.Generic;
+
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GetItemPanel : UIBase
+public class GetItemPanel : MonoBehaviour
 {
-    [SerializeField] private GameObject _itemBack;
     [SerializeField] private Image[] _iconImgs;
-    [SerializeField] private Button _closeBtn;
-    [SerializeField] private Vector2 _endPosition;
+    [SerializeField] private RectTransform _storageRect;
+    [SerializeField] private float _spawnInterval = 0.1f;
     
-    private Vector2[] _startPosition = new Vector2[8];
-
-    public override void Initialize(UIManager manager)
-    {
-        base.Initialize(manager);
-
-        _closeBtn.onClick.AddListener(ClosePanel);
-        
-        for (var i = 0; i < _iconImgs.Length; i++)
-        {
-            _startPosition[i] = _iconImgs[i].rectTransform.anchoredPosition;
-        }
-    }
+    private readonly Queue<int> _itemQueue = new(); 
+    private readonly Queue<Image> _iconPool = new();
     
-    public override void OpenPanel()
-    {
-        base.OpenPanel();
-        
-        SetItemsNull();
-    }
-
-    public void OpenPanel(List<ItemData> items)
-    {
-        OpenPanel();
-        SetItems(items);
-    }
-
-
-    public void OpenPanel(ItemData item)
-    {
-        OpenPanel();
-        SetItem(item);
-    }
+    private float _nextSpawnTime;
+    private Dictionary<Image, Vector2> _startPositionMap;
     
-    private void SetItems(List<ItemData> items)
-    {
-        for (var i = 0; i < items.Count; i++)
-        {
-            SetItem(items[i], i);
-        }
-    }
+    private bool _storageVisible;
 
-    private void SetItem(ItemData item, int index = 0)
+    private void Awake()
     {
-        _iconImgs[index].gameObject.SetActive(true);
-        _iconImgs[index].sprite = null;//item.Icon;
-    }
-
-    private void SetItemsNull()
-    {
-        for (var i = 0; i < _iconImgs.Length; i++) 
-        {
-            _iconImgs[i].gameObject.SetActive(false);
-            _iconImgs[i].rectTransform.anchoredPosition = _startPosition[i];
-        }
-    }
-    
-    private IEnumerator ShowResources()
-    {
+        _startPositionMap = new Dictionary<Image, Vector2>(_iconImgs.Length);
         foreach (var icon in _iconImgs)
         {
-            icon.rectTransform.DOScale(1, 0.5f).SetEase(Ease.OutElastic);
-            yield return new WaitForSeconds(0.1f);
+            _startPositionMap[icon] = icon.rectTransform.anchoredPosition;
         }
         
-        yield return new WaitForSeconds(0.3f);
-
-        for (var i = _iconImgs.Length - 1; i >= 0; i--) 
+        foreach (var img in _iconImgs)
         {
-            _iconImgs[i].rectTransform.DOAnchorPos(_endPosition, 0.5f).SetEase(Ease.InBack);
-            yield return new WaitForSeconds(0.2f);
-            _iconImgs[i].rectTransform.DOScale(0, 0.3f).SetEase(Ease.InCubic);
+            img.gameObject.SetActive(false);
+            _iconPool.Enqueue(img);
+        }
+    }
+    
+    private void Update()
+    {
+        if (Time.time >= _nextSpawnTime 
+            && _itemQueue.Count > 0 
+            && _iconPool.Count > 0)
+        {
+            SpawnNext();
+            _nextSpawnTime = Time.time + _spawnInterval;
         }
         
-        yield return new WaitForSeconds(0.3f);
- 
-        ClosePanel();   
+        var shouldShow = _iconPool.Count < _iconImgs.Length;
+        if (shouldShow == _storageVisible) return;
+        
+        _storageVisible = shouldShow;
+        _storageRect.gameObject.SetActive(_storageVisible);
+    }
+    
+    public void EnqueueItem(int id) => _itemQueue.Enqueue(id);
+    public void EnqueueItems(IEnumerable<int> ids)
+    {
+        foreach (var id in ids) _itemQueue.Enqueue(id);
+    }
+    
+    private void SpawnNext()
+    {
+        var itemId = _itemQueue.Dequeue();
+        var img = _iconPool.Dequeue();
+
+        SetItemIcon(itemId, img);
+
+        img.rectTransform
+            .DOScale(1f, 0.5f).SetEase(Ease.OutElastic)
+            .OnComplete(() =>
+            {
+                img.rectTransform.DOAnchorPos(_storageRect.anchoredPosition, 0.5f).SetEase(Ease.InBack);
+                img.rectTransform.DOScale(0f, 0.3f).SetEase(Ease.InCubic).SetDelay(0.2f);
+                img.rectTransform.DOScale(0f, 0.3f).SetEase(Ease.InCubic).SetDelay(0.2f)
+                    .OnComplete(() =>
+                    {
+                        img.gameObject.SetActive(false);
+                        _iconPool.Enqueue(img);
+                    });
+            });
+    }
+    
+    private void SetItemIcon(int itemId, Image image)
+    {
+        image.sprite = AccountInfo.Instance.Items[itemId].Icon;
+        image.rectTransform.anchoredPosition = _startPositionMap[image];
+        image.rectTransform.localScale = Vector3.zero;  
+        
+        image.gameObject.SetActive(true);
     }
 }

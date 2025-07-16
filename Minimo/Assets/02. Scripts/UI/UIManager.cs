@@ -9,7 +9,9 @@ using DG.Tweening;
 public class UIManager : ManagerBase
 {
     [SerializeField] private Image _blackBlur;
-
+    [SerializeField] private GetItemPanel _getItem;
+    public GetItemPanel GetItem => _getItem;
+    
     public bool IsOnlyDefaultPanelsInStack =>
         _uiStack.Count > 0 &&
         _uiStack.All(panel => panel.IsDefaultPanel);

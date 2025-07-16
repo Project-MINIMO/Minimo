@@ -11,10 +11,7 @@ public abstract class UIBase : MonoBehaviour
     /// Initialize Panel.
     /// Called once on Awake.
     /// </summary>
-    public virtual void Initialize(UIManager manager)
-    {
-        _manager = manager;
-    }
+    public virtual void Initialize(UIManager manager) => _manager = manager;
 
     public virtual void OpenPanel() => _manager.PushPanel(this);
     public virtual void ClosePanel() => _manager.PopPanel(this);

@@ -12,6 +12,8 @@ public class AccountInfo : Singleton<AccountInfo>
     public int rainbowStar;
     public int Exp { get; private set; }
 
+    private GetItemPanel _itemPanel;
+
     private void Start()
     {
         _titleData = App.GetData<TitleData>();
@@ -32,6 +34,12 @@ public class AccountInfo : Singleton<AccountInfo>
     public void AddItem(int id, int amount)
     {
         Items[id].AddCount(amount);
+
+        if (_itemPanel == null)
+        {
+            _itemPanel = App.GetManager<UIManager>().GetItem;
+        }
+        _itemPanel.EnqueueItem(id);
     }
 
     public void AddItem(Item item, int amount)
