@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -6,11 +7,11 @@ using UnityEngine.UI;
 
 public class QuaternaryInventory : MonoBehaviour
 {
-    private List<WishOptionBtn> _optionBtns;
-
     [SerializeField] private Toggle[] _menuTogs;
     [SerializeField] private ScrollRect _scrollRect;
 
+    private List<InventorySlot> _slots;
+    
     private void Awake()
     {
         InitSlots();
@@ -20,33 +21,36 @@ public class QuaternaryInventory : MonoBehaviour
             var index = i;
             _menuTogs[index].onValueChanged.AddListener((isOn) =>
             {
+                Debug.Log($"{index} Toggle is {isOn}");
                 if (isOn)
                 {
                     FilterStorageBtns(index);
                 }
             });
         }
+        
+        FilterStorageBtns(0);
     }
 
     private void InitSlots()
     {
-        var existingButtons = GetComponentsInChildren<WishOptionBtn>(true);
+        var existingButtons = _scrollRect.GetComponentsInChildren<InventorySlot>(true);
 
         var filteredItems = App.GetData<TitleData>().Item.Values
             .Where(x => x.Level == 3)
             .ToList();
-        _optionBtns = new List<WishOptionBtn>(filteredItems.Count);
+        _slots = new List<InventorySlot>(filteredItems.Count);
         
         var i = 0;
         
         for (; i < filteredItems.Count; i++)
         {
-            var optionBtn = existingButtons[i];
+            var slot = existingButtons[i];
 
-            optionBtn.Initialize(filteredItems[i].ID);
-            _optionBtns.Add(optionBtn);
+            slot.Initialize(filteredItems[i].ID);
+            _slots.Add(slot);
 
-            optionBtn.gameObject.SetActive(true);
+            slot.gameObject.SetActive(true);
         }
 
         for (; i < existingButtons.Length; i++)
@@ -55,15 +59,9 @@ public class QuaternaryInventory : MonoBehaviour
         }
     }
 
-    public void Show(int index)
-    {
-        gameObject.SetActive(true);
-        FilterStorageBtns(index);
-    }
-    
     private void FilterStorageBtns(int index)
     {
-        foreach (var button in _optionBtns)
+        foreach (var button in _slots)
         {
             var isActive = index == button.Item.Data.Type - 1;
             

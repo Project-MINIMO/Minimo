@@ -33,4 +33,9 @@ public class ItemInfoUpdater : MonoBehaviour
         _iconImg.sprite = item.Icon;
         _iconImg.gameObject.SetActive(true);
     }
+
+    public void UpdateItemCount(int amount)
+    {
+        _itemCountTMP?.SetText(amount.ToString());
+    }
 }

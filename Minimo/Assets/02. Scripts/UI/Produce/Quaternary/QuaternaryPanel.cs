@@ -1,5 +1,5 @@
 using System.Linq;
-
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,8 +7,8 @@ public class QuaternaryPanel : ElevatedPanel
 {
     [SerializeField] private Button[] _selectBtns;
     [SerializeField] private ItemInfoUpdater[] _selectedInfos;
-
-    [SerializeField] private QuaternaryInventory _inventory;
+    [SerializeField] private Toggle[] _inventoryTogs;
+    [SerializeField] private QuaternaryTransitioner _transitioner;
 
     private readonly Item[] _selectedItems = new Item[2];
     
@@ -19,20 +19,21 @@ public class QuaternaryPanel : ElevatedPanel
         for (var i = 0; i < _selectBtns.Length; i++)
         {
             var index = i;
-            _selectBtns[index].onClick.AddListener(() => _inventory.Show(index));
+            _selectBtns[index].onClick.AddListener(() =>
+            {
+                _transitioner.Open();
+                _inventoryTogs[index].isOn = true;
+            });
         }
 
-        var slots = _inventory.transform.GetComponentsInChildren<WishOptionBtn>(true);
-        for (var i = 0; i < slots.Length; i++)
+        var slots = GetComponentsInChildren<InventorySlot>(true);
+        foreach (var slot in slots)
         {
-            var index = i;
-            slots[index].GetComponent<Button>()
-                .onClick
-                .AddListener(() => SetItemOnSlot(slots[index].Item));
+            slot.OnItemSelected += SetItemOnSlot;
         }
     }
     
-    public void SetItemOnSlot(Item selectedItem)
+    private void SetItemOnSlot(Item selectedItem)
     {
         _selectedInfos[selectedItem.Data.Type - 1].UpdateItem(selectedItem, 1);
         _selectedItems[selectedItem.Data.Type - 1] = selectedItem;
