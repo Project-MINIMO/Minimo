@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -5,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerExitHandler
+public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private enum PlantType { Object, UI }
     
@@ -38,6 +39,15 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         _startPosition = _rect.anchoredPosition;
         
         _plantedThisDrag = new HashSet<ProduceObject>();
+    }
+
+    private void OnEnable()
+    {
+        _image.raycastTarget = true;
+        _rect.anchoredPosition = _startPosition;
+        
+        _amountObj.gameObject.SetActive(true);
+        _plantedThisDrag.Clear();
     }
 
     public void SetOption(ProduceData option)
@@ -91,15 +101,6 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 _produceManager.Plant(_currentOption);
             }
         }
-        
-        _amountObj.gameObject.SetActive(true);
-        _plantedThisDrag.Clear();
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        _image.raycastTarget = true;
-        _rect.anchoredPosition = _startPosition;
         
         _amountObj.gameObject.SetActive(true);
         _plantedThisDrag.Clear();

@@ -5,6 +5,7 @@ public class QuaternaryTransitioner : MonoBehaviour
 {
     [SerializeField] private RectTransform _quaternaryRect;
     [SerializeField] private InventorySlideHandler _slider;
+    [SerializeField] private GameObject _clearDialog;
 
     private void Awake()
     {
@@ -14,6 +15,7 @@ public class QuaternaryTransitioner : MonoBehaviour
     private void OnEnable()
     {
         _quaternaryRect.anchoredPosition = Vector2.zero;
+        _clearDialog.SetActive(false);
     }
 
     public void Open()
