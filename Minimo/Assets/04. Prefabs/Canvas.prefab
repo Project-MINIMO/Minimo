@@ -3065,7 +3065,7 @@ GameObject:
   - component: {fileID: 4722028086658271619}
   - component: {fileID: 1807665896652270478}
   - component: {fileID: 4295954013326782091}
-  - component: {fileID: 3353530890695768919}
+  - component: {fileID: 8148295420576346369}
   - component: {fileID: 194987673525153642}
   m_Layer: 5
   m_Name: Tog_Entire
@@ -3132,7 +3132,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3353530890695768919
+--- !u!114 &8148295420576346369
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3141,7 +3141,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 215033635646806122}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 8dff9de9162afd34eb43132a849a9733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -3163,7 +3163,7 @@ MonoBehaviour:
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 21300000, guid: 2f2ccd23b763bc74aaa7c754d6529d09, type: 3}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -3175,7 +3175,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4295954013326782091}
   toggleTransition: 1
   graphic: {fileID: 0}
-  m_Group: {fileID: 3068092081326133252}
+  m_Group: {fileID: 1298240287743597958}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -8590,7 +8590,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7218226025690614185}
   - component: {fileID: 1815460740227445858}
-  - component: {fileID: 3068092081326133252}
+  - component: {fileID: 1298240287743597958}
   m_Layer: 5
   m_Name: Back_Menus
   m_TagString: Untagged
@@ -8648,7 +8648,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &3068092081326133252
+--- !u!114 &1298240287743597958
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8657,7 +8657,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 626291295663013928}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b4e5e5f92550834c8848c2d786922a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowSwitchOff: 0
@@ -48489,7 +48489,7 @@ GameObject:
   - component: {fileID: 4841934444999436259}
   - component: {fileID: 4218118039077573567}
   - component: {fileID: 6345049279867556910}
-  - component: {fileID: 3172771522253534199}
+  - component: {fileID: 1057235858476789278}
   - component: {fileID: 1794458862989913602}
   m_Layer: 5
   m_Name: Tog_Amulet
@@ -48556,7 +48556,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3172771522253534199
+--- !u!114 &1057235858476789278
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -48565,7 +48565,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3574190382466955942}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 8dff9de9162afd34eb43132a849a9733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -48587,7 +48587,7 @@ MonoBehaviour:
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 21300000, guid: 2f2ccd23b763bc74aaa7c754d6529d09, type: 3}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -48599,7 +48599,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6345049279867556910}
   toggleTransition: 1
   graphic: {fileID: 0}
-  m_Group: {fileID: 3068092081326133252}
+  m_Group: {fileID: 1298240287743597958}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -60953,11 +60953,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _menuTogs:
-  - {fileID: 3353530890695768919}
-  - {fileID: 7268952757694764348}
-  - {fileID: 3079657967309996153}
-  - {fileID: 3172771522253534199}
-  - {fileID: 6337475461896781359}
+  - {fileID: 8148295420576346369}
+  - {fileID: 4928064076432541645}
+  - {fileID: 3971581813308859974}
+  - {fileID: 1057235858476789278}
+  - {fileID: 3760881746379135443}
   _scrollRect: {fileID: 3871937195877038868}
 --- !u!1 &4595819542641593769
 GameObject:
@@ -87200,7 +87200,7 @@ GameObject:
   - component: {fileID: 7254898626897814167}
   - component: {fileID: 2714936514671491895}
   - component: {fileID: 2349610784935232017}
-  - component: {fileID: 3079657967309996153}
+  - component: {fileID: 3971581813308859974}
   - component: {fileID: 4081019473145205209}
   m_Layer: 5
   m_Name: Tog_Flower
@@ -87267,7 +87267,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3079657967309996153
+--- !u!114 &3971581813308859974
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87276,7 +87276,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6481145876885964986}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 8dff9de9162afd34eb43132a849a9733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -87298,7 +87298,7 @@ MonoBehaviour:
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 21300000, guid: 2f2ccd23b763bc74aaa7c754d6529d09, type: 3}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -87310,7 +87310,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2349610784935232017}
   toggleTransition: 1
   graphic: {fileID: 0}
-  m_Group: {fileID: 3068092081326133252}
+  m_Group: {fileID: 1298240287743597958}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -89903,7 +89903,7 @@ GameObject:
   - component: {fileID: 5036174638752881683}
   - component: {fileID: 3019425122854427780}
   - component: {fileID: 3751698257510737381}
-  - component: {fileID: 553923206969054901}
+  - component: {fileID: 3347068253726665988}
   - component: {fileID: 7003313163200400377}
   m_Layer: 5
   m_Name: Tog_Flower
@@ -89970,7 +89970,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &553923206969054901
+--- !u!114 &3347068253726665988
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89979,7 +89979,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6703811057530550751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 8dff9de9162afd34eb43132a849a9733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -90001,7 +90001,7 @@ MonoBehaviour:
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 21300000, guid: 2f2ccd23b763bc74aaa7c754d6529d09, type: 3}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -90013,7 +90013,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3751698257510737381}
   toggleTransition: 1
   graphic: {fileID: 0}
-  m_Group: {fileID: 5654623395896720150}
+  m_Group: {fileID: 201431650356039802}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -96725,8 +96725,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _menuTogs:
-  - {fileID: 6711718889859449312}
-  - {fileID: 553923206969054901}
+  - {fileID: 3347068253726665988}
+  - {fileID: 8651608300798741363}
   _scrollRect: {fileID: 3866576888741995314}
 --- !u!1 &7317521459359157988
 GameObject:
@@ -103019,7 +103019,7 @@ GameObject:
   - component: {fileID: 4192997400887168143}
   - component: {fileID: 7537246220665293335}
   - component: {fileID: 5890951088868213262}
-  - component: {fileID: 7268952757694764348}
+  - component: {fileID: 4928064076432541645}
   - component: {fileID: 1445531417359949591}
   m_Layer: 5
   m_Name: Tog_Food
@@ -103086,7 +103086,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7268952757694764348
+--- !u!114 &4928064076432541645
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103095,7 +103095,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7788582470732547529}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 8dff9de9162afd34eb43132a849a9733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -103117,7 +103117,7 @@ MonoBehaviour:
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 21300000, guid: 2f2ccd23b763bc74aaa7c754d6529d09, type: 3}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -103129,7 +103129,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5890951088868213262}
   toggleTransition: 1
   graphic: {fileID: 0}
-  m_Group: {fileID: 3068092081326133252}
+  m_Group: {fileID: 1298240287743597958}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -103506,6 +103506,7 @@ MonoBehaviour:
   _infoUpdater: {fileID: 2906140736653182336}
   _sellHandler: {fileID: 993650228642206178}
   _canvas: {fileID: 1554195520820538673}
+  _rect: {fileID: 6994713562614064451}
 --- !u!114 &2906140736653182336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103826,8 +103827,8 @@ MonoBehaviour:
   - {fileID: 6265887581741380817}
   - {fileID: 6105802801472620410}
   _inventoryTogs:
-  - {fileID: 6711718889859449312}
-  - {fileID: 553923206969054901}
+  - {fileID: 0}
+  - {fileID: 0}
   _clearDialog: {fileID: 3522724290396397990}
   _transitioner: {fileID: 4666301063655474641}
   _selectedInfos:
@@ -104133,7 +104134,7 @@ GameObject:
   - component: {fileID: 7271405305853632141}
   - component: {fileID: 3135862535324905310}
   - component: {fileID: 3458732047370022588}
-  - component: {fileID: 6711718889859449312}
+  - component: {fileID: 8651608300798741363}
   - component: {fileID: 8531730233940971791}
   m_Layer: 5
   m_Name: Tog_Food
@@ -104200,7 +104201,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6711718889859449312
+--- !u!114 &8651608300798741363
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104209,7 +104210,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7884946587586165320}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 8dff9de9162afd34eb43132a849a9733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -104219,7 +104220,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 0
+  m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -104231,7 +104232,7 @@ MonoBehaviour:
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 21300000, guid: 2f2ccd23b763bc74aaa7c754d6529d09, type: 3}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -104243,7 +104244,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3458732047370022588}
   toggleTransition: 1
   graphic: {fileID: 0}
-  m_Group: {fileID: 5654623395896720150}
+  m_Group: {fileID: 201431650356039802}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -108547,7 +108548,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6040182927833548372}
   - component: {fileID: 2937223076047599865}
-  - component: {fileID: 5654623395896720150}
+  - component: {fileID: 201431650356039802}
   m_Layer: 5
   m_Name: Back_Menus
   m_TagString: Untagged
@@ -108602,7 +108603,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &5654623395896720150
+--- !u!114 &201431650356039802
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108611,7 +108612,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8222555038345882928}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b4e5e5f92550834c8848c2d786922a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowSwitchOff: 0
@@ -118070,7 +118071,7 @@ GameObject:
   - component: {fileID: 966404703692582264}
   - component: {fileID: 3325731869633118036}
   - component: {fileID: 1503111730794641641}
-  - component: {fileID: 6337475461896781359}
+  - component: {fileID: 3760881746379135443}
   - component: {fileID: 1888247338651741868}
   m_Layer: 5
   m_Name: Tog_Etc
@@ -118137,7 +118138,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6337475461896781359
+--- !u!114 &3760881746379135443
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118146,7 +118147,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8983653425692625617}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 8dff9de9162afd34eb43132a849a9733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -118168,7 +118169,7 @@ MonoBehaviour:
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 21300000, guid: 2f2ccd23b763bc74aaa7c754d6529d09, type: 3}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -118180,7 +118181,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1503111730794641641}
   toggleTransition: 1
   graphic: {fileID: 0}
-  m_Group: {fileID: 3068092081326133252}
+  m_Group: {fileID: 1298240287743597958}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []

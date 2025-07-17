@@ -9,8 +9,7 @@ public class StorageInfoCtrl : MonoBehaviour
     [SerializeField] private ItemInfoUpdater _infoUpdater;
     [SerializeField] private ItemSellHandler _sellHandler;
     [SerializeField] private Canvas _canvas;
-    
-    private RectTransform _rect;
+    [SerializeField] private RectTransform _rect;
     
     private void Awake()
     {
@@ -22,6 +21,8 @@ public class StorageInfoCtrl : MonoBehaviour
 
     public void Show(InventorySlot slot)
     {
+        gameObject.SetActive(true);
+        
         _infoUpdater.UpdateItem(slot.Item);
         _sellHandler.SetItem(slot.Item);
         
