@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: MaltProcessor
   m_EditorClassIdentifier: 
   Code: MaltProcessor
-  GroundTilePositions: []
+  GroundTilePositions:
+  - {x: -2, y: -1}
+  - {x: -2, y: -2}
+  - {x: -1, y: -2}
+  - {x: -1, y: -1}
   WaterTilePositions: []
   Offset: {x: 0, y: -0.15}
   ColliderOffset: {x: 0, y: -0.5}
