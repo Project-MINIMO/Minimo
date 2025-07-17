@@ -56,7 +56,7 @@ public abstract class ProduceAdvanced : ProduceObject
     
     internal override void OnPlant(ProduceTask task)
     {
-        task.ApplyTimeReduction(_timeReduction);
+        task.ApplyTimeReduction(_timeReduction + _globalTimeReduction);
         
         base.OnPlant(task);
     }
