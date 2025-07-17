@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -76,13 +75,13 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             worldPosition.z = 0;
             
             var hit = Physics2D.OverlapPoint(worldPosition, _targetLayerMask);
-            if (hit != null
-                && hit.TryGetComponent<ProduceObject>(out var component)
-                && !_plantedThisDrag.Contains(component))
-            {
-                _produceManager.Plant(component, _currentOption);
-                _plantedThisDrag.Add(component);
-            }
+            if (hit == null) return;
+            if (!hit.TryGetComponent<ProduceObject>(out var component)) return;
+            if (_plantedThisDrag.Contains(component)) return;
+            if (component.CurrentState is not ProduceState.Idle) return;
+            
+            _produceManager.Plant(component, _currentOption);
+            _plantedThisDrag.Add(component);
         }
     }
 
