@@ -15,8 +15,7 @@ public class ProduceSlotExpandHandler : MonoBehaviour
     private ProduceManager _produceManager;
     private ProduceElevated _produceObject;
     private UseCashPanel _useCashPanel;
-
-
+    
     private int _currentPrice;
 
     private void Awake()

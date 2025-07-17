@@ -4,7 +4,6 @@ using UnityEngine.UI;
 public class StorageInfoCtrl : MonoBehaviour
 {
     [SerializeField] private Button _closeBtn;
-    [SerializeField] private Button _sellBtn;
     
     [SerializeField] private ItemInfoUpdater _infoUpdater;
     [SerializeField] private ItemSellHandler _sellHandler;
@@ -18,7 +17,6 @@ public class StorageInfoCtrl : MonoBehaviour
         _parentRect = _rect.parent.GetComponent<RectTransform>();
         
         _closeBtn.onClick.AddListener(() => gameObject.SetActive(false));
-        _sellBtn.onClick.AddListener(() => gameObject.SetActive(false));
     }
 
     public void Show(InventorySlot slot)
@@ -26,7 +24,7 @@ public class StorageInfoCtrl : MonoBehaviour
         gameObject.SetActive(true);
         
         _infoUpdater.UpdateItem(slot.Item);
-        _sellHandler.SetItem(slot.Item);
+        _sellHandler.Initialize(slot.Item);
         
         PositionNear(slot.GetComponent<RectTransform>());
     }
