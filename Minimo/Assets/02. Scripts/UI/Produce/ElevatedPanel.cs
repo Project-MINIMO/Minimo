@@ -83,7 +83,7 @@ public abstract class ElevatedPanel : UIBase
         if (state == ProduceState.Complete)
         {
             _resultInfo.gameObject.SetActive(true);
-            _resultInfo.UpdateItem(_produceObject.AllTasks[0].Result.ID);
+            _resultInfo.UpdateItem(_produceObject.AllTasks[0].Data.ResultItems[0].ID);
         }
         else
         {

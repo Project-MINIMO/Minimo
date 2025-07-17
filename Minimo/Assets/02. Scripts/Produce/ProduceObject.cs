@@ -159,7 +159,7 @@ public abstract class ProduceObject : BuildingObject
         
         AllTasks.Add(task);
         
-        _plantEffect.PlayEffect(task.Materials.Select(x => x.ID).ToArray());
+        _plantEffect.PlayEffect(task.Data.MaterialItems.Select(x => x.ID).ToArray());
         
         SetNextActiveTask();
     }

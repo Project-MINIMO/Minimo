@@ -5,8 +5,8 @@ using Random = System.Random;
 
 public class ProduceTask
 {
-    public ProduceResult Result { get; }
-    public ProduceMaterial[] Materials { get; }
+    public ProduceData Data { get; }
+
     public ITaskState CurrentState { get; private set; }
     
     public event Action<ITaskState> OnStateChanged;
@@ -30,8 +30,7 @@ public class ProduceTask
     
     public ProduceTask(ProduceData produceOption)
     {
-        Result = produceOption.ResultItems[0];
-        Materials = produceOption.MaterialItems;
+        Data = produceOption;
         
         _baseTime = produceOption.Time;
         _reducedTime = produceOption.Time;
@@ -160,17 +159,27 @@ public class CompletedState : ITaskState
     
     private void TryHarvest(ProduceTask task)
     {
-        var result = task.Result;
+        var result = task.Data.ResultItems[0];
         var bonus = CalculateBonus(result.Amount, task.HarvestRatio);
-
         AccountInfo.Instance.AddItem(result.ID, result.Amount + bonus);
-        
         App.LogBox("yellow", "생산물 추가 수확 로그", new()
         {
             { "기존 수확량", result.Amount.ToString() },
             { "추가 생산 확률", task.HarvestRatio.ToString() },
             { "추가 수확량", bonus.ToString() },
             { "최종 수확량", (result.Amount + bonus).ToString() },
+        });
+
+        var expAmount = task.Data.EXP;
+        var modifiedExp = expAmount * task.ExpRatio;
+        var roundedExp = Mathf.RoundToInt(modifiedExp);
+        AccountInfo.Instance.AddExp(roundedExp);
+        App.LogBox("purple", "획득 경험치 비율 증가 로그", new()
+        {
+            { "기존 경험치", expAmount.ToString() },
+            { "획득 경험치 증가 비율", task.ExpRatio.ToString() },
+            { "재계산된 경험치", modifiedExp.ToString() },
+            { "반올림된 최종 경험치", roundedExp.ToString() },
         });
     }
 

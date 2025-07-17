@@ -75,7 +75,7 @@ public class ProduceSlot : MonoBehaviour
         _produceTask.OnRemainTimeChanged += OnRemainTimeChanged;
         _produceTask.OnStateChanged += OnStateChanged;
 
-        var result = _produceTask.Result;
+        var result = _produceTask.Data.ResultItems[0];
         _itemInfoUpdater.UpdateItem(result.ID, result.Amount);
         OnRemainTimeChanged(_produceTask.RemainTime);
         OnStateChanged(_produceTask.CurrentState);

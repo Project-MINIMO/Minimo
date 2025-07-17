@@ -38,7 +38,7 @@ public class ItemSellHandler : TransactionHandler
         var modifiedPrice = price * _globalSellCostRatio;
         var roundedPrice = Mathf.RoundToInt(modifiedPrice);
         
-        App.LogBox("green", "생산 시간 로그", new()
+        App.LogBox("green", "판매 가격 증가 로그", new()
         {
             { "기존 판매 가격", price.ToString() },
             { "판매 가격 증가 비율", _globalSellCostRatio.ToString() },

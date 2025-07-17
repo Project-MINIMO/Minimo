@@ -9,10 +9,10 @@ public class AccountInfo : Singleton<AccountInfo>
     private TitleData _titleData;
     
     public Dictionary<int, Item> Items { get; } = new();
-    public int level = 1;
+    public int level => Exp / 100;
     public int blueStar;
     public int rainbowStar;
-    public int Exp { get; private set; }
+    public int Exp = 100;
     public int Capacity { get; private set; } = 100;
 
     private GetItemPanel _itemPanel;
@@ -33,7 +33,6 @@ public class AccountInfo : Singleton<AccountInfo>
     public void AddExp(int amount)
     {
         Exp += amount;
-        level = Exp / 100;
     }
 
     public void AddItem(int id, int amount)

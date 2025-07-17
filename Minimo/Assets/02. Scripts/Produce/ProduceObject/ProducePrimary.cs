@@ -67,7 +67,7 @@ public class ProducePrimary : ProduceObject
     
     private void SetupSprites(ProduceTask task)
     {
-        _currentID = task.Result.ID;
+        _currentID = task.Data.ResultItems[0].ID;
         _currentIndex = -1;
         SetCropSprite(ActiveTask.RemainTime, ActiveTask.ModifiedTime);
     }
