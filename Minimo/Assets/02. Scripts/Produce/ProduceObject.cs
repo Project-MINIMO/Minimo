@@ -19,12 +19,15 @@ public abstract class ProduceObject : BuildingObject
     private PlantEffectCtrl _plantEffect;
     
     private float _lastUpdateTime;
-    
-    private float _timeRatio = 1f;
-    private float _globalTimeRatio;
 
-    private float _harvestRatio = 1f;
-    private float _globalHarvestRatio;
+    protected virtual float TimeRatio => _globalTimeRatio;
+    protected float _globalTimeRatio;
+    
+    protected virtual float HarvestRatio => _globalHarvestRatio;
+    protected float _globalHarvestRatio;
+    
+    protected virtual float ExpRatio => _globalExpRatio;
+    protected float _globalExpRatio;
 
     protected override void Awake()
     {
@@ -40,10 +43,11 @@ public abstract class ProduceObject : BuildingObject
                 
                 foreach (var task in AllTasks)
                 {
-                    task.ApplyTimeRatio(_timeRatio * _globalTimeRatio); 
+                    task.ApplyTimeRatio(TimeRatio); 
                 }
             })
             .AddTo(this);
+        _globalTimeRatio = minimoManager.GlobalTimeRatio.Value;
         
         minimoManager
             .GlobalHarvestRatio
@@ -53,10 +57,25 @@ public abstract class ProduceObject : BuildingObject
                 
                 foreach (var task in AllTasks)
                 {
-                    task.ApplyHarvestRatio(_harvestRatio * _globalHarvestRatio); 
+                    task.ApplyHarvestRatio(HarvestRatio); 
                 }
             })
             .AddTo(this);
+        _globalHarvestRatio = minimoManager.GlobalHarvestRatio.Value;
+        
+        minimoManager
+            .GlobalExpRatio
+            .Subscribe(value =>
+            {
+                _globalExpRatio = value;
+                
+                foreach (var task in AllTasks)
+                {
+                    task.ApplyHarvestRatio(ExpRatio); 
+                }
+            })
+            .AddTo(this);
+        _globalExpRatio = minimoManager.GlobalExpRatio.Value;
     }
     
     public override void Initialize(Building data)
@@ -108,16 +127,9 @@ public abstract class ProduceObject : BuildingObject
             return ProduceState.Complete;
         }
 
-        if (ActiveTask != null)
-        {
-            OnProduceStateChanged?.Invoke(ProduceState.Produce);
-            return ProduceState.Produce;
-        }
-        else
-        {
-            OnProduceStateChanged?.Invoke(ProduceState.Idle);
-            return ProduceState.Idle;
-        }
+        var state = ActiveTask != null ? ProduceState.Produce : ProduceState.Idle;
+        OnProduceStateChanged?.Invoke(state);
+        return state;
     }
     
     public override void OnClickUp()
@@ -141,8 +153,10 @@ public abstract class ProduceObject : BuildingObject
 
     internal virtual void OnPlant(ProduceTask task)
     {
-        task.ApplyTimeRatio(_timeRatio * _globalTimeRatio);
-        task.ApplyHarvestRatio(_harvestRatio * _globalHarvestRatio); 
+        task.ApplyTimeRatio(TimeRatio);
+        task.ApplyHarvestRatio(HarvestRatio); 
+        task.ApplyExpRatio(ExpRatio);
+        
         AllTasks.Add(task);
         
         _plantEffect.PlayEffect(task.Materials.Select(x => x.ID).ToArray());
@@ -168,28 +182,6 @@ public abstract class ProduceObject : BuildingObject
     {
         ActiveTask?.ChangeState(CompletedState.Instance);
         SetNextActiveTask();
-    }
-    #endregion
-    
-    #region Apply Minimo Abilities
-    public void ApplyTimeRatio(float value)
-    {  
-        _timeRatio = 1 - value / 100;
-        
-        foreach (var task in AllTasks)
-        {
-            task.ApplyTimeRatio(_timeRatio * _globalTimeRatio);
-        }
-    }
-    
-    public void ApplyHarvestRatio(float value)
-    {  
-        _harvestRatio = 1 - value / 100;
-        
-        foreach (var task in AllTasks)
-        {
-            task.ApplyHarvestRatio(_harvestRatio * _globalHarvestRatio);
-        }
     }
     #endregion
 }

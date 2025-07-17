@@ -120,6 +120,11 @@ public class Minimo : MonoBehaviour
 
     public void AddLevel(int amount)
     {
+        if (AssignedBuilding != null)
+        {
+            _minimoManager.OnMinimoUnassigned(this);
+        }
+        
         Level += amount;
         Level = Mathf.Clamp(Level, 1, 30);
 
@@ -137,8 +142,7 @@ public class Minimo : MonoBehaviour
                     ability.Apply(AssignedBuilding);
                 }
             }
-        
-            _minimoManager.OnMinimoUnassigned(this);
+            
             _minimoManager.OnMinimoAssigned(this);
         }
     }

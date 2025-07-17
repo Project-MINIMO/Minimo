@@ -8,16 +8,26 @@ public abstract class ProduceAdvanced : ProduceObject
     public string AnimTrigger;
 
     private Minimo _placedMinimo;
-    private float _timeReduction;
+    
     private float _globalTimeReduction;
+    
+    protected override float TimeRatio => _timeRatio * _globalTimeRatio;
+    private float _timeRatio = 1f;
+    
+    protected override float HarvestRatio => _harvestRatio * _globalHarvestRatio;
+    private float _harvestRatio = 1f;
+    
+    protected override float ExpRatio => _expRatio * _globalExpRatio;
+    private float _expRatio = 1f;
     
     protected override void Awake()
     {
         base.Awake();
 
         MinimoWorkingPosition = transform.GetChild(2);
-        
-        App.GetManager<MinimoManager>()
+
+        var minimoManager = App.GetManager<MinimoManager>();
+        minimoManager
             .GlobalTimeReduction
             .Subscribe(value =>
             {
@@ -25,26 +35,17 @@ public abstract class ProduceAdvanced : ProduceObject
                 
                 foreach (var task in AllTasks)
                 {
-                    task.ApplyTimeReduction(_timeReduction + _globalTimeReduction); 
+                    task.ApplyTimeReduction(value); 
                 }
             })
             .AddTo(this);
+        _globalTimeReduction = minimoManager.GlobalTimeReduction.Value;
     }
 
     public void PlaceMinimo(Minimo minimo)
     {
         _placedMinimo?.SetChillState();
         _placedMinimo = minimo;
-    }
-
-    public void ApplyTimeReduction(float reduction)
-    { 
-        _timeReduction = reduction;
-        
-        foreach (var task in AllTasks)
-        {
-            task.ApplyTimeReduction(_timeReduction + _globalTimeReduction); 
-        }
     }
 
     internal override void StartPlant(ProduceData option)
@@ -56,8 +57,40 @@ public abstract class ProduceAdvanced : ProduceObject
     
     internal override void OnPlant(ProduceTask task)
     {
-        task.ApplyTimeReduction(_timeReduction + _globalTimeReduction);
+        task.ApplyTimeReduction(_globalTimeReduction);
         
         base.OnPlant(task);
     }
+    
+    #region Apply Minimo Abilities
+    public void ApplyTimeRatio(float value)
+    {  
+        _timeRatio = 1 - value / 100;
+        
+        foreach (var task in AllTasks)
+        {
+            task.ApplyTimeRatio(TimeRatio);
+        }
+    }
+    
+    public void ApplyHarvestRatio(float value)
+    {  
+        _harvestRatio = 1 - value / 100;
+        
+        foreach (var task in AllTasks)
+        {
+            task.ApplyHarvestRatio(HarvestRatio);
+        }
+    }
+    
+    public void ApplyExpRatio(float value)
+    {
+        _expRatio = 1 + value / 100;
+        
+        foreach (var task in AllTasks)
+        {
+            task.ApplyExpRatio(ExpRatio);
+        }
+    }
+    #endregion
 }

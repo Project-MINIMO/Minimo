@@ -24,6 +24,7 @@ public class ProduceTask
     private float _timeRatio;
     
     public float HarvestRatio { get; private set; }
+    public float ExpRatio { get; private set; }
     
     private bool _isModifiedDirty = true;
     
@@ -99,6 +100,11 @@ public class ProduceTask
     public void ApplyHarvestRatio(float harvestRatio)
     {
         HarvestRatio = 1f - harvestRatio;
+    }
+
+    public void ApplyExpRatio(float expRatio)
+    {
+        ExpRatio = expRatio;
     }
     #endregion
 }

@@ -1,6 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
+
 using UniRx;
 using UnityEngine;
 
@@ -14,6 +14,9 @@ public class MinimoManager : ManagerBase
     
     public ReactiveProperty<float> GlobalHarvestRatio { get; } = new(1f);
     private float _globalHarvestRatio = 1f;
+    
+    public ReactiveProperty<float> GlobalExpRatio { get; } = new(1f);
+    private float _globalExpRatio = 1f;
     
     public ReactiveProperty<float> GlobalSellCostRatio { get; } = new(1f);
     private float _globalSellCostRatio = 1f;
@@ -52,6 +55,10 @@ public class MinimoManager : ManagerBase
                         _globalHarvestRatio *= 1 - a.Value / 100;
                         break;
                     
+                    case AbilityType.ProdEXP:
+                        _globalExpRatio *= 1 + a.Value / 100;
+                        break;
+                    
                     case AbilityType.SellValue:
                         _globalSellCostRatio *= 1 + a.Value / 100;
                         break;
@@ -66,6 +73,7 @@ public class MinimoManager : ManagerBase
         GlobalTimeReduction.Value = _globalTimeReduction;
         GlobalTimeRatio.Value = _globalTimeRatio;
         GlobalHarvestRatio.Value = _globalHarvestRatio;
+        GlobalExpRatio.Value = _globalExpRatio;
         GlobalSellCostRatio.Value = _globalSellCostRatio;
         GlobalTimeSkipCostRatio.Value = _globalTimeSkipCostRatio;
     }
@@ -92,6 +100,10 @@ public class MinimoManager : ManagerBase
                         _globalHarvestRatio /= 1 - a.Value / 100;
                         break;
                     
+                    case AbilityType.ProdEXP:
+                        _globalExpRatio /= 1 + a.Value / 100;
+                        break;
+                    
                     case AbilityType.SellValue:
                         _globalSellCostRatio /= a.Value / 100;
                         break;
@@ -106,6 +118,7 @@ public class MinimoManager : ManagerBase
         GlobalTimeReduction.Value = _globalTimeReduction;
         GlobalTimeRatio.Value = _globalTimeRatio;
         GlobalHarvestRatio.Value = _globalHarvestRatio;
+        GlobalExpRatio.Value = _globalExpRatio;
         GlobalSellCostRatio.Value = _globalSellCostRatio;
         GlobalTimeSkipCostRatio.Value = _globalTimeSkipCostRatio;
     }
