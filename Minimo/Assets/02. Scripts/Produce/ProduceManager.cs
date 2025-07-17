@@ -73,7 +73,7 @@ public class ProduceManager : ManagerBase
         }
 
         _camera.transform
-            .DOMove(targetPos, 0.5f)
+            .DOMove(targetPos, 0.3f)
             .SetEase(Ease.OutCubic)
             .OnComplete(() => onComplete?.Invoke());
     }

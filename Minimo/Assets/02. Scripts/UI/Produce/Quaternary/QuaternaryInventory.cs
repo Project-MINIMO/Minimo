@@ -21,7 +21,6 @@ public class QuaternaryInventory : MonoBehaviour
             var index = i;
             _menuTogs[index].onValueChanged.AddListener((isOn) =>
             {
-                Debug.Log($"{index} Toggle is {isOn}");
                 if (isOn)
                 {
                     FilterStorageBtns(index);
