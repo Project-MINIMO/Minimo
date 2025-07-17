@@ -22,6 +22,7 @@ public class InventorySlot : MonoBehaviour
     {
         var item = AccountInfo.Instance.Items[id];
         Item = item;
+        Item.OnItemCountChnaged += SetCount;
         _info.UpdateItem(item);
         _inventoryBtn.onClick.AddListener(() => OnItemSelected?.Invoke(this));
     }

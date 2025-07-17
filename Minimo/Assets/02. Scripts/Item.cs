@@ -1,7 +1,11 @@
+using System;
+
 using UnityEngine;
 
 public class Item
 {
+    public event Action OnItemCountChnaged;
+    
     public readonly ItemData Data;
     
     public readonly string Name;
@@ -24,5 +28,6 @@ public class Item
         Count += num;
         
         Count = Mathf.Clamp(Count, 0, 99999);
+        OnItemCountChnaged?.Invoke();
     }
 }
