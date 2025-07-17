@@ -1,59 +1,50 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
-public class StorageInfoPanel : UIBase
+public class StorageInfoCtrl : MonoBehaviour
 {
-    [SerializeField] private RectTransform _infoRect;
-    
     [SerializeField] private Button _closeBtn;
+    [SerializeField] private Button _sellBtn;
     
-    [SerializeField] private TextMeshProUGUI _nameTMP;
-    [SerializeField] private TextMeshProUGUI _descriptionTMP;
-    [SerializeField] private Image _iconImg;
-    [SerializeField] private StorageSellCtrl _sellCtrl;
+    [SerializeField] private ItemInfoUpdater _infoUpdater;
+    [SerializeField] private ItemSellHandler _sellHandler;
+    [SerializeField] private Canvas _canvas;
     
-    private TitleData _titleData;
+    private RectTransform _rect;
     
-    public override void Initialize(UIManager manager)
+    private void Awake()
     {
-        base.Initialize(manager);
-
-        _titleData = App.GetData<TitleData>();
-        _closeBtn.onClick.AddListener(ClosePanel);
-
-        _sellCtrl.Setup();
+        _rect = GetComponent<RectTransform>();
         
-        ClosePanel();
+        _closeBtn.onClick.AddListener(() => gameObject.SetActive(false));
+        _sellBtn.onClick.AddListener(() => gameObject.SetActive(false));
     }
 
-    public void OpenPanel(StorageBtn storageBtn)
+    public void Show(InventorySlot slot)
     {
-        base.OpenPanel();
+        _infoUpdater.UpdateItem(slot.Item);
+        _sellHandler.SetItem(slot.Item);
         
-        SetInfo(storageBtn.Item);
-        _sellCtrl.Initialize(storageBtn.Item);
-        
-        //var newPosition = new Vector2(GetPositionBySiblingIndex(storageBtn.SibilingsIndex), 0);
-        //_infoRect.anchoredPosition = newPosition;
-
-        //newPosition = new Vector2(_infoRect.position.x, storageBtn.Position.y - 100);
-        //_infoRect.position = newPosition;
+        PositionNear(slot.GetComponent<RectTransform>());
     }
 
-    private void SetInfo(Item item)
+    private void PositionNear(RectTransform slotRect)
     {
-        _nameTMP.text = item.Name;
-        _descriptionTMP.text = item.Name;
-        _iconImg.sprite = item.Icon;
+        var worldPos = slotRect.TransformPoint(slotRect.rect.center);
+        var screenPoint = RectTransformUtility.WorldToScreenPoint(null, worldPos);
+        
+        var canvasRect = _canvas.transform as RectTransform;
+        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPoint, 
+                _canvas.worldCamera, 
+                out var localPoint))
+            return;
+        
+        var pivot = new Vector2(
+            screenPoint.x / Screen.width  < 0.5f ? 0f : 1f,
+            screenPoint.y / Screen.height < 0.5f ? 0f : 1f
+        );
+        _rect.pivot = pivot;
+        
+        _rect.anchoredPosition = localPoint;
     }
-
-    private int GetPositionBySiblingIndex(int index) => index switch
-    {
-        0 => -50,
-        1 => 250,
-        2 => -250,
-        3 => 50,
-        _ => 0
-    };
 }

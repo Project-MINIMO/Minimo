@@ -1,6 +1,5 @@
 using System.Linq;
 
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -27,7 +26,7 @@ public class StorageCapacityCtrl : MonoBehaviour
     
     private void SetCapacity()
     {
-        var storageBtns = _storageParent.GetComponentsInChildren<StorageBtn>();
+        var storageBtns = _storageParent.GetComponentsInChildren<InventorySlot>();
         Capacity = storageBtns.Sum(storageBtn => storageBtn.CanShow ? 1 : 0);
 
         _capacityTMP.text = $"{Capacity}/{100}"; //TODO : 최대 창고 용량

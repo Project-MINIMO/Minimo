@@ -24,7 +24,7 @@ public class InventorySlideHandler : MonoBehaviour, IBeginDragHandler, IDragHand
 
     private void OnEnable()
     {
-        _targetRect.anchoredPosition = new Vector2(-180f, _minY);
+        _targetRect.anchoredPosition = new Vector2(_targetRect.anchoredPosition.x, _minY);
     }
 
     public void Open()

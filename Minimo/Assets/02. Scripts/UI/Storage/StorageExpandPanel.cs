@@ -32,8 +32,8 @@ public class StorageExpandPanel : UIBase
         _expandCost = titleData.Common["StorageExpandCost"];
         _expandString = titleData.GetString("STR_STORAGE_EXPAND_COST");
         
-        _titleTMP.text = titleData.GetString("STR_STORAGE_EXPAND_TITLE");
-        _descriptionTMP.text = titleData.GetString("STR_STORAGE_EXPAND_DESC");
+        _titleTMP.text = titleData.GetString("STR_STORAGE_EXPAND_NAME");
+        _descriptionTMP.text = titleData.GetString("STR_STORTAGE_UI_EXPAND_DESC");
         
         _closeBtn.onClick.AddListener(ClosePanel);
         

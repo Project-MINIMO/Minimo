@@ -90,8 +90,8 @@ public class ProduceSlot : MonoBehaviour
             _produceTask = null;
         }
         
-        _itemInfoUpdater.UpdateItem(-1, -1);
-        _remainTimeUpdater.UpdateTime(-1, 1);
+        _itemInfoUpdater.ClearItem();
+        _remainTimeUpdater.ClearTime();
         OnStateChanged(PendingState.Instance);
     }
 

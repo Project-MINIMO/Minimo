@@ -8,7 +8,7 @@ public class InventorySlot : MonoBehaviour
     public bool CanShow => Item is { Count: > 0 };
     public Item Item { get; private set; }
     
-    public event Action<Item> OnItemSelected;
+    public event Action<InventorySlot> OnItemSelected;
 
     [SerializeField] private ItemInfoUpdater _info;
     [SerializeField] private Button _inventoryBtn;
@@ -22,8 +22,8 @@ public class InventorySlot : MonoBehaviour
     {
         var item = AccountInfo.Instance.Items[id];
         Item = item;
-        _info.UpdateItem(item, item.Count);
-        _inventoryBtn.onClick.AddListener(() => OnItemSelected?.Invoke(Item));
+        _info.UpdateItem(item);
+        _inventoryBtn.onClick.AddListener(() => OnItemSelected?.Invoke(this));
     }
 
     private void SetCount()

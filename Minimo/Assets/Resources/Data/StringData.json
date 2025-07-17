@@ -3668,36 +3668,134 @@
     "Japanese": ""
   },
   {
-    "ID": "STR_STORAGE_UI_ENTIRE",
+    "ID": "STR_STORAGE_UI_DESC",
+    "Korean": "기타 아이템은 창고 용량에 포함되지 않습니다",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_STORAGE_UI_TAB1_NAME",
     "Korean": "전체",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_STORAGE_UI_RESOURCE",
-    "Korean": "자원",
+    "ID": "STR_STORAGE_UI_TAB2_NAME",
+    "Korean": "식품",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_STORAGE_UI_PRODUCT",
-    "Korean": "상품",
+    "ID": "STR_STORAGE_UI_TAB3_NAME",
+    "Korean": "속성",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_STORAGE_UI_CONSTRUCTION",
-    "Korean": "건설 자재",
+    "ID": "STR_STORAGE_UI_TAB4_NAME",
+    "Korean": "기물",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_STORAGE_UI_EXPAND",
-    "Korean": "확장",
+    "ID": "STR_STORAGE_UI_TAB5_NAME",
+    "Korean": "기타",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_STORTAGE_UI_ALIGN_NAME",
+    "Korean": "정렬",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_STORTAGE_UI_ALIGN_COMPONENT1_NAME",
+    "Korean": "기본",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_STORTAGE_UI_ALIGN_COMPONENT2_NAME",
+    "Korean": "개수",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_STORTAGE_UI_ALIGN_COMPONENT3_NAME",
+    "Korean": "가격",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_STORTAGE_UI_FILTER_NAME",
+    "Korean": "필터",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_STORTAGE_UI_FILTER_COMPONENT1_NAME",
+    "Korean": "전체",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_STORTAGE_UI_FILTER_COMPONENT2_NAME",
+    "Korean": "작물",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_STORTAGE_UI_FILTER_COMPONENT3_NAME",
+    "Korean": "가공품",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_STORTAGE_UI_FILTER_COMPONENT4_NAME",
+    "Korean": "식품",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_STORTAGE_UI_FILTER_COMPONENT5_NAME",
+    "Korean": "꽃",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_STORTAGE_UI_FILTER_COMPONENT6_NAME",
+    "Korean": "가루",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_STORTAGE_UI_EXPAND_DESC",
+    "Korean": "창고 용량을\n확장하시겠습니까?",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_STORTAGE_UI_EXPAND_COMPLETE",
+    "Korean": "창고 용량이 확장되었습니다!",
     "English": "",
     "Chinese": "",
     "Japanese": ""
@@ -3731,37 +3829,184 @@
     "Japanese": ""
   },
   {
-    "ID": "STR_MINIMO_PLACE_NAME",
+    "ID": "STR_MINIMOCENTER_NAME",
+    "Korean": "미니모 관리소",
+    "English": -1,
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MC_RESIDENCEEXPAND_DESC",
+    "Korean": "미니모 거주공간을\n확장하시겠습니까?",
+    "English": -1,
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MC_EXPANDSUCCEED_DESC",
+    "Korean": "거주공간이 확장되었습니다!",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MC_FILTER_NAME",
+    "Korean": "필터",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MC_FILTER_COMPONENT1_NAME",
+    "Korean": "전체",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MC_FILTER_COMPONENT2_NAME",
+    "Korean": "배치O",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MC_FILTER_COMPONENT3_NAME",
+    "Korean": "배치X",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MC_FILTER_COMPONENT4_NAME",
+    "Korean": "고유",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MC_FILTER_COMPONENT5_NAME",
+    "Korean": "일반",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MC_ALIGN_NAME",
+    "Korean": "정렬",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MC_ALIGN_COMPONENT1_NAME",
+    "Korean": "기본",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MC_ALIGN_COMPONENT2_NAME",
+    "Korean": "성장",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MC_ALIGN_COMPONENT3_NAME",
+    "Korean": "획득",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MINIMOPROFILE_NAME",
+    "Korean": "프로필",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MINIMOPROFILE_TAB1_NAME",
+    "Korean": "정보",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MINIMOPROFILE_TAB2_NAME",
+    "Korean": "성장",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MINIMOPROFILE_TAB3_NAME",
+    "Korean": "장비",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_POPUP_PRODUCEPLACE_NAME",
+    "Korean": "생산 배치",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_POPUP_PRODUCEPLACE_DESC",
+    "Korean": "클릭 시 해당 건물에 미니모를 배치할 수 있습니다",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MINIMOPLACE_NAME",
     "Korean": "미니모 배치",
-    "English": "Place Minimo",
+    "English": -1,
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MINIMO_PLACE_EDIT_NAME",
+    "ID": "STR_POPUP_PLACEBUILDING_NAME",
+    "Korean": "건물 배치",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_POPUP_PLACEBUILDING_DESC",
     "Korean": "배치할 미니모를 선택하세요",
-    "English": "Select the Minimo to place",
+    "English": -1,
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MINIMO_PLACE_PLACECHECK_NAME",
-    "Korean": "해당 미니모를 배치하시겠습니까?",
-    "English": "Are you going to place that Minimo?",
+    "ID": "STR_POPUP_PLACE_DESC1",
+    "Korean": "이 미니모를 배치하시겠습니까?",
+    "English": -1,
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MINIMO_PLACE_DISPLACECHECK_NAME",
-    "Korean": "배치된 미니모를 해제하시겠습니까?",
-    "English": "Are you going to release the placed Minimo?",
+    "ID": "STR_POPUP_PLACE_DESC2",
+    "Korean": "배치 상태",
+    "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MINIMO_PLACE_DISPLACECHECK_NAME2",
-    "Korean": "배치 해제",
-    "English": "Displace",
+    "ID": "STR_POPUP_DISPLACE_DESC1",
+    "Korean": "[{0}]에서 [{1}]을(를)\n해제하시겠습니까?",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_POPUP_DISPLACE_DESC2",
+    "Korean": "*미니모가 없는 건물은 생산이 되지 않습니다",
+    "English": "",
     "Chinese": "",
     "Japanese": ""
   },

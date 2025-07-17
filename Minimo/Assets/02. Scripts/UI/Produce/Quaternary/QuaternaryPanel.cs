@@ -53,10 +53,10 @@ public class QuaternaryPanel : ElevatedPanel
         }
     }
     
-    private void OnItemSelected(Item selectedItem)
+    private void OnItemSelected(InventorySlot slot)
     {
-        _selectedInfos[selectedItem.Data.Type - 1].UpdateItem(selectedItem, 1);
-        _selectedItems[selectedItem.Data.Type - 1] = selectedItem;
+        _selectedInfos[slot.Item.Data.Type].UpdateItem(slot.Item);
+        _selectedItems[slot.Item.Data.Type] = slot.Item;
 
         if (CheckCanPlant())
         {
@@ -82,6 +82,6 @@ public class QuaternaryPanel : ElevatedPanel
     private void ClearItem(int index)
     {
         _selectedItems[index] = null;
-        _selectedInfos[index].UpdateItem(-1, -1);
+        _selectedInfos[index].ClearItem();
     }
 }
