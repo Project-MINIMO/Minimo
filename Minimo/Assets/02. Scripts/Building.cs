@@ -14,6 +14,8 @@ public class Building
     public readonly string Description;
     public readonly int Cost;
     public readonly int Duration;
+
+    public bool IsLocked => AccountInfo.Instance.level < UnlockLevel;
     
     public BuildingPositionData Position { get; private set; }
     public Sprite Icon { get; private set; }

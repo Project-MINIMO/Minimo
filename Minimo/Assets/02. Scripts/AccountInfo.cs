@@ -9,7 +9,7 @@ public class AccountInfo : Singleton<AccountInfo>
     private TitleData _titleData;
     
     public Dictionary<int, Item> Items { get; } = new();
-    public int level { get; private set; } = 2;
+    public int level { get; private set; } = 1;
     public int blueStar;
     public int rainbowStar;
     public int Exp { get; private set; }
