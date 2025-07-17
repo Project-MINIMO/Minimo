@@ -19,7 +19,7 @@ public class StorageInfoCtrl : MonoBehaviour
         _closeBtn.onClick.AddListener(() => gameObject.SetActive(false));
     }
 
-    public void Show(InventorySlot slot)
+    public void Show(InventorySlot<Item> slot)
     {
         gameObject.SetActive(true);
         

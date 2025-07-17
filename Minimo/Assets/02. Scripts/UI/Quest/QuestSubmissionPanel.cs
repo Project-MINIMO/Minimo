@@ -107,7 +107,7 @@ public class QuestSubmissionPanel : UIBase
                 case ClearType.Build:
                 {
                     var target = _titleData.Building[clear.Target];
-                    var name = _titleData.GetString($"STR_BUILDING_{target.Name.ToUpper()}_NAME");
+                    var name = target.Name;
                     _clearTMP.text += string.Format(_clearStrings[(int)clear.Type], _titleData.GetString(name), clear.Amount);
                     break;
                 }

@@ -173,7 +173,7 @@ public class TitleData : DataBase
     public Dictionary<int, QuestData> Quest { get; private set; } = new();
     public Dictionary<int, DetailQuestData> DetailQuest { get; private set; } = new();
     public Dictionary<string, int> Common { get; private set; } = new();
-    public Dictionary<int, BuildingData> Building { get; private set; } = new();
+    public Dictionary<int, Building> Building { get; private set; } = new();
     public Dictionary<int, ItemData> Item { get; private set; } = new();
     public Dictionary<int, ProduceData> Produce { get; private set; } = new();
     public Dictionary<string, List<ProduceData>> GroupedProduce { get; private set; } = new();
@@ -250,7 +250,8 @@ public class TitleData : DataBase
         var buildingDataRaw = DataLoader.LoadData<BuildingData>(BUILDING_PATH);
         foreach (var data in buildingDataRaw)
         {
-            Building.Add(data.ID, data);
+            var newBuilding = new Building(data, this);
+            Building.Add(data.ID, newBuilding);
         } 
         
         var itemDataRaw = DataLoader.LoadData<ItemData>(ITEM_PATH);

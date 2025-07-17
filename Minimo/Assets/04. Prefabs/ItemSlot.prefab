@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 4677158115811487451}
   - component: {fileID: 9156855872490254598}
   - component: {fileID: 5621900523182689402}
-  - component: {fileID: 6657868625846263501}
+  - component: {fileID: 5957391521241441753}
   - component: {fileID: 3102293277683602141}
   m_Layer: 5
-  m_Name: InventorySlot
+  m_Name: ItemSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -125,7 +125,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6657868625846263501
+--- !u!114 &5957391521241441753
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -134,11 +134,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3510608413281686106}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66959538eec2af14e9e09e0288167bb7, type: 3}
+  m_Script: {fileID: 11500000, guid: a1ba04c7132e16941b3f7f46a8ac1054, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _info: {fileID: 3102293277683602141}
   _inventoryBtn: {fileID: 5621900523182689402}
+  _info: {fileID: 3102293277683602141}
 --- !u!114 &3102293277683602141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemNameTMP: {fileID: 4071161125019149821}
+  _itemDescriptionTMP: {fileID: 0}
   _itemCountTMP: {fileID: 7886042978930909970}
   _iconImg: {fileID: 7918555514169337007}
 --- !u!1 &5448526410171155980

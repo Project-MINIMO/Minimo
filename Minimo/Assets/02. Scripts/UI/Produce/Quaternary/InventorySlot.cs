@@ -3,35 +3,17 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventorySlot : MonoBehaviour
+public abstract class InventorySlot<T> : MonoBehaviour
 {
-    public bool CanShow => Item is { Count: > 0 };
-    public Item Item { get; private set; }
+    public abstract bool CanShow();
+    public T Item { get; protected set; }
     
-    public event Action<InventorySlot> OnItemSelected;
-
-    [SerializeField] private ItemInfoUpdater _info;
+    public event Action<InventorySlot<T>> OnItemSelected;
+    
     [SerializeField] private Button _inventoryBtn;
     
-    private void OnEnable()
+    public virtual void Initialize(T item)
     {
-        SetCount();
-    }
-
-    public void Initialize(int id)
-    {
-        var item = AccountInfo.Instance.Items[id];
-        Item = item;
-        Item.OnItemCountChnaged += SetCount;
-        _info.UpdateItem(item);
         _inventoryBtn.onClick.AddListener(() => OnItemSelected?.Invoke(this));
-    }
-
-    private void SetCount()
-    {
-        if (Item == null) return;
-        
-        gameObject.SetActive(CanShow);
-        _info.UpdateItemCount(Item.Count);
     }
 }

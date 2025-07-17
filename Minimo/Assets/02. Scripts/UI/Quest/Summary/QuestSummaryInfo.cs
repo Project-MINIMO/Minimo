@@ -93,7 +93,7 @@ public class QuestSummaryInfo : MonoBehaviour
                 case ClearType.Build:
                 {
                     var target = _titleData.Building[clear.Target];
-                    var name = _titleData.GetString($"STR_BUILDING_{target.Name.ToUpper()}_NAME");
+                    var name = target.Name;
                     _descTMP.text += string.Format(_descriptionStrings[(int)clear.Type], _titleData.GetString(name), clear.Amount);
                     break;
                 }

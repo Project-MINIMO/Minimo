@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using TMPro;
 
-public class StorageInventory : Inventory
+public class StorageInventory : Inventory<Item>
 {
     private void OnEnable()
     {
@@ -20,7 +20,7 @@ public class StorageInventory : Inventory
         _menuTogs[4].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_TAB5_NAME");
     }
 
-    protected override List<ItemData> GetFilteredItems() => App.GetData<TitleData>().Item.Values.ToList();
+    protected override List<Item> GetFilteredItems() => AccountInfo.Instance.Items.Values.ToList();
 
-    protected override bool IsSlotFiltered(int index, int type) => index == 0 || index == type + 1;
+    protected override bool IsSlotFiltered(int index, Item item) => index == 0 || index == item.Data.Type + 1;
 }

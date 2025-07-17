@@ -34,9 +34,9 @@ public class BuildingBack : MonoBehaviour
 
         foreach (var data in App.GetData<TitleData>().Building.Values)
         {
-            var isValid = _buildingType == EBuildingType.Production
-                ? data.Type is 0 or 1 or 2 or 3
-                : data.Type == (int)_buildingType;
+            var isValid = true;//_buildingType == EBuildingType.Production
+                //? data.Type is 0 or 1 or 2 or 3
+                //: data.Type == (int)_buildingType;
 
             if (!isValid)
             {
@@ -52,7 +52,7 @@ public class BuildingBack : MonoBehaviour
                 buildingBtn = Instantiate(_buildingBtnPrefab, _buildingBtnParent).GetComponent<BuildingBtn>();
             }
 
-            buildingBtn.Initialize(data);
+            //buildingBtn.Initialize(data);
             _btnDictionary.Add(data.ID, buildingBtn);
 
             index++;

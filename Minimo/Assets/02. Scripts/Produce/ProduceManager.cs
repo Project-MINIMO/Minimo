@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public enum BuildingTier
+public enum BuildingType
 {
     Tier1,
     Tier2,
@@ -19,19 +19,19 @@ public class ProduceManager : ManagerBase
     private readonly List<ProduceTertiary> _tertiaryBuildings = new();
     public IReadOnlyList<ProduceTertiary> TertiaryBuildings => _tertiaryBuildings;
     
-    private Dictionary<BuildingTier, UIBase> _panelMap;
+    private Dictionary<BuildingType, UIBase> _panelMap;
     private Camera _camera;
 
     private void Start()
     {
         var uiManager = App.GetManager<UIManager>();
         
-        _panelMap = new Dictionary<BuildingTier, UIBase>
+        _panelMap = new Dictionary<BuildingType, UIBase>
         {
-            { BuildingTier.Tier1, uiManager.GetPanel<PrimaryPanel>() },
-            { BuildingTier.Tier2, uiManager.GetPanel<SecondaryPanel>() },
-            { BuildingTier.Tier3, uiManager.GetPanel<TertiaryPanel>() },
-            { BuildingTier.Tier4, uiManager.GetPanel<QuaternaryPanel>() }
+            { BuildingType.Tier1, uiManager.GetPanel<PrimaryPanel>() },
+            { BuildingType.Tier2, uiManager.GetPanel<SecondaryPanel>() },
+            { BuildingType.Tier3, uiManager.GetPanel<TertiaryPanel>() },
+            { BuildingType.Tier4, uiManager.GetPanel<QuaternaryPanel>() }
         };
         
         _camera = Camera.main;
@@ -45,14 +45,14 @@ public class ProduceManager : ManagerBase
         Deselect();
         
         CurrentObject = obj;
-        MoveCamera(_panelMap[(BuildingTier)obj.BuildingData.Type].OpenPanel);
+        MoveCamera(_panelMap[(BuildingType)obj.BuildingData.Type].OpenPanel);
     }
 
     public void Deselect()
     {
         if (CurrentObject == null) return;
         
-        _panelMap[(BuildingTier)CurrentObject.BuildingData.Type].ClosePanel();
+        _panelMap[(BuildingType)CurrentObject.BuildingData.Type].ClosePanel();
         CurrentObject = null;
     }
 

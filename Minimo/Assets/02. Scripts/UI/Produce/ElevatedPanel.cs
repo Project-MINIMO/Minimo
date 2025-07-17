@@ -36,9 +36,8 @@ public abstract class ElevatedPanel : UIBase
     public override void OpenPanel()
     {
         base.OpenPanel();
-        
-        _titleTMP.text = App.GetData<TitleData>()
-            .GetString($"STR_BUILDING_{_produceManager.CurrentObject.BuildingData.Name.ToUpper()}_NAME");
+
+        _titleTMP.SetText(_produceManager.CurrentObject.BuildingData.Name);
         
         _produceObject = _produceManager.CurrentObject as ProduceElevated;
         if (_produceObject == null) return;

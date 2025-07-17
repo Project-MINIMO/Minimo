@@ -101,6 +101,6 @@ public class BuildingBtn : MonoBehaviour
         var cameraCenterPosition = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, Camera.main.nearClipPlane));
         cameraCenterPosition.z = 0;
 
-        _editManager.CreateObject(Data, cameraCenterPosition);
+        //_editManager.CreateObject(Data, cameraCenterPosition);
     }
 }

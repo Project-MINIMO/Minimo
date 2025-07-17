@@ -17,11 +17,11 @@ public class ProducePrimary : ProduceObject
         _cropRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
     }
     
-    public override void Initialize(BuildingData data)
+    public override void Initialize(Building data)
     {
         base.Initialize(data);
 
-        var config = Resources.Load<ProduceVisualConfig>($"Building/Config/{data.Name}");
+        var config = Resources.Load<ProduceVisualConfig>($"Building/Config/{data.Code}");
         if (config == null)
         {
             Debug.LogError($"[ProducePrimary] Config not found for '{data.Name}'");

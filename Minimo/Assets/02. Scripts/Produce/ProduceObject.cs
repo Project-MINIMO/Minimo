@@ -59,11 +59,11 @@ public abstract class ProduceObject : BuildingObject
             .AddTo(this);
     }
     
-    public override void Initialize(BuildingData data)
+    public override void Initialize(Building data)
     {
         base.Initialize(data);
 
-        ProduceData = App.GetData<TitleData>().GroupedProduce[data.Name];
+        ProduceData = App.GetData<TitleData>().GroupedProduce[data.Code];
 
         _plantHelper = new PlantHelper();
         _plantEffect = GetComponentInChildren<PlantEffectCtrl>();

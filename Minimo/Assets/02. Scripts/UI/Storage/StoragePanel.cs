@@ -22,7 +22,7 @@ public class StoragePanel : UIBase
         _closeBtn.onClick.AddListener(ClosePanel);
         _capacityBtn.onClick.AddListener(_capacityHandler.Initialize);
         
-        var slots = GetComponentsInChildren<InventorySlot>(true);
+        var slots = GetComponentsInChildren<ItemSlot>(true);
         foreach (var slot in slots)
         {
             slot.OnItemSelected += OnItemSelected;
@@ -42,7 +42,7 @@ public class StoragePanel : UIBase
         _capacityHandler.gameObject.SetActive(false);
     }
 
-    private void OnItemSelected(InventorySlot slot)
+    private void OnItemSelected(InventorySlot<Item> slot)
     {
         _infoCtrl.Show(slot);
     }

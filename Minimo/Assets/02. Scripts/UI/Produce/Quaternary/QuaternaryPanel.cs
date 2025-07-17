@@ -23,7 +23,7 @@ public class QuaternaryPanel : ElevatedPanel
             _selectBtns[index].onClick.AddListener(() => OnClickSelectBtn(index));
         }
 
-        var slots = GetComponentsInChildren<InventorySlot>(true);
+        var slots = GetComponentsInChildren<ItemSlot>(true);
         foreach (var slot in slots)
         {
             slot.OnItemSelected += OnItemSelected;
@@ -53,7 +53,7 @@ public class QuaternaryPanel : ElevatedPanel
         }
     }
     
-    private void OnItemSelected(InventorySlot slot)
+    private void OnItemSelected(InventorySlot<Item> slot)
     {
         _selectedInfos[slot.Item.Data.Type].UpdateItem(slot.Item);
         _selectedItems[slot.Item.Data.Type] = slot.Item;

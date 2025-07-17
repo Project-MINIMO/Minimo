@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using TMPro;
 
-public class QuaternaryInventory : Inventory
+public class QuaternaryInventory : Inventory<Item>
 {
     protected override void SetString()
     {
@@ -12,9 +12,9 @@ public class QuaternaryInventory : Inventory
         _menuTogs[1].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_TAB3_NAME");
     }
 
-    protected override List<ItemData> GetFilteredItems() => App.GetData<TitleData>().Item.Values
-                                                            .Where(x => x.Level == 3)
+    protected override List<Item> GetFilteredItems() => AccountInfo.Instance.Items.Values
+                                                            .Where(x => x.Data.Level == 3)
                                                             .ToList();
 
-    protected override bool IsSlotFiltered(int index, int type) => index == type;
+    protected override bool IsSlotFiltered(int index, Item item) => index == item.Data.Type;
 }

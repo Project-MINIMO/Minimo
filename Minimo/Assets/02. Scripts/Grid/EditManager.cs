@@ -109,20 +109,20 @@ public class EditManager : ManagerBase
         }
     }
     
-    public void CreateObject(BuildingData data, Vector3 position)
+    public void CreateObject(Building data, Vector3 position)
     {
         var gridObject = Instantiate(_objectPrefab, position, Quaternion.identity, _buildingParent);
         switch (data.Type)
         {
-            case 0:
+            case BuildingType.Tier1:
                 gridObject.AddComponent<ProducePrimary>();
                 break;
             
-            case 1:
+            case BuildingType.Tier2:
                 gridObject.AddComponent<ProduceSecondary>();
                 break;
             
-            case 2:
+            case BuildingType.Tier3:
                 gridObject.AddComponent<ProduceTertiary>();
                 break;
             

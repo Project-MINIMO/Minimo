@@ -11,7 +11,7 @@ public class BuildingObject : InteractObject
 {
     public Vector3 PreviousPosition { get; private set; }
     
-    public BuildingData BuildingData { get; private set; }
+    public Building BuildingData { get; private set; }
     public BuildingPositionData PositionData { get; private set; }
 
     public bool IsPlaced {get; private set;}
@@ -26,7 +26,7 @@ public class BuildingObject : InteractObject
         _editManager = App.GetManager<EditManager>();
     }
     
-    public virtual async void Initialize(BuildingData data)
+    public virtual async void Initialize(Building data)
     {
         try
         {
@@ -53,28 +53,11 @@ public class BuildingObject : InteractObject
     
     private async Task LoadPositionData()
     {
-        try
-        {
-            var path = $"Assets/09. Scriptable Objects/Building/{BuildingData.Name}.asset";
-            var handle = Addressables.LoadAssetAsync<BuildingPositionData>(path);
-            await handle.Task;
-            if (handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                PositionData = handle.Result;
-                SetPolygonCollider(GetComponent<PolygonCollider2D>());
-                GetComponent<PolygonCollider2D>().offset = PositionData.ColliderOffset;
-                _spriteRenderer.sprite = PositionData.Sprite;
-                _spriteRenderer.transform.localPosition = new Vector3(PositionData.Offset.x, PositionData.Offset.y, 0);
-            }
-            else
-            {
-                Debug.LogError("Failed to load BuildingData");
-            }
-        }
-        catch (Exception e)
-        {
-            throw; // TODO 예외 처리
-        }
+        PositionData = BuildingData.Position;
+        SetPolygonCollider(GetComponent<PolygonCollider2D>());
+        GetComponent<PolygonCollider2D>().offset = PositionData.ColliderOffset;
+        _spriteRenderer.sprite = PositionData.Sprite;
+        _spriteRenderer.transform.localPosition = new Vector3(PositionData.Offset.x, PositionData.Offset.y, 0);
     }
     
     private void SetPolygonCollider(PolygonCollider2D polyCollider)
