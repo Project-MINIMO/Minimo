@@ -1,15 +1,21 @@
+using System;
+ 
 using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 
 public class InventorySlideHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    public event Action OnClose;
+    
     [SerializeField] private RectTransform _targetRect;
     
     [SerializeField] private float _minY = -725f;
     [SerializeField] private float _maxY = -20f;
     [SerializeField] private float _outerMargin = 20f;
 
+    private const float _duration = 0.25f;
+    
     private Vector2 _dragStartPos;
     private Vector2 _imageStartPos;
     
@@ -18,7 +24,12 @@ public class InventorySlideHandler : MonoBehaviour, IBeginDragHandler, IDragHand
 
     private void OnEnable()
     {
-        _targetRect.anchoredPosition = new Vector2(-180f, _maxY);
+        _targetRect.anchoredPosition = new Vector2(_targetRect.anchoredPosition.x, _minY);
+    }
+
+    public void Open()
+    {
+        SnapTo(_maxY);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -64,7 +75,9 @@ public class InventorySlideHandler : MonoBehaviour, IBeginDragHandler, IDragHand
     
     private void SnapTo(float targetY)
     {
-        _targetRect.DOAnchorPosY(targetY, 0.25f)
+        if (Mathf.Approximately(targetY, _minY)) OnClose?.Invoke();
+        
+        _targetRect.DOAnchorPosY(targetY, _duration)
             .SetEase(Ease.OutCubic);
     }
 }

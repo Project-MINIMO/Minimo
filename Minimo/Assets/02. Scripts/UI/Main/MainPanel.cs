@@ -14,8 +14,10 @@ public class MainPanel : UIBase
     [SerializeField] private Button _mainBtn;
     [SerializeField] private Button _closeBtn;
     
+    private RectTransform _panelRect;
     private RectTransform _mainRect;
     private Vector2[] _btnPositions;
+    private readonly Vector2 _hidePosition = new(0, -300);
     private float _closeYPosition;
     
     private bool _isOpened;
@@ -23,7 +25,8 @@ public class MainPanel : UIBase
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
-        
+
+        _panelRect = GetComponent<RectTransform>();
         _mainRect = _mainBtn.GetComponent<RectTransform>();
         _closeYPosition = _mainRect.anchoredPosition.y;
         _btnPositions = new Vector2[_btnRects.Length];
@@ -41,9 +44,14 @@ public class MainPanel : UIBase
 
     public override void Show(bool isNew)
     {
-        base.Show(isNew);
+        _panelRect.DOAnchorPos(Vector2.zero, _duration).SetEase(Ease.OutCubic);
 
         Close(0);
+    }
+
+    public override void Hide(bool isNew)
+    {
+        _panelRect.DOAnchorPos(_hidePosition, _duration).SetEase(Ease.InCubic);
     }
 
     private void Toggle()

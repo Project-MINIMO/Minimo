@@ -9,6 +9,7 @@ public class EditManager : ManagerBase
     
     [SerializeField] private GridLayout _gridLayout;
     [SerializeField] private Transform _buildingParent;
+    [SerializeField] private GameObject _objectPrefab;
     
     private InstallChecker _installChecker;
     private TileStateModifier _tileStateModifier;
@@ -84,12 +85,61 @@ public class EditManager : ManagerBase
             return;
         }
 
+        var isNew = !CurrentEditObject.IsPlaced;
+        
         if (CurrentEditObject.Install())
         {
             _tileStateModifier.ModifyTileState(CurrentEditObject, TileState.Installed);
             
+            if (isNew)
+            {
+                var currentCell = _gridLayout.WorldToCell(CurrentEditObject.transform.position);
+                var diagonalOffset = new Vector3Int(0, -1, 0);
+                var newCell = currentCell + diagonalOffset;
+                var newWorldPos = _gridLayout.CellToWorld(newCell);
+
+                var buildingData = CurrentEditObject.BuildingData;
+                CurrentEditObject = null;
+                CreateObject(buildingData, newWorldPos);
+                return;
+            }
+            
             CurrentEditObject = null;
             IsEditing.Value = false;
+        }
+    }
+    
+    public void CreateObject(BuildingData data, Vector3 position)
+    {
+        var gridObject = Instantiate(_objectPrefab, position, Quaternion.identity, _buildingParent);
+        switch (data.Type)
+        {
+            case 0:
+                gridObject.AddComponent<ProducePrimary>();
+                break;
+            
+            case 1:
+                gridObject.AddComponent<ProduceSecondary>();
+                break;
+            
+            case 2:
+                gridObject.AddComponent<ProduceTertiary>();
+                break;
+            
+            default:
+                gridObject.AddComponent<ProduceQuaternary>();
+                break;
+        }
+       
+
+        if (gridObject.TryGetComponent<ProduceObject>(out var produce))
+        {
+            produce.Initialize(data);
+        }
+        else
+        {
+            Debug.LogError("GridObject component not found in instantiated prefab.");
+            Destroy(gridObject.gameObject);
         }
     }
 

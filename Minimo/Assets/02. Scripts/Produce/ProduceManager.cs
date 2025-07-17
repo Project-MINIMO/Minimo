@@ -62,7 +62,7 @@ public class ProduceManager : ManagerBase
         
         var targetPos = new Vector3(
             CurrentObject.transform.position.x,
-            CurrentObject.transform.position.y - 0.5f,
+            CurrentObject.transform.position.y,
             _camera.transform.position.z
         );
 
@@ -73,7 +73,7 @@ public class ProduceManager : ManagerBase
         }
 
         _camera.transform
-            .DOMove(targetPos, 0.5f)
+            .DOMove(targetPos, 0.3f)
             .SetEase(Ease.OutCubic)
             .OnComplete(() => onComplete?.Invoke());
     }

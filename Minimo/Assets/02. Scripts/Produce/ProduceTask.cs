@@ -67,6 +67,15 @@ public class ProduceTask
         _modifiedTime = Mathf.Max(_maxReducedTime, _reducedTime * _timeRatio);
         _isModifiedDirty = false;
         
+        App.LogBox("red", "생산 시간 로그", new()
+        {
+            { "원본 생산 시간", _baseTime.ToString() },
+            { "수정된 생산 시간", _reducedTime.ToString() },
+            { "생산 시간 감소 비율", _timeRatio.ToString() },
+            { "최종 생산 시간 (비율 적용)", (_reducedTime * _timeRatio).ToString() },
+            { "최종 생산 시간 (캡값 적용)", _modifiedTime.ToString() }
+        });
+        
         return _modifiedTime;
     }
 
@@ -77,15 +86,6 @@ public class ProduceTask
         
         _timeRatio = reductionRatio;
         _isModifiedDirty = true;
-        
-        App.LogBox("red", "생산 시간 로그", new()
-        {
-            { "원본 생산 시간", _baseTime.ToString() },
-            { "수정된 생산 시간", _reducedTime.ToString() },
-            { "생산 시간 감소 비율", _timeRatio.ToString() },
-            { "최종 생산 시간 (비율 적용)", (_reducedTime * _timeRatio).ToString() },
-            { "최종 생산 시간 (캡값 적용)", _modifiedTime.ToString() }
-        });
     }
 
     public void ApplyTimeReduction(float reductionAmount)

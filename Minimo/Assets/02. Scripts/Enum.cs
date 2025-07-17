@@ -29,10 +29,10 @@ public enum ResourceType
 
 public enum ItemType
 {
-    None,
     Food,
     Flower,
     Amulet,
+    Etc,
 }
 
 public enum TileState

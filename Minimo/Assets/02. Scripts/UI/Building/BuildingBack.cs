@@ -18,12 +18,9 @@ public class BuildingBack : MonoBehaviour
     [SerializeField] private GameObject _buildingBtnPrefab;
 
     private Dictionary<int, BuildingBtn> _btnDictionary = new();
-    private Transform _buildingObjectParent;
 
     private void Awake()
     {
-        _buildingObjectParent = GameObject.FindWithTag("BuildingObjectParent").transform;
-
         InitBuildingBtns();
     }
 
@@ -55,7 +52,7 @@ public class BuildingBack : MonoBehaviour
                 buildingBtn = Instantiate(_buildingBtnPrefab, _buildingBtnParent).GetComponent<BuildingBtn>();
             }
 
-            buildingBtn.Initialize(data, _buildingObjectParent);
+            buildingBtn.Initialize(data);
             _btnDictionary.Add(data.ID, buildingBtn);
 
             index++;

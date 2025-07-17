@@ -21,7 +21,14 @@ public class EditCirclePanel : UIBase
         _editManager.IsEditing
             .Subscribe((isEditing) =>
             {
-                gameObject.SetActive(isEditing);
+                if (isEditing)
+                {
+                    OpenPanel();
+                }
+                else
+                {
+                    ClosePanel();
+                }
             }).AddTo(gameObject);
         
         _editManager.CurrentCellPosition

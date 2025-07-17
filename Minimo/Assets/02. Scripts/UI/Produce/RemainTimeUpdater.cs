@@ -23,6 +23,14 @@ public class RemainTimeUpdater : MonoBehaviour
             titleData.GetString("STR_PRODUCE_SLOTSTATE_COMPLETE"),
         };
     }
+
+    public void ClearTime()
+    {   
+        _remainTimeTMP.SetText(_stateStrings?[(int)TaskState.Empty]);
+        
+        if (_remainTimeImg == null) return;
+        _remainTimeImg.fillAmount = 0;
+    }
     
     public void UpdateTime(float remainTime, float fullTime)
     {
@@ -34,7 +42,6 @@ public class RemainTimeUpdater : MonoBehaviour
     
     private TaskState DetermineState(float remain, float full)
     {
-        if (remain < 0) return TaskState.Empty;
         if (Mathf.Approximately(remain, 0)) return TaskState.Complete;
         return remain < full ? TaskState.Produce : TaskState.Pending;
     }
@@ -45,7 +52,7 @@ public class RemainTimeUpdater : MonoBehaviour
 
         _remainTimeImg.fillAmount = state switch
         {
-            TaskState.Empty or TaskState.Pending => 0,
+            TaskState.Pending => 0,
             TaskState.Produce => 1 - remain / full,
             TaskState.Complete => 1,
             _ => _remainTimeImg.fillAmount
@@ -58,7 +65,7 @@ public class RemainTimeUpdater : MonoBehaviour
         
         _remainTimeTMP.text = state switch
         {
-            TaskState.Empty or TaskState.Pending or TaskState.Complete => _stateStrings?[(int)state],
+            TaskState.Pending or TaskState.Complete => _stateStrings?[(int)state],
             TaskState.Produce => FormatTime(remain),
             _ => _remainTimeTMP.text
         };
