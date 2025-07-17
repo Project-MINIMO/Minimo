@@ -94,6 +94,7 @@ public class ProducePrimary : ProduceObject
     {
         if (state == CompletedState.Instance)
         {
+            SetCropSprite(AllTasks[0].RemainTime, AllTasks[0].ModifiedTime);
             AllTasks[0].OnRemainTimeChanged -= OnRemainTimeChanged;
         }
         else if (state == EndState.Instance)
