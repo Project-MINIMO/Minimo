@@ -11,6 +11,13 @@ public enum NotifyType
     CapacityLack,
 }
 
+public enum PlantResultType
+{
+    SlotLack,
+    InvalidOption,
+    MaterialLack
+}
+
 public enum UseCashType
 {
     Produce,

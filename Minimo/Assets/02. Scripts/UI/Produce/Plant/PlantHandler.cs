@@ -80,7 +80,7 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             if (_plantedThisDrag.Contains(component)) return;
             if (component.CurrentState is not ProduceState.Idle) return;
             
-            _produceManager.Plant(component, _currentOption);
+            _produceManager.RequestPlant(component, _currentOption);
             _plantedThisDrag.Add(component);
         }
     }
@@ -97,7 +97,7 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             raycaster.Raycast(eventData, raycastResults);
             if (raycastResults.Any(result => result.gameObject.CompareTag("ProduceTaskBtn")))
             {
-                _produceManager.Plant(_currentOption);
+                _produceManager.RequestPlant(_currentOption);
             }
         }
         

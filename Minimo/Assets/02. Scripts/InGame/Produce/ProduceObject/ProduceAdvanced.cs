@@ -48,18 +48,17 @@ public abstract class ProduceAdvanced : ProduceObject
         _placedMinimo = minimo;
     }
 
-    internal override void StartPlant(ProduceData option)
+    internal void StartPlant(ProduceData option)
     {
         if (_placedMinimo == null) return;
-        
-        base.StartPlant(option);
     }
     
-    internal override void OnPlant(ProduceTask task)
+    public override ProduceTask CreateTask(ProduceData option)
     {
-        task.ApplyTimeReduction(_globalTimeReduction);
+        var task = base.CreateTask(option);
         
-        base.OnPlant(task);
+        task.ApplyTimeReduction(_globalTimeReduction);
+        return task;
     }
     
     #region Apply Minimo Abilities

@@ -15,7 +15,6 @@ public abstract class ProduceObject : BuildingObject
     public int MaxSlotCount { get; protected set; } = 1;
     
     protected ProduceManager _produceManager;
-    private PlantHelper _plantHelper;
     private PlantEffectCtrl _plantEffect;
     
     private float _lastUpdateTime;
@@ -83,8 +82,7 @@ public abstract class ProduceObject : BuildingObject
         base.Initialize(data);
 
         ProduceData = App.GetData<TitleData>().GroupedProduce[data.Code];
-
-        _plantHelper = new PlantHelper();
+        
         _plantEffect = GetComponentInChildren<PlantEffectCtrl>();
         
         _produceManager = App.GetManager<ProduceManager>();
@@ -142,28 +140,20 @@ public abstract class ProduceObject : BuildingObject
         }
     }
     
-    #region Produce
-    internal virtual void StartPlant(ProduceData option)
+    public virtual ProduceTask CreateTask(ProduceData option)
     {
-        if (AllTasks.Count >= MaxSlotCount) return;
-        if (!ProduceData.Contains(option)) return;
-
-        _plantHelper.TryPlant(option, OnPlant);
-    }
-
-    internal virtual void OnPlant(ProduceTask task)
-    {
+        var task = new ProduceTask(option);
         task.ApplyTimeRatio(TimeRatio);
         task.ApplyHarvestRatio(HarvestRatio); 
         task.ApplyExpRatio(ExpRatio);
-        
         AllTasks.Add(task);
-        
         _plantEffect.PlayEffect(task.Data.MaterialItems.Select(x => x.ID).ToArray());
         
         SetNextActiveTask();
+        return task;
     }
     
+    #region Produce
     internal virtual void StartHarvest()
     {
         for (var i = AllTasks.Count - 1; i >= 0; i--)

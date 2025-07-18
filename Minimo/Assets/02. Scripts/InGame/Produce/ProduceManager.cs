@@ -20,6 +20,7 @@ public class ProduceManager : ManagerBase
     public IReadOnlyList<ProduceTertiary> TertiaryBuildings => _tertiaryBuildings;
     
     private Dictionary<BuildingType, UIBase> _panelMap;
+    private PlantService _plantService;
     private Camera _camera;
 
     private void Start()
@@ -33,6 +34,8 @@ public class ProduceManager : ManagerBase
             { BuildingType.Tier3, uiManager.GetPanel<TertiaryPanel>() },
             { BuildingType.Tier4, uiManager.GetPanel<QuaternaryPanel>() }
         };
+        
+        _plantService = new PlantService(uiManager.GetPanel<UseCashPanel>());
         
         _camera = Camera.main;
     }
@@ -58,7 +61,7 @@ public class ProduceManager : ManagerBase
     {
         if (CurrentObject == null) return;
         
-        _panelMap[(BuildingType)CurrentObject.BuildingData.Type].ClosePanel();
+        _panelMap[CurrentObject.BuildingData.Type].ClosePanel();
         CurrentObject = null;
     }
 
@@ -84,16 +87,27 @@ public class ProduceManager : ManagerBase
             .OnComplete(() => onComplete?.Invoke());
     }
     
-    public void Plant(ProduceData option)
+    public void RequestPlant(ProduceObject target, ProduceData option)
+    {
+        _plantService.TryPlant(
+            target,
+            option,
+            onSuccess: () =>
+            {
+                
+            },
+            onFailed: reason =>
+            {
+
+            }
+        );
+    }
+    
+    public void RequestPlant(ProduceData option)
     {
         if (CurrentObject == null) return;
-        
-        CurrentObject.StartPlant(option);
-    }
 
-    public void Plant(ProduceObject obj, ProduceData option)
-    {
-        obj.StartPlant(option);
+        RequestPlant(CurrentObject, option);
     }
 
     public void Harvest()

@@ -11,11 +11,12 @@ public class ProduceElevated : ProduceAdvanced
         OnMaxSlotCountChanged?.Invoke();
     }
 
-    internal override void OnPlant(ProduceTask task)
+    public override ProduceTask CreateTask(ProduceData option)
     {
-        base.OnPlant(task);
+        var task = base.CreateTask(option);
         
         OnTaskCountChanged?.Invoke(AllTasks.Count);
+        return task;
     }
     
     internal override void StartHarvest()

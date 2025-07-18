@@ -42,11 +42,11 @@ public class ProducePrimary : ProduceObject
         }
     }
     
-    internal override void OnPlant(ProduceTask task)
+    public override ProduceTask CreateTask(ProduceData option)
     {
-        base.OnPlant(task);
-        
+        var task = base.CreateTask(option);
         BindTask(task);
+        return task;
     }
 
     private void OnDisable()

@@ -16,7 +16,8 @@ public class UseCashMaterialBack : MonoBehaviour
     
     private ItemInfoUpdater[] _itemInfos;
     
-    private Action _useAction;
+    private Action _confirmAction;
+    private Action _cancelAction;
     private Action _closeAction;
     private Action _lackAction;
     private int _price;
@@ -33,14 +34,19 @@ public class UseCashMaterialBack : MonoBehaviour
         _titleTMP.text = titleData.GetString("STR_SPENDCASH_TITLE");
         _descriptionTMP.text = titleData.GetString("STR_SPENDCASH_DESC_PRODUCE");
         _confirmBtn.onClick.AddListener(Confirm);
-        _cancelBtn.onClick.AddListener(() => _closeAction?.Invoke());
+        _cancelBtn.onClick.AddListener(() =>
+        {
+            _cancelAction?.Invoke();
+            _closeAction?.Invoke();
+        });
     }
 
-    public void Setup(List<(Item, int)> lackItems, Action useAction)
+    public void Setup(List<(Item, int)> lackItems, Action onConfirm, Action onCancel)
     {
         _price = CalculatePrice(lackItems);
         _priceTMP.text = _price.ToString();
-        _useAction = useAction;
+        _confirmAction = onConfirm;
+        _cancelAction = onCancel;
 
         SetMaterialSlots(lackItems);
     }
@@ -75,8 +81,8 @@ public class UseCashMaterialBack : MonoBehaviour
         else
         {
             AccountInfo.Instance.blueStar -= _price;
-            _useAction?.Invoke();
-            _useAction = null;
+            _confirmAction?.Invoke();
+            _confirmAction = null;
             _price = 0;
 
             _closeAction.Invoke();
