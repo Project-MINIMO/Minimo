@@ -43,9 +43,9 @@ public class CapacityHandler : TransactionHandler
 
     protected override void Transaction()
     {
-        if (Price <= AccountInfo.Instance.blueStar)
+        if (Price <= AccountInfo.Instance.Cash)
         {
-            AccountInfo.Instance.blueStar -= Price;
+            AccountInfo.Instance.Cash -= Price;
             AccountInfo.Instance.AddCapacity(Quantity - _currentCapacity);
             
             _transactionAction?.Invoke();

@@ -70,7 +70,7 @@ public class ProduceSkipHandler : MonoBehaviour
 
     private void Skip()
     {
-        if (_modifiedPrice <= AccountInfo.Instance.blueStar)
+        if (_modifiedPrice <= AccountInfo.Instance.Cash)
         {
             _skipBtn.gameObject.SetActive(false);
             _confirmBack.SetActive(true);

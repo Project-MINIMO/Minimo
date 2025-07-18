@@ -74,13 +74,13 @@ public class UseCashMaterialBack : MonoBehaviour
     
     private void Confirm()
     {
-        if (AccountInfo.Instance.blueStar < _price)
+        if (AccountInfo.Instance.Cash < _price)
         {
             _lackAction?.Invoke();
         }
         else
         {
-            AccountInfo.Instance.blueStar -= _price;
+            AccountInfo.Instance.Cash -= _price;
             _confirmAction?.Invoke();
             _confirmAction = null;
             _price = 0;

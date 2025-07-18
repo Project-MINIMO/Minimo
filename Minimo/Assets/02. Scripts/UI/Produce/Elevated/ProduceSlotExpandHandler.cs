@@ -46,7 +46,7 @@ public class ProduceSlotExpandHandler : MonoBehaviour
 
     private void Expand()
     {
-        if (_currentPrice <= AccountInfo.Instance.blueStar)
+        if (_currentPrice <= AccountInfo.Instance.Cash)
         {
             _expandBtn.gameObject.SetActive(false);
             _confirmBack.SetActive(true);

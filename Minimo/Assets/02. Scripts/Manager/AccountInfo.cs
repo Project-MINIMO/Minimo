@@ -10,8 +10,8 @@ public class AccountInfo : Singleton<AccountInfo>
     
     public Dictionary<int, Item> Items { get; } = new();
     public int level => Exp / 100;
-    public int blueStar;
-    public int rainbowStar;
+    public int Gold;
+    public int Cash;
     public int Exp = 100;
     public int Capacity { get; private set; } = 100;
 
