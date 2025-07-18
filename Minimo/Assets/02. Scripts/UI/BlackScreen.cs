@@ -18,7 +18,7 @@ public class BlackScreen : MonoBehaviour
         _blackBlur.gameObject.SetActive(true);
 
         _blackBlur.DOKill();
-        _blackBlur.DOFade(1f, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
+        _blackBlur.DOFade(1f, 0.5f).SetEase(Ease.InCubic).OnComplete(() =>
         {
             onComplete?.Invoke();
         });
@@ -27,7 +27,7 @@ public class BlackScreen : MonoBehaviour
     public void FadeOut(float duration, Action onComplete = null)
     {
         _blackBlur.DOKill();
-        _blackBlur.DOFade(0f, duration).SetEase(Ease.Linear).OnComplete(() =>
+        _blackBlur.DOFade(0f, duration).SetEase(Ease.InCubic).OnComplete(() =>
         {
             _blackBlur.gameObject.SetActive(false);
             onComplete?.Invoke();
@@ -39,7 +39,7 @@ public class BlackScreen : MonoBehaviour
         _blackBlur.gameObject.SetActive(true);
 
         _blackBlur.DOKill();
-        _blackBlur.DOFade(1f, duration).SetEase(Ease.Linear).OnComplete(() =>
+        _blackBlur.DOFade(1f, duration).SetEase(Ease.InCubic).OnComplete(() =>
         {
             midAction?.Invoke();
             FadeOut(duration);

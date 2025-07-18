@@ -18,7 +18,7 @@ public class InputManager : ManagerBase
 #if UNITY_EDITOR
         HandleMouse();
 #else
-          switch (Input.touchCount)
+        switch (Input.touchCount)
         {
             case 0:
                 if (CurrentState is InputState.DragEnd or InputState.ClickUp)
@@ -103,7 +103,11 @@ public class InputManager : ManagerBase
     #region Mouse
     private void HandleMouse()
     {
-        if (EventSystem.current.IsPointerOverGameObject()) return;
+        if (EventSystem.current.IsPointerOverGameObject())         
+        {
+            Reset();
+            return;
+        }
         
         if (Input.GetMouseButtonDown(0))
         {
@@ -120,6 +124,12 @@ public class InputManager : ManagerBase
         else if (CurrentState is InputState.DragEnd or InputState.ClickUp)
         {
             CurrentState = InputState.None;
+        }
+        else
+        {
+            var scroll = Input.GetAxis("Mouse ScrollWheel");
+            if (scroll != 0)
+                CurrentState = InputState.Zoom;
         }
     }
     #endregion

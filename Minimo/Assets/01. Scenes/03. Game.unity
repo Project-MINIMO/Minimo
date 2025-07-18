@@ -1077,12 +1077,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ebbd114d5cf04445bb6f8c9d34cb868, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dragSpeed: 5
+  _dragSpeed: 20
   _zoomSpeed: 1
   _minZoom: 1
   _maxZoom: 5
-  _minBounds: {x: -21.5, y: -20}
-  _maxBounds: {x: 22, y: 17}
+  _minBounds: {x: -14, y: -12}
+  _maxBounds: {x: 14, y: 12}
 --- !u!114 &408177628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2469,19 +2469,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1990624251723000847, guid: 1c608c0cdc8e9284eb4f7eba56d6d6cb, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1990624251723000847, guid: 1c608c0cdc8e9284eb4f7eba56d6d6cb, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1990624251723000847, guid: 1c608c0cdc8e9284eb4f7eba56d6d6cb, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 181
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1990624251723000847, guid: 1c608c0cdc8e9284eb4f7eba56d6d6cb, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -34.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2114228335018892093, guid: 1c608c0cdc8e9284eb4f7eba56d6d6cb, type: 3}
       propertyPath: m_Pivot.x
