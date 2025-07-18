@@ -52,6 +52,8 @@ public class MainPanel : UIBase
     public override void Hide(bool isNew)
     {
         _panelRect.DOAnchorPos(_hidePosition, _duration).SetEase(Ease.InCubic);
+        
+        Close(0);
     }
 
     private void Toggle()

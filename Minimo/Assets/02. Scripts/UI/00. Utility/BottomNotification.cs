@@ -36,6 +36,8 @@ public class BottomNotification : MonoBehaviour
             [NotifyType.SlotLack] = titleData.GetString("STR_NOTIFY_PRODUCE_SLOTLACK"),
             [NotifyType.MissMinimo] = titleData.GetString("STR_NOTIFY_PRODUCE_MISSMINIMO"),
             [NotifyType.MissRecipe] = titleData.GetString("STR_NOTIFY_PRODUCE_MISSRECIPE"),
+            
+            [NotifyType.GoldLack] = "골드가 부족합니다.",
         };
         
         Reset();
