@@ -8,8 +8,8 @@ using UnityEngine.UI;
 public class StorageInventory : Inventory<Item>
 {
     [SerializeField] private RectTransform _content;
-    [SerializeField] private InventorySortHandler _dropdown;
-    [SerializeField] private InventoryFilterHandler _dropdown2;
+    [SerializeField] private InventorySortHandler _sortDropdown;
+    [SerializeField] private InventoryFilterHandler _filterDropdown;
     
     private List<InventorySlot<Item>> _activeSlots;
     
@@ -34,8 +34,9 @@ public class StorageInventory : Inventory<Item>
         
         _activeSlots = Slots.Where(slot => slot.gameObject.activeSelf).ToList();
         SortDefault();
-        _dropdown.OnMenuChanged(index);
-        _dropdown2.OnMenuChanged(index);
+        
+        _sortDropdown.OnMenuChanged(index);
+        _filterDropdown.OnMenuChanged(index);
     }
 
     protected override List<Item> GetFilteredItems() => AccountInfo.Instance.Items.Values.ToList();
@@ -45,15 +46,12 @@ public class StorageInventory : Inventory<Item>
     #region Sort
     public void SortDefault()
     {
-        Debug.Log("기본순 정렬");
         var sorted = _activeSlots.OrderBy(slot => slot.Item.ID).ToList();
 
         SortSlots(sorted);
     }
     public void SortByCount(bool desc)    
     {
-        Debug.Log($"개수 {(desc?"↑":"↓")}");
-        
         var sorted = desc
             ? _activeSlots.OrderBy(slot => slot.Item.Count).ThenBy(slot => slot.Item.ID).ToList()
             : _activeSlots.OrderByDescending(slot => slot.Item.Count).ThenBy(slot => slot.Item.ID).ToList();
@@ -62,8 +60,6 @@ public class StorageInventory : Inventory<Item>
     }
     public void SortByPrice(bool desc)
     {
-        Debug.Log($"가격 {(desc ? "↑" : "↓")}");
-
         var sorted = desc
             ? _activeSlots.OrderBy(slot => slot.Item.SellCost).ThenBy(slot => slot.Item.ID).ToList()
             : _activeSlots.OrderByDescending(slot => slot.Item.SellCost).ThenBy(slot => slot.Item.ID).ToList();

@@ -19,19 +19,20 @@ public class InventoryFilterHandler : MonoBehaviour
 
     [SerializeField] private StorageInventory _inventory;
     [SerializeField] private MultiSelectDropdown _dropdown;
+    [SerializeField] private TextMeshProUGUI _label;
 
     private Dictionary<int, List<FilterOption>> _optionMap;
     private Dictionary<int, Action<bool[]>> _actionMap;
     private Dictionary<int, List<TMP_Dropdown.OptionData>> _cachedOptionData;
 
-    private int _selectedIndex = -1;
+    private int _selectedIndex;
 
     private void Awake()
     {
         InitTabOptions();
         CacheOptionData();
 
-        _dropdown.onMultiValueChanged.AddListener(OnDropdownChanged);
+        _dropdown.OnSelectionChanged.AddListener(OnDropdownChanged);
     }
 
     private void InitTabOptions()
@@ -68,6 +69,8 @@ public class InventoryFilterHandler : MonoBehaviour
             [2] = _inventory.FilterItem,
             [3] = _inventory.FilterProps,
         };
+
+        _label.SetText(titleData.GetString("STR_STORTAGE_UI_FILTER_NAME"));
     }
 
     private void CacheOptionData()
@@ -98,14 +101,11 @@ public class InventoryFilterHandler : MonoBehaviour
         var refreshBools = Enumerable
             .Repeat(true, count)
             .ToArray();
-        _dropdown.multiValue = refreshBools;
-
-        _actionMap[index]?.Invoke(refreshBools);
+        _dropdown.SelectedStates = refreshBools;
     }
 
     private void OnDropdownChanged(bool[] index)
     {
-        var option = _actionMap[_selectedIndex];
-        option?.Invoke(index);
+        _actionMap[_selectedIndex]?.Invoke(index);
     }
 }

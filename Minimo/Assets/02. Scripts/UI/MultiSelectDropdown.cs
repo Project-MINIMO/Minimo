@@ -9,78 +9,73 @@ using UnityEngine.UI;
 public class MultiSelectDropdown : TMP_Dropdown
 {
     [Serializable]
-    public class BoolArrayEvent : UnityEvent<bool[]> { }
+    public class SelectionChangedEvent : UnityEvent<bool[]> { }
     
-    private BoolArrayEvent _onValueArrayChanged = new();
-    public BoolArrayEvent onMultiValueChanged 
+    private SelectionChangedEvent _onSelectionChanged = new();
+    public SelectionChangedEvent OnSelectionChanged 
     { 
-        get => _onValueArrayChanged;
-        set => _onValueArrayChanged = value;
+        get => _onSelectionChanged;
+        set => _onSelectionChanged = value;
     }
     
-    private List<bool> _selectedIndices { get; } = new ();
-    private List<Toggle> _toggles = new();
-
-    private bool[] m_multiValue;
+    private readonly List<Toggle> _itemToggles = new();
+    private bool[] _selectedStates;
     
-    public bool[] multiValue
+    public bool[] SelectedStates
     {
-        get => m_multiValue;
-        set => SetValue(value);
+        get => _selectedStates;
+        set => SetSelectedStates(value);
     }
 
-    private void SetValue(bool[] value, bool sendCallback = true)
+    private void SetSelectedStates(bool[] states, bool sendCallback = true)
     {
-        if (Application.isPlaying && value == m_multiValue)
+        if (Application.isPlaying && states == _selectedStates)
             return;
 
-        m_multiValue = value;
-        RefreshShownValue();
+        _selectedStates = states;
 
         if (sendCallback)
         {
             UISystemProfilerApi.AddMarker("Dropdown.value", this);
-            _onValueArrayChanged.Invoke(m_multiValue);
+            _onSelectionChanged.Invoke(_selectedStates);
         }
     }
 
     public override void OnPointerClick(PointerEventData eventData)
     {
-        ShowMulti();
+        DisplayDropdown();
     }
     
     protected override DropdownItem CreateItem(DropdownItem itemTemplate)
     {
         var item = base.CreateItem(itemTemplate);
-        _toggles.Add(item.GetComponentInChildren<Toggle>());
+        _itemToggles.Add(item.GetComponentInChildren<Toggle>(true));
         return item;
     }
 
-    private void ShowMulti()
+    private void DisplayDropdown()
     {
-        _toggles.Clear();
+        _itemToggles.Clear();
         
         Show();
         
-        for (var i = 0; i < _toggles.Count; i++)
+        for (var i = 0; i < _itemToggles.Count; i++)
         {
-            var tog = _toggles[i];
+            var toggle = _itemToggles[i];
 
             var index = i; 
-            tog.onValueChanged.RemoveAllListeners();
-            tog.onValueChanged.AddListener(isOn =>
+            toggle.onValueChanged.RemoveAllListeners();
+            toggle.onValueChanged.AddListener(isOn =>
             {
-                m_multiValue[index] = isOn;
-                onMultiValueChanged?.Invoke(m_multiValue);
+                _selectedStates[index] = isOn;
+                _onSelectionChanged.Invoke(_selectedStates);
             });
 
-            tog.isOn = m_multiValue[index];
-            if (m_multiValue[index])
+            toggle.isOn = _selectedStates[index];
+            if (_selectedStates[index])
             {
-                tog.Select();
+                toggle.Select();
             }
         }
     }
-    
-    public new void RefreshShownValue() { }
 }
