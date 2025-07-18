@@ -99,12 +99,10 @@ public class ProduceManager : ManagerBase
             onSuccess: () =>
             {
                 onSuccess?.Invoke();
-                Debug.Log("success");
             },
             onFailed: reason =>
             {
                 onFailed?.Invoke(reason);
-                Debug.Log(reason);
             }
         );
     }

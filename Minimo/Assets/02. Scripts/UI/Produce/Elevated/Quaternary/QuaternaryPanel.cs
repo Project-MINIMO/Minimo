@@ -35,6 +35,20 @@ public class QuaternaryPanel : ElevatedPanel
         base.OpenPanel();
 
         ClearItems();
+        _produceObject.OnMaxSlotCountChanged += CheckCanPlant;
+        ((ProduceQuaternary)_produceObject).OnMinimoPlaced += CheckCanPlant;
+    }
+
+    public override void ClosePanel()
+    {
+        if (_produceObject != null)
+        {
+            _produceObject.OnMaxSlotCountChanged -= CheckCanPlant;
+            ((ProduceQuaternary)_produceObject).OnMinimoPlaced -= CheckCanPlant;
+            _produceObject = null;
+        }
+        
+        base.ClosePanel();
     }
 
     private void OnClickSelectBtn(int index)
@@ -58,17 +72,17 @@ public class QuaternaryPanel : ElevatedPanel
         _selectedInfos[(int)slot.Item.Type].UpdateItem(slot.Item);
         _selectedItems[(int)slot.Item.Type] = slot.Item;
 
-        if (CheckCanPlant())
+        CheckCanPlant();
+    }
+
+    private void CheckCanPlant()
+    {
+        if (_selectedItems.All(item => item != null))
         {
             _produceManager.RequestPlant(_selectedItems,
                 onSuccess: ClearItems,
                 onFailed: App.Notification);
         }
-    }
-
-    private bool CheckCanPlant()
-    {
-        return _selectedItems.All(item => item != null);
     }
 
     private void ClearItems()
