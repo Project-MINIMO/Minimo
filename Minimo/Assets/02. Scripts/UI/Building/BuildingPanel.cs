@@ -26,7 +26,7 @@ public class BuildingPanel : UIBase
             slot.OnItemSelected += OnItemSelected;
         }
 
-        _titleTMP.text = App.GetData<TitleData>().GetString("STR_BUILDING_UI_TITLE");
+        _titleTMP.text = App.GetData<TitleData>().GetString("STR_BUILDING_UI_NAME");
     }
     
     private void OnItemSelected(InventorySlot<Building> slot)
