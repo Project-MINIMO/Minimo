@@ -41,11 +41,24 @@ public abstract class ProduceAdvanced : ProduceObject
             .AddTo(this);
         _globalTimeReduction = minimoManager.GlobalTimeReduction.Value;
     }
+    
+    protected virtual void Update()
+    {
+        if (_placedMinimo != null)
+        {
+            base.Update();
+        }
+    }
 
     public virtual void PlaceMinimo(Minimo minimo)
     {
         _placedMinimo?.SetChillState();
         _placedMinimo = minimo;
+    }
+
+    public virtual void UnplaceMinimo()
+    {
+        _placedMinimo = null;
     }
     
     public override NotifyType CheckPlantCondition(ProduceData option)

@@ -88,8 +88,8 @@ public class Minimo : MonoBehaviour
 
         if (AssignedBuilding != null)
         {
+            AssignedBuilding.UnplaceMinimo();
             AssignedBuilding = null;
-        
             _minimoManager.OnMinimoUnassigned(this);
         }
     }
@@ -104,6 +104,11 @@ public class Minimo : MonoBehaviour
         
         SetSpriteFilp(false);
 
+        if (AssignedBuilding != null)
+        {
+            AssignedBuilding.UnplaceMinimo();
+            _minimoManager.OnMinimoUnassigned(this);
+        }
         AssignedBuilding = produceObject;
         produceObject.PlaceMinimo(this);
         

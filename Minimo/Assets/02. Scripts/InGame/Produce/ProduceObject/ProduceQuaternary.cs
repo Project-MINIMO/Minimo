@@ -10,4 +10,11 @@ public class ProduceQuaternary : ProduceElevated
         
         OnMinimoPlaced?.Invoke();
     }
+    
+    public override void UnplaceMinimo()
+    {
+        base.UnplaceMinimo();
+        
+        OnMinimoPlaced?.Invoke();
+    }
 }
