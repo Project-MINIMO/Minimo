@@ -14,20 +14,15 @@ public class PlantService
         ProduceObject target,
         ProduceData option,
         Action onSuccess,
-        Action<PlantResultType> onFailed)
+        Action<NotifyType> onFailed)
     {
-        if (target.AllTasks.Count >= target.MaxSlotCount)
+        var preCheck = target.CheckPlantCondition(option);
+        if (preCheck != NotifyType.Success)
         {
-            onFailed?.Invoke(PlantResultType.SlotLack);
+            onFailed?.Invoke(preCheck);
             return;
         }
 
-        if (!target.ProduceData.Contains(option))
-        {
-            onFailed?.Invoke(PlantResultType.InvalidOption);
-            return;
-        }
-        
         var lack = GetLackItems(option.MaterialItems);
         if (lack.Count > 0)
         {
@@ -43,7 +38,7 @@ public class PlantService
                 },
                 onCancel: () =>
                 {
-                    onFailed?.Invoke(PlantResultType.MaterialLack);
+                    onFailed?.Invoke(NotifyType.MaterialLack);
                 }
             );
             return;

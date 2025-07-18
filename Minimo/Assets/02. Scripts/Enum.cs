@@ -9,12 +9,12 @@ public enum TaskState
 public enum NotifyType
 {
     CapacityLack,
-}
-
-public enum PlantResultType
-{
+    
+    Success,
     SlotLack,
     InvalidOption,
+    MissMinimo,
+    MissRecipe,
     MaterialLack
 }
 

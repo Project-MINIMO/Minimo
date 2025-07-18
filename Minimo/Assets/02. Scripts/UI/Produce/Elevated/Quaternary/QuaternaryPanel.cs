@@ -60,9 +60,9 @@ public class QuaternaryPanel : ElevatedPanel
 
         if (CheckCanPlant())
         {
-            ((ProduceQuaternary)_produceObject).StartPlant(_selectedItems);
-
-            ClearItems();
+            _produceManager.RequestPlant(_selectedItems,
+                onSuccess: ClearItems,
+                onFailed: App.Notification);
         }
     }
 

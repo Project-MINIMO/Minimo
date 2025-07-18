@@ -139,6 +139,14 @@ public abstract class ProduceObject : BuildingObject
             _produceManager.Select(this);
         }
     }
+
+    public virtual NotifyType CheckPlantCondition(ProduceData option)
+    {
+        if (AllTasks.Count >= MaxSlotCount) return NotifyType.SlotLack;
+        if (!ProduceData.Contains(option)) return NotifyType.InvalidOption;
+
+        return NotifyType.Success;
+    }
     
     public virtual ProduceTask CreateTask(ProduceData option)
     {

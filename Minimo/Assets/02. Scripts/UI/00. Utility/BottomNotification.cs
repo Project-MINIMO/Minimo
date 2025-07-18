@@ -32,6 +32,10 @@ public class BottomNotification : MonoBehaviour
         _notifications = new Dictionary<NotifyType, string>()
         {
             [NotifyType.CapacityLack] = titleData.GetString("STR_PRODUCE_STORAGE"),
+            
+            [NotifyType.SlotLack] = titleData.GetString("STR_NOTIFY_PRODUCE_SLOTLACK"),
+            [NotifyType.MissMinimo] = titleData.GetString("STR_NOTIFY_PRODUCE_MISSMINIMO"),
+            [NotifyType.MissRecipe] = titleData.GetString("STR_NOTIFY_PRODUCE_MISSRECIPE"),
         };
         
         Reset();

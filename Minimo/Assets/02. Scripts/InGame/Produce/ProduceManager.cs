@@ -87,27 +87,56 @@ public class ProduceManager : ManagerBase
             .OnComplete(() => onComplete?.Invoke());
     }
     
-    public void RequestPlant(ProduceObject target, ProduceData option)
+    public void RequestPlant(
+        ProduceObject target, 
+        ProduceData option, 
+        Action onSuccess = null, 
+        Action<NotifyType> onFailed = null)
     {
         _plantService.TryPlant(
             target,
             option,
             onSuccess: () =>
             {
-                
+                onSuccess?.Invoke();
+                Debug.Log("success");
             },
             onFailed: reason =>
             {
-
+                onFailed?.Invoke(reason);
+                Debug.Log(reason);
             }
         );
     }
     
-    public void RequestPlant(ProduceData option)
+    public void RequestPlant(
+        ProduceData option, 
+        Action onSuccess = null, 
+        Action<NotifyType> onFailed = null)
     {
         if (CurrentObject == null) return;
 
-        RequestPlant(CurrentObject, option);
+        RequestPlant(CurrentObject, option, onSuccess, onFailed);
+    }
+
+    public void RequestPlant(
+        Item[] materials, 
+        Action onSuccess = null, 
+        Action<NotifyType> onFailed = null)
+    {
+        if (CurrentObject == null) return;
+        
+        var options = CurrentObject.ProduceData
+            .Where(x => x.MaterialItems[0].ID == materials[1].ID)
+            .Where(x => x.MaterialItems[1].ID == materials[0].ID).ToList();
+
+        if (options.Count == 0)
+        {
+            onFailed?.Invoke(NotifyType.MissRecipe);
+            return;
+        }
+        
+        RequestPlant(CurrentObject, options[0], onSuccess, onFailed);
     }
 
     public void Harvest()

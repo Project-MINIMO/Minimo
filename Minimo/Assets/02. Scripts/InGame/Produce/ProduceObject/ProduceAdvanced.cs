@@ -47,11 +47,10 @@ public abstract class ProduceAdvanced : ProduceObject
         _placedMinimo?.SetChillState();
         _placedMinimo = minimo;
     }
-
-    internal void StartPlant(ProduceData option)
-    {
-        if (_placedMinimo == null) return;
-    }
+    
+    public override NotifyType CheckPlantCondition(ProduceData option) => _placedMinimo == null 
+        ? NotifyType.MissMinimo 
+        : base.CheckPlantCondition(option);
     
     public override ProduceTask CreateTask(ProduceData option)
     {
