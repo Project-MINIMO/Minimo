@@ -170,6 +170,7 @@ public abstract class ProduceObject : BuildingObject
         {
             var task = AllTasks[i];
             if (task.CurrentState is not CompletedState) continue;
+            if (!AccountInfo.Instance.CanKeepItem(task.Data.ResultItems[0].ID)) return;
             
             task.ChangeState(EndState.Instance);
             AllTasks.RemoveAt(i);

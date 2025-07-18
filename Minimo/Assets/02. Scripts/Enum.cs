@@ -6,6 +6,11 @@ public enum TaskState
     Produce,
 }
 
+public enum NotifyType
+{
+    CapacityLack,
+}
+
 public enum UseCashType
 {
     Produce,

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
 using DG.Tweening;
 
@@ -37,7 +37,13 @@ public class ProduceManager : ManagerBase
         _camera = Camera.main;
     }
     
-    public void RegisterTertiary(ProduceTertiary tertiary)   => _tertiaryBuildings.Add(tertiary);
+    public void RegisterTertiary(ProduceTertiary tertiary)
+    {
+        _tertiaryBuildings.Add(tertiary);
+        _tertiaryBuildings.Sort((a, b) =>
+            a.BuildingData.ID.CompareTo(b.BuildingData.ID));
+    }
+
     public void UnregisterTertiary(ProduceTertiary tertiary) => _tertiaryBuildings.Remove(tertiary);
 
     public void Select(ProduceObject obj)

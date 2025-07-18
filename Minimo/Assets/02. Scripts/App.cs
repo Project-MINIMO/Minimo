@@ -20,31 +20,23 @@ public class App : Singleton<App>
     private static readonly Dictionary<Type, MonoBehaviour> _managers = new();
     private static readonly Dictionary<Type, MonoBehaviour> _datas = new();
     public static IServiceProvider Services { get; private set; }
+    
+    private static BottomNotification _notification;
 
     protected override void Awake()
     {
         base.Awake();
 
+        _notification = GetComponentInChildren<BottomNotification>();
+        
         QualitySettings.vSyncCount = 1;
         Application.targetFrameRate = 120;
 
         DOTween.safeModeLogBehaviour = DG.Tweening.Core.Enums.SafeModeLogBehaviour.Error;
     }
 
-    private static void Register(MonoBehaviour obj, Dictionary<Type, MonoBehaviour> dictionary)
-    {
-        var type = obj.GetType();
-
-        if (!dictionary.ContainsKey(type))
-        {
-            dictionary.Add(type, obj);
-        }
-        else
-        {
-            dictionary[type] = obj;
-        }
-        Debug.Log($"{type.Name} registered.");
-    }
+    private static void Register(MonoBehaviour obj, Dictionary<Type, MonoBehaviour> dictionary) 
+        => dictionary[obj.GetType()] = obj;
 
     public static void RegisterManager(MonoBehaviour manager)
     {
@@ -98,5 +90,10 @@ public class App : Singleton<App>
             Debug.Log($"│ <color={titleColor}>▶</color> <b>{pair.Key}</b> : {pair.Value}");
         }
         Debug.Log("└────────────────────────────────────────────┘");
+    }
+
+    public static void Notification(NotifyType type)
+    {
+        _notification.ShowNotification(type);
     }
 }

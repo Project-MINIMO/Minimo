@@ -13,7 +13,7 @@ public class AccountInfo : Singleton<AccountInfo>
     public int blueStar;
     public int rainbowStar;
     public int Exp = 100;
-    public int Capacity { get; private set; } = 100;
+    public int Capacity { get; private set; } = 1;
 
     private GetItemPanel _itemPanel;
     public event Action<int> OnCapacityChanged;
@@ -33,6 +33,19 @@ public class AccountInfo : Singleton<AccountInfo>
     public void AddExp(int amount)
     {
         Exp += amount;
+    }
+
+    public bool CanKeepItem(int id)
+    {
+        if (Items[id].Count > 0) return true;
+        
+        var cankeep = CurrentItemCounts < Capacity;
+        if (!cankeep)
+        {
+            App.Notification(NotifyType.CapacityLack);
+        }
+
+        return cankeep;
     }
 
     public void AddItem(int id, int amount)
