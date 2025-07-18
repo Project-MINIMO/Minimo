@@ -8,32 +8,29 @@ public class ChargeCashBack : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _titleTMP;
     [SerializeField] private TextMeshProUGUI _descriptionTMP;
-    [SerializeField] private Button _yesBtn;
-    [SerializeField] private Button _noBtn;
-    [SerializeField] private Button _closeBtn;
+    [SerializeField] private Button _confirmBtn;
+    [SerializeField] private Button _cancelBtn;
     
-    private TitleData _titleData;
     private Action _closeAction;
 
-    public void Initialize(TitleData titleData, Action closeAction)
+    public void Initialize(Action closeAction)
     {
-        _titleData = titleData;
+        var titleData = App.GetData<TitleData>();
         _closeAction = closeAction;
 
-        _titleTMP.text = _titleData.GetString("STR_CHARGECASH_TITLE");
-        _descriptionTMP.text = _titleData.GetString("STR_CHARGECASH_DESC");
+        _titleTMP.text = titleData.GetString("STR_CHARGECASH_NAME");
+        _descriptionTMP.text = titleData.GetString("STR_CHARGECASH_DESC");
 
-        _yesBtn.GetComponentInChildren<TextMeshProUGUI>().text = _titleData.GetString("STR_BUTTON_YES");
-        _noBtn.GetComponentInChildren<TextMeshProUGUI>().text = _titleData.GetString("STR_BUTTON_NO");
+        _confirmBtn.GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_BUTTON_YES");
+        _cancelBtn.GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_BUTTON_NO");
 
-        _yesBtn.onClick.AddListener(OnClickChargeYes);
-        _noBtn.onClick.AddListener(() => _closeAction?.Invoke());
-        _closeBtn.onClick.AddListener(() => _closeAction?.Invoke());
+        _confirmBtn.onClick.AddListener(OnClickChargeYes);
+        _cancelBtn.onClick.AddListener(() => _closeAction?.Invoke());
     }
 
     private void OnClickChargeYes()
     {
-        //TODO : Charge Panel Open
+        AccountInfo.Instance.blueStar += 100;
         _closeAction.Invoke();
     }
 }

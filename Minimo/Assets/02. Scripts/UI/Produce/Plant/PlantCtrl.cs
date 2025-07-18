@@ -2,41 +2,40 @@ using UnityEngine;
 
 public class PlantCtrl : MonoBehaviour
 {
-    private PlantOptionSlot[] _plantOptionSlots;
+    private PlantHandler[] _plantHandlers;
     private ProduceManager _produceManager;
 
     private void Awake()
     {
-        _plantOptionSlots = GetComponentsInChildren<PlantOptionSlot>(true);
+        _plantHandlers = GetComponentsInChildren<PlantHandler>(true);
         _produceManager = App.GetManager<ProduceManager>();
     }
 
-    public void SetActive(bool isActive)
+    private void OnEnable()
     {
-        gameObject.SetActive(isActive);
-
-        if (isActive)
-        {
-            InitOptionButtons();
-        }
+        if (_produceManager == null) return;
+        if (_produceManager.CurrentObject == null) return;
+        
+        InitHandlers();
     }
 
-    private void InitOptionButtons()
+    private void InitHandlers()
     {
-        var options = _produceManager.CurrentProduceObject.ProduceData;
+        var options = _produceManager.CurrentObject.ProduceData;
 
         var i = 0;
         
         for (; i < options.Count; i++) 
         {
             var option = options[i];
-            _plantOptionSlots[i].gameObject.SetActive(true);
-            _plantOptionSlots[i].SetOption(option);
+            _plantHandlers[i].SetOption(option);
+            
+            _plantHandlers[i].gameObject.SetActive(true);
         }
 
-        for (; i < _plantOptionSlots.Length; i++) 
+        for (; i < _plantHandlers.Length; i++) 
         {
-            _plantOptionSlots[i].gameObject.SetActive(false);
+            _plantHandlers[i].gameObject.SetActive(false);
         }
     }
 }

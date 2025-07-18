@@ -12,6 +12,7 @@ public class LoginPanel : MonoBehaviour
     [SerializeField] private TMP_InputField _pwInputField;
     [SerializeField] private Button _loginBtn;
     [SerializeField] private Button _registerBtn;
+    [SerializeField] private Button _guetsLogin;
     [SerializeField] private TextMeshProUGUI _resultText;
     
     //private bool isLogin;

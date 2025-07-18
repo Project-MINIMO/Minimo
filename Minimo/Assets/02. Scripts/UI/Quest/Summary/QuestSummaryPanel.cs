@@ -1,10 +1,12 @@
 using System.Linq;
 
 using UnityEngine;
+using DG.Tweening;
 
 public class QuestSummaryPanel : UIBase
 {
-    [SerializeField] private QuestUIGrouper _grouper;
+    public override bool IsDefaultPanel => true;
+
     [SerializeField] private Transform _questParent;
     [SerializeField] private GameObject _questPrefab;
     
@@ -13,10 +15,18 @@ public class QuestSummaryPanel : UIBase
     private QuestManager _questManager;
     private QuestListPanel _questListPanel;
     
-    public override void Initialize()
+    private RectTransform _panelRect;
+    private readonly Vector2 _showPosition = new(-2, 0);
+    private readonly Vector2 _hidePosition = new(-370, 0);
+    
+    public override void Initialize(UIManager manager)
     {
+        base.Initialize(manager);
+
+        _panelRect = GetComponent<RectTransform>();
+        
         _questManager = App.GetManager<QuestManager>();
-        _questListPanel = App.GetManager<UIManager>().GetPanel<QuestListPanel>();
+        _questListPanel = manager.GetPanel<QuestListPanel>();
         
         _longPressDetector.OnLongPress = _questListPanel.OpenPanel;
         
@@ -25,6 +35,16 @@ public class QuestSummaryPanel : UIBase
         {
             info.gameObject.SetActive(false);
         }
+    }
+
+    public override void Show(bool isNew)
+    {
+        _panelRect.DOAnchorPos(_showPosition, 0.3f).SetEase(Ease.OutCubic);
+    }
+
+    public override void Hide(bool isNew)
+    {
+        _panelRect.DOAnchorPos(_hidePosition, 0.3f).SetEase(Ease.InCubic);
     }
   
     public void UpdateQuest()

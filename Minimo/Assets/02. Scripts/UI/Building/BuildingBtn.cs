@@ -38,10 +38,9 @@ public class BuildingBtn : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _unlockNoticeTMP;
     
     public BuildingData Data { get; private set; }
-    private GameObject _objectPrefab;
-    private Transform _buildingGroup;
 
     private BuildingPanel _buildingPanel;
+    private EditManager _editManager;
     
     private BuildingState _currentState;
 
@@ -49,20 +48,16 @@ public class BuildingBtn : MonoBehaviour
     {
         _editBtn.onClick.AddListener(CreateObject);
         _buildingPanel = App.GetManager<UIManager>().GetPanel<BuildingPanel>();
+        _editManager = App.GetManager<EditManager>();
     }
 
-    public void Initialize(BuildingData data, Transform gridObjectGroup)
+    public void Initialize(BuildingData data)
     {
         Data = data;
-
-        _buildingGroup = gridObjectGroup;
-
+        
         var spritePath = $"Building/Icon/{data.Name}";
         _iconImg.sprite = Resources.Load<Sprite>(spritePath);
         _iconImg.SetNativeSize();
-        
-        var prefabPath = $"Building/GridObject";
-        _objectPrefab = Resources.Load<GameObject>(prefabPath);
 
         SetString();
         SetBuildingState();
@@ -103,40 +98,9 @@ public class BuildingBtn : MonoBehaviour
 
     private void CreateObject()
     {
-        _buildingPanel.ClosePanel();
-
         var cameraCenterPosition = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, Camera.main.nearClipPlane));
         cameraCenterPosition.z = 0;
-        
-        var gridObject = Instantiate(_objectPrefab, cameraCenterPosition, Quaternion.identity, _buildingGroup);
-        switch (Data.Type)
-        {
-            case 0:
-                gridObject.AddComponent<ProducePrimary>();
-                break;
-            
-            case 1:
-                gridObject.AddComponent<ProduceSecondary>();
-                break;
-            
-            case 2:
-                gridObject.AddComponent<ProduceTertiary>();
-                break;
-            
-            default:
-                gridObject.AddComponent<ProduceQuaternary>();
-                break;
-        }
-       
 
-        if (gridObject.TryGetComponent<ProduceObject>(out var produce))
-        {
-            produce.Initialize(Data);
-        }
-        else
-        {
-            Debug.LogError("GridObject component not found in instantiated prefab.");
-            Destroy(gridObject.gameObject);
-        }
+        _editManager.CreateObject(Data, cameraCenterPosition);
     }
 }

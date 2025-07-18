@@ -10,7 +10,7 @@ public class QuestItemPickSlot : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _nameTMP;
     [SerializeField] private TextMeshProUGUI _countTMP;
     
-    private ItemData _item;
+    private Item _item;
     private QuestSubmissionPanel _submissionPanel;
     
     private void Awake()
@@ -20,7 +20,7 @@ public class QuestItemPickSlot : MonoBehaviour
         _pickBtn.onClick.AddListener(OnClickPick);
     }
 
-    public void Initialize(ItemData item)
+    public void Initialize(Item item)
     {
         _item = item;
 
@@ -34,16 +34,8 @@ public class QuestItemPickSlot : MonoBehaviour
     {
         if (_item == null) return;
 
-        if (AccountInfo.Instance.Items.TryGetValue(_item, out var count))
-        {
-            _countTMP.text = count.ToString();
-            gameObject.SetActive(count > 0);
-        }
-        else
-        {
-            _countTMP.text = "0";
-            gameObject.SetActive(false);
-        }
+        _countTMP.text = _item.Count.ToString();
+        gameObject.SetActive(_item.Count > 0);
     }
 
     private void OnClickPick()

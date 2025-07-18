@@ -59,6 +59,7 @@ public class TitlePanel : MonoBehaviour
             .OnComplete(() =>
             {
                 App.LoadScene(SceneName.Game);
-            });
+            })
+            .Play();
     }
 }

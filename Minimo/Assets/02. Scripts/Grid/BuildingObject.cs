@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.Serialization;
 
 public class BuildingObject : InteractObject
 {
@@ -13,7 +14,7 @@ public class BuildingObject : InteractObject
     public BuildingData BuildingData { get; private set; }
     public BuildingPositionData PositionData { get; private set; }
 
-    public bool IsPlaced { get; private set; } 
+    public bool IsPlaced {get; private set;}
     private bool _isFlipped = false;
     
     protected EditManager _editManager;
@@ -34,7 +35,7 @@ public class BuildingObject : InteractObject
             
             PreviousPosition = transform.position;
             
-            _editManager.StartEdit(this);
+            _editManager.StartEdit(this, true);
         }
         catch (Exception e)
         {
@@ -140,7 +141,7 @@ public class BuildingObject : InteractObject
         }
     }
 
-    private bool CreateBuilding()
+    protected virtual bool CreateBuilding()
     {
         IsPlaced = true;
         PreviousPosition = transform.position;
@@ -155,7 +156,7 @@ public class BuildingObject : InteractObject
         return true;
     }
   
-    public void Cancel()
+    public bool Cancel()
     {
         if (IsPlaced)
         {
@@ -166,6 +167,8 @@ public class BuildingObject : InteractObject
         {
             Destroy(gameObject);
         }
+
+        return IsPlaced;
     }
 
     public void Rotate()
