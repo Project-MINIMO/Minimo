@@ -15,7 +15,9 @@ public enum NotifyType
     InvalidOption,
     MissMinimo,
     MissRecipe,
-    MaterialLack
+    MaterialLack,
+    
+    GoldLack
 }
 
 public enum UseCashType
