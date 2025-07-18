@@ -15,14 +15,12 @@ public class FirebaseFunctionTest : MonoBehaviour
     
     async void Awake()
     {
-        _functions = FirebaseFunctions.DefaultInstance;
+        _functions = FirebaseFunctions.GetInstance("asia-northeast3");
 #if USE_EMULATOR
         _functions.UseFunctionsEmulator("http://localhost:5001");
 #endif
         _auth = FirebaseAuth.DefaultInstance;
         await _auth.SignInAnonymouslyAsync();
-        // 1초 대기
-        await Task.Delay(1000);
         
         var user = FirebaseAuth.DefaultInstance.CurrentUser;
         if (user == null) {
@@ -30,14 +28,24 @@ public class FirebaseFunctionTest : MonoBehaviour
             return;
         }
         
-        var callable = _functions.GetHttpsCallable("getUserAccountInfo");
-        
         var data = new Dictionary<string, object>
         {
             //{ "text", "Hello World" }
         };
-
-        await callable.CallAsync(data).ContinueWith(task => {
+        
+        var createUserAccount = _functions.GetHttpsCallable("createUserAccount");
+        await createUserAccount.CallAsync(data).ContinueWith(task => {
+            if (task.IsFaulted) {
+                Debug.LogError("Function call failed: " + task.Exception);
+            } else {
+                var result = task.Result.Data;
+                Debug.Log("Raw JSON result: " + JsonConvert.SerializeObject(result));
+            }
+        });
+        
+        
+        var getUserAccountInfo = _functions.GetHttpsCallable("getUserAccountInfo");
+        await getUserAccountInfo.CallAsync(data).ContinueWith(task => {
             if (task.IsFaulted) {
                 Debug.LogError("Function call failed: " + task.Exception);
             } else {

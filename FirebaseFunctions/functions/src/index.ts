@@ -34,16 +34,34 @@ export const testFirestore = onCall(
 
     try {
       const testRef = admin.firestore().collection("test").doc(request.auth.uid);
+      console.log("testRef path:", testRef.path); // 경로를 로깅하는 것이 더 유용합니다.
+
       await testRef.set({
         message: "테스트 메시지",
         timestamp: admin.firestore.FieldValue.serverTimestamp(),
       });
 
+      console.log("Firestore write successful for UID:", request.auth.uid);
+
       return { success: true, message: "Firestore 테스트 성공" };
-    } catch (error) {
-      throw new HttpsError("internal", "Firestore 테스트 실패");
+    } catch (error) { // 여기서 'error'는 'unknown' 타입입니다.
+      console.error("Firestore 쓰기 실패:", error);
+
+      let errorMessage = "Firestore 테스트 중 알 수 없는 오류가 발생했습니다.";
+
+      // 타입을 확인하여 안전하게 message 속성에 접근합니다.
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      throw new HttpsError(
+        "internal",
+        "Firestore 테스트 실패: " + errorMessage,
+        error // 세 번째 인자로 원본 에러를 전달할 수 있습니다.
+      );
     }
-  });
+  }
+);
 
 // --- 계정 정보 조회 함수 ---
 // Firebase SDK를 통해 호출되며, 인증 정보를 자동으로 받습니다.
@@ -101,47 +119,36 @@ onCall(
   });
 
 // --- 계정 생성 시 UserData 문서 생성 트리거 ---
-export const createUserDocument =
-functions.auth.user().onCreate(async (user: admin.auth.UserRecord) => {
-  const uid = user.uid;
-  const displayName = user.displayName;
-
-  console.log(`User created: ${uid}`);
-
-  try {
-    const userDocRef = admin.firestore().collection("users").doc(uid);
-
-    const userDoc = await userDocRef.get();
-    if (userDoc.exists) {
-      console.warn(`User document already exists ${uid}.`);
-      return null;
+export const createUserAccount = onCall(
+  { region: "asia-northeast3" },
+  async (request) => {
+    const uid = request.auth?.uid;
+    if (!uid) {
+      throw new HttpsError("unauthenticated", "로그인이 필요합니다.");
     }
 
-    const initialUserData: UserData = {
-      uid: uid,
-      nickname: displayName || `user_${uid.substring(0, 6)}`,
-      createdAt: admin.firestore.FieldValue
-        .serverTimestamp() as admin.firestore.Timestamp,
-      lastLoginAt: admin.firestore.FieldValue
-        .serverTimestamp() as admin.firestore.Timestamp,
-      currencies: {
-        SDC: 0,
-        SLP: 0,
-        WSD: 0,
-        HDP: 0,
-      },
+    const userDocRef = admin.firestore().collection("users").doc(uid);
+    const userDoc = await userDocRef.get();
+
+    if (userDoc.exists) {
+      throw new HttpsError("already-exists", "이미 계정이 생성되었습니다.");
+    }
+
+    const nickname = request.data.nickname || `user_${uid.substring(0, 6)}`;
+
+    const userData: UserData = {
+      uid,
+      nickname,
+      createdAt: admin.firestore.FieldValue.serverTimestamp() as any,
+      lastLoginAt: admin.firestore.FieldValue.serverTimestamp() as any,
+      currencies: { SDC: 0, SLP: 0, WSD: 0, HDP: 0 },
     };
 
-    await userDocRef.set(initialUserData);
-    console.log(`Created user document for uid: ${uid}`);
-    return { success: true, uid: uid };
-  } catch (error) {
-    console.error(`Error creating user document for uid: ${uid}`, error);
-    // In a background trigger like onCreate, you typically log the error
-    // instead of throwing an HttpsError back to a client.
-    throw new Error(`Failed to create user document: ${error}`);
+    await userDocRef.set(userData);
+    return { success: true };
   }
-});
+);
+
 
 // --- 계정 삭제 시 UserData 문서 및 서브컬렉션 삭제 ---
 export const deleteUserDocument = functions

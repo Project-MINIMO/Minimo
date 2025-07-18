@@ -15,7 +15,7 @@ public class FirebaseFunctionsManager : ManagerBase
     protected override void Awake()
     {
         base.Awake();
-        functions = FirebaseFunctions.DefaultInstance;
+        functions = FirebaseFunctions.GetInstance("asia-northeast3");
 #if USE_EMULATOR
         functions.UseFunctionsEmulator("http://localhost:4000");
 #endif
@@ -30,10 +30,17 @@ public class FirebaseFunctionsManager : ManagerBase
         try
         {
             var function = functions.GetHttpsCallable("testFirestore");
+            if (function == null)
+            {
+                Debug.LogError("testFirestore 함수가 정의되어 있지 않습니다.");
+                return false;
+            }
+            Debug.Log("Firestore 테스트 함수 호출 중...");
             var result = await function.CallAsync();
-            
+            Debug.Log($"Firestore 테스트 결과: {result.Data}");
             if (result.Data is IDictionary data)
             {
+                Debug.Log($"Firestore 테스트 데이터: {data}");
                 var message = data["message"]?.ToString();
                 var success = Convert.ToBoolean(data["success"]);
 
