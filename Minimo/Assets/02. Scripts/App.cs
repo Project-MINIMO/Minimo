@@ -20,31 +20,25 @@ public class App : Singleton<App>
     private static readonly Dictionary<Type, MonoBehaviour> _managers = new();
     private static readonly Dictionary<Type, MonoBehaviour> _datas = new();
     public static IServiceProvider Services { get; private set; }
+    
+    private static BottomNotification _notification;
+    private static BlackScreen _blackScreen;
 
     protected override void Awake()
     {
         base.Awake();
 
+        _notification = GetComponentInChildren<BottomNotification>();
+        _blackScreen = GetComponentInChildren<BlackScreen>();
+        
         QualitySettings.vSyncCount = 1;
         Application.targetFrameRate = 120;
 
         DOTween.safeModeLogBehaviour = DG.Tweening.Core.Enums.SafeModeLogBehaviour.Error;
     }
 
-    private static void Register(MonoBehaviour obj, Dictionary<Type, MonoBehaviour> dictionary)
-    {
-        var type = obj.GetType();
-
-        if (!dictionary.ContainsKey(type))
-        {
-            dictionary.Add(type, obj);
-        }
-        else
-        {
-            dictionary[type] = obj;
-        }
-        Debug.Log($"{type.Name} registered.");
-    }
+    private static void Register(MonoBehaviour obj, Dictionary<Type, MonoBehaviour> dictionary) 
+        => dictionary[obj.GetType()] = obj;
 
     public static void RegisterManager(MonoBehaviour manager)
     {
@@ -84,9 +78,21 @@ public class App : Singleton<App>
 
     public static void LoadScene(SceneName sceneName)
     {
-        DOTween.KillAll();
+        GetManager<SoundManager>().FadeOutBGM(2);
+        _blackScreen.FadeInOut(2f, () =>
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene((int)sceneName);
 
-        UnityEngine.SceneManagement.SceneManager.LoadScene((int)sceneName);
+            if (sceneName == SceneName.Title)
+            {
+                GetManager<SoundManager>().PlayBGM("Title");
+            }
+            else if (sceneName == SceneName.Game)
+            {
+                GetManager<SoundManager>().PlayBGM("InGame");
+            }
+        });
+
     }
     
     public static void LogBox(string titleColor, string title, Dictionary<string, string> contents)
@@ -98,5 +104,15 @@ public class App : Singleton<App>
             Debug.Log($"│ <color={titleColor}>▶</color> <b>{pair.Key}</b> : {pair.Value}");
         }
         Debug.Log("└────────────────────────────────────────────┘");
+    }
+
+    public static void Notification(NotifyType type)
+    {
+        _notification.ShowNotification(type);
+    }
+
+    public static void FadeInOut(float duration, Action callback)
+    {
+        _blackScreen.FadeInOut(duration, callback);
     }
 }

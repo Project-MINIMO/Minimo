@@ -29,16 +29,16 @@ public class ItemSellHandler : TransactionHandler
         _item = item;
         Quantity = (item.Count / 2) + 1;
       
-        base.Initialize();
+        Initialize();
     }
     
     protected override int CalculatePrice()
     {
-        var price = Mathf.Max(_item.Data.SellCost * Quantity, 0);
+        var price = Mathf.Max(_item.SellCost * Quantity, 0);
         var modifiedPrice = price * _globalSellCostRatio;
         var roundedPrice = Mathf.RoundToInt(modifiedPrice);
         
-        App.LogBox("green", "생산 시간 로그", new()
+        App.LogBox("green", "판매 가격 증가 로그", new()
         {
             { "기존 판매 가격", price.ToString() },
             { "판매 가격 증가 비율", _globalSellCostRatio.ToString() },
@@ -55,7 +55,7 @@ public class ItemSellHandler : TransactionHandler
     protected override void Transaction()
     {
         AccountInfo.Instance.RemoveItem(_item, Quantity);
-        AccountInfo.Instance.blueStar += Price;
+        AccountInfo.Instance.Gold += Price;
         
         base.Transaction();
     }

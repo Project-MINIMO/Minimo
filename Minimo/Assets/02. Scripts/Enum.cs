@@ -6,6 +6,18 @@ public enum TaskState
     Produce,
 }
 
+public enum NotifyType
+{
+    CapacityLack,
+    
+    Success,
+    SlotLack,
+    InvalidOption,
+    MissMinimo,
+    MissRecipe,
+    MaterialLack
+}
+
 public enum UseCashType
 {
     Produce,
@@ -33,6 +45,29 @@ public enum ItemType
     Flower,
     Amulet,
     Etc,
+}
+
+public enum InputState
+{
+    None,      
+    Drag,  
+    DragEnd,
+    ClickDown,
+    ClickUp,   
+    LongPress,
+    Zoom
+}
+
+
+public enum ItemProperty
+{
+    None,
+    Love,
+    Friendship,
+    Memory,
+    Peace,
+    Hope,
+    Courage
 }
 
 public enum TileState

@@ -3,12 +3,11 @@ using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
-using UnityEngine.UI;
-using DG.Tweening;
+using LeTai.Asset.TranslucentImage;
 
 public class UIManager : ManagerBase
 {
-    [SerializeField] private Image _blackBlur;
+    [SerializeField] private GameObject _blurImg;
     [SerializeField] private GetItemPanel _getItem;
     public GetItemPanel GetItem => _getItem;
     
@@ -29,6 +28,9 @@ public class UIManager : ManagerBase
         _uiStack = new(uiPanels.Length);
 
         _uiDictionary = uiPanels.ToDictionary(p => p.GetType(), p => p);
+
+        _blurImg.GetComponent<TranslucentImage>().source = Camera.main.GetComponent<TranslucentImageSource>();
+        _blurImg.SetActive(false);
     }
 
     private void Start()
@@ -53,8 +55,6 @@ public class UIManager : ManagerBase
             catch (Exception error)
             { Debug.LogError($"ERROR: {error.Message}\n{error.StackTrace}"); }
         }
-        
-        FadeOut(1);
     }
     
     private void Update()
@@ -88,6 +88,7 @@ public class UIManager : ManagerBase
             peek.Hide(false);
         }
         
+        _blurImg.SetActive(panel.IsUseBlur);
         panel.Show(true);
         _uiStack.Push(panel);
     }
@@ -103,6 +104,7 @@ public class UIManager : ManagerBase
         {
             if (_uiStack.Peek().IsDefaultPanel)
             {
+                _blurImg.SetActive(false);
                 foreach (var peek in _uiStack)
                 {
                     peek.Show(false);
@@ -110,7 +112,9 @@ public class UIManager : ManagerBase
             }
             else
             {
-                _uiStack.Peek().Show(false);
+                var newPanel = _uiStack.Peek();
+                newPanel.Show(false);
+                _blurImg.SetActive(newPanel.IsUseBlur);
             }
         }
     }
@@ -121,41 +125,6 @@ public class UIManager : ManagerBase
         if (_uiStack.Peek().IsDefaultPanel) return;
         
         PopPanel(_uiStack.Peek());
-    }
-    #endregion
-    
-    #region Fade In / Out
-    public void FadeIn(Action onComplete = null)
-    {
-        _blackBlur.gameObject.SetActive(true);
-
-        _blackBlur.DOKill();
-        _blackBlur.DOFade(1f, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
-        {
-            onComplete?.Invoke();
-        });
-    }
-
-    public void FadeOut(float duration, Action onComplete = null)
-    {
-        _blackBlur.DOKill();
-        _blackBlur.DOFade(0f, duration).SetEase(Ease.Linear).OnComplete(() =>
-        {
-            _blackBlur.gameObject.SetActive(false);
-            onComplete?.Invoke();
-        });
-    }
-
-    public void FadeInOut(float duration, Action midAction = null)
-    {
-        _blackBlur.gameObject.SetActive(true);
-
-        _blackBlur.DOKill();
-        _blackBlur.DOFade(1f, duration).SetEase(Ease.Linear).OnComplete(() =>
-        {
-            midAction?.Invoke();
-            FadeOut(duration);
-        });
     }
     #endregion
 }

@@ -104,10 +104,7 @@ public class ProduceTimeSecondAbility : MinimoAbilityBase
 
     public override void Apply(ProduceAdvanced building)
     {
-        if (Scope == AbilityScope.Individual)
-        {
-            building.ApplyTimeReduction(Value);
-        }
+        if (Scope == AbilityScope.Individual) { }
     }
 }
 
@@ -145,7 +142,7 @@ public class ProduceExperienceAbility : MinimoAbilityBase
     {
         if (Scope == AbilityScope.Individual)
         {
-            
+            building.ApplyExpRatio(Value);
         }
     }
 }

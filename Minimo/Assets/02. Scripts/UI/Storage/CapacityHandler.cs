@@ -1,19 +1,17 @@
-using System.Linq;
+using System;
 
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class CapacityHandler : TransactionHandler
 {
-    [SerializeField] private TextMeshProUGUI _titleTMP;
     [SerializeField] private TextMeshProUGUI _currentCapacityTMP;
-    [SerializeField] private Button _closeBtn;
-
+    
     protected override int Step => 10;
     
     private UseCashPanel _useCashPanel;
-    
+
+    private Action _transactionAction;
     private int _expandCost;
     private int _currentCapacity;
     
@@ -26,19 +24,16 @@ public class CapacityHandler : TransactionHandler
         var titleData = App.GetData<TitleData>();
         _expandCost = titleData.Common["StorageExpandCost"];
         TransactionString = titleData.GetString("STR_STORAGE_EXPAND_COST");
-        _titleTMP.text = titleData.GetString("STR_STORTAGE_UI_EXPAND_DESC");
-        
-        _closeBtn.onClick.AddListener(() => gameObject.SetActive(false));
     }
 
-    public override void Initialize()
+    public void Initialize(Action transactionCallback)
     {
-        gameObject.SetActive(true);
+        _transactionAction = transactionCallback;
         _currentCapacity = AccountInfo.Instance.Capacity;
         Quantity = _currentCapacity + 10;
         _currentCapacityTMP.SetText($"{AccountInfo.Instance.CurrentItemCounts}/{_currentCapacity}");
         
-        base.Initialize();
+        Initialize();
     }
     
     protected override int CalculatePrice() => Mathf.Max(_expandCost * (Quantity - _currentCapacity), 0);
@@ -48,12 +43,12 @@ public class CapacityHandler : TransactionHandler
 
     protected override void Transaction()
     {
-        if (Price <= AccountInfo.Instance.blueStar)
+        if (Price <= AccountInfo.Instance.Cash)
         {
-            AccountInfo.Instance.blueStar -= Price;
+            AccountInfo.Instance.Cash -= Price;
             AccountInfo.Instance.AddCapacity(Quantity - _currentCapacity);
             
-            base.Transaction();
+            _transactionAction?.Invoke();
         }
         else
         {

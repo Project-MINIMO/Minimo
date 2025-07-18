@@ -24,13 +24,13 @@ public class UseCashPanel : UIBase
         ActiveBacks(false);
     }
 
-    public void OpenPanel(List<(Item, int)> lackItems, Action useAction)
+    public void OpenPanel(List<(Item, int)> lackItems, Action onConfirm, Action onCancel)
     {
         base.OpenPanel();
         
         ActiveBacks(true);
         
-        _useMaterialBack.Setup(lackItems, useAction);
+        _useMaterialBack.Setup(lackItems, onConfirm, onCancel);
     }
 
     private void ActiveBacks(bool isActiveUse)
