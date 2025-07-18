@@ -13,7 +13,7 @@ public class AccountInfo : Singleton<AccountInfo>
     public int blueStar;
     public int rainbowStar;
     public int Exp = 100;
-    public int Capacity { get; private set; } = 1;
+    public int Capacity { get; private set; } = 100;
 
     private GetItemPanel _itemPanel;
     public event Action<int> OnCapacityChanged;

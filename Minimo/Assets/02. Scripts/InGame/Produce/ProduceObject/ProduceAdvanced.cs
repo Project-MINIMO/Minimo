@@ -48,10 +48,19 @@ public abstract class ProduceAdvanced : ProduceObject
         _placedMinimo = minimo;
     }
     
-    public override NotifyType CheckPlantCondition(ProduceData option) => _placedMinimo == null 
-        ? NotifyType.MissMinimo 
-        : base.CheckPlantCondition(option);
-    
+    public override NotifyType CheckPlantCondition(ProduceData option)
+    {
+        var result = base.CheckPlantCondition(option);
+        if (result == NotifyType.Success)
+        {
+            return _placedMinimo == null
+                ? NotifyType.MissMinimo
+                : NotifyType.Success;
+        }
+        
+        return result;
+    }
+
     public override ProduceTask CreateTask(ProduceData option)
     {
         var task = base.CreateTask(option);
