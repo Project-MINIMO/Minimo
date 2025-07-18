@@ -22,5 +22,5 @@ public class StorageInventory : Inventory<Item>
 
     protected override List<Item> GetFilteredItems() => AccountInfo.Instance.Items.Values.ToList();
 
-    protected override bool IsSlotFiltered(int index, Item item) => index == 0 || index == item.Data.Type + 1;
+    protected override bool IsSlotFiltered(int index, Item item) => index == 0 || index == (int)item.Type + 1;
 }

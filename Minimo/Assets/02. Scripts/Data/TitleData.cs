@@ -29,6 +29,7 @@ public class ItemData
     public int ID;
     public int Type;
     public int Level;
+    public int Property;
     public int SellCost;
     public int BuyCost;
     public string Name;

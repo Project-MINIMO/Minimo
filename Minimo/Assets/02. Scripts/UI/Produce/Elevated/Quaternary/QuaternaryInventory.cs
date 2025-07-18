@@ -13,8 +13,8 @@ public class QuaternaryInventory : Inventory<Item>
     }
 
     protected override List<Item> GetFilteredItems() => AccountInfo.Instance.Items.Values
-                                                            .Where(x => x.Data.Level == 3)
+                                                            .Where(x => x.Level == 3)
                                                             .ToList();
 
-    protected override bool IsSlotFiltered(int index, Item item) => index == item.Data.Type;
+    protected override bool IsSlotFiltered(int index, Item item) => index == (int)item.Type;
 }

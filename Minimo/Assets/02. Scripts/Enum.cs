@@ -35,6 +35,17 @@ public enum ItemType
     Etc,
 }
 
+public enum ItemProperty
+{
+    None,
+    Love,
+    Friendship,
+    Memory,
+    Peace,
+    Hope,
+    Courage
+}
+
 public enum TileState
 {
     Empty,

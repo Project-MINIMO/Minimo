@@ -16,7 +16,7 @@ public class ItemSlot : InventorySlot<Item>
         base.Initialize(item);
 
         Item = item;
-        Item.OnItemCountChnaged += SetCount;
+        Item.OnItemCountChanged += SetCount;
         _info.UpdateItem(item);
     }
 

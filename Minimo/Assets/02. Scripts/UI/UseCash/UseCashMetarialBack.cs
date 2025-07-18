@@ -47,7 +47,7 @@ public class UseCashMaterialBack : MonoBehaviour
     
     private int CalculatePrice(List<(Item, int)> lackItems)
     {
-        return lackItems.Sum(lackItem => lackItem.Item1.Data.BuyCost * lackItem.Item2);
+        return lackItems.Sum(lackItem => lackItem.Item1.BuyCost * lackItem.Item2);
     }
 
     private void SetMaterialSlots(List<(Item, int)> lackItems)

@@ -55,8 +55,8 @@ public class QuaternaryPanel : ElevatedPanel
     
     private void OnItemSelected(InventorySlot<Item> slot)
     {
-        _selectedInfos[slot.Item.Data.Type].UpdateItem(slot.Item);
-        _selectedItems[slot.Item.Data.Type] = slot.Item;
+        _selectedInfos[(int)slot.Item.Type].UpdateItem(slot.Item);
+        _selectedItems[(int)slot.Item.Type] = slot.Item;
 
         if (CheckCanPlant())
         {

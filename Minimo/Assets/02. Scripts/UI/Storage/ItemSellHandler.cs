@@ -34,7 +34,7 @@ public class ItemSellHandler : TransactionHandler
     
     protected override int CalculatePrice()
     {
-        var price = Mathf.Max(_item.Data.SellCost * Quantity, 0);
+        var price = Mathf.Max(_item.SellCost * Quantity, 0);
         var modifiedPrice = price * _globalSellCostRatio;
         var roundedPrice = Mathf.RoundToInt(modifiedPrice);
         

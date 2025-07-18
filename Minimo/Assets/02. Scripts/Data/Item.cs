@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class Item
 {
-    public event Action OnItemCountChnaged;
+    public event Action OnItemCountChanged;
     
-    public readonly ItemData Data;
-    
+    public int ID;
+    public readonly ItemType Type;
+    public readonly int Level;
+    public readonly ItemProperty Property;
+    public readonly int SellCost;
+    public readonly int BuyCost;
     public readonly string Name;
     public readonly string Description;
     public readonly Sprite Icon;
@@ -16,8 +20,12 @@ public class Item
     
     public Item(ItemData data)
     {
-        Data = data;
-
+        ID = data.ID;
+        Type = (ItemType)data.Type;
+        Level = data.Level;
+        Property = (ItemProperty)data.Property;
+        SellCost = data.SellCost;
+        BuyCost = data.BuyCost;
         Name = App.GetData<TitleData>().GetString($"STR_ITEM_{data.Name.ToUpper()}_NAME");
         Description = App.GetData<TitleData>().GetString($"STR_ITEM_{data.Name.ToUpper()}_DESC");
         Icon = Resources.Load<Sprite>($"Item/{data.Name}");
@@ -28,6 +36,6 @@ public class Item
         Count += num;
         
         Count = Mathf.Clamp(Count, 0, 99999);
-        OnItemCountChnaged?.Invoke();
+        OnItemCountChanged?.Invoke();
     }
 }
