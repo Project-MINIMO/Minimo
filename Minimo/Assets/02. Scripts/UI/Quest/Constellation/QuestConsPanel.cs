@@ -7,6 +7,8 @@ using TMPro;
 
 public class QuestConsPanel : UIBase
 {
+    public override bool IsUseBlur => true;
+    
     [SerializeField] private Button _closeBtn;
 
     [SerializeField] private TextMeshProUGUI _titleTMP;

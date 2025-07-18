@@ -4,6 +4,8 @@ using TMPro;
 
 public class StoragePanel : UIBase
 {
+    public override bool IsUseBlur => true;
+            
     [SerializeField] private TextMeshProUGUI _titleTMP;
     [SerializeField] private StorageInfoCtrl _infoCtrl;
     [SerializeField] private StorageExpandCtrl _expandCtrl;

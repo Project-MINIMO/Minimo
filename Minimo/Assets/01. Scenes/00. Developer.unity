@@ -267,10 +267,10 @@ AudioSource:
   m_GameObject: {fileID: 1072097326}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -890759888645719930, guid: 14fb2df9e30898748bf19b7e9df7123d, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -630,6 +630,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1708394407}
   - component: {fileID: 1708394406}
+  - component: {fileID: 1708394411}
   - component: {fileID: 1708394410}
   m_Layer: 0
   m_Name: Main Camera
@@ -748,6 +749,14 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!81 &1708394411
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708394404}
+  m_Enabled: 1
 --- !u!1 &1724322311
 GameObject:
   m_ObjectHideFlags: 0
@@ -1409,8 +1418,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fff2976dd07a3c547a1584d56cac7f27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blueStar: 0
-  rainbowStar: 0
+  Gold: 0
+  Cash: 0
   Exp: 100
 --- !u!1 &7031188566999757838
 GameObject:
@@ -1423,13 +1432,14 @@ GameObject:
   - component: {fileID: 3060404124156102696}
   - component: {fileID: 1691701453945167336}
   - component: {fileID: 8255281949819654924}
+  - component: {fileID: 8255281949819654925}
   m_Layer: 5
   m_Name: BlackBlur
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &7078819083864837280
 GameObject:
   m_ObjectHideFlags: 0
@@ -1592,7 +1602,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1609,6 +1619,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8255281949819654925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7031188566999757838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d36ba6602eb7a884b867dfef81f97881, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8300059609362807839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1621,7 +1643,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f39c822fb1b3524ab32e10ed2181d97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bgmClips: []
+  _bgmClips:
+  - Name: Title
+    Clip: {fileID: 8300000, guid: 036cd9093a36c0141a1ef267d974aa85, type: 3}
+  - Name: InGame
+    Clip: {fileID: 8300000, guid: 0b963f1c2a004f24b95865759ac5b2fb, type: 3}
   _sfxClips: []
   _bgmPlayer: {fileID: 1072097328}
   _sfxPlayer: {fileID: 1247558949}

@@ -8,6 +8,8 @@ using TMPro;
 
 public class QuestSubmissionPanel : UIBase
 {
+    public override bool IsUseBlur => true;
+    
     [Serializable]
     public struct RewardInfo
     {

@@ -49,7 +49,7 @@ public class ScreenStateManager : ManagerBase
                 if (CurrentState.Value == ScreenState.Space)
                 {
                     Camera.main.DOOrthoSize(3f, 1f);
-                    App.GetManager<UIManager>().FadeInOut(0.5f, 
+                    App.FadeInOut(0.5f, 
                         () =>
                         {
                             
@@ -62,7 +62,7 @@ public class ScreenStateManager : ManagerBase
             case ScreenState.Space:
                 Camera.main.DOKill();
                 Camera.main.DOOrthoSize(10f, 1f).SetEase(Ease.InQuad);
-                App.GetManager<UIManager>().FadeInOut(0.5f, 
+                App.FadeInOut(0.5f, 
                     () =>
                     {
                         _planetObj.SetActive(true);
@@ -72,7 +72,7 @@ public class ScreenStateManager : ManagerBase
             
             case ScreenState.DeepSpace:
                 Camera.main.DOOrthoSize(100f, 1f).SetEase(Ease.InQuad);
-                App.GetManager<UIManager>().FadeInOut(0.5f, 
+                App.FadeInOut(0.5f, 
                     () => _planetObj.SetActive(false));
                 break;
         }

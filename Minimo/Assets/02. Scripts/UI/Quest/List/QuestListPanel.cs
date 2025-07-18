@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class QuestListPanel : UIBase
 {
+    public override bool IsUseBlur => true;
+    
     [SerializeField] private Button _closeBtn;
     
     [SerializeField] private Button[] _menuBtns;

@@ -71,7 +71,7 @@ public class SoundManager : ManagerBase
 
         _bgmPlayer.clip = clip;
         _bgmPlayer.loop = true;
-        _bgmPlayer.Play();
+        FadeInBGM(5);
     }
 
     public void StopBGM() => _bgmPlayer.Stop();
@@ -94,7 +94,7 @@ public class SoundManager : ManagerBase
             });
     }
 
-    public void FadeInBGM(float duration) => FadeBGM(1f, duration);
+    public void FadeInBGM(float duration) => FadeBGM(0.2f, duration);
     public void FadeOutBGM(float duration) => FadeBGM(0f, duration);
     #endregion
 

@@ -4,6 +4,8 @@ using TMPro;
 
 public class BuildingPanel : UIBase
 {
+    public override bool IsUseBlur => true;
+    
     [SerializeField] private TextMeshProUGUI _titleTMP;
 
     [SerializeField] private Button _openBtn;
