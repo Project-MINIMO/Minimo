@@ -35,6 +35,18 @@ public enum ItemType
     Etc,
 }
 
+public enum InputState
+{
+    None,      
+    Drag,  
+    DragEnd,
+    ClickDown,
+    ClickUp,   
+    LongPress,
+    Zoom
+}
+
+
 public enum ItemProperty
 {
     None,

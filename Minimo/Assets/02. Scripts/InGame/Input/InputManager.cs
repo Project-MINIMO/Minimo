@@ -1,111 +1,126 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public enum InputState
-{
-    None,      
-    Drag,  
-    DragEnd,
-    ClickDown,
-    ClickUp,   
-    LongPress,
-    Zoom
-}
-
 public class InputManager : ManagerBase
 {
     public InputState CurrentState { get; private set; } = InputState.None;
-    private InputState _previousState = InputState.None;
-
-    private Vector2 _startPos;
-    private float _startTime;
-    private bool _isDragging;
-
+    
     private const float DragThreshold = 10f; 
     private const float LongPressThreshold = 1f; 
     
+    private Vector2 _startPos;
+    private float _startTime;
+    private bool _isDragging;
+    private bool _longPressed;
+    
     private void Update()
     {
-        if (IsPointerOverUI())
+#if UNITY_EDITOR
+        HandleMouse();
+#else
+          switch (Input.touchCount)
         {
-            ResetState();
+            case 0:
+                if (CurrentState is InputState.DragEnd or InputState.ClickUp)
+                {
+                    CurrentState = InputState.None;
+                }
+                break;
+            
+            case 1:
+                HandleSingleTouch(Input.GetTouch(0));
+                break;
+            
+            case 2:
+                CurrentState = InputState.Zoom;
+                break;
+        }
+#endif
+    }
+    
+    private void HandleSingleTouch(Touch touch)
+    {
+        if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+        {
+            Reset();
             return;
         }
 
-        HandleInput();
+        switch (touch.phase)
+        {
+            case TouchPhase.Began:
+                BeginInput(touch.position);
+                break;
+
+            case TouchPhase.Moved:
+                MoveInput(touch.position);
+                break;
+
+            case TouchPhase.Ended:
+            case TouchPhase.Canceled:
+                EndInput();
+                break;
+        }
+    }
+    
+    private void BeginInput(Vector2 pos)
+    {
+        _startPos    = pos;
+        _startTime   = Time.time;
+        _isDragging  = _longPressed = false;
+        CurrentState = InputState.ClickDown;
+    }
+    
+    private void MoveInput(Vector2 pos)
+    {
+        switch (_isDragging)
+        {
+            case false when Vector2.Distance(pos, _startPos) > DragThreshold:
+                _isDragging  = true;
+                CurrentState = InputState.Drag;
+                break;
+            
+            case false when !_longPressed && Time.time - _startTime > LongPressThreshold:
+                _longPressed = true;
+                CurrentState = InputState.LongPress;
+                break;
+        }
+    }
+    
+    private void EndInput()
+    {
+        if (_isDragging)        CurrentState = InputState.DragEnd;
+        else if (!_longPressed) CurrentState = InputState.ClickUp;
+        else                    CurrentState = InputState.None;
+    }
+   
+    private void Reset()
+    {
+        CurrentState = InputState.None;
+        _isDragging = _longPressed = false;
+    }
+
+    #region Mouse
+    private void HandleMouse()
+    {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
         
-        if (_previousState is InputState.ClickUp or InputState.DragEnd)
+        if (Input.GetMouseButtonDown(0))
+        {
+            BeginInput(Input.mousePosition);
+        }
+        else if (Input.GetMouseButton(0))
+        {
+            MoveInput(Input.mousePosition);
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            EndInput();
+        }
+        else if (CurrentState is InputState.DragEnd or InputState.ClickUp)
         {
             CurrentState = InputState.None;
         }
-
-        _previousState = CurrentState;
     }
-    
-    private bool IsPointerOverUI()
-    {
-        return Input.touchCount > 0 ? 
-            EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId) : 
-            EventSystem.current.IsPointerOverGameObject();
-    }
-    
-    private void HandleInput()
-    {
-        if (Input.GetMouseButtonDown(0)) // Click
-        {
-            _startPos = Input.mousePosition;
-            _startTime = Time.time;
-            _isDragging = false;
-            CurrentState = InputState.ClickDown; 
-        }
-
-        if (Input.GetMouseButton(0)) 
-        {
-            if (!_isDragging && Vector2.Distance(Input.mousePosition, _startPos) > DragThreshold) // Drag
-            {
-                CurrentState = InputState.Drag;
-                _isDragging = true;
-            }
-            else if (!_isDragging && Time.time - _startTime > LongPressThreshold) // LongPress
-            {
-                CurrentState = InputState.LongPress;
-            }
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            if (_isDragging) 
-            {
-                CurrentState = InputState.DragEnd;
-            }
-            else if (CurrentState == InputState.ClickDown)
-            {
-                CurrentState = InputState.ClickUp;
-            }
-            else 
-            {
-                CurrentState = InputState.None;
-            }
-
-            _isDragging = false;
-        }
-
-        if (Input.GetAxis("Mouse ScrollWheel") != 0)
-        {
-            CurrentState = InputState.Zoom;
-            _isDragging = false;
-        }
-
-        if (Input.touchCount == 2) 
-        {
-            CurrentState = InputState.Zoom;
-            _isDragging = false;
-        }
-    }
-    
-    private void ResetState()
-    {
-        CurrentState = InputState.None;
-        _isDragging = false;
-    }
+    #endregion
 }

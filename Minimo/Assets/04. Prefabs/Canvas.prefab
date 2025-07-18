@@ -29518,6 +29518,7 @@ GameObject:
   - component: {fileID: 3686014008021471732}
   - component: {fileID: 9182322679099551307}
   - component: {fileID: 1532034214619854381}
+  - component: {fileID: 5721435688584084686}
   m_Layer: 5
   m_Name: Btn_Move
   m_TagString: Untagged
@@ -29594,6 +29595,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaed148ff614aa442b108f83f1297fe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5721435688584084686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2191358940207811333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8687ccf5cd0979144ba73b4dde69f451, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  edgeThreshold: 0.1
+  panSpeed: 5
 --- !u!1 &2211157128348241268
 GameObject:
   m_ObjectHideFlags: 0
@@ -52224,6 +52239,7 @@ GameObject:
   - component: {fileID: 5929812868232253411}
   - component: {fileID: 1569780155940767182}
   - component: {fileID: 3409788032126330104}
+  - component: {fileID: 5624067190247228253}
   m_Layer: 5
   m_Name: Back_Harvest
   m_TagString: Untagged
@@ -52303,6 +52319,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rect: {fileID: 910972432380669909}
   _image: {fileID: 424589062371894925}
+--- !u!114 &5624067190247228253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3817391653365421048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8687ccf5cd0979144ba73b4dde69f451, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  edgeThreshold: 0.1
+  panSpeed: 5
 --- !u!1 &3820938961585654044
 GameObject:
   m_ObjectHideFlags: 0
@@ -129211,7 +129241,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 284614575789912889, guid: e15831ce93c7397468dd6dc2485f282b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 284614575789912889, guid: e15831ce93c7397468dd6dc2485f282b, type: 3}
       propertyPath: m_AnchorMin.x
@@ -129219,7 +129249,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 284614575789912889, guid: e15831ce93c7397468dd6dc2485f282b, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 284614575789912889, guid: e15831ce93c7397468dd6dc2485f282b, type: 3}
       propertyPath: m_SizeDelta.x
@@ -129259,11 +129289,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 284614575789912889, guid: e15831ce93c7397468dd6dc2485f282b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 181
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 284614575789912889, guid: e15831ce93c7397468dd6dc2485f282b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -34.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 284614575789912889, guid: e15831ce93c7397468dd6dc2485f282b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
