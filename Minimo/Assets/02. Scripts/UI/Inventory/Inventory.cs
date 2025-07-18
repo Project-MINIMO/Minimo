@@ -8,7 +8,7 @@ public abstract class Inventory<T> : MonoBehaviour
     [SerializeField] protected Toggle[] _menuTogs;
     [SerializeField] private ScrollRect _scrollRect;
 
-    private List<InventorySlot<T>> _slots;
+    protected List<InventorySlot<T>> Slots;
     
     private void Awake()
     {
@@ -30,7 +30,7 @@ public abstract class Inventory<T> : MonoBehaviour
         var existingButtons = _scrollRect.GetComponentsInChildren<InventorySlot<T>>(true);
 
         var filteredItems = GetFilteredItems();
-        _slots = new List<InventorySlot<T>>(filteredItems.Count);
+        Slots = new List<InventorySlot<T>>(filteredItems.Count);
         
         var i = 0;
         
@@ -40,7 +40,7 @@ public abstract class Inventory<T> : MonoBehaviour
             slot.Initialize(filteredItems[i]);
             slot.gameObject.SetActive(true);
             
-            _slots.Add(slot);
+            Slots.Add(slot);
         }
 
         for (; i < existingButtons.Length; i++)
@@ -53,13 +53,13 @@ public abstract class Inventory<T> : MonoBehaviour
     
     protected abstract List<T> GetFilteredItems();
 
-    private void FilterSlots(int index)
+    protected virtual void FilterSlots(int index)
     {
-        foreach (var button in _slots)
+        foreach (var slot in Slots)
         {
-            var isActive = IsSlotFiltered(index, button.Item);
+            var isActive = IsSlotFiltered(index, slot.Item);
             
-            button.gameObject.SetActive(isActive);
+            slot.gameObject.SetActive(isActive);
         }
         
         _scrollRect.verticalNormalizedPosition = 1;
