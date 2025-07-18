@@ -29,7 +29,7 @@ public class ItemSellHandler : TransactionHandler
         _item = item;
         Quantity = (item.Count / 2) + 1;
       
-        base.Initialize();
+        Initialize();
     }
     
     protected override int CalculatePrice()

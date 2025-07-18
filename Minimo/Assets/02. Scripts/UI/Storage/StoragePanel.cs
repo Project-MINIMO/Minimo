@@ -6,8 +6,7 @@ public class StoragePanel : UIBase
 {
     [SerializeField] private TextMeshProUGUI _titleTMP;
     [SerializeField] private StorageInfoCtrl _infoCtrl;
-    
-    [SerializeField] private CapacityHandler _capacityHandler;
+    [SerializeField] private StorageExpandCtrl _expandCtrl;
     [SerializeField] private TextMeshProUGUI _capacityTMP;
     
     [SerializeField] private Button _openBtn;
@@ -20,7 +19,7 @@ public class StoragePanel : UIBase
 
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
-        _capacityBtn.onClick.AddListener(_capacityHandler.Initialize);
+        _capacityBtn.onClick.AddListener(_expandCtrl.Show);
         
         var slots = GetComponentsInChildren<ItemSlot>(true);
         foreach (var slot in slots)
@@ -39,7 +38,7 @@ public class StoragePanel : UIBase
         base.OpenPanel();
         
         _infoCtrl.gameObject.SetActive(false);
-        _capacityHandler.gameObject.SetActive(false);
+        _expandCtrl.gameObject.SetActive(false);
     }
 
     private void OnItemSelected(InventorySlot<Item> slot)
