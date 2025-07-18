@@ -8,7 +8,8 @@ using UnityEngine.UI;
 public class StorageInventory : Inventory<Item>
 {
     [SerializeField] private RectTransform _content;
-    [SerializeField] private InventoryDropdown _dropdown;
+    [SerializeField] private InventorySortHandler _dropdown;
+    [SerializeField] private InventoryFilterHandler _dropdown2;
     
     private List<InventorySlot<Item>> _activeSlots;
     
@@ -31,10 +32,10 @@ public class StorageInventory : Inventory<Item>
     {
         base.FilterSlots(index);
         
-        SortDefault();
-        
         _activeSlots = Slots.Where(slot => slot.gameObject.activeSelf).ToList();
+        SortDefault();
         _dropdown.OnMenuChanged(index);
+        _dropdown2.OnMenuChanged(index);
     }
 
     protected override List<Item> GetFilteredItems() => AccountInfo.Instance.Items.Values.ToList();
@@ -81,24 +82,20 @@ public class StorageInventory : Inventory<Item>
     #endregion
 
     #region Filter
-    public void FilterItem(int level)
+    public void FilterItem(bool[] activeArray)
     {
-        Debug.Log($"식품 필터: {level}");
-        
         foreach (var slot in _activeSlots)
         {
-            var isActive = level == 0 || slot.Item.Level == level;
+            var isActive = activeArray[slot.Item.Level - 1];
             
             slot.gameObject.SetActive(isActive);
         }
     }
-    public void FilterProps(ItemProperty property)
+    public void FilterProps(bool[] activeArray)
     {
-        Debug.Log($"기물 필터: {property}");
-        
         foreach (var slot in _activeSlots)
         {
-            var isActive = property == 0 || slot.Item.Property == property;
+            var isActive = activeArray[(int)slot.Item.Property - 1];
             
             slot.gameObject.SetActive(isActive);
         }
