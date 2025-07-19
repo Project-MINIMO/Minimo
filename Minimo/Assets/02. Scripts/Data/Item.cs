@@ -1,12 +1,15 @@
 using System;
+using System.Threading.Tasks;
 
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class Item
 {
     public event Action OnItemCountChanged;
     
-    public int ID;
+    public readonly int ID;
     public readonly ItemType Type;
     public readonly int Level;
     public readonly ItemProperty Property;
@@ -14,11 +17,11 @@ public class Item
     public readonly int BuyCost;
     public readonly string Name;
     public readonly string Description;
-    public readonly Sprite Icon;
+    public Sprite Icon { get; private set; }
     
     public int Count { get; private set; }
     
-    public Item(ItemData data)
+    public Item(ItemData data, TitleData title)
     {
         ID = data.ID;
         Type = (ItemType)data.Type;
@@ -26,9 +29,24 @@ public class Item
         Property = (ItemProperty)data.Property;
         SellCost = data.SellCost;
         BuyCost = data.BuyCost;
-        Name = App.GetData<TitleData>().GetString($"STR_ITEM_{data.Name.ToUpper()}_NAME");
-        Description = App.GetData<TitleData>().GetString($"STR_ITEM_{data.Name.ToUpper()}_DESC");
-        Icon = Resources.Load<Sprite>($"Item/{data.Name}");
+        Name = title.GetString($"STR_ITEM_{data.Name.ToUpper()}_NAME");
+        Description = title.GetString($"STR_ITEM_{data.Name.ToUpper()}_DESC");
+        LoadIcon(data.Name);
+    }
+
+    private async Task LoadIcon(string assetName)
+    {
+        var path = $"Assets/03. Images/Item/{assetName}.png";
+        var handle = Addressables.LoadAssetAsync<Sprite>(path);
+        await handle.Task;
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            Icon = handle.Result;
+        }
+        else
+        {
+            Debug.LogError($"Failed to load Item Icon : {assetName}");
+        }
     }
 
     public void AddCount(int num)
