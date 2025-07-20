@@ -42,7 +42,7 @@ public abstract class ProduceAdvanced : ProduceObject
         _globalTimeReduction = minimoManager.GlobalTimeReduction.Value;
     }
     
-    protected virtual void Update()
+    protected override void Update()
     {
         if (_placedMinimo != null)
         {

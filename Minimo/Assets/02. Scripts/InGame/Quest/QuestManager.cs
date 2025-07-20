@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-
+using System.Data;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -48,6 +48,8 @@ public class QuestManager : ManagerBase
     
     public event Action<List<Quest>> OnQuestsUpdated;
     
+    private List<Quest> _quests;
+    
     protected override void Awake()
     {
         base.Awake();
@@ -55,8 +57,13 @@ public class QuestManager : ManagerBase
         _titleData = App.GetData<TitleData>();
         GroupedQuest = _titleData.Quest
             .Values
+            .Where(data => data.Group != null)
             .GroupBy(data => data.Group.ID)
             .ToDictionary(data => data.Key, data => data.ToList());
+        _quests = _titleData.Quest
+            .Values
+            .Where(quest => quest.PreQuestID == -1)
+            .ToList();
     }
     
     public void AddQuest(Quest quest)
@@ -84,15 +91,10 @@ public class QuestManager : ManagerBase
     [ContextMenu("Add Quest")]
     public void AddQuest()
     {
-        if (GroupedQuest.Count == 0)
-        {
-            Debug.LogError("No quest data found");
-            return;
-        }
-        
-        var selected = GroupedQuest
+        var selected = _quests
             .OrderBy(_ => Random.value)
             .First();
-        AddQuest(selected.Value[0]);
+        AddQuest(selected);
+        _quests.Remove(selected);
     }
 }

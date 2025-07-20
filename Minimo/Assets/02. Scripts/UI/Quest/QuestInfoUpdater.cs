@@ -19,7 +19,7 @@ public class QuestInfoUpdater : MonoBehaviour
         _questConditionTMP?.SetText(quest.ClearDescription);
 
         if (_iconImg == null) return;
-        _iconImg.sprite = quest.Group.Icon;
+        _iconImg.sprite = quest.Group?.Icon;
         _iconImg.gameObject.SetActive(true);
     }
     
@@ -28,7 +28,7 @@ public class QuestInfoUpdater : MonoBehaviour
         _questNameTMP?.SetText(quest.Group.Name);
 
         if (_iconImg == null) return;
-        _iconImg.sprite = quest.Group.Icon;
+        _iconImg.sprite = quest.Group?.Icon;
         _iconImg.gameObject.SetActive(true);
     }
 }

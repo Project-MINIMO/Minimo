@@ -1,9 +1,6 @@
 using System;
-using System.Threading.Tasks;
 
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class Item
 {
@@ -18,11 +15,11 @@ public class Item
     public readonly int BuyCost;
     public readonly string Name;
     public readonly string Description;
-    public Sprite Icon { get; private set; }
+    public readonly Sprite Icon;
     
     public int Count { get; private set; }
     
-    public Item(ItemData data, TitleData title)
+    public Item(ItemData data, Sprite icon, TitleData title)
     {
         ID = data.ID;
         Code = data.Name;
@@ -33,22 +30,7 @@ public class Item
         BuyCost = data.BuyCost;
         Name = title.GetString($"STR_ITEM_{data.Name.ToUpper()}_NAME");
         Description = title.GetString($"STR_ITEM_{data.Name.ToUpper()}_DESC");
-        LoadIcon(data.Name);
-    }
-
-    private async Task LoadIcon(string assetName)
-    {
-        var path = $"Assets/03. Images/Item/{assetName}.png";
-        var handle = Addressables.LoadAssetAsync<Sprite>(path);
-        await handle.Task;
-        if (handle.Status == AsyncOperationStatus.Succeeded)
-        {
-            Icon = handle.Result;
-        }
-        else
-        {
-            Debug.LogError($"Failed to load Item Icon : {assetName}");
-        }
+        Icon = icon;
     }
 
     public void AddCount(int num)

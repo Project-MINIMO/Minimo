@@ -1,45 +1,24 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
+
+public class QuestGroup
+{
+    public readonly int ID;
+    public readonly string Name;
+    public readonly Sprite Icon;
+        
+    public QuestGroup(QuestGroupData data, Sprite icon, TitleData title)
+    {
+        ID = data.ID;
+        Name = title.GetString($"STR_QUEST_{data.Name.ToUpper()}");
+        Icon = icon;
+    }
+}
 
 public class Quest
 {
-    public class QuestGroup
-    {
-        public readonly int ID;
-        public readonly string Name;
-        public readonly int OpenLevel;
-        public Sprite Icon { get; private set; }
-        
-        public QuestGroup(int id, string name, int openLevel)
-        {
-            ID = id;
-            Name = name;
-            OpenLevel = openLevel;
-
-            //LoadIcon(name);
-        }
-        
-        private async Task LoadIcon(string assetName)
-        {
-            var path = $"Assets/03. Images/Quest/{assetName}.png";
-            var handle = Addressables.LoadAssetAsync<Sprite>(path);
-            await handle.Task;
-            if (handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                Icon = handle.Result;
-            }
-            else
-            {
-                Debug.LogError($"Failed to load Item Icon : {assetName}");
-            }
-        }
-    }
-    
     [Serializable]
     public class QuestClear
     {
@@ -81,11 +60,10 @@ public class Quest
     public readonly QuestClear[] Clear;
     public readonly QuestReward[] Reward;
     
-    public Quest(QuestGroupData groupData, QuestData data, TitleData title)
+    public Quest(QuestGroup group, QuestData data, TitleData title)
     {
-        Group = new(groupData.ID, title.GetString(groupData.Name), groupData.OpenLevel);
-        
         ID = data.ID;
+        Group = group;
         Code = data.Name;
         Type = (QuestType)data.Type;
         PreQuestID = data.PreQuestID;
@@ -140,8 +118,6 @@ public class Quest
                 }
             }
         }
-
-        //LoadIcon(data.Name);
     }
     
     private QuestClear[] ParseClear(string clearRaw)

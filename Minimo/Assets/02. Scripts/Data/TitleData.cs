@@ -55,9 +55,6 @@ public class QuestGroupData
 {
     public int ID;
     public string Name;
-    public int Title;
-    public int PreQuestID;
-    public int OpenLevel;
 }
 
 [Serializable]
@@ -159,8 +156,8 @@ public class TitleData : DataBase
 
     #region Data Path
     private const string STRING_PATH = "Data/StringData";
+    private const string QUESTGROUP_PATH = "Data/QuestGroupData";
     private const string QUEST_PATH = "Data/QuestData";
-    private const string DETAILQUEST_PATH = "Data/DetailQuestData";
     private const string COMMON_PATH = "Data/CommonData";
     private const string BUILDING_PATH = "Data/BuildingData";
     private const string ITEM_PATH = "Data/ItemData";
@@ -175,20 +172,11 @@ public class TitleData : DataBase
         base.Awake();
 
         LoadData();
+        LoadDataAsync();
     }
 
-    private async void LoadData()
+    private void LoadData()
     {
-        _string.Clear();
-        Quest.Clear();
-        Common.Clear();
-        Building.Clear();
-        Item.Clear();
-        Produce.Clear();
-        UserMinimo.Clear();
-        UMStat.Clear();
-        UMStatGrowth.Clear();
-
         var stringDataRaw = DataLoader.LoadData<StringData>(STRING_PATH);
         foreach (var data in stringDataRaw)
         {
@@ -201,31 +189,6 @@ public class TitleData : DataBase
             Common.Add(data.ID, data.Value);
         }
         
-        var buildingDataRaw = DataLoader.LoadData<BuildingData>(BUILDING_PATH);
-        foreach (var data in buildingDataRaw)
-        {
-            var position = await LoadPositionData(data.Name);
-            var newBuilding = new Building(data, position, this);
-            Building.Add(data.ID, newBuilding);
-        } 
-        
-        var itemDataRaw = DataLoader.LoadData<ItemData>(ITEM_PATH);
-        foreach (var data in itemDataRaw)
-        {
-            var newItem = new Item(data, this);
-            Item.Add(data.ID, newItem);
-        }
-        
-        var produceDataRaw = DataLoader.LoadDataProduceData(PRODUCE_PATH);
-        foreach (var data in produceDataRaw)
-        {
-            Produce.Add(data.ID, data);   
-        }
-        GroupedProduce = Produce
-            .Values
-            .GroupBy(data => data.Building)
-            .ToDictionary(data => data.Key, data => data.ToList());
-       
         var userMinimoDataRaw = DataLoader.LoadData<UMData>(UM_PATH);
         foreach (var data in userMinimoDataRaw)
         {
@@ -244,31 +207,78 @@ public class TitleData : DataBase
             UMStatGrowth.Add(data.ID, data);
         }
         
-        var questDataRaw = DataLoader.LoadData<QuestGroupData>(QUEST_PATH);
-        var quests = questDataRaw.ToDictionary(data => data.ID);
-
-        var detailQuestDataRaw = DataLoader.LoadData<QuestData>(DETAILQUEST_PATH);
-        foreach (var data in detailQuestDataRaw)
+        var produceDataRaw = DataLoader.LoadDataProduceData(PRODUCE_PATH);
+        foreach (var data in produceDataRaw)
         {
-            var newQuest = new Quest(quests[data.ID / 100 * 100], data, this);
+            Produce.Add(data.ID, data);   
+        }
+        GroupedProduce = Produce
+            .Values
+            .GroupBy(data => data.Building)
+            .ToDictionary(data => data.Key, data => data.ToList());
+    }
+    
+    private async Task LoadDataAsync()
+    {
+        var buildingRaw = DataLoader.LoadData<BuildingData>(BUILDING_PATH);
+        var itemRaw = DataLoader.LoadData<ItemData>(ITEM_PATH);
+        var questGroupRaw = DataLoader.LoadData<QuestGroupData>(QUESTGROUP_PATH);
+        var questRaw = DataLoader.LoadData<QuestData>(QUEST_PATH);
+
+        const string buildingAssetPath = "Assets/09. Scriptable Objects/Building/{0}.asset";
+        const string itemIconPath = "Assets/03. Images/Item/{0}.png";
+        const string questIconPath = "Assets/03. Images/Quest/{0}.png";
+    
+        var buildingTasks = buildingRaw
+            .Select(d => LoadAddressableDataAsync<BuildingPositionData>(d.Name, buildingAssetPath))
+            .ToList();
+        var iconTasks = itemRaw
+            .Select(d => LoadAddressableDataAsync<Sprite>(d.Name, itemIconPath))
+            .ToList();
+        var groupTasks = questGroupRaw
+            .Select(d => LoadAddressableDataAsync<Sprite>(d.Name, questIconPath))
+            .ToList();
+        
+        var buildingPositions = await Task.WhenAll(buildingTasks);
+        var itemIcons = await Task.WhenAll(iconTasks);
+        var questGroupIcons = await Task.WhenAll(groupTasks);
+
+        for (var i = 0; i < buildingRaw.Length; i++)
+        {
+            Building.Add(buildingRaw[i].ID, new Building(buildingRaw[i], buildingPositions[i], this));
+        }
+
+        for (var i = 0; i < itemRaw.Length; i++)
+        {
+            Item.Add(itemRaw[i].ID, new Item(itemRaw[i], itemIcons[i], this));
+        }
+        
+        var questGroups = new Dictionary<int, QuestGroup>();
+        for (var i = 0; i < questGroupRaw.Length; i++)
+        {
+            questGroups.Add(questGroupRaw[i].ID, new QuestGroup(questGroupRaw[i], questGroupIcons[i], this));
+        }
+
+        foreach (var data in questRaw)
+        {
+            var newQuest = questGroups.TryGetValue(data.ID / 100 * 100, out var questGroup) 
+                ? new Quest(questGroup, data, this) 
+                : new Quest(null, data, this);
+
             Quest.Add(data.ID, newQuest);
         }
     }
-    
-    private async Task<BuildingPositionData> LoadPositionData(string assetName)
+   
+    private Task<T> LoadAddressableDataAsync<T>(string assetName, string assetPath)
     {
-        var path = $"Assets/09. Scriptable Objects/Building/{assetName}.asset";
-        var handle = Addressables.LoadAssetAsync<BuildingPositionData>(path);
-        await handle.Task;
-        if (handle.Status == AsyncOperationStatus.Succeeded)
+        var path = string.Format(assetPath, assetName);
+        var handle = Addressables.LoadAssetAsync<T>(path);
+        return handle.Task.ContinueWith(task =>
         {
-            return handle.Result;
-        }
-        else
-        {
-            Debug.LogError("Failed to load BuildingData");
-            return null;
-        }
+            if (handle.Status == AsyncOperationStatus.Succeeded) return handle.Result;
+            Debug.LogError($"Failed to load {assetName}");
+            return default;
+        });
     }
 
     #region StringData
