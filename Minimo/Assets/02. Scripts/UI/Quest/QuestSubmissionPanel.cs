@@ -38,8 +38,9 @@ public class QuestSubmissionPanel : UIBase
     [SerializeField] private CanvasGroup _canvasGroup2;
     [SerializeField] private RectTransform _canvasRect;
 
+    private QuestManager _questManager;
     private TitleData _titleData;
-    private DetailQuestData _questData;
+    private Quest _questData;
     
     private string[] _clearStrings;
 
@@ -47,6 +48,7 @@ public class QuestSubmissionPanel : UIBase
     {
         base.Initialize(manager);
 
+        _questManager = App.GetManager<QuestManager>();
         _titleData = App.GetData<TitleData>();
         
         _clearStrings = new[]
@@ -78,16 +80,11 @@ public class QuestSubmissionPanel : UIBase
             {
                 _canvasGroup2.blocksRaycasts = true;
             });
-    }
-   
-    public void OpenPanel(DetailQuestData questData)
-    {
-        OpenPanel();
-
-        _questData = questData;
         
-        _titleTMP.text = _titleData.GetString($"STR_QUEST_{questData.Name}");
-        _descriptionTMP.text = _titleData.GetString($"STR_QUEST_{questData.Name}_DESC");
+        _questData = _questManager.CurrentQuest;
+        
+        _titleTMP.text = _questData.Name;
+        _descriptionTMP.text = _questData.Description;
 
         _clearTMP.text = string.Empty;
         for (var i = 0; i < _questData.Clear.Length; i++)
@@ -127,7 +124,7 @@ public class QuestSubmissionPanel : UIBase
         }
 
         _progressTMP.text = "0 / 0";
-        _progressTMP.gameObject.SetActive(questData.Condition == QuestCondition.Normal);
+        _progressTMP.gameObject.SetActive(_questData.Condition == QuestCondition.Normal);
 
         SetRewardInfo();
         SetClearInfo();

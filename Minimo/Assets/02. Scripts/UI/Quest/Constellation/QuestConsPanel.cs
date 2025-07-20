@@ -28,21 +28,27 @@ public class QuestConsPanel : UIBase
     private const float OpenTargetX = 160f;
     private const float AnimationDuration = 0.3f;
 
+    private QuestManager _questManager;
+
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
 
         _titleData = App.GetData<TitleData>();
+        _questManager = App.GetManager<QuestManager>();
         _questInfos = GetComponentsInChildren<QuestConsInfo>();
         _submissionPanel = manager.GetPanel<QuestSubmissionPanel>();
 
         _closeBtn.onClick.AddListener(ClosePanel);
+        
+        var slots = GetComponentsInChildren<QuestListSlot>(true);
+        foreach (var slot in slots)
+        {
+            slot.OnSlotSelected += OnSlotSelected;
+        }
     }
-
-    public void OpenSubmissionPanel(DetailQuestData questData)
-    {
-        _submissionPanel.OpenPanel(questData);
-    }
+    
+    private void OnSlotSelected(Quest type) => _submissionPanel.OpenPanel();
 
     public override void Show(bool isNew)
     {
@@ -51,10 +57,11 @@ public class QuestConsPanel : UIBase
         AnimateOpen(isNew ? PrimaryStartX : SecondaryStartX);
     }
 
-    public void OpenPanel(DetailQuestData questData)
+    public override void OpenPanel()
     {
-        OpenPanel();
-        SetupQuestInfos(questData);
+        base.OpenPanel();
+        
+        SetupQuestInfos(_questManager.CurrentQuest);
     }
 
     private void AnimateOpen(float fromX)
@@ -76,28 +83,41 @@ public class QuestConsPanel : UIBase
             .OnComplete(() => _canvasGroup2.blocksRaycasts = true);
     }
 
-    private void SetupQuestInfos(DetailQuestData questData)
+    private void SetupQuestInfos(Quest questData)
     {
-        var quests = _titleData.DetailQuest.Values
-            .Where(x => x.ID / 10 == questData.ID / 10)
+        var quests = _titleData.Quest.Values
+            .Where(x => x.Group.ID == questData.Group.ID)
             .ToList();
 
         var i = 0;
+        var activeIndex = int.MaxValue;
         
-        for (; i < quests.Count && i < _questInfos.Length; i++)
+        for (; i < quests.Count; i++)
         {
             _questInfos[i].gameObject.SetActive(true);
-            _questInfos[i].Initialize(quests[i]);
+            if (quests[i] == questData)
+            {
+                activeIndex = i;
+            }
+            _questInfos[i].Initialize(GetQuestState(i, activeIndex), quests[i]);
         }
+        
         for (; i < _questInfos.Length; i++)
         {
             _questInfos[i].gameObject.SetActive(false);
         }
 
-        var questTitleKey = _titleData.Quest[questData.ID / 10].Name;
+        var questTitleKey = _titleData.Quest[questData.ID / 100 * 100].Name;
         
         _titleTMP.text = _titleData.GetString(questTitleKey);
 
         _iconImg.sprite = _sprites[UnityEngine.Random.Range(0, _sprites.Length)];
     }
+
+    private QuestState GetQuestState(int index, int activeIndex) => (index, activeIndex) switch
+    {
+        var (i, a) when i < a => QuestState.Completed,
+        var (i, a) when i == a => QuestState.InProgress,
+        var (i, a) when i > a => QuestState.Locked,
+    };
 }

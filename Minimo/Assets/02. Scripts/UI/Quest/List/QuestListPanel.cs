@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,14 +12,30 @@ public class QuestListPanel : UIBase
     [SerializeField] private QuestListBack[] _menuBacks;
     [SerializeField] private GameObject[] _menuActiveObjs;
     [SerializeField] private GameObject[] _alertObjs;
-
-    private QuestSummaryPanel _questSummaryPanel;
+    
+    private Dictionary<QuestType, UIBase> _panelMap;
+    QuestManager  _questManager;
     
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
-
-        _questSummaryPanel = manager.GetPanel<QuestSummaryPanel>();
+        _questManager = App.GetManager<QuestManager>();
+        var consPanel = manager.GetPanel<QuestConsPanel>();
+        var submissionPanel = manager.GetPanel<QuestSubmissionPanel>();
+        _panelMap = new Dictionary<QuestType, UIBase>()
+        {
+            [QuestType.Guide] = submissionPanel,
+            [QuestType.Story] = submissionPanel,
+            [QuestType.Constellation] = consPanel,
+            [QuestType.Side] = submissionPanel,
+            [QuestType.Wish] = submissionPanel,
+        };
+        
+        var slots = GetComponentsInChildren<QuestListSlot>(true);
+        foreach (var slot in slots)
+        {
+            slot.OnSlotSelected += OnSlotSelected;
+        }
         
         _closeBtn.onClick.AddListener(ClosePanel);
         
@@ -60,25 +77,12 @@ public class QuestListPanel : UIBase
         base.OpenPanel();
         
         OnClickMenuBtn(0);
-    }
-
-    public void UpdateQuest(QuestType questType)
-    {
-        var index = GetQuestType(questType);
-        
-        if (!_menuBacks[index].gameObject.activeSelf)
-        {
-            _alertObjs[index].SetActive(true);
-        }
-        
-        _menuBacks[index].UpdateQuest();
+        _questManager.CurrentQuest = null;
     }
     
-    private int GetQuestType(QuestType questType) => questType switch
+    private void OnSlotSelected(Quest quest)
     {
-        QuestType.Guide => 0,
-        QuestType.Story => 0,
-        QuestType.Constellation => 1,
-        _ => 2
-    };
+        _questManager.CurrentQuest = quest;
+        _panelMap[quest.Type].OpenPanel();
+    }
 }

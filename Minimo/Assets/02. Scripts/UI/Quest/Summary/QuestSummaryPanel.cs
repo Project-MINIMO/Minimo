@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -18,6 +19,10 @@ public class QuestSummaryPanel : UIBase
     private RectTransform _panelRect;
     private readonly Vector2 _showPosition = new(-2, 0);
     private readonly Vector2 _hidePosition = new(-370, 0);
+
+    private List<QuestSummarySlot> _slots;
+    
+    private Dictionary<QuestType, UIBase> _panelMap;
     
     public override void Initialize(UIManager manager)
     {
@@ -27,19 +32,39 @@ public class QuestSummaryPanel : UIBase
         
         _questManager = App.GetManager<QuestManager>();
         _questListPanel = manager.GetPanel<QuestListPanel>();
-        
         _longPressDetector.OnLongPress = _questListPanel.OpenPanel;
         
-        var existingInfos = GetComponentsInChildren<QuestSummaryInfo>(true);
-        foreach (var info in existingInfos)
+        _slots = GetComponentsInChildren<QuestSummarySlot>(true).ToList();
+        foreach (var slot in _slots)
         {
-            info.gameObject.SetActive(false);
+            slot.OnSlotSelected += OnSlotSelected;
         }
+        
+        var consPanel = manager.GetPanel<QuestConsPanel>();
+        var submissionPanel = manager.GetPanel<QuestSubmissionPanel>();
+        _panelMap = new Dictionary<QuestType, UIBase>()
+        {
+            [QuestType.Guide] = submissionPanel,
+            [QuestType.Story] = submissionPanel,
+            [QuestType.Constellation] = consPanel,
+            [QuestType.Side] = submissionPanel,
+            [QuestType.Wish] = submissionPanel,
+        };
+        
+        _questManager.OnQuestsUpdated += UpdateQuest;
+
+    }
+    
+    private void OnSlotSelected(Quest quest)
+    {
+        _questManager.CurrentQuest = quest;
+        _panelMap[quest.Type].OpenPanel();
     }
 
     public override void Show(bool isNew)
     {
         _panelRect.DOAnchorPos(_showPosition, 0.3f).SetEase(Ease.OutCubic);
+        _questManager.CurrentQuest = null;
     }
 
     public override void Hide(bool isNew)
@@ -47,26 +72,23 @@ public class QuestSummaryPanel : UIBase
         _panelRect.DOAnchorPos(_hidePosition, 0.3f).SetEase(Ease.InCubic);
     }
   
-    public void UpdateQuest()
+    private void UpdateQuest(List<Quest> quests)
     {
-        var existingInfos = GetComponentsInChildren<QuestSummaryInfo>(true);
-        var quests = _questManager.ActiveQuests.OrderBy(x => x.ID).ToList();
+        var orderedQuests = quests.OrderBy(x => x.ID).ToList();
   
         var i = 0;
         
-        for (; i < quests.Count; i++)
+        for (; i < orderedQuests.Count; i++)
         {
-            var questInfo = i < existingInfos.Length 
-                ? existingInfos[i] 
-                : Instantiate(_questPrefab, _questParent).GetComponent<QuestSummaryInfo>();
+            var questInfo = _slots[i];
 
             questInfo.gameObject.SetActive(true);
-            questInfo.Initialize(quests[i]);
+            questInfo.Initialize(orderedQuests[i]);
         }
 
-        for (; i < existingInfos.Length; i++)
+        for (; i < _slots.Count; i++)
         {
-            existingInfos[i].gameObject.SetActive(false);
+            _slots[i].gameObject.SetActive(false);
         }
     }
 }

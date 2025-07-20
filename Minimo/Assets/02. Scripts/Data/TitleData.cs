@@ -47,18 +47,17 @@ public class StringData
 
 #region Quest
 [Serializable]
-public class QuestData
+public class QuestGroupData
 {
     public int ID;
     public string Name;
-    public int Type;
     public int Title;
     public int PreQuestID;
     public int OpenLevel;
 }
 
 [Serializable]
-public class RawDetailQuestData
+public class QuestData
 {
     public int ID;
     public int Type;
@@ -68,35 +67,6 @@ public class RawDetailQuestData
     public int Condition;
     public string Clear;
     public string Reward;
-}
-
-[Serializable]
-public class DetailQuestData
-{
-    public int ID;
-    public QuestType Type;
-    public int PreQuestID;
-    public int OpenLevel;
-    public string Name;
-    public QuestCondition Condition;
-    public QuestClear[] Clear;
-    public QuestReward[] Reward;
-}
-
-[Serializable]
-public class QuestClear
-{
-    public ClearType Type;
-    public int Target;
-    public int Amount;
-}
-
-[Serializable]
-public class QuestReward
-{
-    public RewardType Type;
-    public int Target;
-    public int Amount;
 }
 #endregion
 
@@ -171,8 +141,7 @@ public class UMStatGrowthData
 
 public class TitleData : DataBase
 {
-    public Dictionary<int, QuestData> Quest { get; private set; } = new();
-    public Dictionary<int, DetailQuestData> DetailQuest { get; private set; } = new();
+    public Dictionary<int, Quest> Quest { get; private set; } = new();
     public Dictionary<string, int> Common { get; private set; } = new();
     public Dictionary<int, Building> Building { get; private set; } = new();
     public Dictionary<int, Item> Item { get; private set; } = new();
@@ -215,7 +184,6 @@ public class TitleData : DataBase
 
         _string.Clear();
         Quest.Clear();
-        DetailQuest.Clear();
         Common.Clear();
         Building.Clear();
         Item.Clear();
@@ -228,18 +196,6 @@ public class TitleData : DataBase
         foreach (var data in stringDataRaw)
         {
             _string.Add(data.ID, data);
-        }
-        
-        var questDataRaw = DataLoader.LoadData<QuestData>(QUEST_PATH);
-        foreach (var data in questDataRaw)
-        {
-            Quest.Add(data.ID, data);
-        }
-        
-        var detailQuestDataRaw = DataLoader.LoadDataDetailQuest(DETAILQUEST_PATH);
-        foreach (var data in detailQuestDataRaw)
-        {
-            DetailQuest.Add(data.ID, data);
         }
         
         var commonDataRaw = DataLoader.LoadData<CommonData>(COMMON_PATH);
@@ -288,6 +244,16 @@ public class TitleData : DataBase
         foreach (var data in umStatGrowthDataRaw)
         {
             UMStatGrowth.Add(data.ID, data);
+        }
+        
+        var questDataRaw = DataLoader.LoadData<QuestGroupData>(QUEST_PATH);
+        var quests = questDataRaw.ToDictionary(data => data.ID);
+
+        var detailQuestDataRaw = DataLoader.LoadData<QuestData>(DETAILQUEST_PATH);
+        foreach (var data in detailQuestDataRaw)
+        {
+            var newQuest = new Quest(quests[data.ID / 100 * 100], data, this);
+            Quest.Add(data.ID, newQuest);
         }
         
         

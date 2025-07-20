@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -20,7 +21,7 @@ public class QuestListBack : MonoBehaviour
     public void Initialize(int index)
     {
         _questManager = App.GetManager<QuestManager>();
-
+        _questManager.OnQuestsUpdated += UpdateQuest;
         _questIndex = index;
     }
 
@@ -29,26 +30,24 @@ public class QuestListBack : MonoBehaviour
         if (_questManager == null) return;
         
         _scrollRect.verticalNormalizedPosition = 1;
-        
-        UpdateQuest();
     }
 
-    public void UpdateQuest()
+    private void UpdateQuest(List<Quest> quests)
     {
-        var quests = _questManager.ActiveQuests.Where(x => CheckQuestType(x.Type)).ToList();
+        var filteredQuests = quests.Where(x => CheckQuestType(x.Type)).ToList();
 
-        var existingInfos = GetComponentsInChildren<QuestListInfo>(true);
+        var existingInfos = GetComponentsInChildren<QuestListSlot>(true);
         
         var i = 0;
         
-        for (; i < quests.Count; i++)
+        for (; i < filteredQuests.Count; i++)
         {
             var questInfo = i < existingInfos.Length 
                 ? existingInfos[i] 
-                : Instantiate(_questPrefab, _questParent).GetComponent<QuestListInfo>();
+                : Instantiate(_questPrefab, _questParent).GetComponent<QuestListSlot>();
 
             questInfo.gameObject.SetActive(true);
-            questInfo.Initialize(quests[i]);
+            questInfo.Initialize(filteredQuests[i]);
         }
 
         for (; i < existingInfos.Length; i++)

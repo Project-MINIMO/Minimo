@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class QuestGiver : InteractObject
 {
-    protected DetailQuestData _questData;
+    protected Quest _questData;
     private ScreenStateManager _screenStateManager;
 
     private bool _eventTriggered;

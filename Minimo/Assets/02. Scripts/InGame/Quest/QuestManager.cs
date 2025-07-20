@@ -1,7 +1,9 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public enum QuestCondition
 {
@@ -38,13 +40,16 @@ public enum QuestType
 
 public class QuestManager : ManagerBase
 {
-    public List<DetailQuestData> ActiveQuests { get; } = new();
+    public List<Quest> ActiveQuests { get; } = new();
+    public Quest CurrentQuest;
 
     private QuestSummaryPanel _questSummaryPanel;
     private QuestListPanel _questListPanel;
 
     private TitleData _titleData;
-    private List<DetailQuestData> _allQuests;
+    private List<Quest> _allQuests;
+    
+    public event Action<List<Quest>> OnQuestsUpdated;
     
     protected override void Awake()
     {
@@ -54,24 +59,19 @@ public class QuestManager : ManagerBase
         _questListPanel = App.GetManager<UIManager>().GetPanel<QuestListPanel>();
 
         _titleData = App.GetData<TitleData>();
-        _allQuests =
-            _titleData.DetailQuest.Values.Where(x =>
-                x.Type is QuestType.Constellation or QuestType.Side or QuestType.Wish).ToList();
+        _allQuests = _titleData.Quest.Values.ToList();
     }
     
-    public void AddQuest(DetailQuestData quest)
+    public void AddQuest(Quest quest)
     {
         ActiveQuests.Add(quest);
-        _questSummaryPanel.UpdateQuest();
-        _questListPanel.UpdateQuest(quest.Type);
+        OnQuestsUpdated?.Invoke(ActiveQuests);
     }
 
-    public void RemoveQuest(DetailQuestData quest)
+    public void RemoveQuest(Quest quest)
     {
         ActiveQuests.Remove(quest);
-        
-        _questSummaryPanel.UpdateQuest();
-        _questListPanel.UpdateQuest(quest.Type);
+        OnQuestsUpdated?.Invoke(ActiveQuests);
     }
 
     [ContextMenu("Add Quest")]
