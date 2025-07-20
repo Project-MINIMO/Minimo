@@ -26,21 +26,19 @@ public class BuildingObject : InteractObject
         _editManager = App.GetManager<EditManager>();
     }
     
-    public virtual async void Initialize(Building data)
+    public virtual void Initialize(Building data)
     {
-        try
-        {
-            BuildingData = data;
-            await LoadPositionData();
+        BuildingData = data;
+        PositionData = BuildingData.Position;
+        
+        SetPolygonCollider(GetComponent<PolygonCollider2D>());
+        GetComponent<PolygonCollider2D>().offset = PositionData.ColliderOffset;
+        _spriteRenderer.sprite = PositionData.Sprite;
+        _spriteRenderer.transform.localPosition = new Vector3(PositionData.Offset.x, PositionData.Offset.y, 0);
             
-            PreviousPosition = transform.position;
+        PreviousPosition = transform.position;
             
-            _editManager.StartEdit(this, true);
-        }
-        catch (Exception e)
-        {
-            throw; // TODO 예외 처리
-        }
+        _editManager.StartEdit(this, true);
     }
     
     public virtual void Initialize(int id)
@@ -50,16 +48,7 @@ public class BuildingObject : InteractObject
         var buildingData = App.GetData<TitleData>().Building[id];
         Initialize(buildingData);
     }
-    
-    private async Task LoadPositionData()
-    {
-        PositionData = BuildingData.Position;
-        SetPolygonCollider(GetComponent<PolygonCollider2D>());
-        GetComponent<PolygonCollider2D>().offset = PositionData.ColliderOffset;
-        _spriteRenderer.sprite = PositionData.Sprite;
-        _spriteRenderer.transform.localPosition = new Vector3(PositionData.Offset.x, PositionData.Offset.y, 0);
-    }
-    
+
     private void SetPolygonCollider(PolygonCollider2D polyCollider)
     {
         var tileSet = new HashSet<Vector2Int>();

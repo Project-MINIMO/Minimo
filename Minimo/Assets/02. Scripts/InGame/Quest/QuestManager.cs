@@ -40,11 +40,11 @@ public enum QuestType
 
 public class QuestManager : ManagerBase
 {
+    public Dictionary<int, List<Quest>> GroupedQuest { get; private set; } = new();
     public List<Quest> ActiveQuests { get; } = new();
     public Quest CurrentQuest;
     
     private TitleData _titleData;
-    private List<Quest> _allQuests;
     
     public event Action<List<Quest>> OnQuestsUpdated;
     
@@ -53,7 +53,10 @@ public class QuestManager : ManagerBase
         base.Awake();
         
         _titleData = App.GetData<TitleData>();
-        _allQuests = _titleData.Quest.Values.ToList();
+        GroupedQuest = _titleData.Quest
+            .Values
+            .GroupBy(data => data.Group.ID)
+            .ToDictionary(data => data.Key, data => data.ToList());
     }
     
     public void AddQuest(Quest quest)
@@ -68,18 +71,28 @@ public class QuestManager : ManagerBase
         OnQuestsUpdated?.Invoke(ActiveQuests);
     }
 
+    public void SubmitQuest()
+    {
+        
+    }
+    
+    public void SubmitQuest(Item item)
+    {
+        
+    }
+
     [ContextMenu("Add Quest")]
     public void AddQuest()
     {
-        if (_allQuests.Count == 0)
+        if (GroupedQuest.Count == 0)
         {
             Debug.LogError("No quest data found");
             return;
         }
         
-        var selected = _allQuests[Random.Range(0, _allQuests.Count)];
-        AddQuest(selected);
-
-        _allQuests.Remove(selected);
+        var selected = GroupedQuest
+            .OrderBy(_ => Random.value)
+            .First();
+        AddQuest(selected.Value[0]);
     }
 }

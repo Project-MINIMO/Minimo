@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 
 using UnityEngine;
@@ -39,9 +40,7 @@ public class QuestConsPanel : QuestPanel<QuestConsSlot>
 
     private void SetupQuestInfos(Quest questData)
     {
-        var quests = _titleData.Quest.Values
-            .Where(x => x.Group.ID == questData.Group.ID)
-            .ToList();
+        var quests = _questManager.GroupedQuest[questData.Group.ID];
 
         var i = 0;
         var activeIndex = int.MaxValue;
@@ -69,5 +68,6 @@ public class QuestConsPanel : QuestPanel<QuestConsSlot>
         var (i, a) when i < a => QuestState.Completed,
         var (i, a) when i == a => QuestState.InProgress,
         var (i, a) when i > a => QuestState.Locked,
+        _ => QuestState.Completed
     };
 }

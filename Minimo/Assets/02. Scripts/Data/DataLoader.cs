@@ -139,13 +139,6 @@ public class JsonUtilityHelper
         Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(newJson);
         return wrapper.array;
     }
-    
-    public static T[] FromJsonWithConvert<T, U>(string json) where U : struct, Enum
-    {
-        json = JsonPreprocessor.PreprocessJson<U>(json);
-
-        return FromJson<T>(json);
-    }
 
     public static string ToJson<T>(T[] array)
     {

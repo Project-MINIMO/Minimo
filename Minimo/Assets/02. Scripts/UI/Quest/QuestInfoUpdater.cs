@@ -5,11 +5,11 @@ using TMPro;
 
 public class QuestInfoUpdater : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _questNameTMP;
-    [SerializeField] private TextMeshProUGUI _questNameTMP2;
-    [SerializeField] private TextMeshProUGUI _questDescriptionTMP;
-    [SerializeField] private TextMeshProUGUI _questConditionTMP;
-    [SerializeField] private Image _iconImg;
+    [SerializeField] private TextMeshProUGUI? _questNameTMP;
+    [SerializeField] private TextMeshProUGUI? _questNameTMP2;
+    [SerializeField] private TextMeshProUGUI? _questDescriptionTMP;
+    [SerializeField] private TextMeshProUGUI? _questConditionTMP;
+    [SerializeField] private Image? _iconImg;
 
     public void UpdateQuest(Quest quest)
     {
@@ -18,8 +18,8 @@ public class QuestInfoUpdater : MonoBehaviour
         _questDescriptionTMP?.SetText(quest.Description);
         _questConditionTMP?.SetText(quest.ClearDescription);
 
-        if (!_iconImg) return;
-        _iconImg.sprite = quest.Icon;
+        if (_iconImg == null) return;
+        _iconImg.sprite = quest.Group.Icon;
         _iconImg.gameObject.SetActive(true);
     }
     
@@ -27,8 +27,8 @@ public class QuestInfoUpdater : MonoBehaviour
     {
         _questNameTMP?.SetText(quest.Group.Name);
 
-        if (!_iconImg) return;
-        _iconImg.sprite = quest.Icon;
+        if (_iconImg == null) return;
+        _iconImg.sprite = quest.Group.Icon;
         _iconImg.gameObject.SetActive(true);
     }
 }

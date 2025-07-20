@@ -1,41 +1,33 @@
-using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 using TMPro;
 
 public class QuestSubmissionPanel : UIBase
 {
     public override bool IsUseBlur => true;
-    
-    [Serializable]
-    public struct RewardInfo
-    {
-        public GameObject Obj;
-        public Image Icon;
-        public TextMeshProUGUI Amount;
-    }
 
     [SerializeField] private Button _closeBtn;
     [SerializeField] private QuestTransitioner _transitioner;
-    [SerializeField] private TextMeshProUGUI _progressTMP;
+    [SerializeField] private QuestInfoUpdater _infoUpdater;
     
-    [SerializeField] private RewardInfo[] _rewardInfos;
+    [SerializeField] private TextMeshProUGUI _progressTMP;
+    [SerializeField] private QuestItemSelectedSlot[] _selectedSlots; 
+    [SerializeField] private Button _submitBtn;  
+    [SerializeField] private Button _cancelBtn;
+    
+    [SerializeField] private ItemInfoUpdater[] _resultInfos;
     [SerializeField] private Sprite _goldSprite;
     [SerializeField] private Sprite _expSprite;
-
-    [SerializeField] private QuestItemSelectedSlot[] _selectedSlots;
     
-    [SerializeField] private Button _cancelBtn;
-    [SerializeField] private Button _submitBtn;
-
+    private Dictionary<QuestCondition, ISubmissionStrategy> _strategies;
+    private ISubmissionStrategy _currentStrategy;
+    
     private QuestManager _questManager;
     private TitleData _titleData;
     private Quest _questData;
-    
-    private string[] _clearStrings;
 
     public override void Initialize(UIManager manager)
     {
@@ -44,16 +36,26 @@ public class QuestSubmissionPanel : UIBase
         _questManager = App.GetManager<QuestManager>();
         _titleData = App.GetData<TitleData>();
         
-        _clearStrings = new[]
+        var slots = GetComponentsInChildren<ItemSlot>(true);
+        foreach (var slot in slots)
         {
-            _titleData.GetString("STR_QUEST_CLEAR_LEVEL"),
-            _titleData.GetString("STR_QUEST_CLEAR_PREP"),
-            _titleData.GetString("STR_QUEST_CLEAR_HARVEST"),
-            _titleData.GetString("STR_QUEST_CLEAR_CRAFT"),
-            _titleData.GetString("STR_QUEST_CLEAR_WISH"),
-            _titleData.GetString("STR_QUEST_CLEAR_BUILD"),
-        };
+            slot.OnItemSelected += OnItemSelected;
+        }
   
+        _strategies = new Dictionary<QuestCondition, ISubmissionStrategy>
+        {
+            { QuestCondition.Normal, new NormalSubmissionStrategy() },
+            { QuestCondition.Choice, new ChoiceSubmissionStrategy() },
+            { QuestCondition.Quiz,   new QuizSubmissionStrategy() }
+        };
+        
+        foreach (var strategy in _strategies.Values)
+        {
+            strategy.Initialize(_progressTMP, _selectedSlots);
+        }
+
+        _submitBtn.onClick.AddListener(() => _currentStrategy.OnSubmit());
+        _cancelBtn.onClick.AddListener(() => _currentStrategy.OnCancel());
         _closeBtn.onClick.AddListener(ClosePanel);
     }
     
@@ -69,113 +71,36 @@ public class QuestSubmissionPanel : UIBase
         base.OpenPanel();  
       
         _questData = _questManager.CurrentQuest;
-       
-        _progressTMP.text = "0 / 0";
-        _progressTMP.gameObject.SetActive(_questData.Condition == QuestCondition.Normal);
-
-        SetRewardInfo();
-        SetClearInfo();
+        _infoUpdater.UpdateQuest(_questData);
+        UpdateRewardSlots();
+        _currentStrategy = _strategies[_questData.Condition];
+        _currentStrategy.Setup(_questData);
     }
 
-    private void SetRewardInfo()
+    private void UpdateRewardSlots()
     {
         var i = 0;
         
         for (; i < _questData.Reward.Length; i++)
         {
+            _resultInfos[i].gameObject.SetActive(true);
+            
             var reward = _questData.Reward[i];
-            var info = _rewardInfos[i];
-            
-            info.Obj.SetActive(true);
-
-            switch (reward.Type)
+            var sprite = reward.Type switch
             {
-                case RewardType.Gold:
-                    info.Icon.sprite = _goldSprite;
-                    break;
-                
-                case RewardType.Exp:
-                    info.Icon.sprite = _expSprite;
-                    break;
-                
-                case RewardType.Item:
-                {
-                    var item = _titleData.Item[reward.Target];
-                    info.Icon.sprite = Resources.Load<Sprite>($"Item/{item.Name}");
-                    break;
-                }
-            }
-            
-            info.Amount.text = reward.Amount.ToString();
+                RewardType.Gold => _goldSprite,
+                RewardType.Exp  => _expSprite,
+                RewardType.Item => _titleData.Item[reward.Target].Icon,
+                _                => _goldSprite
+            };
+            _resultInfos[i].UpdateItem(sprite, reward.Amount);
         }
 
-        for (; i < _rewardInfos.Length; i++)
+        for (; i < _resultInfos.Length; i++)
         {
-            _rewardInfos[i].Obj.SetActive(false);
+            _resultInfos[i].gameObject.SetActive(false);
         }
     }
 
-    private void SetClearInfo()
-    {
-        var i = 0;
-        
-        for (; i < _questData.Clear.Length; i++)
-        {
-            var clear = _questData.Clear[i];
-            var info = _selectedSlots[i];
-            
-            info.gameObject.SetActive(true);
-
-            switch (clear.Type)
-            {
-                case ClearType.UserLevel:
-                case ClearType.Plant:
-                case ClearType.Harvest:
-                case ClearType.Craft:
-                case ClearType.Build:
-                    info.gameObject.SetActive(false);
-                    break;
-                
-                case ClearType.Wish:
-                    if (_questData.Condition == QuestCondition.Normal)
-                    {
-                        var item = AccountInfo.Instance.Items[clear.Target];
-                        info.Initialize(item, clear.Amount);
-                    }
-                    else
-                    {
-                        info.Initialize(_questData.Condition);
-                    }
-                    break;
-            }
-        }
-
-        for (; i < _selectedSlots.Length; i++)
-        {
-            _selectedSlots[i].gameObject.SetActive(false);
-        }
-    }
-
-    public bool CanSelectItem(Item item)
-    {
-        if (_questData.Condition == QuestCondition.Normal)
-        {
-            var slot = _selectedSlots.FirstOrDefault(x => x.Item == item);
-            
-            if (slot == null) return false;
-            if (!slot.CanSelected) return false;
-            
-            slot.AddItem(item);
-        }
-        else
-        {
-            var slot = _selectedSlots.FirstOrDefault(x => x.CanSelected);
-
-            if (slot == null) return false;
-            
-            slot.AddItem(item);
-        }
-
-        return true;
-    }
+    private void OnItemSelected(InventorySlot<Item> slot) => _currentStrategy?.SelectItem(slot.Item);
 }

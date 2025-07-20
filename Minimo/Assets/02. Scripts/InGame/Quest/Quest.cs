@@ -13,11 +13,30 @@ public class Quest
         public readonly int ID;
         public readonly string Name;
         public readonly int OpenLevel;
+        public Sprite Icon { get; private set; }
+        
         public QuestGroup(int id, string name, int openLevel)
         {
             ID = id;
             Name = name;
             OpenLevel = openLevel;
+
+            //LoadIcon(name);
+        }
+        
+        private async Task LoadIcon(string assetName)
+        {
+            var path = $"Assets/03. Images/Quest/{assetName}.png";
+            var handle = Addressables.LoadAssetAsync<Sprite>(path);
+            await handle.Task;
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                Icon = handle.Result;
+            }
+            else
+            {
+                Debug.LogError($"Failed to load Item Icon : {assetName}");
+            }
         }
     }
     
@@ -61,7 +80,6 @@ public class Quest
     public readonly QuestCondition Condition;
     public readonly QuestClear[] Clear;
     public readonly QuestReward[] Reward;
-    public Sprite Icon { get; private set; }
     
     public Quest(QuestGroupData groupData, QuestData data, TitleData title)
     {
@@ -166,20 +184,5 @@ public class Quest
                 int.Parse(parts[1]), 
                 int.Parse(parts[2]));
         }).ToArray();
-    }
-
-    private async Task LoadIcon(string assetName)
-    {
-        var path = $"Assets/03. Images/Quest/{assetName}.png";
-        var handle = Addressables.LoadAssetAsync<Sprite>(path);
-        await handle.Task;
-        if (handle.Status == AsyncOperationStatus.Succeeded)
-        {
-            Icon = handle.Result;
-        }
-        else
-        {
-            Debug.LogError($"Failed to load Item Icon : {assetName}");
-        }
     }
 }

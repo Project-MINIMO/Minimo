@@ -1,8 +1,12 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.UIElements;
 
 
 [Serializable]
@@ -153,8 +157,6 @@ public class TitleData : DataBase
 
     private Dictionary<string, StringData> _string = new();
 
-    private bool _isGameDataLoaded = false;
-
     #region Data Path
     private const string STRING_PATH = "Data/StringData";
     private const string QUEST_PATH = "Data/QuestData";
@@ -175,13 +177,8 @@ public class TitleData : DataBase
         LoadData();
     }
 
-    private void LoadData()
+    private async void LoadData()
     {
-        if (_isGameDataLoaded)
-        {
-            return;
-        }
-
         _string.Clear();
         Quest.Clear();
         Common.Clear();
@@ -207,7 +204,8 @@ public class TitleData : DataBase
         var buildingDataRaw = DataLoader.LoadData<BuildingData>(BUILDING_PATH);
         foreach (var data in buildingDataRaw)
         {
-            var newBuilding = new Building(data, this);
+            var position = await LoadPositionData(data.Name);
+            var newBuilding = new Building(data, position, this);
             Building.Add(data.ID, newBuilding);
         } 
         
@@ -255,9 +253,22 @@ public class TitleData : DataBase
             var newQuest = new Quest(quests[data.ID / 100 * 100], data, this);
             Quest.Add(data.ID, newQuest);
         }
-        
-        
-        _isGameDataLoaded = true;
+    }
+    
+    private async Task<BuildingPositionData> LoadPositionData(string assetName)
+    {
+        var path = $"Assets/09. Scriptable Objects/Building/{assetName}.asset";
+        var handle = Addressables.LoadAssetAsync<BuildingPositionData>(path);
+        await handle.Task;
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            return handle.Result;
+        }
+        else
+        {
+            Debug.LogError("Failed to load BuildingData");
+            return null;
+        }
     }
 
     #region StringData
