@@ -1,10 +1,11 @@
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine;
 
 public abstract class QuestPanel<T> : UIBase where T : QuestSlot
 {
     protected QuestManager _questManager;
-    private Dictionary<QuestType, UIBase> _panelMap;
+    protected Dictionary<QuestType, UIBase> _panelMap;
     protected List<T> _slots;
     
     public override void Initialize(UIManager manager)
@@ -31,5 +32,10 @@ public abstract class QuestPanel<T> : UIBase where T : QuestSlot
         }
     }
     
-    protected virtual void OnSlotSelected(Quest quest) => _panelMap[quest.Type].OpenPanel();
+    protected virtual void OnSlotSelected(Quest quest)
+    {
+        Debug.Log(quest.Type);
+        Debug.Log(_panelMap[quest.Type]);
+        _panelMap[quest.Type].OpenPanel();
+    }
 }

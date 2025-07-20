@@ -19,6 +19,8 @@ public class QuestConsPanel : QuestPanel<QuestConsSlot>
 
         _titleData = App.GetData<TitleData>();
         _closeBtn.onClick.AddListener(ClosePanel);
+
+        _panelMap[QuestType.Constellation] = manager.GetPanel<QuestSubmissionPanel>();
     }
 
     public override void Show(bool isNew)

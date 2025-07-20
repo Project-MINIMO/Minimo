@@ -59,7 +59,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1155,11 +1155,7 @@ MonoBehaviour:
   - {fileID: 3653429950368121742}
   - {fileID: 5358724659446942618}
   - {fileID: 2054712877296583999}
-  _completeBack: {fileID: 3653429950368121742}
-  _completeTitleTMP: {fileID: 3068983980278658972}
-  _completeDescriptionTMP: {fileID: 1471690218786307879}
   _completeDayTMP: {fileID: 1346099319398043154}
-  _lockBack: {fileID: 2054712877296583999}
   _lockDescriptionTMP: {fileID: 1913875424372482046}
 --- !u!114 &7862406372342399714
 MonoBehaviour:
@@ -1174,6 +1170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _questNameTMP: {fileID: 3068983980278658972}
+  _questNameTMP2: {fileID: 2637535133797476957}
   _questDescriptionTMP: {fileID: 0}
   _questConditionTMP: {fileID: 0}
   _iconImg: {fileID: 0}

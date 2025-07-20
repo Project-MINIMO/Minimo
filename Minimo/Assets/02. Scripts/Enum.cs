@@ -22,9 +22,9 @@ public enum NotifyType
 
 public enum QuestState
 {
-    Locked,
-    InProgress,
     Completed,
+    InProgress,
+    Locked,
 }
 
 public enum UseCashType

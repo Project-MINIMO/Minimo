@@ -14,7 +14,11 @@ public class QuestSlot : MonoBehaviour
     
     protected virtual void Awake()
     {
-        _selectBtn.onClick.AddListener(() => OnSlotSelected?.Invoke(QuestData));
+        _selectBtn.onClick.AddListener(() =>
+        {
+            Debug.Log("Selected");
+            OnSlotSelected?.Invoke(QuestData);
+        });
     }
     
     public virtual void Initialize(Quest data)
