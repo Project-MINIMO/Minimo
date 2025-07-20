@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 using UnityEngine;
 using UniRx;
 
@@ -59,9 +59,9 @@ public abstract class ProduceObject : BuildingObject
             .AddTo(this);
     }
     
-    public override void Initialize(BuildingData data)
+    public override async Task Initialize(BuildingData data)
     {
-        base.Initialize(data);
+        await base.Initialize(data);
 
         ProduceData = App.GetData<TitleData>().GroupedProduce[data.Name];
 

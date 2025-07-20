@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class ProducePrimary : ProduceObject
@@ -17,9 +17,9 @@ public class ProducePrimary : ProduceObject
         _cropRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
     }
     
-    public override void Initialize(BuildingData data)
+    public override async Task Initialize(BuildingData data)
     {
-        base.Initialize(data);
+        await base.Initialize(data);
 
         var config = Resources.Load<ProduceVisualConfig>($"Building/Config/{data.Name}");
         if (config == null)

@@ -1,4 +1,5 @@
 using UniRx;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EditManager : ManagerBase
@@ -21,31 +22,63 @@ public class EditManager : ManagerBase
         InstallExistBuildings();
     }
     
-    private void InstallExistBuildings()
+    private async void InstallExistBuildings()
     {
-        /*
+        var firebaseManager = App.GetManager<FirebaseManager>();
+        var buildings = await firebaseManager.LoadUserBuildings();
+
         foreach (var building in buildings)
         {
-            if (building.BuildingType == "TestBuilding")
+            // 임시 필터링: 필요 없으면 제거 가능
+            if (building.BuildingDataId == -1) continue;
+
+            // 프리팹 경로 추정 예시 (ID -> 리소스 경로 변환 필요 시 매핑 테이블화)
+            var prefabPath = $"Building/GridObject";
+            var prefab = Resources.Load<GameObject>(prefabPath);
+            if (prefab == null)
             {
+                Debug.LogWarning($"Prefab not found: {prefabPath}");
                 continue;
             }
 
-            var path = building.BuildingType;
-            path = path.Replace("Building_", "");
-            var prefabPath = $"Building/{path}";
-            var objectPrefab = Resources.Load<GameObject>(prefabPath);
-            var position = building.Position != null
-                ? new Vector3Int(building.Position[0], building.Position[1], building.Position[2])
-                : Vector3Int.zero;
-            var cellPosition = _gridLayout.CellToWorld(position);
-            var buildingObject = Instantiate(objectPrefab, cellPosition, Quaternion.identity).GetComponent<BuildingObject>();
-            buildingObject.transform.SetParent(_buildingParent);
-            buildingObject.Initialize(building);
-            _tileStateModifier.ModifyTileState(buildingObject.Area, TileState.Installed);
+            // 셀 위치를 월드 위치로 변환
+            var cellPosition = _gridLayout.CellToWorld(building.Position);
+            
+            var buildingData = App.GetData<TitleData>().Building[building.BuildingDataId];
+            var gridObject = Instantiate(prefab, cellPosition, Quaternion.identity, _buildingParent);
+            switch (buildingData.Type)
+            {
+                case 0:
+                    gridObject.AddComponent<ProducePrimary>();
+                    break;
+                case 1:
+                    gridObject.AddComponent<ProduceSecondary>();
+                    break;
+                case 2:
+                    gridObject.AddComponent<ProduceTertiary>();
+                    break;
+                default:
+                    gridObject.AddComponent<ProduceQuaternary>();
+                    break;
+            }
+            if (gridObject.TryGetComponent<ProduceObject>(out var produce))
+            {
+                await produce.Initialize(buildingData);
+                produce.BuildingId = building.BuildingId;
+                produce.PreviousPosition = cellPosition;
+                produce.transform.position = cellPosition;
+                _tileStateModifier.ModifyTileState(produce, TileState.Installed);
+                CurrentEditObject = null;
+                IsEditing.Value = false;
+            }
+            else
+            {
+                Debug.LogError("GridObject component not found in instantiated prefab.");
+                Destroy(gridObject.gameObject);
+            }
         }
-        */
     }
+
     
     public void StartEdit(BuildingObject gridObject, bool isNew = false)
     {
@@ -77,19 +110,24 @@ public class EditManager : ManagerBase
         IsEditing.Value = false;
     }
     
-    public void ConfirmEdit()
+    public async void ConfirmEdit()
     {
         if (!_installChecker.CheckCanInstall(CurrentEditObject))
         {
             return;
         }
 
-        if (CurrentEditObject.Install())
+        var success = await CurrentEditObject.Install();
+        if (success)
         {
             _tileStateModifier.ModifyTileState(CurrentEditObject, TileState.Installed);
             
             CurrentEditObject = null;
             IsEditing.Value = false;
+        }
+        else
+        {
+            Debug.LogError("Failed to confirm edit. Installation check failed or installation process failed.");
         }
     }
 

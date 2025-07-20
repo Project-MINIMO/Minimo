@@ -14,6 +14,11 @@ public class ProduceStateUI : MonoBehaviour
             }).AddTo(gameObject);
         
         var obj = GetComponentInParent<ProduceObject>();
+        if (obj == null)
+        {
+            Debug.LogWarning("ProduceObject not found in parent.");
+            return;
+        }
         if (obj.BuildingData.Type == 0) return;
         
         obj.OnProduceStateChanged += UpdateStateUI;

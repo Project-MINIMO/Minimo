@@ -8,9 +8,9 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class BuildingObject : InteractObject
 {
-    public Vector3 PreviousPosition { get; private set; }
-    
-    public BuildingData BuildingData { get; private set; }
+    public string BuildingId { get;  set; } // 파이어베이스에 저장된 건물 ID
+    public Vector3 PreviousPosition { get; set; }
+    public BuildingData BuildingData { get; set; }
     public BuildingPositionData PositionData { get; private set; }
 
     private bool _isPlaced;
@@ -25,7 +25,7 @@ public class BuildingObject : InteractObject
         _editManager = App.GetManager<EditManager>();
     }
     
-    public virtual async void Initialize(BuildingData data)
+    public virtual async Task Initialize(BuildingData data)
     {
         try
         {
@@ -128,28 +128,51 @@ public class BuildingObject : InteractObject
         _spriteRenderer.color = color;
     }
 
-    public bool Install()
+    public async Task<bool> Install()
     {
         if (_isPlaced)
         {
-            return UpdateBuilding();
+            return await UpdateBuilding();
         }
         else
         {
-            return CreateBuilding();
+            return await CreateBuilding();
         }
     }
 
-    protected virtual bool CreateBuilding()
+    protected virtual async Task<bool> CreateBuilding()
     {
+        // Firebase. 건물 설치 요청
+        var firebaseManager = App.GetManager<FirebaseManager>();
+        var targetCell = _editManager.GetCellPosition(transform.position);
+
+        string? buildingId = await firebaseManager.InstallBuilding(BuildingData.ID, targetCell);
+        if (buildingId == null)
+        {
+            Debug.LogError("Building installation failed.");
+            return false;
+        }
+
+        this.BuildingId = buildingId;
+
         _isPlaced = true;
         PreviousPosition = transform.position;
         EndEdit();
         return true;
     }
     
-    private bool UpdateBuilding()
+    private async Task<bool> UpdateBuilding()
     {
+        // Firebase. 건물 위치 업데이트 요청
+        var firebaseManager = App.GetManager<FirebaseManager>();
+        var targetCell = _editManager.GetCellPosition(transform.position);
+        var success = await firebaseManager.MoveBuilding(BuildingId, targetCell);
+        if (!success)
+        {
+            Debug.LogError("Building position update failed.");
+            return false;
+        }
+        
         PreviousPosition = transform.position;
         EndEdit();
         return true;
