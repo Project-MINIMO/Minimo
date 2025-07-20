@@ -1,0 +1,100 @@
+using System.Linq;
+using System.Collections.Generic;
+
+using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+
+public class StorageInventory : Inventory<Item>
+{
+    [SerializeField] private RectTransform _content;
+    [SerializeField] private InventorySortHandler _sortDropdown;
+    [SerializeField] private InventoryFilterHandler _filterDropdown;
+    
+    private List<InventorySlot<Item>> _activeSlots;
+    
+    private void OnEnable()
+    {
+        _menuTogs[0].isOn = true;
+    }
+
+    protected override void SetString()
+    {
+        var titleData = App.GetData<TitleData>();
+        _menuTogs[0].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_TAB1_NAME");
+        _menuTogs[1].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_TAB2_NAME");
+        _menuTogs[2].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_TAB3_NAME");
+        _menuTogs[3].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_TAB4_NAME");
+        _menuTogs[4].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_TAB5_NAME");
+    }
+
+    protected override void FilterSlots(int index)
+    {
+        base.FilterSlots(index);
+        
+        _activeSlots = Slots.Where(slot => slot.gameObject.activeSelf).ToList();
+        SortDefault();
+        
+        _sortDropdown.OnMenuChanged(index);
+        _filterDropdown.OnMenuChanged(index);
+    }
+
+    protected override List<Item> GetFilteredItems() => AccountInfo.Instance.Items.Values.ToList();
+
+    protected override bool IsSlotFiltered(int index, Item item) => index == 0 || index == (int)item.Type + 1;
+
+    #region Sort
+    public void SortDefault()
+    {
+        var sorted = _activeSlots.OrderBy(slot => slot.Item.ID).ToList();
+
+        SortSlots(sorted);
+    }
+    public void SortByCount(bool desc)    
+    {
+        var sorted = desc
+            ? _activeSlots.OrderBy(slot => slot.Item.Count).ThenBy(slot => slot.Item.ID).ToList()
+            : _activeSlots.OrderByDescending(slot => slot.Item.Count).ThenBy(slot => slot.Item.ID).ToList();
+
+        SortSlots(sorted);
+    }
+    public void SortByPrice(bool desc)
+    {
+        var sorted = desc
+            ? _activeSlots.OrderBy(slot => slot.Item.SellCost).ThenBy(slot => slot.Item.ID).ToList()
+            : _activeSlots.OrderByDescending(slot => slot.Item.SellCost).ThenBy(slot => slot.Item.ID).ToList();
+
+        SortSlots(sorted);
+    }
+    private void SortSlots(List<InventorySlot<Item>> slots)
+    {
+        for (var i = 0; i < slots.Count; i++)
+        {
+            slots[i].transform.SetSiblingIndex(i);
+        }
+        
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_content);
+    }
+    #endregion
+
+    #region Filter
+    public void FilterItem(bool[] activeArray)
+    {
+        foreach (var slot in _activeSlots)
+        {
+            var isActive = activeArray[slot.Item.Level - 1];
+            
+            slot.gameObject.SetActive(isActive);
+        }
+    }
+    public void FilterProps(bool[] activeArray)
+    {
+        foreach (var slot in _activeSlots)
+        {
+            var isActive = activeArray[(int)slot.Item.Property - 1];
+            
+            slot.gameObject.SetActive(isActive);
+        }
+    }
+    #endregion
+}

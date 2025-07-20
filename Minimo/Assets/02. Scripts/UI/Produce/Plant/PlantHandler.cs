@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerExitHandler
+public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private enum PlantType { Object, UI }
     
@@ -40,6 +40,15 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         _plantedThisDrag = new HashSet<ProduceObject>();
     }
 
+    private void OnEnable()
+    {
+        _image.raycastTarget = true;
+        _rect.anchoredPosition = _startPosition;
+        
+        _amountObj.gameObject.SetActive(true);
+        _plantedThisDrag.Clear();
+    }
+
     public void SetOption(ProduceData option)
     {
         _currentOption = option;
@@ -66,13 +75,17 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             worldPosition.z = 0;
             
             var hit = Physics2D.OverlapPoint(worldPosition, _targetLayerMask);
-            if (hit != null
-                && hit.TryGetComponent<ProduceObject>(out var component)
-                && !_plantedThisDrag.Contains(component))
-            {
-                _produceManager.Plant(component, _currentOption);
-                _plantedThisDrag.Add(component);
-            }
+            if (hit == null) return;
+            if (!hit.TryGetComponent<ProduceObject>(out var component)) return;
+            if (_plantedThisDrag.Contains(component)) return;
+            if (component.CurrentState is not ProduceState.Idle) return;
+            
+            _produceManager.RequestPlant(component, _currentOption,
+                onSuccess: () => _plantedThisDrag.Add(component),
+                onFailed: result =>
+                {
+                    if (result == NotifyType.MissMinimo) App.Notification(result);
+                });
         }
     }
 
@@ -88,18 +101,11 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             raycaster.Raycast(eventData, raycastResults);
             if (raycastResults.Any(result => result.gameObject.CompareTag("ProduceTaskBtn")))
             {
-                _produceManager.Plant(_currentOption);
+                _produceManager.RequestPlant(_currentOption,
+                    onSuccess: null,
+                    onFailed: App.Notification);
             }
         }
-        
-        _amountObj.gameObject.SetActive(true);
-        _plantedThisDrag.Clear();
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        _image.raycastTarget = true;
-        _rect.anchoredPosition = _startPosition;
         
         _amountObj.gameObject.SetActive(true);
         _plantedThisDrag.Clear();

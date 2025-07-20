@@ -42,13 +42,13 @@ public class HarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         worldPosition.z = 0;
         
         var hit = Physics2D.OverlapPoint(worldPosition, _targetLayerMask);
-        if (hit != null 
-            && hit.TryGetComponent<ProducePrimary>(out var component)
-            && !_harvestedThisDrag.Contains(component))
-        {
-            _produceManager.Harvest(component);
-            _harvestedThisDrag.Add(component);
-        }
+        if (hit == null) return;
+        if (!hit.TryGetComponent<ProducePrimary>(out var component)) return;
+        if (_harvestedThisDrag.Contains(component)) return;
+        if (component.CurrentState is not ProduceState.Complete) return;
+            
+        _produceManager.Harvest(component);
+        _harvestedThisDrag.Add(component);
     }
 
     public void OnEndDrag(PointerEventData eventData)

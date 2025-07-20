@@ -4,6 +4,7 @@ public abstract class UIBase : MonoBehaviour
 {
     protected virtual GameObject Panel => gameObject;
     public virtual bool IsDefaultPanel => false;
+    public virtual bool IsUseBlur => false;
     
     private UIManager _manager;
 
