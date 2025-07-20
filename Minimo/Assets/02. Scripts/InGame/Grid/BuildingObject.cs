@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.Serialization;
+using UniRx;
 
 public class BuildingObject : InteractObject
 {
@@ -24,6 +21,8 @@ public class BuildingObject : InteractObject
     {
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _editManager = App.GetManager<EditManager>();
+        _editManager.IsEditing
+            .Subscribe((isEditing) => SetTransparency(isEditing ? 0.5f : 1)).AddTo((gameObject));
     }
     
     public virtual async Task Initialize(Building data)
@@ -84,16 +83,6 @@ public class BuildingObject : InteractObject
     }
     
     #region Edit Functions
-    public void StartEdit()
-    {
-        SetTransparency(0.5f);
-    }
-
-    private void EndEdit()
-    {
-        SetTransparency(1f);
-    }
-    
     private void SetTransparency(float alpha)
     {
         var color = _spriteRenderer.color;
@@ -130,7 +119,7 @@ public class BuildingObject : InteractObject
 
         IsPlaced = true;
         PreviousPosition = transform.position;
-        EndEdit();
+        BuildingData.AddCount(1);
         return true;
     }
     
@@ -147,7 +136,6 @@ public class BuildingObject : InteractObject
         }
         
         PreviousPosition = transform.position;
-        EndEdit();
         return true;
     }
   
@@ -156,7 +144,6 @@ public class BuildingObject : InteractObject
         if (IsPlaced)
         {
             _editManager.MoveObject(PreviousPosition);
-            EndEdit();
         }
         else
         {

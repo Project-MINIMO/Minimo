@@ -76,7 +76,6 @@ public class EditManager : ManagerBase
         CurrentEditObject = gridObject;
         IsEditing.Value = true;
         
-        CurrentEditObject.StartEdit();
         CurrentCellPosition.Value = CurrentEditObject.transform.position;
     }
 
