@@ -26,7 +26,7 @@ public class AccountInfo : Singleton<AccountInfo>
         for (var i = 0; i < _titleData.Item.Count; i++)
         {
             var item = _titleData.Item[i];
-            Items.TryAdd(item.ID, new Item(item));
+            Items.TryAdd(item.ID, item);
         }
     }
     

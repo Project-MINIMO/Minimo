@@ -54,7 +54,8 @@ public class Minimo : MonoBehaviour
         AbilityType.QuestEXP => new QuestExperienceAbility(id, potential),
         AbilityType.SellValue => new SellValueAbility(id, potential),
         AbilityType.TimeSkipCost => new TimeSkipCostAbility(id, potential),
-        AbilityType.MissionTime => new MissionTimeAbility(id, potential)
+        AbilityType.MissionTime => new MissionTimeAbility(id, potential),
+        _ => null
     };
 
     private void Update()

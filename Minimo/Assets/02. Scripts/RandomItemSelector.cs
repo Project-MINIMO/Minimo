@@ -6,9 +6,9 @@ public class RandomItemSelector
 {
     private readonly TitleData _titleData = App.GetData<TitleData>();
 
-    public List<ItemData> GetRandomItems(ResourceType type, int count = 1)
+    public List<Item> GetRandomItems(ResourceType type, int count = 1)
     {
-        var items = new List<ItemData>();
+        var items = new List<Item>();
 
         for (var i = 0; i < count; i++) 
         {
@@ -19,7 +19,7 @@ public class RandomItemSelector
         return items;
     }
     
-    private ItemData GetRandomItem(ResourceType type)
+    private Item GetRandomItem(ResourceType type)
     {
         var randomIndex = Random.Range(0, _titleData.Item.Count);
         return _titleData.Item[randomIndex];

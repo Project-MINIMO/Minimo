@@ -89,78 +89,8 @@ public class DataLoader
 
     private static int GetItemIdFromCode(string code)
     {
-        var item = App.GetData<TitleData>().Item.FirstOrDefault(x => x.Value.Name == code);
+        var item = App.GetData<TitleData>().Item.FirstOrDefault(x => x.Value.Code == code);
         return item.Key;
-    }
-    #endregion
-    
-    #region DetailQuestData Utils
-    public static DetailQuestData[] LoadDataDetailQuest(string dataPath)
-    {
-        var rawList = LoadData<RawDetailQuestData>(dataPath);
-        if (rawList == null)
-        {
-            return Array.Empty<DetailQuestData>();
-        }
-        
-        return rawList.Select(raw => new DetailQuestData
-            {
-                ID            = raw.ID,
-                Type          = (QuestType)raw.Type,
-                PreQuestID    = raw.PreQuestID,
-                OpenLevel     = raw.OpenLevel,
-                Name          = raw.Name,
-                Condition     = (QuestCondition)raw.Condition,
-                Clear         = ParseClear(raw.Clear),
-                Reward        = ParseReward(raw.Reward),
-            })
-            .ToArray();
-    }
-    
-    private static QuestClear[] ParseClear(string clearRaw)
-    {
-        if (string.IsNullOrEmpty(clearRaw)) return Array.Empty<QuestClear>();
-
-        return clearRaw.Split(',').Select(res =>
-        {
-            var parts = res.Split(':').Select(p => p.Trim()).ToArray();
-
-            if (parts.Length < 3)
-            {
-                Debug.LogWarning($"[ParseCondition] Invalid format: {res}");
-                return null;
-            }
-
-            return new QuestClear
-            {
-                Type = (ClearType)int.Parse(parts[0]),
-                Target = int.Parse(parts[1]),
-                Amount = int.Parse(parts[2])
-            };
-        }).ToArray();
-    }
-    
-    private static QuestReward[] ParseReward(string rewardRaw)
-    {
-        if (string.IsNullOrEmpty(rewardRaw)) return Array.Empty<QuestReward>();
-
-        return rewardRaw.Split(',').Select(res =>
-        {
-            var parts = res.Split(':').Select(p => p.Trim()).ToArray();
-
-            if (parts.Length < 3)
-            {
-                Debug.LogWarning($"[ParseCondition] Invalid format: {res}");
-                return null;
-            }
-
-            return new QuestReward
-            {
-                Type = (RewardType)int.Parse(parts[0]),
-                Target = int.Parse(parts[1]),
-                Amount = int.Parse(parts[2])
-            };
-        }).ToArray();
     }
     #endregion
 }
@@ -208,13 +138,6 @@ public class JsonUtilityHelper
 
         Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(newJson);
         return wrapper.array;
-    }
-    
-    public static T[] FromJsonWithConvert<T, U>(string json) where U : struct, Enum
-    {
-        json = JsonPreprocessor.PreprocessJson<U>(json);
-
-        return FromJson<T>(json);
     }
 
     public static string ToJson<T>(T[] array)

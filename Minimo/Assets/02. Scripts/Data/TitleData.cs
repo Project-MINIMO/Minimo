@@ -1,8 +1,12 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.UIElements;
 
 
 [Serializable]
@@ -47,18 +51,14 @@ public class StringData
 
 #region Quest
 [Serializable]
-public class QuestData
+public class QuestGroupData
 {
     public int ID;
     public string Name;
-    public int Type;
-    public int Title;
-    public int PreQuestID;
-    public int OpenLevel;
 }
 
 [Serializable]
-public class RawDetailQuestData
+public class QuestData
 {
     public int ID;
     public int Type;
@@ -68,35 +68,6 @@ public class RawDetailQuestData
     public int Condition;
     public string Clear;
     public string Reward;
-}
-
-[Serializable]
-public class DetailQuestData
-{
-    public int ID;
-    public QuestType Type;
-    public int PreQuestID;
-    public int OpenLevel;
-    public string Name;
-    public QuestCondition Condition;
-    public QuestClear[] Clear;
-    public QuestReward[] Reward;
-}
-
-[Serializable]
-public class QuestClear
-{
-    public ClearType Type;
-    public int Target;
-    public int Amount;
-}
-
-[Serializable]
-public class QuestReward
-{
-    public RewardType Type;
-    public int Target;
-    public int Amount;
 }
 #endregion
 
@@ -171,11 +142,10 @@ public class UMStatGrowthData
 
 public class TitleData : DataBase
 {
-    public Dictionary<int, QuestData> Quest { get; private set; } = new();
-    public Dictionary<int, DetailQuestData> DetailQuest { get; private set; } = new();
+    public Dictionary<int, Quest> Quest { get; private set; } = new();
     public Dictionary<string, int> Common { get; private set; } = new();
     public Dictionary<int, Building> Building { get; private set; } = new();
-    public Dictionary<int, ItemData> Item { get; private set; } = new();
+    public Dictionary<int, Item> Item { get; private set; } = new();
     public Dictionary<int, ProduceData> Produce { get; private set; } = new();
     public Dictionary<string, List<ProduceData>> GroupedProduce { get; private set; } = new();
     public Dictionary<int, UMData> UserMinimo { get; private set; } = new();
@@ -184,12 +154,10 @@ public class TitleData : DataBase
 
     private Dictionary<string, StringData> _string = new();
 
-    private bool _isGameDataLoaded = false;
-
     #region Data Path
     private const string STRING_PATH = "Data/StringData";
+    private const string QUESTGROUP_PATH = "Data/QuestGroupData";
     private const string QUEST_PATH = "Data/QuestData";
-    private const string DETAILQUEST_PATH = "Data/DetailQuestData";
     private const string COMMON_PATH = "Data/CommonData";
     private const string BUILDING_PATH = "Data/BuildingData";
     private const string ITEM_PATH = "Data/ItemData";
@@ -204,42 +172,15 @@ public class TitleData : DataBase
         base.Awake();
 
         LoadData();
+        LoadDataAsync();
     }
 
     private void LoadData()
     {
-        if (_isGameDataLoaded)
-        {
-            return;
-        }
-
-        _string.Clear();
-        Quest.Clear();
-        DetailQuest.Clear();
-        Common.Clear();
-        Building.Clear();
-        Item.Clear();
-        Produce.Clear();
-        UserMinimo.Clear();
-        UMStat.Clear();
-        UMStatGrowth.Clear();
-
         var stringDataRaw = DataLoader.LoadData<StringData>(STRING_PATH);
         foreach (var data in stringDataRaw)
         {
             _string.Add(data.ID, data);
-        }
-        
-        var questDataRaw = DataLoader.LoadData<QuestData>(QUEST_PATH);
-        foreach (var data in questDataRaw)
-        {
-            Quest.Add(data.ID, data);
-        }
-        
-        var detailQuestDataRaw = DataLoader.LoadDataDetailQuest(DETAILQUEST_PATH);
-        foreach (var data in detailQuestDataRaw)
-        {
-            DetailQuest.Add(data.ID, data);
         }
         
         var commonDataRaw = DataLoader.LoadData<CommonData>(COMMON_PATH);
@@ -248,29 +189,6 @@ public class TitleData : DataBase
             Common.Add(data.ID, data.Value);
         }
         
-        var buildingDataRaw = DataLoader.LoadData<BuildingData>(BUILDING_PATH);
-        foreach (var data in buildingDataRaw)
-        {
-            var newBuilding = new Building(data, this);
-            Building.Add(data.ID, newBuilding);
-        } 
-        
-        var itemDataRaw = DataLoader.LoadData<ItemData>(ITEM_PATH);
-        foreach (var data in itemDataRaw)
-        {
-            Item.Add(data.ID, data);
-        }
-        
-        var produceDataRaw = DataLoader.LoadDataProduceData(PRODUCE_PATH);
-        foreach (var data in produceDataRaw)
-        {
-            Produce.Add(data.ID, data);   
-        }
-        GroupedProduce = Produce
-            .Values
-            .GroupBy(data => data.Building)
-            .ToDictionary(data => data.Key, data => data.ToList());
-       
         var userMinimoDataRaw = DataLoader.LoadData<UMData>(UM_PATH);
         foreach (var data in userMinimoDataRaw)
         {
@@ -289,8 +207,78 @@ public class TitleData : DataBase
             UMStatGrowth.Add(data.ID, data);
         }
         
+        var produceDataRaw = DataLoader.LoadDataProduceData(PRODUCE_PATH);
+        foreach (var data in produceDataRaw)
+        {
+            Produce.Add(data.ID, data);   
+        }
+        GroupedProduce = Produce
+            .Values
+            .GroupBy(data => data.Building)
+            .ToDictionary(data => data.Key, data => data.ToList());
+    }
+    
+    private async Task LoadDataAsync()
+    {
+        var buildingRaw = DataLoader.LoadData<BuildingData>(BUILDING_PATH);
+        var itemRaw = DataLoader.LoadData<ItemData>(ITEM_PATH);
+        var questGroupRaw = DataLoader.LoadData<QuestGroupData>(QUESTGROUP_PATH);
+        var questRaw = DataLoader.LoadData<QuestData>(QUEST_PATH);
+
+        const string buildingAssetPath = "Assets/09. Scriptable Objects/Building/{0}.asset";
+        const string itemIconPath = "Assets/03. Images/Item/{0}.png";
+        const string questIconPath = "Assets/03. Images/Quest/{0}.png";
+    
+        var buildingTasks = buildingRaw
+            .Select(d => LoadAddressableDataAsync<BuildingPositionData>(d.Name, buildingAssetPath))
+            .ToList();
+        var iconTasks = itemRaw
+            .Select(d => LoadAddressableDataAsync<Sprite>(d.Name, itemIconPath))
+            .ToList();
+        var groupTasks = questGroupRaw
+            .Select(d => LoadAddressableDataAsync<Sprite>(d.Name, questIconPath))
+            .ToList();
         
-        _isGameDataLoaded = true;
+        var buildingPositions = await Task.WhenAll(buildingTasks);
+        var itemIcons = await Task.WhenAll(iconTasks);
+        var questGroupIcons = await Task.WhenAll(groupTasks);
+
+        for (var i = 0; i < buildingRaw.Length; i++)
+        {
+            Building.Add(buildingRaw[i].ID, new Building(buildingRaw[i], buildingPositions[i], this));
+        }
+
+        for (var i = 0; i < itemRaw.Length; i++)
+        {
+            Item.Add(itemRaw[i].ID, new Item(itemRaw[i], itemIcons[i], this));
+        }
+        
+        var questGroups = new Dictionary<int, QuestGroup>();
+        for (var i = 0; i < questGroupRaw.Length; i++)
+        {
+            questGroups.Add(questGroupRaw[i].ID, new QuestGroup(questGroupRaw[i], questGroupIcons[i], this));
+        }
+
+        foreach (var data in questRaw)
+        {
+            var newQuest = questGroups.TryGetValue(data.ID / 100 * 100, out var questGroup) 
+                ? new Quest(questGroup, data, this) 
+                : new Quest(null, data, this);
+
+            Quest.Add(data.ID, newQuest);
+        }
+    }
+   
+    private Task<T> LoadAddressableDataAsync<T>(string assetName, string assetPath)
+    {
+        var path = string.Format(assetPath, assetName);
+        var handle = Addressables.LoadAssetAsync<T>(path);
+        return handle.Task.ContinueWith(task =>
+        {
+            if (handle.Status == AsyncOperationStatus.Succeeded) return handle.Result;
+            Debug.LogError($"Failed to load {assetName}");
+            return default;
+        });
     }
 
     #region StringData

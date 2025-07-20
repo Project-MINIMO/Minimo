@@ -1,7 +1,9 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
-
+using System.Data;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public enum QuestCondition
 {
@@ -38,54 +40,61 @@ public enum QuestType
 
 public class QuestManager : ManagerBase
 {
-    public List<DetailQuestData> ActiveQuests { get; } = new();
-
-    private QuestSummaryPanel _questSummaryPanel;
-    private QuestListPanel _questListPanel;
-
+    public Dictionary<int, List<Quest>> GroupedQuest { get; private set; } = new();
+    public List<Quest> ActiveQuests { get; } = new();
+    public Quest CurrentQuest;
+    
     private TitleData _titleData;
-    private List<DetailQuestData> _allQuests;
+    
+    public event Action<List<Quest>> OnQuestsUpdated;
+    
+    private List<Quest> _quests;
     
     protected override void Awake()
     {
         base.Awake();
-
-        _questSummaryPanel = App.GetManager<UIManager>().GetPanel<QuestSummaryPanel>();
-        _questListPanel = App.GetManager<UIManager>().GetPanel<QuestListPanel>();
-
+        
         _titleData = App.GetData<TitleData>();
-        _allQuests =
-            _titleData.DetailQuest.Values.Where(x =>
-                x.Type is QuestType.Constellation or QuestType.Side or QuestType.Wish).ToList();
+        GroupedQuest = _titleData.Quest
+            .Values
+            .Where(data => data.Group != null)
+            .GroupBy(data => data.Group.ID)
+            .ToDictionary(data => data.Key, data => data.ToList());
+        _quests = _titleData.Quest
+            .Values
+            .Where(quest => quest.PreQuestID == -1)
+            .ToList();
     }
     
-    public void AddQuest(DetailQuestData quest)
+    public void AddQuest(Quest quest)
     {
         ActiveQuests.Add(quest);
-        _questSummaryPanel.UpdateQuest();
-        _questListPanel.UpdateQuest(quest.Type);
+        OnQuestsUpdated?.Invoke(ActiveQuests);
     }
 
-    public void RemoveQuest(DetailQuestData quest)
+    public void RemoveQuest(Quest quest)
     {
         ActiveQuests.Remove(quest);
+        OnQuestsUpdated?.Invoke(ActiveQuests);
+    }
+
+    public void SubmitQuest()
+    {
         
-        _questSummaryPanel.UpdateQuest();
-        _questListPanel.UpdateQuest(quest.Type);
+    }
+    
+    public void SubmitQuest(Item item)
+    {
+        
     }
 
     [ContextMenu("Add Quest")]
     public void AddQuest()
     {
-        if (_allQuests.Count == 0)
-        {
-            Debug.LogError("No quest data found");
-            return;
-        }
-        
-        var selected = _allQuests[Random.Range(0, _allQuests.Count)];
+        var selected = _quests
+            .OrderBy(_ => Random.value)
+            .First();
         AddQuest(selected);
-
-        _allQuests.Remove(selected);
+        _quests.Remove(selected);
     }
 }

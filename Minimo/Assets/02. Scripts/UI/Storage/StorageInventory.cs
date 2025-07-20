@@ -2,32 +2,16 @@ using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
 
-public class StorageInventory : Inventory<Item>
+public class StorageInventory : ItemInventory
 {
     [SerializeField] private RectTransform _content;
     [SerializeField] private InventorySortHandler _sortDropdown;
     [SerializeField] private InventoryFilterHandler _filterDropdown;
     
     private List<InventorySlot<Item>> _activeSlots;
-    
-    private void OnEnable()
-    {
-        _menuTogs[0].isOn = true;
-    }
-
-    protected override void SetString()
-    {
-        var titleData = App.GetData<TitleData>();
-        _menuTogs[0].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_TAB1_NAME");
-        _menuTogs[1].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_TAB2_NAME");
-        _menuTogs[2].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_TAB3_NAME");
-        _menuTogs[3].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_TAB4_NAME");
-        _menuTogs[4].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_TAB5_NAME");
-    }
-
+   
     protected override void FilterSlots(int index)
     {
         base.FilterSlots(index);
@@ -38,10 +22,6 @@ public class StorageInventory : Inventory<Item>
         _sortDropdown.OnMenuChanged(index);
         _filterDropdown.OnMenuChanged(index);
     }
-
-    protected override List<Item> GetFilteredItems() => AccountInfo.Instance.Items.Values.ToList();
-
-    protected override bool IsSlotFiltered(int index, Item item) => index == 0 || index == (int)item.Type + 1;
 
     #region Sort
     public void SortDefault()

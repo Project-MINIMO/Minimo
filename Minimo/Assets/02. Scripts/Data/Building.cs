@@ -1,8 +1,4 @@
-using System.Threading.Tasks;
-
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class Building
 {
@@ -14,13 +10,12 @@ public class Building
     public readonly string Description;
     public readonly int Cost;
     public readonly int Duration;
-
+    public readonly BuildingPositionData Position;
+    public readonly Sprite Icon;
+    
     public bool IsLocked => AccountInfo.Instance.level < UnlockLevel;
     
-    public BuildingPositionData Position { get; private set; }
-    public Sprite Icon { get; private set; }
-    
-    public Building(BuildingData data, TitleData title)
+    public Building(BuildingData data, BuildingPositionData position, TitleData title)
     {
         ID = data.ID;
         Code = data.Name;
@@ -30,23 +25,7 @@ public class Building
         Description = title.GetString($"STR_BUILDING_{data.Name.ToUpper()}_DESC");
         Cost = data.Cost;
         Duration = data.Duration;
-
-        LoadPositionData(data.Name);
-    }
-
-    private async Task LoadPositionData(string assetName)
-    {
-        var path = $"Assets/09. Scriptable Objects/Building/{assetName}.asset";
-        var handle = Addressables.LoadAssetAsync<BuildingPositionData>(path);
-        await handle.Task;
-        if (handle.Status == AsyncOperationStatus.Succeeded)
-        {
-            Position = handle.Result;
-            Icon = Position.Sprite;
-        }
-        else
-        {
-            Debug.LogError("Failed to load BuildingData");
-        }
+        Position = position;
+        Icon = position.Sprite;
     }
 }

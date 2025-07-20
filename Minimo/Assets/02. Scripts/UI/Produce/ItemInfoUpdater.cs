@@ -5,17 +5,18 @@ using TMPro;
 
 public class ItemInfoUpdater : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _itemNameTMP;
-    [SerializeField] private TextMeshProUGUI _itemDescriptionTMP;
-    [SerializeField] private TextMeshProUGUI _itemCountTMP;
-    [SerializeField] private Image _iconImg;
+    [SerializeField] private TextMeshProUGUI? _itemNameTMP;
+    [SerializeField] private TextMeshProUGUI? _itemDescriptionTMP;
+    [SerializeField] private TextMeshProUGUI? _itemCountTMP;
+    [SerializeField] private Image? _iconImg;
 
     public void ClearItem()
     {
         _itemNameTMP?.SetText(string.Empty);
         _itemCountTMP?.SetText(string.Empty);
         _itemDescriptionTMP?.SetText(string.Empty);
-        if (_iconImg) _iconImg.gameObject.SetActive(false);
+        if (_iconImg == null) return; 
+        _iconImg.gameObject.SetActive(false);
     }
     
     public void UpdateItem(int itemId, int amount)
@@ -27,11 +28,16 @@ public class ItemInfoUpdater : MonoBehaviour
     public void UpdateItem(Item item, int amount)
     {
         _itemNameTMP?.SetText(item.Name);
-        _itemCountTMP?.SetText(amount.ToString());
         _itemDescriptionTMP?.SetText(item.Description);
+        UpdateItem(item.Icon, amount);
+    }
+    
+    public void UpdateItem(Sprite sprite, int amount)
+    {
+        _itemCountTMP?.SetText(amount.ToString());
 
-        if (!_iconImg) return;
-        _iconImg.sprite = item.Icon;
+        if (_iconImg == null) return;
+        _iconImg.sprite = sprite;
         _iconImg.gameObject.SetActive(true);
     }
 
@@ -44,12 +50,8 @@ public class ItemInfoUpdater : MonoBehaviour
     public void UpdateItem(Item item)
     {
         _itemNameTMP?.SetText(item.Name);
-        _itemCountTMP?.SetText(item.Count.ToString());
         _itemDescriptionTMP?.SetText(item.Description);
-
-        if (!_iconImg) return;
-        _iconImg.sprite = item.Icon;
-        _iconImg.gameObject.SetActive(true);
+        UpdateItem(item.Icon, item.Count);
     }
 
     public void UpdateItemCount(int amount)

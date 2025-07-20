@@ -20,6 +20,13 @@ public enum NotifyType
     GoldLack
 }
 
+public enum QuestState
+{
+    Completed,
+    InProgress,
+    Locked,
+}
+
 public enum UseCashType
 {
     Produce,
