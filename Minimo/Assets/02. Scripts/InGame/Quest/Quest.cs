@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -23,16 +24,33 @@ public class Quest
     public class QuestClear
     {
         public readonly ClearType Type;
-        public readonly int Target;
+        public readonly bool Result;
+        public readonly IQuestClearTarget Target;
         public readonly int Amount;
-        public QuestClear(ClearType type, int target, int amount)
+        
+        public int CurrentProgress
         {
-            Type = type;
+            get
+            {
+                return Type switch
+                {
+                    ClearType.UserLevel => AccountInfo.Instance.level,
+                    _                   =>Target.Count
+                };
+            }
+        }
+
+        public bool IsCompleted => CurrentProgress >= Amount;
+        
+        public QuestClear(QuestClearData data, IQuestClearTarget target)
+        {
+            Type = (ClearType)data.Type;
+            Result = data.Result;
             Target = target;
-            Amount = amount;
+            Amount = data.Amount;
         }
     }
-
+    
     [Serializable]
     public class QuestReward
     {
@@ -60,7 +78,12 @@ public class Quest
     public readonly QuestClear[] Clear;
     public readonly QuestReward[] Reward;
     
-    public Quest(QuestGroup group, QuestData data, TitleData title)
+    public Quest(
+        QuestGroup group, 
+        QuestData data, 
+        List<QuestClearData> clearData, 
+        string[] descriptions,
+        TitleData title)
     {
         ID = data.ID;
         Group = group;
@@ -71,74 +94,29 @@ public class Quest
         Name = title.GetString($"STR_QUEST_{data.Name.ToUpper()}");
         Description = title.GetString($"STR_QUEST_{data.Name.ToUpper()}_DESC");
         Condition = (QuestCondition)data.Condition;
-        Clear = ParseClear(data.Clear);
+        Clear = ParseClear(clearData, title);
         Reward = ParseReward(data.Reward);
-        
-        var descriptionStrings = new[]
-        {
-            title.GetString("STR_QUEST_CLEAR_LEVEL"),
-            title.GetString("STR_QUEST_CLEAR_PREP"),
-            title.GetString("STR_QUEST_CLEAR_HARVEST"),
-            title.GetString("STR_QUEST_CLEAR_CRAFT"),
-            title.GetString("STR_QUEST_CLEAR_WISH"),
-            title.GetString("STR_QUEST_CLEAR_BUILD"),
-        };
-        for (var i = 0; i < Clear.Length; i++)
-        {
-            if (i >= 1) ClearDescription += "\n";
-            
-            var clear = Clear[i];
-            
-            switch (clear.Type)
-            {
-                case ClearType.Wish:
-                    ClearDescription += descriptionStrings[(int)clear.Type];
-                    break;
-                
-                case ClearType.UserLevel:
-                    ClearDescription += string.Format(descriptionStrings[(int)clear.Type], clear.Amount);
-                    break;
-                
-                case ClearType.Build:
-                {
-                    var target = title.Building[clear.Target];
-                    var name = target.Name;
-                    ClearDescription += string.Format(descriptionStrings[(int)clear.Type], title.GetString(name), clear.Amount);
-                    break;
-                }
-                
-                case ClearType.Plant:
-                case ClearType.Harvest:
-                case ClearType.Craft:
-                {
-                    //var target = title.Item[clear.Target];
-                    //var name = title.GetString($"STR_ITEM_{target.Name.ToUpper()}_NAME");
-                    //ClearDescription += string.Format(descriptionStrings[(int)clear.Type], title.GetString(name), clear.Amount);
-                    break;
-                }
-            }
-        }
+        ClearDescription = GetClearDescription(descriptions);
     }
     
-    private QuestClear[] ParseClear(string clearRaw)
+    private QuestClear[] ParseClear(List<QuestClearData> clearRaw, TitleData title)
     {
-        if (string.IsNullOrEmpty(clearRaw)) return Array.Empty<QuestClear>();
+        if (clearRaw == null) return Array.Empty<QuestClear>();
 
-        return clearRaw.Split(',').Select(res =>
+        var result = new List<QuestClear>();
+        foreach (var data in clearRaw)
         {
-            var parts = res.Split(':').Select(p => p.Trim()).ToArray();
-
-            if (parts.Length < 3)
+            IQuestClearTarget clearTarget = (ClearType)data.Type switch
             {
-                Debug.LogWarning($"[ParseCondition] Invalid format: {res}");
-                return null;
-            }
+                ClearType.Plant or ClearType.Harvest or ClearType.Wish => title.Item[data.Target],
+                ClearType.Build => title.Building[data.Target],
+                _ => null
+            };
 
-            return new QuestClear(
-                (ClearType)int.Parse(parts[0]), 
-                int.Parse(parts[1]), 
-                int.Parse(parts[2]));
-        }).ToArray();
+            result.Add(new QuestClear(data, clearTarget));
+        }
+        
+        return result.ToArray();
     }
     
     private QuestReward[] ParseReward(string rewardRaw)
@@ -160,5 +138,37 @@ public class Quest
                 int.Parse(parts[1]), 
                 int.Parse(parts[2]));
         }).ToArray();
+    }
+
+    private string GetClearDescription(string[] descriptions)
+    {
+        var clearDescription = string.Empty;
+        
+        for (var i = 0; i < Clear.Length; i++)
+        {
+            if (i >= 1) clearDescription += "\n";
+            
+            var clear = Clear[i];
+            
+            switch (clear.Type)
+            {
+                case ClearType.UserLevel:
+                    clearDescription += string.Format(descriptions[(int)clear.Type], clear.Amount);
+                    break;
+
+                case ClearType.Build:
+                case ClearType.Plant:
+                case ClearType.Harvest:
+                    var name = clear.Target.Name;
+                    clearDescription += string.Format(descriptions[(int)clear.Type], name, clear.Amount);
+                    break;
+                
+                case ClearType.Wish:
+                    clearDescription += descriptions[(int)clear.Type];
+                    break;
+            }
+        }
+        
+        return clearDescription;
     }
 }

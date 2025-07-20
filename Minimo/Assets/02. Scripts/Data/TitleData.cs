@@ -64,10 +64,19 @@ public class QuestData
     public int Type;
     public int PreQuestID;
     public int OpenLevel;
-    public string Name;
     public int Condition;
-    public string Clear;
+    public string Name;
     public string Reward;
+}
+
+[Serializable]
+public class QuestClearData
+{
+    public int ID;
+    public int Type;
+    public bool Result;
+    public int Target;
+    public int Amount;
 }
 #endregion
 
@@ -158,6 +167,7 @@ public class TitleData : DataBase
     private const string STRING_PATH = "Data/StringData";
     private const string QUESTGROUP_PATH = "Data/QuestGroupData";
     private const string QUEST_PATH = "Data/QuestData";
+    private const string QUESTCLEAR_PATH = "Data/QuestClearData";
     private const string COMMON_PATH = "Data/CommonData";
     private const string BUILDING_PATH = "Data/BuildingData";
     private const string ITEM_PATH = "Data/ItemData";
@@ -223,8 +233,7 @@ public class TitleData : DataBase
         var buildingRaw = DataLoader.LoadData<BuildingData>(BUILDING_PATH);
         var itemRaw = DataLoader.LoadData<ItemData>(ITEM_PATH);
         var questGroupRaw = DataLoader.LoadData<QuestGroupData>(QUESTGROUP_PATH);
-        var questRaw = DataLoader.LoadData<QuestData>(QUEST_PATH);
-
+        
         const string buildingAssetPath = "Assets/09. Scriptable Objects/Building/{0}.asset";
         const string itemIconPath = "Assets/03. Images/Item/{0}.png";
         const string questIconPath = "Assets/03. Images/Quest/{0}.png";
@@ -258,15 +267,8 @@ public class TitleData : DataBase
         {
             questGroups.Add(questGroupRaw[i].ID, new QuestGroup(questGroupRaw[i], questGroupIcons[i], this));
         }
-
-        foreach (var data in questRaw)
-        {
-            var newQuest = questGroups.TryGetValue(data.ID / 100 * 100, out var questGroup) 
-                ? new Quest(questGroup, data, this) 
-                : new Quest(null, data, this);
-
-            Quest.Add(data.ID, newQuest);
-        }
+        
+        LoadQuestData(questGroups);
     }
    
     private Task<T> LoadAddressableDataAsync<T>(string assetName, string assetPath)
@@ -279,6 +281,36 @@ public class TitleData : DataBase
             Debug.LogError($"Failed to load {assetName}");
             return default;
         });
+    }
+
+    private void LoadQuestData(Dictionary<int, QuestGroup> questGroups)
+    {
+        var questRaw = DataLoader.LoadData<QuestData>(QUEST_PATH);
+        var questClearRaw = DataLoader.LoadData<QuestClearData>(QUESTCLEAR_PATH);
+        
+        var groupedQuestClears = questClearRaw
+            .GroupBy(data => data.ID)
+            .ToDictionary(data => data.Key, data => data.ToList());
+     
+        var descriptions = new[]
+        {
+            GetString("STR_QUEST_CLEAR_LEVEL"),
+            GetString("STR_QUEST_CLEAR_PREP"),
+            GetString("STR_QUEST_CLEAR_HARVEST"),
+            GetString("STR_QUEST_CLEAR_WISH"),
+            GetString("STR_QUEST_CLEAR_BUILD"),
+        };
+        
+        foreach (var data in questRaw)
+        {
+            var clear = groupedQuestClears.GetValueOrDefault(data.ID);
+            
+            var newQuest = questGroups.TryGetValue(data.ID / 100 * 100, out var questGroup) 
+                ? new Quest(questGroup, data, clear, descriptions, this) 
+                : new Quest(null, data, clear, descriptions, this);
+            
+            Quest.Add(data.ID, newQuest);
+        }
     }
 
     #region StringData

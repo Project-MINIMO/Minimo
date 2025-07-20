@@ -17,7 +17,6 @@ public enum ClearType
     UserLevel,
     Plant,
     Harvest,
-    Craft,
     Wish,
     Build
 }

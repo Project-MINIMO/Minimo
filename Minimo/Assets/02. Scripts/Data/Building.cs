@@ -1,17 +1,20 @@
 using UnityEngine;
 
-public class Building
+public class Building : IQuestClearTarget
 {
-    public readonly int ID;
+    public int ID { get; }
+    public string Name { get; }
+    
     public readonly string Code;
     public readonly BuildingType Type;
     public readonly int UnlockLevel;
-    public readonly string Name;
     public readonly string Description;
     public readonly int Cost;
     public readonly int Duration;
     public readonly BuildingPositionData Position;
     public readonly Sprite Icon;
+    
+    public int Count { get; private set; }
     
     public bool IsLocked => AccountInfo.Instance.level < UnlockLevel;
     
@@ -27,5 +30,12 @@ public class Building
         Duration = data.Duration;
         Position = position;
         Icon = position.Sprite;
+    }
+    
+    public void AddCount(int num)
+    {
+        Count += num;
+        
+        Count = Mathf.Clamp(Count, 0, 99999);
     }
 }

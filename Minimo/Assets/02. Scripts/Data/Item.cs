@@ -2,18 +2,19 @@ using System;
 
 using UnityEngine;
 
-public class Item
+public class Item : IQuestClearTarget
 {
     public event Action OnItemCountChanged;
     
-    public readonly int ID;
+    public int ID { get; }
+    public string Name { get; }
+    
     public readonly string Code;
     public readonly ItemType Type;
     public readonly int Level;
     public readonly ItemProperty Property;
     public readonly int SellCost;
     public readonly int BuyCost;
-    public readonly string Name;
     public readonly string Description;
     public readonly Sprite Icon;
     

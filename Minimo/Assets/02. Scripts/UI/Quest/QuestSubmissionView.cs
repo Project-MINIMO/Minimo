@@ -1,8 +1,7 @@
 using System.Linq;
 
-using UnityEngine.UI;
-using TMPro;
 using UnityEngine;
+using TMPro;
 
 public interface ISubmissionStrategy
 {
@@ -39,7 +38,7 @@ public class NormalSubmissionStrategy : ISubmissionStrategy
             if (!active) continue;
             
             var clear = quest.Clear[i];
-            var item  = AccountInfo.Instance.Items[clear.Target];
+            var item  = (Item)clear.Target;
             _slots[i].Initialize(item, clear.Amount, QuestCondition.Normal);
         }
         
@@ -147,7 +146,7 @@ public class QuizSubmissionStrategy : ISubmissionStrategy
             _slots[i].OnSlotSelected = slot => {
                 var idx = slot.transform.GetSiblingIndex();
                 var clear = quest.Clear[idx];
-                var item  = AccountInfo.Instance.Items[clear.Target];
+                var item = (Item)clear.Target;
                 slot.AddItem(item);
             };
         }
