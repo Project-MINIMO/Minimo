@@ -112,9 +112,6 @@ public class FirebaseManager : ManagerBase
         }
     }
 
-    
-    
-
 #region Util Method
     // ===================== //
     //      유틸 메서드      //
@@ -148,6 +145,21 @@ public class FirebaseManager : ManagerBase
             return false;
         }
     }
+    
+    private async Task<(bool success, T result)> TryGet<T>(Func<Task<T>> action)
+    {
+        try
+        {
+            var result = await action();
+            return (true, result);
+        }
+        catch (Exception e)
+        {
+            OnError?.Invoke(e.ToString()); // 더 자세히 출력
+            return (false, default);
+        }
+    }
+
 #endregion
 
 #region Auth
@@ -247,6 +259,80 @@ public class FirebaseManager : ManagerBase
     {
         if (_user == null) return Task.FromResult(false);
         return Try(() => _user.DeleteAsync());
+    }
+#endregion
+
+#region Building
+    public async Task<List<BuildingDTO>> LoadUserBuildings()
+    {
+        var uid = FirebaseAuth.DefaultInstance.CurrentUser?.UserId;
+        if (string.IsNullOrEmpty(uid))
+        {
+            Debug.LogError("No user logged in.");
+            return new List<BuildingDTO>();
+        }
+
+        var snapshot = await FirebaseFirestore.DefaultInstance
+            .Collection("users").Document(uid)
+            .Collection("buildings").GetSnapshotAsync();
+
+        var buildings = new List<BuildingDTO>();
+        foreach (var doc in snapshot.Documents)
+        {
+            var data = doc.ToDictionary();
+
+            var dto = new BuildingDTO
+            {
+                BuildingId = doc.Id,
+                BuildingDataId = Convert.ToInt32(data["buildingDataId"]),
+                Position = new Vector3Int(
+                    Convert.ToInt32(((Dictionary<string, object>)data["position"])["x"]),
+                    Convert.ToInt32(((Dictionary<string, object>)data["position"])["y"]),
+                    Convert.ToInt32(((Dictionary<string, object>)data["position"])["z"])
+                )
+            };
+
+            buildings.Add(dto);
+        }
+
+        return buildings;
+    }
+
+    public async Task<string?> InstallBuilding(int buildingDataId, Vector3Int position)
+    {
+        
+        var callable = _functions.GetHttpsCallable("installBuilding");
+        var data = new Dictionary<string, object>
+        {
+            { "buildingDataId", buildingDataId },
+            { "position", new[] { position.x, position.y, position.z } }
+        };
+
+        var (success, result) = await TryGet(() => callable.CallAsync(data));
+        if (!success)
+        {
+            return null;
+        }
+
+        var dict = result.Data as Dictionary<object, object>;
+        string buildingId = dict?["buildingId"] as string;
+
+        Debug.Log($"Building installed at {position}, ID: {buildingId}");
+        return buildingId;
+    }
+
+    public Task<bool> MoveBuilding(string buildingId, Vector3Int position)
+    {
+        var callable = _functions.GetHttpsCallable("moveBuilding");
+        var data = new Dictionary<string, object>
+        {
+            { "buildingId", buildingId },
+            { "position", new[] { position.x, position.y, position.z } }
+        };
+        return Try(() => callable.CallAsync(data), result =>
+        {
+            Debug.Log($"Building moved to {position}: {result.Data}");
+        });
     }
 #endregion
 

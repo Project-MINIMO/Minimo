@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 using UnityEngine;
 using UniRx;
 
@@ -77,9 +77,9 @@ public abstract class ProduceObject : BuildingObject
         _globalExpRatio = minimoManager.GlobalExpRatio.Value;
     }
     
-    public override void Initialize(Building data)
+    public override async Task Initialize(Building data)
     {
-        base.Initialize(data);
+        await base.Initialize(data);
 
         ProduceData = App.GetData<TitleData>().GroupedProduce[data.Code];
         

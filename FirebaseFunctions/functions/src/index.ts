@@ -172,3 +172,93 @@ export const deleteUserDocument = functions
         return null;
       }
     });
+
+export const installBuilding = onCall(
+  {
+    region: "asia-northeast3",
+  },
+  async (request) => {
+    if (!request.auth) {
+      throw new HttpsError("unauthenticated", "로그인이 필요합니다.");
+    }
+
+    const uid = request.auth.uid;
+    const { buildingDataId, position } = request.data;
+
+    if (
+      typeof buildingDataId !== "number" ||
+      !Array.isArray(position) ||
+      position.length !== 3
+    ) {
+      throw new HttpsError("invalid-argument", "잘못된 파라미터입니다.");
+    }
+
+    const firestore = admin.firestore();
+    const userBuildingRef = firestore
+      .collection("users")
+      .doc(uid)
+      .collection("buildings")
+      .doc(); // 새로운 건물
+
+    const buildingData = {
+      buildingDataId,
+      position: { x: position[0], y: position[1], z: position[2] },
+      installedAt: admin.firestore.FieldValue.serverTimestamp(),
+    };
+
+    try {
+      await userBuildingRef.set(buildingData);
+      return { success: true, buildingId: userBuildingRef.id };
+    } catch (error) {
+      console.error("installBuilding 실패", error);
+      throw new HttpsError("internal", "건물 설치 중 오류가 발생했습니다.");
+    }
+  }
+);
+
+export const moveBuilding = onCall(
+  {
+    region: "asia-northeast3",
+  },
+  async (request) => {
+    if (!request.auth) {
+      throw new HttpsError("unauthenticated", "로그인이 필요합니다.");
+    }
+
+    const uid = request.auth.uid;
+    const { buildingId, position } = request.data;
+
+    if (
+      typeof buildingId !== "string" ||
+      !Array.isArray(position) ||
+      position.length !== 3
+    ) {
+      throw new HttpsError("invalid-argument", "잘못된 파라미터입니다.");
+    }
+
+    const firestore = admin.firestore();
+    const buildingRef = firestore
+      .collection("users")
+      .doc(uid)
+      .collection("buildings")
+      .doc(buildingId);
+
+    try {
+      const snap = await buildingRef.get();
+      if (!snap.exists) {
+        throw new HttpsError("not-found", "해당 건물이 존재하지 않습니다.");
+      }
+
+      await buildingRef.update({
+        position: { x: position[0], y: position[1], z: position[2] },
+        movedAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+
+      return { success: true };
+    } catch (error) {
+      console.error("moveBuilding 실패", error);
+      if (error instanceof HttpsError) throw error;
+      throw new HttpsError("internal", "건물 이동 중 오류가 발생했습니다.");
+    }
+  }
+);
