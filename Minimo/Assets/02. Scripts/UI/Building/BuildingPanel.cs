@@ -36,6 +36,6 @@ public class BuildingPanel : UIBase
         var cameraCenterPosition = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, Camera.main.nearClipPlane));
         cameraCenterPosition.z = 0;
 
-        _editManager.CreateObject(slot.Item, cameraCenterPosition);
+        _editManager.CreateAndStartEdit(slot.Item, cameraCenterPosition);
     }
 }

@@ -11,7 +11,7 @@ public class BuildingObject : InteractObject
     public Building BuildingData { get; set; }
     public BuildingPositionData PositionData { get; private set; }
 
-    public bool IsPlaced {get; private set;}
+    public bool IsPlaced {get; set;}
     private bool _isFlipped = false;
     
     protected EditManager _editManager;
@@ -36,16 +36,6 @@ public class BuildingObject : InteractObject
         _spriteRenderer.transform.localPosition = new Vector3(PositionData.Offset.x, PositionData.Offset.y, 0);
             
         PreviousPosition = transform.position;
-            
-        _editManager.StartEdit(this, true);
-    }
-    
-    public virtual void Initialize(int id)
-    {
-        IsPlaced = true;
-        
-        var buildingData = App.GetData<TitleData>().Building[id];
-        Initialize(buildingData);
     }
 
     private void SetPolygonCollider(PolygonCollider2D polyCollider)
@@ -67,6 +57,7 @@ public class BuildingObject : InteractObject
         }
     }
 
+    #region InteractObject
     public override void OnLongPress()
     {
         if (_editManager.IsEditing.Value) return;
@@ -81,6 +72,7 @@ public class BuildingObject : InteractObject
             _editManager.StartEdit(this);
         }
     }
+    #endregion
     
     #region Edit Functions
     private void SetTransparency(float alpha)
