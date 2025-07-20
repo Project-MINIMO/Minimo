@@ -31,47 +31,61 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         
         _rect = GetComponent<RectTransform>();
     }
-
-    private void OnSlotOpened(QuestCompactSlot openedSlot)
-    {
-        foreach (var slot in _slots.Where(slot => openedSlot != slot))
-        {
-            slot.Close();
-        }
-    }
-
+    
     public override void Show(bool isNew)
     {
         base.Show(isNew);
-        
+
+        CloseAllSlots();
         _rect.DOAnchorPos(_showPosition, 0.3f).SetEase(Ease.OutCubic);
     }
 
     public override void Hide(bool isNew)
     {
         base.Hide(isNew);
-        
+
+        CloseAllSlots();
         _rect.DOAnchorPos(_hidePosition, 0.3f).SetEase(Ease.InCubic);
+    }
+    
+    private void CloseAllSlots()
+    {
+        foreach (var slot in _slots.Where(slot => slot.gameObject.activeSelf))
+        {
+            slot.Close();
+        }
     }
   
     private void UpdateQuest(List<Quest> quests)
     {
-        var orderedQuests = quests.OrderBy(x => x.ID).ToList();
+        //var orderedQuests = quests.OrderBy(x => x.ID).ToList();
   
         var i = 0;
         
-        for (; i < orderedQuests.Count; i++)
+        for (; i < quests.Count; i++)
         {
+            if (i > _slots.Count) return;
+            
             var questInfo = _slots[i];
-
+            
             questInfo.gameObject.SetActive(true);
-            //questInfo.Close();
-            questInfo.Initialize(orderedQuests[i]);
+            questInfo.Initialize(quests[i]);
         }
 
         for (; i < _slots.Count; i++)
         {
             _slots[i].gameObject.SetActive(false);
+        }
+    }
+    
+    private void OnSlotOpened(QuestCompactSlot openedSlot)
+    {
+        foreach (var slot in _slots.Where(slot => openedSlot != slot))
+        {
+            if (slot.gameObject.activeSelf)
+            {
+                slot.Close();
+            }
         }
     }
 }

@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Collections.Generic;
-using UnityEngine;
 
 public abstract class QuestPanel<T> : UIBase where T : QuestSlot
 {

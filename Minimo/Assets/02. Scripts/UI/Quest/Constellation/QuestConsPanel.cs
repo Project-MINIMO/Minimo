@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,14 +8,11 @@ public class QuestConsPanel : QuestPanel<QuestConsSlot>
     [SerializeField] private Button _closeBtn;
     [SerializeField] private QuestTransitioner _transitioner;
     [SerializeField] private QuestInfoUpdater _infoUpdater;
-
-    private TitleData _titleData;
-
+    
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
-
-        _titleData = App.GetData<TitleData>();
+        
         _closeBtn.onClick.AddListener(ClosePanel);
 
         _panelMap[QuestType.Constellation] = manager.GetPanel<QuestSubmissionPanel>();
@@ -35,10 +29,11 @@ public class QuestConsPanel : QuestPanel<QuestConsSlot>
     {
         base.OpenPanel();
         
-        SetupQuestInfos(_questManager.CurrentQuest);
+        UpdateQuest(_questManager.CurrentQuest);
+        _infoUpdater.UpdateQuestGroup(_questManager.CurrentQuest);
     }
 
-    private void SetupQuestInfos(Quest questData)
+    private void UpdateQuest(Quest questData)
     {
         var quests = _questManager.GroupedQuest[questData.Group.ID];
 
@@ -59,8 +54,6 @@ public class QuestConsPanel : QuestPanel<QuestConsSlot>
         {
             _slots[i].gameObject.SetActive(false);
         }
-        
-        _infoUpdater.UpdateQuestGroup(questData);
     }
 
     private QuestState GetQuestState(int index, int activeIndex) => (index, activeIndex) switch

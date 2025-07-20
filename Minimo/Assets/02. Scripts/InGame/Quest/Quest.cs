@@ -146,9 +146,14 @@ public class Quest
         
         for (var i = 0; i < Clear.Length; i++)
         {
-            if (i >= 1) clearDescription += "\n";
-            
             var clear = Clear[i];
+            
+            if (i >= 1)
+            {
+                if (clear.Type == ClearType.Wish) continue;
+                
+                clearDescription += "\n";
+            }
             
             switch (clear.Type)
             {
