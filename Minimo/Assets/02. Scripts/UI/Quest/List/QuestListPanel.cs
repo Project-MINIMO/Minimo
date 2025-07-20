@@ -1,4 +1,6 @@
-public class QuestListPanel<T> : QuestPanel<T> where T : QuestSlot
+using System.Collections.Generic;
+
+public abstract class QuestListPanel<T> : QuestPanel<T> where T : QuestSlot
 {
     protected override void OnSlotSelected(Quest quest)
     {

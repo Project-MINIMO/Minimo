@@ -32,10 +32,5 @@ public abstract class QuestPanel<T> : UIBase where T : QuestSlot
         }
     }
     
-    protected virtual void OnSlotSelected(Quest quest)
-    {
-        Debug.Log(quest.Type);
-        Debug.Log(_panelMap[quest.Type]);
-        _panelMap[quest.Type].OpenPanel();
-    }
+    protected virtual void OnSlotSelected(Quest quest) => _panelMap[quest.Type].OpenPanel();
 }

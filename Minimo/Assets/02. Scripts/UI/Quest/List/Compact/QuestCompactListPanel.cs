@@ -9,6 +9,7 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
     public override bool IsDefaultPanel => true;
     
     private RectTransform _rect;
+    
     private readonly Vector2 _showPosition = new(-2, 0);
     private readonly Vector2 _hidePosition = new(-370, 0);
     
@@ -17,6 +18,7 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         base.Initialize(manager);
         
         _questManager.OnQuestsUpdated += UpdateQuest;
+        UpdateQuest(_questManager.ActiveQuests);
         
         var questListPanel = manager.GetPanel<QuestDetailListPanel>();
         var longPressDetector = GetComponentInChildren<UILongPressDetector>();
@@ -63,6 +65,7 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
             var questInfo = _slots[i];
 
             questInfo.gameObject.SetActive(true);
+            //questInfo.Close();
             questInfo.Initialize(orderedQuests[i]);
         }
 
