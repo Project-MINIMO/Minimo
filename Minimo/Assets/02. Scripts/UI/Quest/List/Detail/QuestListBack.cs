@@ -36,7 +36,7 @@ public class QuestListBack : MonoBehaviour
     {
         var filteredQuests = quests.Where(x => CheckQuestType(x.Type)).ToList();
 
-        var existingInfos = GetComponentsInChildren<QuestListSlot>(true);
+        var existingInfos = GetComponentsInChildren<QuestDetailSlot>(true);
         
         var i = 0;
         
@@ -44,7 +44,7 @@ public class QuestListBack : MonoBehaviour
         {
             var questInfo = i < existingInfos.Length 
                 ? existingInfos[i] 
-                : Instantiate(_questPrefab, _questParent).GetComponent<QuestListSlot>();
+                : Instantiate(_questPrefab, _questParent).GetComponent<QuestDetailSlot>();
 
             questInfo.gameObject.SetActive(true);
             questInfo.Initialize(filteredQuests[i]);

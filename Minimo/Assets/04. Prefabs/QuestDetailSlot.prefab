@@ -147,8 +147,9 @@ GameObject:
   - component: {fileID: 4027713194839549992}
   - component: {fileID: 363544984200502167}
   - component: {fileID: 5077831571075066609}
+  - component: {fileID: 536898387319844486}
   m_Layer: 5
-  m_Name: QuestListInfo
+  m_Name: QuestDetailSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -270,7 +271,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _selectBtn: {fileID: 363544984200502167}
-  _titleTMP: {fileID: 6779725673383387288}
+  _infoUpdater: {fileID: 536898387319844486}
+  _iconImg: {fileID: 5119532686603466892}
+--- !u!114 &536898387319844486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4910701378176584811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87b48f00df083b4781b7301e48019b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _questNameTMP: {fileID: 6779725673383387288}
+  _questDescriptionTMP: {fileID: 0}
+  _questConditionTMP: {fileID: 0}
   _iconImg: {fileID: 5119532686603466892}
 --- !u!1 &6365045222851253343
 GameObject:

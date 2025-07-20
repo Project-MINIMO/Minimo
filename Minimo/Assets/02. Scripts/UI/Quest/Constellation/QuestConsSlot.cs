@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class QuestConsInfo : QuestSlot
+public class QuestConsSlot : QuestSlot
 {
     [SerializeField] private GameObject[] _stateObjs;
 

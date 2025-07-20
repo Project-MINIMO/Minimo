@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 5079591106360043258}
   - component: {fileID: 4921914249969092366}
   - component: {fileID: 5997538190755885251}
+  - component: {fileID: 180081015962435136}
   m_Layer: 5
-  m_Name: Back_StarLight
+  m_Name: QuestDetailSlot_StarLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -137,7 +138,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _selectBtn: {fileID: 4921914249969092366}
-  _titleTMP: {fileID: 1628553258861935301}
+  _infoUpdater: {fileID: 180081015962435136}
+--- !u!114 &180081015962435136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844060159422515102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87b48f00df083b4781b7301e48019b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _questNameTMP: {fileID: 1628553258861935301}
+  _questDescriptionTMP: {fileID: 0}
+  _questConditionTMP: {fileID: 0}
   _iconImg: {fileID: 5520018473585152395}
 --- !u!1 &2740536118232580990
 GameObject:

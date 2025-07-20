@@ -2,14 +2,13 @@ using System;
 
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class QuestSlot : MonoBehaviour
 {
     public event Action<Quest> OnSlotSelected;
     
     [SerializeField] protected Button _selectBtn;
-    [SerializeField] protected TextMeshProUGUI _titleTMP;
+    [SerializeField] private QuestInfoUpdater _infoUpdater;
     
     protected Quest QuestData;
     
@@ -21,6 +20,6 @@ public class QuestSlot : MonoBehaviour
     public virtual void Initialize(Quest data)
     {
         QuestData = data;
-        _titleTMP.text = data.Name;
+        _infoUpdater.UpdateQuest(data);
     }
 }

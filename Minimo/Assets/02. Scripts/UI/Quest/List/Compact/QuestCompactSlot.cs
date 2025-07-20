@@ -4,8 +4,10 @@ using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 
-public class QuestSummarySlot : QuestSlot
+public class QuestCompactSlot : QuestSlot
 {
+    public event Action<QuestCompactSlot> OnSlotOpened;
+    
     [SerializeField] private Button _toggleBtn;
     
     [SerializeField] private TextMeshProUGUI _descTMP;
@@ -13,6 +15,7 @@ public class QuestSummarySlot : QuestSlot
     [SerializeField] private Image _detailBackgroundImg;
     [SerializeField] private Image _defaultBackgroundImg;
     [SerializeField] private GameObject[] _iconObjs;
+    [SerializeField] private TextMeshProUGUI _nameTMP;
     
     private const float ExpandedHeight = 153;
     private const float CollapsedHeight = 69;
@@ -33,7 +36,6 @@ public class QuestSummarySlot : QuestSlot
         base.Initialize(data);
         
         _iconObjs[GetIndex(data.Type)].SetActive(true);
-        _descTMP.text = data.ClearDescription;
     }
     
     private int GetIndex(QuestType type) => (int)type switch
@@ -61,6 +63,7 @@ public class QuestSummarySlot : QuestSlot
         if (_isExpanded) return;
         
         _isExpanded = true;
+        OnSlotOpened?.Invoke(this);
 
         DOTween.To(() => _rect.sizeDelta.y, 
                 y =>
@@ -74,11 +77,11 @@ public class QuestSummarySlot : QuestSlot
         _detailBackgroundImg.DOFade(1f, 0.25f).SetEase(Ease.Linear);
         _defaultBackgroundImg.DOFade(0f, 0.25f).SetEase(Ease.Linear);
         
-        _titleTMP.rectTransform.DOAnchorPos(_titleExpandedPos, 0.3f).SetEase(Ease.Linear);
+        _nameTMP.rectTransform.DOAnchorPos(_titleExpandedPos, 0.3f).SetEase(Ease.Linear);
         _descTMP.DOFade(1, 0.2f).SetEase(Ease.Linear).SetDelay(0.1f);
         
-        DOTween.To(() => _titleTMP.fontSize, 
-                x => _titleTMP.fontSize = x, 
+        DOTween.To(() => _nameTMP.fontSize, 
+                x => _nameTMP.fontSize = x, 
                 32f, 
                 0.3f) 
             .SetEase(Ease.Linear);
@@ -86,7 +89,7 @@ public class QuestSummarySlot : QuestSlot
         _selectBtn.gameObject.SetActive(true);
     }
 
-    private void Close()
+    public void Close()
     {
         if (!_isExpanded) return;
         
@@ -103,11 +106,11 @@ public class QuestSummarySlot : QuestSlot
         _detailBackgroundImg.DOFade(0f, 0.25f).SetEase(Ease.Linear);
         _defaultBackgroundImg.DOFade(1f, 0.25f).SetEase(Ease.Linear);
         
-        _titleTMP.rectTransform.DOAnchorPos(_titleCollapsedPos, 0.3f).SetEase(Ease.Linear);
+        _nameTMP.rectTransform.DOAnchorPos(_titleCollapsedPos, 0.3f).SetEase(Ease.Linear);
         _descTMP.DOFade(0, 0.2f).SetEase(Ease.Linear);
         
-        DOTween.To(() => _titleTMP.fontSize, 
-                x => _titleTMP.fontSize = x, 
+        DOTween.To(() => _nameTMP.fontSize, 
+                x => _nameTMP.fontSize = x, 
                 20f, 
                 0.3f) 
             .SetEase(Ease.Linear);

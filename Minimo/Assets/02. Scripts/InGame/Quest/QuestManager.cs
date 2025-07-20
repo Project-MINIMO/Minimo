@@ -42,10 +42,7 @@ public class QuestManager : ManagerBase
 {
     public List<Quest> ActiveQuests { get; } = new();
     public Quest CurrentQuest;
-
-    private QuestSummaryPanel _questSummaryPanel;
-    private QuestListPanel _questListPanel;
-
+    
     private TitleData _titleData;
     private List<Quest> _allQuests;
     
@@ -54,10 +51,7 @@ public class QuestManager : ManagerBase
     protected override void Awake()
     {
         base.Awake();
-
-        _questSummaryPanel = App.GetManager<UIManager>().GetPanel<QuestSummaryPanel>();
-        _questListPanel = App.GetManager<UIManager>().GetPanel<QuestListPanel>();
-
+        
         _titleData = App.GetData<TitleData>();
         _allQuests = _titleData.Quest.Values.ToList();
     }

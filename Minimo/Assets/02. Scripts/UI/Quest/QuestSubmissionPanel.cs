@@ -19,10 +19,7 @@ public class QuestSubmissionPanel : UIBase
     }
 
     [SerializeField] private Button _closeBtn;
-
-    [SerializeField] private TextMeshProUGUI _titleTMP;
-    [SerializeField] private TextMeshProUGUI _descriptionTMP;
-    [SerializeField] private TextMeshProUGUI _clearTMP;
+    [SerializeField] private QuestTransitioner _transitioner;
     [SerializeField] private TextMeshProUGUI _progressTMP;
     
     [SerializeField] private RewardInfo[] _rewardInfos;
@@ -33,10 +30,6 @@ public class QuestSubmissionPanel : UIBase
     
     [SerializeField] private Button _cancelBtn;
     [SerializeField] private Button _submitBtn;
-    
-    [SerializeField] private CanvasGroup _canvasGroup;
-    [SerializeField] private CanvasGroup _canvasGroup2;
-    [SerializeField] private RectTransform _canvasRect;
 
     private QuestManager _questManager;
     private TitleData _titleData;
@@ -63,66 +56,20 @@ public class QuestSubmissionPanel : UIBase
   
         _closeBtn.onClick.AddListener(ClosePanel);
     }
+    
+    public override void Show(bool isNew)
+    {
+        base.Show(isNew);
+
+        _transitioner.Open(isNew);
+    }
 
     public override void OpenPanel()
     {
-        _canvasGroup2.alpha = 0;
-        _canvasGroup2.blocksRaycasts = false;
-        
         base.OpenPanel();  
-        
-        _canvasGroup2.alpha = 1;
-        _canvasGroup.alpha = 0;
-        _canvasRect.anchoredPosition = new Vector2(120, 0);
-        _canvasRect.DOAnchorPosX(160, 0.3f).SetEase(Ease.Linear);
-        _canvasGroup.DOFade(1, 0.3f).SetEase(Ease.Linear)
-            .OnComplete(() =>
-            {
-                _canvasGroup2.blocksRaycasts = true;
-            });
-        
+      
         _questData = _questManager.CurrentQuest;
-        
-        _titleTMP.text = _questData.Name;
-        _descriptionTMP.text = _questData.Description;
-
-        _clearTMP.text = string.Empty;
-        for (var i = 0; i < _questData.Clear.Length; i++)
-        {
-            if (i >= 1) _clearTMP.text += "\n";
-            
-            var clear = _questData.Clear[i];
-            
-            switch (clear.Type)
-            {
-                case ClearType.Wish:
-                    _clearTMP.text += _clearStrings[(int)clear.Type];
-                    break;
-                
-                case ClearType.UserLevel:
-                    _clearTMP.text += string.Format(_clearStrings[(int)clear.Type], clear.Amount);
-                    break;
-                
-                case ClearType.Build:
-                {
-                    var target = _titleData.Building[clear.Target];
-                    var name = target.Name;
-                    _clearTMP.text += string.Format(_clearStrings[(int)clear.Type], _titleData.GetString(name), clear.Amount);
-                    break;
-                }
-                
-                case ClearType.Plant:
-                case ClearType.Harvest:
-                case ClearType.Craft:
-                {
-                    var target = _titleData.Item[clear.Target];
-                    var name = _titleData.GetString($"STR_ITEM_{target.Name.ToUpper()}_NAME");
-                    _clearTMP.text += string.Format(_clearStrings[(int)clear.Type], _titleData.GetString(name), clear.Amount);
-                    break;
-                }
-            }
-        }
-
+       
         _progressTMP.text = "0 / 0";
         _progressTMP.gameObject.SetActive(_questData.Condition == QuestCondition.Normal);
 
