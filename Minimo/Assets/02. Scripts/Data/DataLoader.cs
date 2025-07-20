@@ -89,7 +89,7 @@ public class DataLoader
 
     private static int GetItemIdFromCode(string code)
     {
-        var item = App.GetData<TitleData>().Item.FirstOrDefault(x => x.Value.Name == code);
+        var item = App.GetData<TitleData>().Item.FirstOrDefault(x => x.Value.Code == code);
         return item.Key;
     }
     #endregion

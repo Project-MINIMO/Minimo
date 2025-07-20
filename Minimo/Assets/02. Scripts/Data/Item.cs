@@ -10,6 +10,7 @@ public class Item
     public event Action OnItemCountChanged;
     
     public readonly int ID;
+    public readonly string Code;
     public readonly ItemType Type;
     public readonly int Level;
     public readonly ItemProperty Property;
@@ -24,6 +25,7 @@ public class Item
     public Item(ItemData data, TitleData title)
     {
         ID = data.ID;
+        Code = data.Name;
         Type = (ItemType)data.Type;
         Level = data.Level;
         Property = (ItemProperty)data.Property;
