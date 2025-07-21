@@ -1,52 +1,34 @@
-using UniRx;
-using UnityEngine;
-using UnityEngine.UI;
+using System.Linq;
+using System.Collections.Generic;
 
-public class QuestConsPanel : QuestPanel<QuestConsSlot>
+public class QuestConsPanel : QuestInfoPanel
 {
-    public override bool IsUseBlur => true;
-    
-    [SerializeField] private Button _closeBtn;
-    [SerializeField] private QuestTransitioner _transitioner;
-    [SerializeField] private QuestInfoUpdater _infoUpdater;
-    
-    private Quest _quest;
+    private List<QuestConsSlot> _slots;
+    private QuestSubmissionPanel _submissionPanel;
     
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
+     
+        _slots = GetComponentsInChildren<QuestConsSlot>(true).ToList();
+        foreach (var slot in _slots)
+        {
+            slot.OnSlotSelected += OnSlotSelected;
+        }
         
-        _questManager.CurrentQuest
-            .Subscribe(quest =>
-            {
-                if (quest != null) _quest = quest;
-                else ClosePanel();
-            })
-            .AddTo(this);
-        
-        _closeBtn.onClick.AddListener(ClosePanel);
-
-        _panelMap[QuestType.Constellation] = manager.GetPanel<QuestSubmissionPanel>();
-    }
-
-    public override void Show(bool isNew)
-    {
-        base.Show(isNew);
-
-        _transitioner.Open(isNew);
+        _submissionPanel = manager.GetPanel<QuestSubmissionPanel>();
     }
 
     public override void OpenPanel()
     {
         base.OpenPanel();
         
-        UpdateQuest(_quest);
-        _infoUpdater.UpdateQuestGroup(_quest);
+        UpdateQuest(SelectedQuest);
     }
 
     private void UpdateQuest(Quest questData)
     {
-        var quests = _questManager.GroupedQuest[questData.Group.ID];
+        var quests = QuestManager.GroupedQuest[questData.Group.ID];
 
         var i = 0;
         var activeIndex = int.MaxValue;
@@ -54,10 +36,12 @@ public class QuestConsPanel : QuestPanel<QuestConsSlot>
         for (; i < quests.Count; i++)
         {
             _slots[i].gameObject.SetActive(true);
+            
             if (quests[i] == questData)
             {
                 activeIndex = i;
             }
+            
             _slots[i].Initialize(GetQuestState(i, activeIndex), quests[i]);
         }
         
@@ -74,4 +58,6 @@ public class QuestConsPanel : QuestPanel<QuestConsSlot>
         var (i, a) when i > a => QuestState.Locked,
         _ => QuestState.Completed
     };
+
+    private void OnSlotSelected(Quest quest) => _submissionPanel.OpenPanel();
 }

@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Collections.Generic;
 
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -15,22 +14,21 @@ public class QuestDetailListView : MonoBehaviour
     [SerializeField] private GameObject _alertObj;
     
     private QuestManager _questManager;
-    private List<QuestDetailSlot> _slots;
 
-    private int _questIndex;
+    private readonly Queue<QuestDetailSlot> _slotPool = new();
+    private readonly Dictionary<Quest, QuestDetailSlot> _activeMap = new();
     
     public void Initialize(int index)
     {
-        _questIndex = index;
-        
         var titleString = GetTitleString(index);
         _titleTMP.SetText(titleString);
         _buttonTMP.SetText(titleString);
         
-        _slots = GetComponentsInChildren<QuestDetailSlot>(true).ToList();
-        foreach (var slot in _slots)
+        var slots = GetComponentsInChildren<QuestDetailSlot>(true).ToList();
+        foreach (var slot in slots)
         {
             slot.gameObject.SetActive(false);
+            _slotPool.Enqueue(slot);
         }
     }
 
@@ -47,44 +45,24 @@ public class QuestDetailListView : MonoBehaviour
         _scrollRect.verticalNormalizedPosition = 1;
         _alertObj.SetActive(false);
     }
-
-    private void UpdateQuest(List<Quest> quests)
+    
+    public void AddQuest(Quest quest)
     {
-        var filteredQuests = quests.Where(x => CheckQuestType(x.Type)).ToList();
-        var activeSlots = _slots.Count(x => x.gameObject.activeSelf);
+        var slot = _slotPool.Dequeue();
 
-        switch (filteredQuests.Count)
-        {
-            case var count when count == activeSlots:
-                return;
-            
-            case var count when count > activeSlots && !gameObject.activeInHierarchy:
-                _alertObj.SetActive(true);
-                break;
-        }
-
-        var i = 0;
+        slot.gameObject.SetActive(true);
+        slot.Initialize(quest);
+        _activeMap[quest] = slot;
         
-        for (; i < filteredQuests.Count; i++)
-        {
-            var questInfo = _slots[i];
-            questInfo.gameObject.SetActive(true);
-            questInfo.Initialize(filteredQuests[i]);
-        }
-
-        for (; i < _slots.Count; i++)
-        {
-            _slots[i].gameObject.SetActive(false);
-        }
+        _alertObj.SetActive(true);
     }
 
-    private bool CheckQuestType(QuestType questType) => questType switch
+    public void RemoveQuest(Quest quest)
     {
-        QuestType.Guide => _questIndex == 0,
-        QuestType.Story => _questIndex == 0,
-        QuestType.Side => _questIndex == 1,
-        QuestType.Wish => _questIndex == 1,
-        QuestType.Constellation => _questIndex == 2,
-        _ => false
-    };
+        if (!_activeMap.TryGetValue(quest, out var slot)) return;
+        
+        slot.gameObject.SetActive(false);
+        _activeMap.Remove(quest);
+        _slotPool.Enqueue(slot);
+    }
 }

@@ -27,4 +27,26 @@ public class QuestDetailListPanel : QuestListPanel<QuestDetailSlot>
         
         _closeBtn.onClick.AddListener(ClosePanel);
     }
+    
+    protected override void AssignSlot(Quest quest)
+    {
+        var tabIndex = GetTabIndexFor(quest.Type);
+        _menuBacks[tabIndex].AddQuest(quest);
+    }
+
+    protected override void ReleaseSlot(Quest quest)
+    {
+        var tabIndex = GetTabIndexFor(quest.Type);
+        _menuBacks[tabIndex].RemoveQuest(quest);
+    }
+    
+    private int GetTabIndexFor(QuestType type) => type switch
+    {
+        QuestType.Guide => 0,
+        QuestType.Story => 0,
+        QuestType.Side => 1,
+        QuestType.Wish => 1,
+        QuestType.Constellation => 2,
+        _ => -1
+    };
 }
