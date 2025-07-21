@@ -27,39 +27,36 @@ public class EditManager : ManagerBase
     private async void InstallExistBuildings()
     {
         var firebaseManager = App.GetManager<FirebaseManager>();
+        var titleData = App.GetData<TitleData>();
         var buildings = await firebaseManager.LoadUserBuildings();
 
         foreach (var building in buildings)
         {
             // 임시 필터링: 필요 없으면 제거 가능
             if (building.BuildingDataId == -1) continue;
-
-            // 프리팹 경로 추정 예시 (ID -> 리소스 경로 변환 필요 시 매핑 테이블화)
-            var prefabPath = $"Building/GridObject";
-            var prefab = Resources.Load<GameObject>(prefabPath);
-            if (prefab == null)
-            {
-                Debug.LogWarning($"Prefab not found: {prefabPath}");
-                continue;
-            }
-
+            
             // 셀 위치를 월드 위치로 변환
             var cellPosition = _gridLayout.CellToWorld(building.Position);
             
-            var buildingData = App.GetData<TitleData>().Building[building.BuildingDataId];
+            var buildingData = titleData.Building[building.BuildingDataId];
             var produce = await CreateObject(buildingData, cellPosition);
             if (produce != null)
             {
                 produce.BuildingId = building.BuildingId;
                 produce.PreviousPosition = cellPosition;
                 produce.transform.position = cellPosition;
+                produce.IsPlaced = true;
                 _tileStateModifier.ModifyTileState(produce, TileState.Installed);
-                CurrentEditObject = null;
-                IsEditing.Value = false;
+                buildingData.AddCount(1);
             }
         }
     }
 
+    public void CreateAndStartEdit(Building data, Vector3 position)
+    {
+        var gridObject = CreateObject(data, position);
+        StartEdit(gridObject.Result, true);
+    }
     
     public void StartEdit(BuildingObject gridObject, bool isNew = false)
     {
@@ -92,13 +89,10 @@ public class EditManager : ManagerBase
     
     public async void ConfirmEdit()
     {
-        if (!_installChecker.CheckCanInstall(CurrentEditObject))
-        {
-            return;
-        }
+        if (!_installChecker.CheckCanInstall(CurrentEditObject)) return;
 
-        var success = await CurrentEditObject.Install();
         var isNew = !CurrentEditObject.IsPlaced;
+        var success = await CurrentEditObject.Install();
 
         if (success)
         {
@@ -113,7 +107,7 @@ public class EditManager : ManagerBase
 
                 var buildingData = CurrentEditObject.BuildingData;
                 CurrentEditObject = null;
-                CreateObject(buildingData, newWorldPos);
+                CreateAndStartEdit(buildingData, newWorldPos);
                 return;
             }
             
@@ -126,7 +120,7 @@ public class EditManager : ManagerBase
         }
     }
     
-    public async Task<ProduceObject> CreateObject(Building data, Vector3 position)
+    private async Task<ProduceObject> CreateObject(Building data, Vector3 position)
     {
         var gridObject = Instantiate(_objectPrefab, position, Quaternion.identity, _buildingParent);
         switch (data.Type)
