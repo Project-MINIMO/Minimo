@@ -4,6 +4,8 @@ public class Building : IQuestClearTarget
 {
     public int ID { get; }
     public string Name { get; }
+    public int Count { get; private set; }
+    public Sprite Icon { get; }
     
     public readonly string Code;
     public readonly BuildingType Type;
@@ -12,9 +14,6 @@ public class Building : IQuestClearTarget
     public readonly int Cost;
     public readonly int Duration;
     public readonly BuildingPositionData Position;
-    public readonly Sprite Icon;
-    
-    public int Count { get; private set; }
     
     public bool IsLocked => AccountInfo.Instance.level < UnlockLevel;
     

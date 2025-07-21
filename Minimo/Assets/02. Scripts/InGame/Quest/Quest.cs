@@ -35,7 +35,7 @@ public class Quest
                 return Type switch
                 {
                     ClearType.UserLevel => AccountInfo.Instance.level,
-                    _                   =>Target.Count
+                    _                   => Target.Count
                 };
             }
         }

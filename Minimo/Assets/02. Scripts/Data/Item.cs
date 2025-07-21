@@ -8,6 +8,8 @@ public class Item : IQuestClearTarget
     
     public int ID { get; }
     public string Name { get; }
+    public int Count { get; private set; }
+    public Sprite Icon { get; }
     
     public readonly string Code;
     public readonly ItemType Type;
@@ -16,9 +18,6 @@ public class Item : IQuestClearTarget
     public readonly int SellCost;
     public readonly int BuyCost;
     public readonly string Description;
-    public readonly Sprite Icon;
-    
-    public int Count { get; private set; }
     
     public Item(ItemData data, Sprite icon, TitleData title)
     {

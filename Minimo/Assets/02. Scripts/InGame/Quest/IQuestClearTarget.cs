@@ -7,4 +7,5 @@ public interface IQuestClearTarget
     int ID { get; }
     string Name { get; }
     int Count { get; }
+    Sprite Icon { get; }
 }

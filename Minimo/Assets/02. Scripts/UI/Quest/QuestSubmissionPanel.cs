@@ -1,9 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
-
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class QuestSubmissionPanel : UIBase
 {
@@ -12,18 +8,10 @@ public class QuestSubmissionPanel : UIBase
     [SerializeField] private Button _closeBtn;
     [SerializeField] private QuestTransitioner _transitioner;
     [SerializeField] private QuestInfoUpdater _infoUpdater;
-    
-    [SerializeField] private TextMeshProUGUI _progressTMP;
-    [SerializeField] private QuestItemSelectedSlot[] _selectedSlots; 
-    [SerializeField] private Button _submitBtn;  
-    [SerializeField] private Button _cancelBtn;
-    
+    [SerializeField] private QuestSubmissionView[] _stateViews;
     [SerializeField] private ItemInfoUpdater[] _resultInfos;
     [SerializeField] private Sprite _goldSprite;
     [SerializeField] private Sprite _expSprite;
-    
-    private Dictionary<QuestCondition, ISubmissionStrategy> _strategies;
-    private ISubmissionStrategy _currentStrategy;
     
     private QuestManager _questManager;
     private TitleData _titleData;
@@ -35,27 +23,12 @@ public class QuestSubmissionPanel : UIBase
 
         _questManager = App.GetManager<QuestManager>();
         _titleData = App.GetData<TitleData>();
-        
-        var slots = GetComponentsInChildren<ItemSlot>(true);
-        foreach (var slot in slots)
+
+        foreach (var view in _stateViews)
         {
-            slot.OnItemSelected += OnItemSelected;
-        }
-  
-        _strategies = new Dictionary<QuestCondition, ISubmissionStrategy>
-        {
-            { QuestCondition.Normal, new NormalSubmissionStrategy() },
-            { QuestCondition.Choice, new ChoiceSubmissionStrategy() },
-            { QuestCondition.Quiz,   new QuizSubmissionStrategy() }
-        };
-        
-        foreach (var strategy in _strategies.Values)
-        {
-            strategy.Initialize(_progressTMP, _selectedSlots);
+            view.Initialize(_questManager, _titleData);
         }
 
-        _submitBtn.onClick.AddListener(() => _currentStrategy.OnSubmit());
-        _cancelBtn.onClick.AddListener(() => _currentStrategy.OnCancel());
         _closeBtn.onClick.AddListener(ClosePanel);
     }
     
@@ -72,9 +45,19 @@ public class QuestSubmissionPanel : UIBase
       
         _questData = _questManager.CurrentQuest;
         _infoUpdater.UpdateQuest(_questData);
+        
+        UpdateStateView();
         UpdateRewardSlots();
-        _currentStrategy = _strategies[_questData.Condition];
-        _currentStrategy.Setup(_questData);
+    }
+
+    private void UpdateStateView()
+    {
+        for (var i = 0; i < _stateViews.Length; i++)
+        {
+            _stateViews[i].gameObject.SetActive(i == (int)_questData.Condition);
+        }
+        
+        _stateViews[(int)_questData.Condition].Setup(_questData);
     }
 
     private void UpdateRewardSlots()
@@ -101,6 +84,4 @@ public class QuestSubmissionPanel : UIBase
             _resultInfos[i].gameObject.SetActive(false);
         }
     }
-
-    private void OnItemSelected(InventorySlot<Item> slot) => _currentStrategy?.SelectItem(slot.Item);
 }
