@@ -9,15 +9,17 @@ public class AccountInfo : Singleton<AccountInfo>
     private TitleData _titleData;
     
     public Dictionary<int, Item> Items { get; } = new();
-    public int level => Exp / 100;
-    public int Gold;
+    public UserLevel Level { get; private set; }
+    public UserGold Gold { get; private set; }
     public int Cash;
-    public int Exp = 100;
     public int Capacity { get; private set; } = 100;
 
     private GetItemPanel _itemPanel;
     public event Action<int> OnCapacityChanged;
     public int CurrentItemCounts => Items.Values.Count(item => item.Count > 0);
+    
+    [SerializeField] private Sprite LevelIcon;
+    [SerializeField] private Sprite GoldIcon;
 
     private void Start()
     {
@@ -28,13 +30,11 @@ public class AccountInfo : Singleton<AccountInfo>
             var item = _titleData.Item[i];
             Items.TryAdd(item.ID, item);
         }
+
+        Level = new UserLevel(LevelIcon);
+        Gold = new UserGold(GoldIcon);
     }
     
-    public void AddExp(int amount)
-    {
-        Exp += amount;
-    }
-
     public bool CanKeepItem(int id)
     {
         if (Items[id].Count > 0) return true;

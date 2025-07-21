@@ -10,8 +10,6 @@ public class QuestSubmissionPanel : UIBase
     [SerializeField] private QuestInfoUpdater _infoUpdater;
     [SerializeField] private QuestSubmissionView[] _stateViews;
     [SerializeField] private ItemInfoUpdater[] _resultInfos;
-    [SerializeField] private Sprite _goldSprite;
-    [SerializeField] private Sprite _expSprite;
     
     private QuestManager _questManager;
     private TitleData _titleData;
@@ -69,14 +67,7 @@ public class QuestSubmissionPanel : UIBase
             _resultInfos[i].gameObject.SetActive(true);
             
             var reward = _questData.Reward[i];
-            var sprite = reward.Type switch
-            {
-                RewardType.Gold => _goldSprite,
-                RewardType.Exp  => _expSprite,
-                RewardType.Item => _titleData.Item[reward.Target].Icon,
-                _                => _goldSprite
-            };
-            _resultInfos[i].UpdateItem(sprite, reward.Amount);
+            _resultInfos[i].UpdateItem(reward.Target.Icon, reward.Amount);
         }
 
         for (; i < _resultInfos.Length; i++)

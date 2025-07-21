@@ -79,14 +79,14 @@ public class TilePanel : UIBase
 
     private bool UseGold()
     {
-        if (AccountInfo.Instance.Gold < 10)
+        if (AccountInfo.Instance.Gold.Count < 10)
         {
             App.Notification(NotifyType.GoldLack);
             return false;
         }
         else
         {
-            AccountInfo.Instance.Gold -= 10;
+            AccountInfo.Instance.Gold.AddCount(-10);
             return true;
         }
     }

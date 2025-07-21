@@ -55,7 +55,7 @@ public class ItemSellHandler : TransactionHandler
     protected override void Transaction()
     {
         AccountInfo.Instance.RemoveItem(_item, Quantity);
-        AccountInfo.Instance.Gold += Price;
+        AccountInfo.Instance.Gold.AddCount(Price);
         
         base.Transaction();
     }
