@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using System.Collections;
+
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ public class AccountInfo : Singleton<AccountInfo>
 {
     private TitleData _titleData;
     
-    public Dictionary<int, Item> Items { get; } = new();
+    public Dictionary<int, Item> Items { get; private set; }
     public UserLevel Level { get; private set; }
     public UserGold Gold { get; private set; }
     public int Cash;
@@ -24,15 +24,14 @@ public class AccountInfo : Singleton<AccountInfo>
     private void Start()
     {
         _titleData = App.GetData<TitleData>();
-
-        for (var i = 0; i < _titleData.Item.Count; i++)
-        {
-            var item = _titleData.Item[i];
-            Items.TryAdd(item.ID, item);
-        }
-
+        
         Level = new UserLevel(LevelIcon);
         Gold = new UserGold(GoldIcon);
+    }
+
+    public void AddItems(Dictionary<int, Item> items)
+    {
+        Items = items;
     }
     
     public bool CanKeepItem(int id)
