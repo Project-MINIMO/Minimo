@@ -2,13 +2,15 @@ using System;
 
 using UnityEngine;
 
-public class Item : IQuestClearTarget
+public class Item : IQuestClearTarget, IQuestRewardTarget
 {
     public event Action OnItemCountChanged;
     
-    public int ID { get; }
     public string Name { get; }
+    public int Count { get; private set; }
+    public Sprite Icon { get; }
     
+    public readonly int ID;
     public readonly string Code;
     public readonly ItemType Type;
     public readonly int Level;
@@ -16,9 +18,6 @@ public class Item : IQuestClearTarget
     public readonly int SellCost;
     public readonly int BuyCost;
     public readonly string Description;
-    public readonly Sprite Icon;
-    
-    public int Count { get; private set; }
     
     public Item(ItemData data, Sprite icon, TitleData title)
     {
@@ -34,11 +33,10 @@ public class Item : IQuestClearTarget
         Icon = icon;
     }
 
-    public void AddCount(int num)
+    public void AddCount(int amount)
     {
-        Count += num;
-        
-        Count = Mathf.Clamp(Count, 0, 99999);
+        Count += amount;
+        Count = Mathf.Clamp(Count, 0, int.MaxValue);
         OnItemCountChanged?.Invoke();
     }
 }

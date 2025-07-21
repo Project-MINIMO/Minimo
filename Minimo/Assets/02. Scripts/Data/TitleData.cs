@@ -216,16 +216,6 @@ public class TitleData : DataBase
         {
             UMStatGrowth.Add(data.ID, data);
         }
-        
-        var produceDataRaw = DataLoader.LoadDataProduceData(PRODUCE_PATH);
-        foreach (var data in produceDataRaw)
-        {
-            Produce.Add(data.ID, data);   
-        }
-        GroupedProduce = Produce
-            .Values
-            .GroupBy(data => data.Building)
-            .ToDictionary(data => data.Key, data => data.ToList());
     }
     
     private async Task LoadDataAsync()
@@ -269,6 +259,8 @@ public class TitleData : DataBase
         }
         
         LoadQuestData(questGroups);
+        LoadProduceData();
+        AccountInfo.Instance.AddItems(Item);
     }
    
     private Task<T> LoadAddressableDataAsync<T>(string assetName, string assetPath)
@@ -311,6 +303,19 @@ public class TitleData : DataBase
             
             Quest.Add(data.ID, newQuest);
         }
+    }
+
+    private void LoadProduceData()
+    {
+        var produceDataRaw = DataLoader.LoadDataProduceData(PRODUCE_PATH);
+        foreach (var data in produceDataRaw)
+        {
+            Produce.Add(data.ID, data);   
+        }
+        GroupedProduce = Produce
+            .Values
+            .GroupBy(data => data.Building)
+            .ToDictionary(data => data.Key, data => data.ToList());
     }
 
     #region StringData

@@ -173,7 +173,7 @@ public class CompletedState : ITaskState
         var expAmount = task.Data.EXP;
         var modifiedExp = expAmount * task.ExpRatio;
         var roundedExp = Mathf.RoundToInt(modifiedExp);
-        AccountInfo.Instance.AddExp(roundedExp);
+        AccountInfo.Instance.Level.AddCount(roundedExp);
         App.LogBox("purple", "획득 경험치 비율 증가 로그", new()
         {
             { "기존 경험치", expAmount.ToString() },

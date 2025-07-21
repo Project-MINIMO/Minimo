@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using System.Collections;
+
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,33 +8,32 @@ public class AccountInfo : Singleton<AccountInfo>
 {
     private TitleData _titleData;
     
-    public Dictionary<int, Item> Items { get; } = new();
-    public int level => Exp / 100;
-    public int Gold;
+    public Dictionary<int, Item> Items { get; private set; }
+    public UserLevel Level { get; private set; }
+    public UserGold Gold { get; private set; }
     public int Cash;
-    public int Exp = 100;
     public int Capacity { get; private set; } = 100;
 
     private GetItemPanel _itemPanel;
     public event Action<int> OnCapacityChanged;
     public int CurrentItemCounts => Items.Values.Count(item => item.Count > 0);
+    
+    [SerializeField] private Sprite LevelIcon;
+    [SerializeField] private Sprite GoldIcon;
 
     private void Start()
     {
         _titleData = App.GetData<TitleData>();
+        
+        Level = new UserLevel(LevelIcon);
+        Gold = new UserGold(GoldIcon);
+    }
 
-        for (var i = 0; i < _titleData.Item.Count; i++)
-        {
-            var item = _titleData.Item[i];
-            Items.TryAdd(item.ID, item);
-        }
+    public void AddItems(Dictionary<int, Item> items)
+    {
+        Items = items;
     }
     
-    public void AddExp(int amount)
-    {
-        Exp += amount;
-    }
-
     public bool CanKeepItem(int id)
     {
         if (Items[id].Count > 0) return true;

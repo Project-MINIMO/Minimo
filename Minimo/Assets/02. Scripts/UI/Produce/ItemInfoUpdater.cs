@@ -34,7 +34,12 @@ public class ItemInfoUpdater : MonoBehaviour
     
     public void UpdateItem(Sprite sprite, int amount)
     {
-        _itemCountTMP?.SetText(amount.ToString());
+        UpdateItem(sprite, amount.ToString());
+    }
+
+    public void UpdateItem(Sprite sprite, string amount)
+    {
+        _itemCountTMP?.SetText(amount);
 
         if (_iconImg == null) return;
         _iconImg.sprite = sprite;

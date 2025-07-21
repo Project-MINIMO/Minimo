@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Cysharp.Threading.Tasks.Triggers;
 using UnityEngine;
 
 public class QuestGroup
@@ -27,19 +27,8 @@ public class Quest
         public readonly bool Result;
         public readonly IQuestClearTarget Target;
         public readonly int Amount;
-        
-        public int CurrentProgress
-        {
-            get
-            {
-                return Type switch
-                {
-                    ClearType.UserLevel => AccountInfo.Instance.level,
-                    _                   =>Target.Count
-                };
-            }
-        }
 
+        public int CurrentProgress => Target.Count;
         public bool IsCompleted => CurrentProgress >= Amount;
         
         public QuestClear(QuestClearData data, IQuestClearTarget target)
@@ -54,14 +43,18 @@ public class Quest
     [Serializable]
     public class QuestReward
     {
-        public readonly RewardType Type;
-        public readonly int Target;
+        public readonly IQuestRewardTarget Target;
         public readonly int Amount;
-        public QuestReward(RewardType type, int target, int amount)
+        
+        public QuestReward(IQuestRewardTarget target, int amount)
         {
-            Type = type;
             Target = target;
             Amount = amount;
+        }
+
+        public void GetReward(int bonus)
+        {
+            Target.AddCount(Amount * bonus);
         }
     }
     
@@ -95,7 +88,7 @@ public class Quest
         Description = title.GetString($"STR_QUEST_{data.Name.ToUpper()}_DESC");
         Condition = (QuestCondition)data.Condition;
         Clear = ParseClear(clearData, title);
-        Reward = ParseReward(data.Reward);
+        Reward = ParseReward(data.Reward, title);
         ClearDescription = GetClearDescription(descriptions);
     }
     
@@ -108,6 +101,7 @@ public class Quest
         {
             IQuestClearTarget clearTarget = (ClearType)data.Type switch
             {
+                ClearType.UserLevel => AccountInfo.Instance.Level,
                 ClearType.Plant or ClearType.Harvest or ClearType.Wish => title.Item[data.Target],
                 ClearType.Build => title.Building[data.Target],
                 _ => null
@@ -119,7 +113,7 @@ public class Quest
         return result.ToArray();
     }
     
-    private QuestReward[] ParseReward(string rewardRaw)
+    private QuestReward[] ParseReward(string rewardRaw, TitleData title)
     {
         if (string.IsNullOrEmpty(rewardRaw)) return Array.Empty<QuestReward>();
 
@@ -132,11 +126,16 @@ public class Quest
                 Debug.LogWarning($"[ParseCondition] Invalid format: {res}");
                 return null;
             }
+            
+            IQuestRewardTarget rewardTarget = (RewardType)int.Parse(parts[0]) switch
+            {  
+                RewardType.Gold => AccountInfo.Instance.Gold,
+                RewardType.Exp => AccountInfo.Instance.Level,
+                RewardType.Item => title.Item[int.Parse(parts[1])],
+                _ => null
+            };
 
-            return new QuestReward(
-                (RewardType)int.Parse(parts[0]), 
-                int.Parse(parts[1]), 
-                int.Parse(parts[2]));
+            return new QuestReward(rewardTarget, int.Parse(parts[2]));
         }).ToArray();
     }
 
@@ -146,9 +145,14 @@ public class Quest
         
         for (var i = 0; i < Clear.Length; i++)
         {
-            if (i >= 1) clearDescription += "\n";
-            
             var clear = Clear[i];
+            
+            if (i >= 1)
+            {
+                if (clear.Type == ClearType.Wish) continue;
+                
+                clearDescription += "\n";
+            }
             
             switch (clear.Type)
             {

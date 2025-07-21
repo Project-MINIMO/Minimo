@@ -398,15 +398,14 @@ MonoBehaviour:
   _selectBtn: {fileID: 522613927153988933}
   _infoUpdater: {fileID: 1985712909422727244}
   _toggleBtn: {fileID: 1526112335528833304}
+  _nameTMP: {fileID: 8460883270350211846}
   _descTMP: {fileID: 2704617124472467006}
-  _rect: {fileID: 284614575789912889}
   _detailBackgroundImg: {fileID: 5823443608096655767}
   _defaultBackgroundImg: {fileID: 7445488214352767256}
   _iconObjs:
   - {fileID: 6356566261050321137}
-  - {fileID: 5875615720390913029}
   - {fileID: 7946558467194952356}
-  _nameTMP: {fileID: 8460883270350211846}
+  - {fileID: 5875615720390913029}
 --- !u!114 &1985712909422727244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -420,6 +419,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _questNameTMP: {fileID: 8460883270350211846}
+  _questNameTMP2: {fileID: 0}
   _questDescriptionTMP: {fileID: 0}
   _questConditionTMP: {fileID: 2704617124472467006}
   _iconImg: {fileID: 0}

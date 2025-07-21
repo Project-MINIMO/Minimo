@@ -1,4 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class QuestDetailSlot : QuestSlot { }
+public class QuestDetailSlot : QuestSlot
+{
+    
+}

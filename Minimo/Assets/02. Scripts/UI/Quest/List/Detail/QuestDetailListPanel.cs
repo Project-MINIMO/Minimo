@@ -6,61 +6,47 @@ public class QuestDetailListPanel : QuestListPanel<QuestDetailSlot>
     public override bool IsUseBlur => true;
     
     [SerializeField] private Button _closeBtn;
-    [SerializeField] private Button[] _menuBtns;
-    [SerializeField] private QuestListBack[] _menuBacks;
-    [SerializeField] private GameObject[] _menuActiveObjs;
-    [SerializeField] private GameObject[] _alertObjs;
+    [SerializeField] private Toggle[] _menuTogs;
+    [SerializeField] private QuestDetailListView[] _menuBacks;
     
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
         
-        _closeBtn.onClick.AddListener(ClosePanel);
-        
-        SetButtonEvent();
-    }
-    
-    private void SetButtonEvent()
-    {
-        for (var i = 0; i < _menuBtns.Length; i++)
+        for (var i = 0; i < _menuTogs.Length; i++)
         {
-            var idx = i;
-
-            _menuBtns[idx].onClick.AddListener(() => OnClickMenuBtn(idx));
-
-            _menuBacks[idx].gameObject.SetActive(true);
-            _menuBacks[idx].Initialize(idx);
-            _menuBacks[idx].gameObject.SetActive(false);
-        }
-    }
-    
-    private void OnClickMenuBtn(int index)
-    {
-        for (var i = 0; i < _menuBtns.Length; i++)
-        {
-            var active = index == i;
+            var index = i;
             
-            _menuBacks[i].gameObject.SetActive(active);
-            _menuActiveObjs[i].SetActive(active);
-
-            if (active)
-            {
-                _alertObjs[i].SetActive(false);
-            }
+            _menuBacks[index].gameObject.SetActive(true);
+            _menuBacks[index].Initialize(index);
+            _menuBacks[index].gameObject.SetActive(false);
+            
+            _menuTogs[index].onValueChanged.AddListener(isOn => 
+                _menuBacks[index].gameObject.SetActive(isOn));
         }
-    }
-
-    public override void OpenPanel()
-    {
-        base.OpenPanel();
         
-        OnClickMenuBtn(0);
+        _closeBtn.onClick.AddListener(ClosePanel);
     }
     
-    protected override void OnSlotSelected(Quest quest)
+    protected override void AssignSlot(Quest quest)
     {
-        base.OnSlotSelected(quest);
-        
-        _questManager.CurrentQuest = quest;
+        var tabIndex = GetTabIndexFor(quest.Type);
+        _menuBacks[tabIndex].AddQuest(quest);
     }
+
+    protected override void ReleaseSlot(Quest quest)
+    {
+        var tabIndex = GetTabIndexFor(quest.Type);
+        _menuBacks[tabIndex].RemoveQuest(quest);
+    }
+    
+    private int GetTabIndexFor(QuestType type) => type switch
+    {
+        QuestType.Guide => 0,
+        QuestType.Story => 0,
+        QuestType.Side => 1,
+        QuestType.Wish => 1,
+        QuestType.Constellation => 2,
+        _ => -1
+    };
 }

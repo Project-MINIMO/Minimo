@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 4054080625410875346}
   - component: {fileID: 3402992943698489471}
   - component: {fileID: 7980073210099026679}
-  - component: {fileID: 7250376837586074871}
+  - component: {fileID: 8847625996533843445}
   m_Layer: 5
   m_Name: QuestItemSelectedSlot
   m_TagString: Untagged
@@ -202,7 +202,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
---- !u!114 &7250376837586074871
+--- !u!114 &8847625996533843445
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -211,12 +211,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4444498306178375705}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52868944c031a4e4581d74344f50e37c, type: 3}
+  m_Script: {fileID: 11500000, guid: bec6e2dcb99c3064f81508026ee66d94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _selectedTog: {fileID: 7980073210099026679}
+  _itemNameTMP: {fileID: 0}
+  _itemDescriptionTMP: {fileID: 0}
+  _itemCountTMP: {fileID: 6223581069831867088}
   _iconImg: {fileID: 3903007790621061879}
-  _countTMP: {fileID: 6223581069831867088}
 --- !u!1 &6946236579101879661
 GameObject:
   m_ObjectHideFlags: 0

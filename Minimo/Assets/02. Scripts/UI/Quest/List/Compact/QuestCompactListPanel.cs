@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
 using UnityEngine;
 using DG.Tweening;
@@ -9,66 +9,70 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
     public override bool IsDefaultPanel => true;
     
     private RectTransform _rect;
+    
     private readonly Vector2 _showPosition = new(-2, 0);
     private readonly Vector2 _hidePosition = new(-370, 0);
+    
+    private readonly Queue<QuestCompactSlot> _slotPool = new();
+    private readonly Dictionary<Quest, QuestCompactSlot> _activeMap = new();
     
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
         
-        _questManager.OnQuestsUpdated += UpdateQuest;
-        
         var questListPanel = manager.GetPanel<QuestDetailListPanel>();
         var longPressDetector = GetComponentInChildren<UILongPressDetector>();
         longPressDetector.OnLongPress = questListPanel.OpenPanel;
         
-        foreach (var slot in _slots)
+        foreach (var slot in Slots)
         {
             slot.OnSlotOpened += OnSlotOpened;
+            slot.gameObject.SetActive(false);
+            _slotPool.Enqueue(slot);
         }
         
         _rect = GetComponent<RectTransform>();
     }
-
-    private void OnSlotOpened(QuestCompactSlot openedSlot)
-    {
-        foreach (var slot in _slots.Where(slot => openedSlot != slot))
-        {
-            slot.Close();
-        }
-    }
-
+    
     public override void Show(bool isNew)
     {
         base.Show(isNew);
-        
+
+        OnSlotOpened(null);
         _rect.DOAnchorPos(_showPosition, 0.3f).SetEase(Ease.OutCubic);
     }
 
     public override void Hide(bool isNew)
     {
         base.Hide(isNew);
-        
+
+        OnSlotOpened(null);
         _rect.DOAnchorPos(_hidePosition, 0.3f).SetEase(Ease.InCubic);
     }
-  
-    private void UpdateQuest(List<Quest> quests)
+   
+    protected override void AssignSlot(Quest quest)
     {
-        var orderedQuests = quests.OrderBy(x => x.ID).ToList();
-  
-        var i = 0;
+        var slot = _slotPool.Dequeue();
+
+        slot.gameObject.SetActive(true);
+        slot.Initialize(quest);
+        _activeMap[quest] = slot;
+    }
+
+    protected override void ReleaseSlot(Quest quest)
+    {
+        if (!_activeMap.TryGetValue(quest, out var slot)) return;
         
-        for (; i < orderedQuests.Count; i++)
+        slot.gameObject.SetActive(false);
+        _activeMap.Remove(quest);
+        _slotPool.Enqueue(slot);
+    }
+  
+    private void OnSlotOpened(QuestCompactSlot openedSlot)
+    {
+        foreach (var slot in _activeMap.Values.Where(slot => openedSlot != slot))
         {
-            var questInfo = _slots[i];
-
-            questInfo.gameObject.SetActive(true);
-            questInfo.Initialize(orderedQuests[i]);
-        }
-
-        for (; i < _slots.Count; i++)
-        {
-            _slots[i].gameObject.SetActive(false);
+            slot.Close();
         }
     }
 }
