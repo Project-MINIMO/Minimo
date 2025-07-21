@@ -8,7 +8,7 @@ public class QuestInfoPanel : UIBase
     
     [SerializeField] private Button _closeBtn;
     [SerializeField] private QuestTransitioner _transitioner;
-    [SerializeField] private QuestInfoUpdater _infoUpdater;
+    [SerializeField] protected QuestInfoUpdater _infoUpdater;
     
     protected QuestManager QuestManager;
     protected Quest SelectedQuest;
@@ -34,12 +34,5 @@ public class QuestInfoPanel : UIBase
         base.Show(isNew);
 
         _transitioner.Open(isNew);
-    }
-
-    public override void OpenPanel()
-    {
-        base.OpenPanel();
-        
-        _infoUpdater.UpdateQuestGroup(SelectedQuest);
     }
 }

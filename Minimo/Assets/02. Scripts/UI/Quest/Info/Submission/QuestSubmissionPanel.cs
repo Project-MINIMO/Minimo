@@ -20,6 +20,7 @@ public class QuestSubmissionPanel : QuestInfoPanel
     {
         base.OpenPanel();  
 
+        _infoUpdater.UpdateQuest(SelectedQuest);
         UpdateStateView();
         UpdateRewardSlots();
     }
