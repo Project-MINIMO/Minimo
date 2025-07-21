@@ -8,6 +8,9 @@ using UnityEngine.UI;
 
 public class MultiSelectDropdown : TMP_Dropdown
 {
+    public GameObject _backgroundObj;
+    public GameObject _backgroundObj2;
+    
     [Serializable]
     public class SelectionChangedEvent : UnityEvent<bool[]> { }
     
@@ -77,5 +80,16 @@ public class MultiSelectDropdown : TMP_Dropdown
                 toggle.Select();
             }
         }
+
+        if (_selectedStates.Length == 3) _backgroundObj.SetActive(true);
+        if (_selectedStates.Length == 2) _backgroundObj2.SetActive(true);
+    }
+
+    protected override void DestroyDropdownList(GameObject dropdownList)
+    {
+        base.DestroyDropdownList(dropdownList);
+        
+        _backgroundObj.SetActive(false);
+        _backgroundObj2.SetActive(false);
     }
 }

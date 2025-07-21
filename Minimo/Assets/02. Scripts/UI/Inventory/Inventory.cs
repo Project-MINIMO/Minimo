@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +30,7 @@ public abstract class Inventory<T> : MonoBehaviour
         var existingButtons = _scrollRect.GetComponentsInChildren<InventorySlot<T>>(true);
 
         var filteredItems = GetFilteredItems();
+
         Slots = new List<InventorySlot<T>>(filteredItems.Count);
         
         var i = 0;

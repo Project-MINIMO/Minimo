@@ -97,13 +97,13 @@ public class App : Singleton<App>
     
     public static void LogBox(string titleColor, string title, Dictionary<string, string> contents)
     {
-        Debug.Log("┌────────────────────────────────────────────┐");
-        Debug.Log($"│ <color={titleColor}><b>{title}</b></color> ");
+        var logString = string.Empty;
+        logString += $"<color={titleColor}>{title}</color>";
         foreach (var pair in contents)
         {
-            Debug.Log($"│ <color={titleColor}>▶</color> <b>{pair.Key}</b> : {pair.Value}");
+            logString += $"\n<color={titleColor}>▶</color> <b>{pair.Key}</b> : {pair.Value}";
         }
-        Debug.Log("└────────────────────────────────────────────┘");
+        Debug.Log(logString);
     }
 
     public static void Notification(NotifyType type)

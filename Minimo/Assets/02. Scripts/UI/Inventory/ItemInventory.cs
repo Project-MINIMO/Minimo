@@ -20,7 +20,7 @@ public class ItemInventory : Inventory<Item>
         _menuTogs[4].GetComponentInChildren<TextMeshProUGUI>().text = titleData.GetString("STR_STORAGE_UI_TAB5_NAME");
     }
 
-    protected override List<Item> GetFilteredItems() => AccountInfo.Instance.Items.Values.ToList();
+    protected override List<Item> GetFilteredItems() => AccountInfo.Instance.Items.Values.Where(item => item.Level != 0).ToList();
 
     protected override bool IsSlotFiltered(int index, Item item) => index == 0 || index == (int)item.Type + 1;
 }

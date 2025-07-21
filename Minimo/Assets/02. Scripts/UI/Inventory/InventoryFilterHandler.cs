@@ -20,6 +20,9 @@ public class InventoryFilterHandler : MonoBehaviour
     [SerializeField] private StorageInventory _inventory;
     [SerializeField] private MultiSelectDropdown _dropdown;
     [SerializeField] private TextMeshProUGUI _label;
+    
+    [SerializeField] private GameObject _backgroundObj;
+    [SerializeField] private GameObject _backgroundObj2;
 
     private Dictionary<int, List<FilterOption>> _optionMap;
     private Dictionary<int, Action<bool[]>> _actionMap;
@@ -33,6 +36,8 @@ public class InventoryFilterHandler : MonoBehaviour
         CacheOptionData();
 
         _dropdown.OnSelectionChanged.AddListener(OnDropdownChanged);
+        _dropdown._backgroundObj = _backgroundObj;
+        _dropdown._backgroundObj2 = _backgroundObj2;
     }
 
     private void InitTabOptions()

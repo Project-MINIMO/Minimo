@@ -17,7 +17,7 @@ public class ToggleTransition : MonoBehaviour
     private void Awake()
     {
         _toggle = GetComponent<Toggle>();
-        _image = GetComponent<Image>();
+        _image = GetComponentInChildren<Image>();
         _text = GetComponentInChildren<TextMeshProUGUI>();
         
         _toggle.onValueChanged.AddListener(UpdateTransition);
