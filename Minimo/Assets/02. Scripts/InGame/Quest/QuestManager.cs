@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using UniRx;
+using UnityEngine;
 
 public enum QuestCondition
 {
@@ -41,6 +42,8 @@ public class QuestManager : ManagerBase
     public Dictionary<int, List<Quest>> GroupedQuest { get; private set; } = new();
     public ReactiveProperty<Quest> CurrentQuest { get; } = new(null);
     public ReactiveCollection<Quest> ActiveQuests { get; } = new();
+
+    private QuestSpawner _spawner;
     
     protected override void Awake()
     {
@@ -51,6 +54,11 @@ public class QuestManager : ManagerBase
             .Where(data => data.Group != null)
             .GroupBy(data => data.Group.ID)
             .ToDictionary(data => data.Key, data => data.ToList());
+    }
+
+    private void Start()
+    {
+        _spawner = new QuestSpawner(this);
     }
     
     public void AddQuest(Quest quest)
