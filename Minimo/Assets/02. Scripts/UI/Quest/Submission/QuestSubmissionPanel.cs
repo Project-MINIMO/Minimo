@@ -1,3 +1,4 @@
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,21 +11,28 @@ public class QuestSubmissionPanel : UIBase
     [SerializeField] private QuestInfoUpdater _infoUpdater;
     [SerializeField] private QuestSubmissionView[] _stateViews;
     [SerializeField] private ItemInfoUpdater[] _resultInfos;
-    
-    private QuestManager _questManager;
+
     private TitleData _titleData;
-    private Quest _questData;
+    private Quest _quest;
 
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
 
-        _questManager = App.GetManager<QuestManager>();
+        var questManager = App.GetManager<QuestManager>();
+        questManager.CurrentQuest
+            .Subscribe(quest =>
+            {
+                if (quest != null) _quest = quest;
+                else ClosePanel();
+            })
+            .AddTo(this);
+        
         _titleData = App.GetData<TitleData>();
 
         foreach (var view in _stateViews)
         {
-            view.Initialize(_questManager, _titleData);
+            view.Initialize(questManager, _titleData);
         }
 
         _closeBtn.onClick.AddListener(ClosePanel);
@@ -40,9 +48,8 @@ public class QuestSubmissionPanel : UIBase
     public override void OpenPanel()
     {
         base.OpenPanel();  
-      
-        _questData = _questManager.CurrentQuest;
-        _infoUpdater.UpdateQuest(_questData);
+        
+        _infoUpdater.UpdateQuest(_quest);
         
         UpdateStateView();
         UpdateRewardSlots();
@@ -52,21 +59,21 @@ public class QuestSubmissionPanel : UIBase
     {
         for (var i = 0; i < _stateViews.Length; i++)
         {
-            _stateViews[i].gameObject.SetActive(i == (int)_questData.Condition);
+            _stateViews[i].gameObject.SetActive(i == (int)_quest.Condition);
         }
         
-        _stateViews[(int)_questData.Condition].Setup(_questData);
+        _stateViews[(int)_quest.Condition].Setup(_quest);
     }
 
     private void UpdateRewardSlots()
     {
         var i = 0;
         
-        for (; i < _questData.Reward.Length; i++)
+        for (; i < _quest.Reward.Length; i++)
         {
             _resultInfos[i].gameObject.SetActive(true);
             
-            var reward = _questData.Reward[i];
+            var reward = _quest.Reward[i];
             _resultInfos[i].UpdateItem(reward.Target.Icon, reward.Amount);
         }
 

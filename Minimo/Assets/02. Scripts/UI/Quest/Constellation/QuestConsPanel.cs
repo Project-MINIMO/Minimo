@@ -1,3 +1,4 @@
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,9 +10,19 @@ public class QuestConsPanel : QuestPanel<QuestConsSlot>
     [SerializeField] private QuestTransitioner _transitioner;
     [SerializeField] private QuestInfoUpdater _infoUpdater;
     
+    private Quest _quest;
+    
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
+        
+        _questManager.CurrentQuest
+            .Subscribe(quest =>
+            {
+                if (quest != null) _quest = quest;
+                else ClosePanel();
+            })
+            .AddTo(this);
         
         _closeBtn.onClick.AddListener(ClosePanel);
 
@@ -29,8 +40,8 @@ public class QuestConsPanel : QuestPanel<QuestConsSlot>
     {
         base.OpenPanel();
         
-        UpdateQuest(_questManager.CurrentQuest);
-        _infoUpdater.UpdateQuestGroup(_questManager.CurrentQuest);
+        UpdateQuest(_quest);
+        _infoUpdater.UpdateQuestGroup(_quest);
     }
 
     private void UpdateQuest(Quest questData)

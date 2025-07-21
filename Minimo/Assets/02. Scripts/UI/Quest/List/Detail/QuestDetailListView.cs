@@ -1,6 +1,7 @@
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -18,11 +19,10 @@ public class QuestDetailListView : MonoBehaviour
 
     private int _questIndex;
     
-    public void Initialize(int index, QuestManager questManager)
+    public void Initialize(int index)
     {
         _questIndex = index;
-        questManager.OnQuestsUpdated += UpdateQuest;
-
+        
         var titleString = GetTitleString(index);
         _titleTMP.SetText(titleString);
         _buttonTMP.SetText(titleString);

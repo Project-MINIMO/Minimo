@@ -36,12 +36,15 @@ public class ChoiceSubmissionView : QuestSubmissionView
 
     protected override void Submit()
     {
+        var activeIndex = 0;
+        
         for (var i = 0; i < _selectTogs.Length; i++)
         {
             if (!_selectTogs[i].isOn) continue;
             if (!Quest.Clear[i].IsCompleted) return;
+            activeIndex = i;
         }
         
-        QuestManager.SubmitQuest();
+        QuestManager.SubmitQuest(activeIndex);
     }
 }

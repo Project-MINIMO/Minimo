@@ -1,6 +1,7 @@
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
+using UniRx;
 using UnityEngine;
 using DG.Tweening;
 
@@ -13,12 +14,20 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
     private readonly Vector2 _showPosition = new(-2, 0);
     private readonly Vector2 _hidePosition = new(-370, 0);
     
+    private Queue<QuestCompactSlot> _slotPool = new();
+    private Dictionary<Quest, QuestCompactSlot> _activeMap = new();
+    
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
         
-        _questManager.OnQuestsUpdated += UpdateQuest;
-        UpdateQuest(_questManager.ActiveQuests);
+        _questManager.ActiveQuests.ObserveAdd()
+            .Subscribe(addEvent => AssignSlot(addEvent.Value))
+            .AddTo(this);
+
+        _questManager.ActiveQuests.ObserveRemove()
+            .Subscribe(removeEvent => ReleaseSlot(removeEvent.Value))
+            .AddTo(this);
         
         var questListPanel = manager.GetPanel<QuestDetailListPanel>();
         var longPressDetector = GetComponentInChildren<UILongPressDetector>();
@@ -55,32 +64,28 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
             slot.Close();
         }
     }
-  
-    private void UpdateQuest(List<Quest> quests)
-    {
-        //var orderedQuests = quests.OrderBy(x => x.ID).ToList();
-  
-        var i = 0;
-        
-        for (; i < quests.Count; i++)
-        {
-            if (i > _slots.Count) return;
-            
-            var questInfo = _slots[i];
-            
-            questInfo.gameObject.SetActive(true);
-            questInfo.Initialize(quests[i]);
-        }
-
-        for (; i < _slots.Count; i++)
-        {
-            _slots[i].gameObject.SetActive(false);
-        }
-    }
     
+    private void AssignSlot(Quest quest)
+    {
+        var slot = _slotPool.Dequeue();
+
+        slot.gameObject.SetActive(true);
+        slot.Initialize(quest);
+        _activeMap[quest] = slot;
+    }
+
+    private void ReleaseSlot(Quest quest)
+    {
+        if (!_activeMap.TryGetValue(quest, out var slot)) return;
+        
+        slot.gameObject.SetActive(false);
+        _activeMap.Remove(quest);
+        _slotPool.Enqueue(slot);
+    }
+  
     private void OnSlotOpened(QuestCompactSlot openedSlot)
     {
-        foreach (var slot in _slots.Where(slot => openedSlot != slot))
+        foreach (var slot in _activeMap.Values.Where(slot => openedSlot != slot))
         {
             if (slot.gameObject.activeSelf)
             {

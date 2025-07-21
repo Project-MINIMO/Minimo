@@ -52,9 +52,9 @@ public class Quest
             Amount = amount;
         }
 
-        public void GetReward()
+        public void GetReward(int bonus)
         {
-            Target.AddCount(Amount);
+            Target.AddCount(Amount * bonus);
         }
     }
     

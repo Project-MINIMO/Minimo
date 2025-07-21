@@ -31,9 +31,9 @@ public class Building : IQuestClearTarget
         Icon = position.Sprite;
     }
     
-    public void AddCount(int num)
+    public void AddCount(int amount)
     {
-        Count += num;
+        Count += amount;
         Count = Mathf.Clamp(Count, 0, int.MaxValue);
     }
 }

@@ -18,7 +18,7 @@ public class QuestDetailListPanel : QuestListPanel<QuestDetailSlot>
             var index = i;
             
             _menuBacks[index].gameObject.SetActive(true);
-            _menuBacks[index].Initialize(index, _questManager);
+            _menuBacks[index].Initialize(index);
             _menuBacks[index].gameObject.SetActive(false);
             
             _menuTogs[index].onValueChanged.AddListener(isOn => 
