@@ -23,6 +23,7 @@ public class QuestConsPanel : QuestInfoPanel
     {
         base.OpenPanel();
         
+        _infoUpdater.UpdateQuestGroup(SelectedQuest);
         UpdateQuest(SelectedQuest);
     }
 
