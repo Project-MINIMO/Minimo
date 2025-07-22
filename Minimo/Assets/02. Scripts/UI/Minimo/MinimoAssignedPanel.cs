@@ -12,11 +12,12 @@ public class MinimoAssignedPanel : UIBase
             
     [SerializeField] private TextMeshProUGUI _titleTMP;
     [SerializeField] private TextMeshProUGUI _descriptionTMP;
-    
+    [SerializeField] private RectTransform _content;
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
     
     private readonly Queue<MinimoAssignedSlot> _slotPool = new();
+    private readonly List<MinimoAssignedSlot> _activeSlots = new();
     private MinimoPlacePanel _placePanel;
     
     public override void Initialize(UIManager manager)
@@ -46,10 +47,19 @@ public class MinimoAssignedPanel : UIBase
     
     private void AssignSlot(ProduceAdvanced building)
     {
-        var slot = _slotPool.Dequeue();
+        var activeSlot = _slotPool.Dequeue();
 
-        slot.gameObject.SetActive(true);
-        slot.Initialize(building);
+        activeSlot.gameObject.SetActive(true);
+        activeSlot.Initialize(building);
+        _activeSlots.Add(activeSlot);
+        
+        var sorted = _activeSlots.OrderBy(slot => slot.Item.BuildingData.ID).ToList();
+        for (var i = 0; i < sorted.Count; i++)
+        {
+            sorted[i].transform.SetSiblingIndex(i);
+        }
+        
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_content);
     }
 
     private void OnItemSelected(InventorySlot<ProduceAdvanced> slot)
