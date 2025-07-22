@@ -48,22 +48,19 @@ public class MinimoInventory : Inventory<Minimo>
     #endregion
 
     #region Filter
-    public void FilterByAssingedBuilding(bool isAssinged)
+    public void FilterMinimo(bool[] activeArray)
     {
         foreach (var slot in Slots)
         {
-            var isActive = slot.Item.AssignedBuilding == isAssinged;
+            var buildingMatches = 
+                (activeArray[0] && slot.Item.AssignedBuilding != null)
+                || (activeArray[1] && slot.Item.AssignedBuilding == null);
             
-            slot.gameObject.SetActive(isActive);
-        }
-    }
-    public void FilterByType(int type)
-    {
-        foreach (var slot in Slots)
-        {
-            var isActive = slot.Item.Type == type;
+            var typeMatches = 
+                (activeArray[2] && slot.Item.Type == 0)
+                || (activeArray[3] && slot.Item.Type == 1);
             
-            slot.gameObject.SetActive(isActive);
+            slot.gameObject.SetActive(buildingMatches && typeMatches);
         }
     }
     #endregion

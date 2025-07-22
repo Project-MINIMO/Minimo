@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using TMPro;
+
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public class MultiSelectDropdown : TMP_Dropdown
 {
@@ -81,15 +82,15 @@ public class MultiSelectDropdown : TMP_Dropdown
             }
         }
 
-        if (_selectedStates.Length == 3) _backgroundObj.SetActive(true);
-        if (_selectedStates.Length == 2) _backgroundObj2.SetActive(true);
+        //if (_selectedStates.Length == 3) _backgroundObj.SetActive(true);
+        //if (_selectedStates.Length == 2) _backgroundObj2.SetActive(true);
     }
 
     protected override void DestroyDropdownList(GameObject dropdownList)
     {
         base.DestroyDropdownList(dropdownList);
         
-        _backgroundObj.SetActive(false);
-        _backgroundObj2.SetActive(false);
+        //_backgroundObj.SetActive(false);
+        //_backgroundObj2.SetActive(false);
     }
 }

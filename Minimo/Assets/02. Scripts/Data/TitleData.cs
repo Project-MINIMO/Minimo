@@ -123,6 +123,7 @@ public class ProduceResult
 public class UMData
 {
     public int ID;
+    public int Type;
     public int Potential;
     public int StatType1;
     public int StatType2;
