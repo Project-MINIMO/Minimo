@@ -1,13 +1,16 @@
 using UnityEngine;
 using UniRx;
+using System;
 
 public abstract class ProduceAdvanced : ProduceObject
 {
+    public event Action<Minimo> OnMinimoAssigned;
+    
     public Transform MinimoWorkingPosition;
     public bool IsMinimoWorking => MinimoWorkingPosition != null && MinimoWorkingPosition.childCount > 0;
     public string AnimTrigger;
 
-    protected MinimoObject _placedMinimo;
+    public MinimoObject _placedMinimo;
     
     private float _globalTimeReduction;
     

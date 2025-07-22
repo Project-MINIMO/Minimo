@@ -45,6 +45,8 @@ public class MinimoInfoUpdater : MonoBehaviour
     
     public void UpdateAssignedBuilding(ProduceAdvanced building)
     {
+        if (_assignedBuildingImg == null) return;
+        
         if (building == null)
         {
             _assignedBuildingImg.gameObject.SetActive(false);

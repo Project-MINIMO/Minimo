@@ -8,6 +8,7 @@ public class EditManager : ManagerBase
     public ReactiveProperty<bool> IsEditing { get; } = new(false);
     public ReactiveProperty<Vector3> CurrentCellPosition { get; } = new();
     public BuildingObject CurrentEditObject { get; private set; }
+    public ReactiveCollection<ProduceAdvanced> ActiveAdvanceds { get; } = new();
     
     [SerializeField] private GridLayout _gridLayout;
     [SerializeField] private Transform _buildingParent;
@@ -42,6 +43,11 @@ public class EditManager : ManagerBase
             var produce = await CreateObject(buildingData, cellPosition);
             if (produce != null)
             {
+                if (produce is ProduceAdvanced advanced)
+                {
+                    ActiveAdvanceds.Add(advanced);
+                }
+                
                 produce.BuildingId = building.BuildingId;
                 produce.PreviousPosition = cellPosition;
                 produce.transform.position = cellPosition;
@@ -100,6 +106,11 @@ public class EditManager : ManagerBase
             
             if (isNew)
             {
+                if (CurrentEditObject is ProduceAdvanced advanced)
+                {
+                    ActiveAdvanceds.Add(advanced);
+                }
+                
                 var currentCell = _gridLayout.WorldToCell(CurrentEditObject.transform.position);
                 var diagonalOffset = new Vector3Int(0, -1, 0);
                 var newCell = currentCell + diagonalOffset;

@@ -42,6 +42,8 @@ public class MinimoProfilePanel : UIBase
         
         minimo.OnMinimoLevelChanged += _infoUpdater.UpdateLevelInfo;
         minimo.OnAssignedBuildingChanged += _infoUpdater.UpdateAssignedBuilding;
+        
+        _menuTogs[1].isOn = true;
     }
 
     public override void ClosePanel()
