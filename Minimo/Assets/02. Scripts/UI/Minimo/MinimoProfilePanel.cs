@@ -1,24 +1,19 @@
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MinimoProfilePanel : UIBase
 {
     [SerializeField] private Button _closeBtn;
+    
     [SerializeField] private TextMeshProUGUI _titleTMP;
-
-    [SerializeField] private TextMeshProUGUI _nameTMP;
-    [SerializeField] private TextMeshProUGUI _levelTMP;
-    [SerializeField] private GameObject[] _starObjs;
-    [SerializeField] private TextMeshProUGUI _descriptionTMP;
-    [SerializeField] private Button _assignButton;
-    [SerializeField] private Image _assignedBuildingImg;
-    [SerializeField] private Button _levelUpBtn;
-    [SerializeField] private TextMeshProUGUI[] _abilityTMPS;
-
     [SerializeField] private Toggle[] _menuTogs;
     [SerializeField] private GameObject[] _menuBacks;
+    
+    [SerializeField] private MinimoInfoUpdater _infoUpdater;
+
+    [SerializeField] private Button _assignButton;
+    [SerializeField] private Button _levelUpBtn;
     
     private Minimo _currentMinimo;
     
@@ -41,20 +36,12 @@ public class MinimoProfilePanel : UIBase
     public void OpenPanel(Minimo minimo)
     {
         OpenPanel();
+        
         _currentMinimo = minimo;
-        _nameTMP.SetText(minimo.Name);
-        _descriptionTMP.SetText(minimo.Description);
+        _infoUpdater.UpdateInfo(minimo);
         
-        minimo.OnMinimoLevelChanged += UpdateLevelInfo;
-        UpdateLevelInfo(minimo.Level);
-        
-        minimo.OnAssignedBuildingChanged += UpdateAssignedBuilding;
-        UpdateAssignedBuilding(minimo.AssignedBuilding);
-
-        for (var i = 0; i < _abilityTMPS.Length; i++)
-        {
-            _abilityTMPS[i].SetText(string.Format(minimo.AbilityDescriptions[i], minimo.Abilities[i].Value));
-        }
+        minimo.OnMinimoLevelChanged += _infoUpdater.UpdateLevelInfo;
+        minimo.OnAssignedBuildingChanged += _infoUpdater.UpdateAssignedBuilding;
     }
 
     public override void ClosePanel()
@@ -62,35 +49,7 @@ public class MinimoProfilePanel : UIBase
         base.ClosePanel();
 
         if (_currentMinimo == null) return;
-        _currentMinimo.OnMinimoLevelChanged -= UpdateLevelInfo;
-        _currentMinimo.OnAssignedBuildingChanged -= UpdateAssignedBuilding;
-    }
-    
-    private void UpdateLevelInfo(int level)
-    {
-        _levelTMP.text = $"Lv.{level}";
-        var starCount = level / 10 + 1;
-        for (var i = 0; i < _starObjs.Length; i++)
-        {
-            _starObjs[i].SetActive(i < starCount);
-        }
-        
-        for (var i = 0; i < _abilityTMPS.Length; i++)
-        {
-            _abilityTMPS[i].SetText(string.Format(_currentMinimo.AbilityDescriptions[i], _currentMinimo.Abilities[i].Value));
-        }
-    }
-    
-    private void UpdateAssignedBuilding(ProduceAdvanced building)
-    {
-        if (building == null)
-        {
-            _assignedBuildingImg.gameObject.SetActive(false);
-        }
-        else
-        {
-            _assignedBuildingImg.gameObject.SetActive(true);
-            _assignedBuildingImg.sprite = building.BuildingData.Icon;
-        }
+        _currentMinimo.OnMinimoLevelChanged -= _infoUpdater.UpdateLevelInfo;
+        _currentMinimo.OnAssignedBuildingChanged -= _infoUpdater.UpdateAssignedBuilding;
     }
 }
