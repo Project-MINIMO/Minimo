@@ -20,6 +20,7 @@ public class Minimo
     
     public Minimo(UMData data, TitleData title)
     {
+        Name = title.GetFormatString(data.Name, data.ID.ToString());
         float potentialValue = data.Potential;
         var rawPotential = 1 + (potentialValue - 1) * (((float)title.Common["PotentialGap"] - 1) / 9);
         var potential = Mathf.Round(rawPotential * 100f) / 100f;

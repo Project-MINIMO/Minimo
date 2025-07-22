@@ -13,11 +13,15 @@ public class ManageMinimoPanel : UIBase
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
     [SerializeField] private Button _capacityBtn;
+    
+    private MinimoProfilePanel _profilePanel;
 
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
 
+        _profilePanel = manager.GetPanel<MinimoProfilePanel>();
+        
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
         //_capacityBtn.onClick.AddListener(_expandCtrl.Show);
@@ -43,7 +47,7 @@ public class ManageMinimoPanel : UIBase
 
     private void OnItemSelected(InventorySlot<Minimo> slot)
     {
-        
+        _profilePanel.OpenPanel(slot.Item);
     }
 
     private void SetMinimoCapacity(int amount)
