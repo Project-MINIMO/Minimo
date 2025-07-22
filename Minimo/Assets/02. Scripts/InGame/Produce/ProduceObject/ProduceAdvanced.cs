@@ -53,10 +53,11 @@ public abstract class ProduceAdvanced : ProduceObject
         }
     }
 
-    public virtual void PlaceMinimo(MinimoObject minimo)
+    public virtual void PlaceMinimo(Minimo minimo)
     {
         _placedMinimo?.SetChillState();
-        _placedMinimo = minimo;
+        //_placedMinimo = minimo;
+        OnMinimoAssigned?.Invoke(minimo);
     }
 
     public virtual void UnplaceMinimo()

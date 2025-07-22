@@ -85,7 +85,7 @@ public class MinimoObject : MonoBehaviour
             _minimoManager.OnMinimoUnassigned(this);
         }
         AssignedBuilding = produceObject;
-        produceObject.PlaceMinimo(this);
+        //produceObject.PlaceMinimo(this);
         
         _minimoManager.OnMinimoAssigned(this);
         

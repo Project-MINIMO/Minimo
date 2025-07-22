@@ -4,7 +4,7 @@ public class ProduceQuaternary : ProduceElevated
 {
     public event Action OnMinimoPlaced;
     
-    public override void PlaceMinimo(MinimoObject minimo)
+    public override void PlaceMinimo(Minimo minimo)
     {
         base.PlaceMinimo(minimo);
         
