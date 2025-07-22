@@ -8,7 +8,7 @@ public class StoragePanel : UIBase
             
     [SerializeField] private TextMeshProUGUI _titleTMP;
     [SerializeField] private StorageInfoCtrl _infoCtrl;
-    [SerializeField] private StorageExpandCtrl _expandCtrl;
+    [SerializeField] private ExpandCtrl _expandCtrl;
     [SerializeField] private TextMeshProUGUI _capacityTMP;
     
     [SerializeField] private Button _openBtn;
@@ -22,6 +22,11 @@ public class StoragePanel : UIBase
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
         _capacityBtn.onClick.AddListener(_expandCtrl.Show);
+        
+        _expandCtrl.Initialize(
+            "STR_STORAGE_UI_NAME", 
+            "STR_STORTAGE_UI_EXPAND_DESC", 
+            "STR_STORTAGE_UI_EXPAND_COMPLETE");
         
         var slots = GetComponentsInChildren<ItemSlot>(true);
         foreach (var slot in slots)

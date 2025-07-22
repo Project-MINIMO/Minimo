@@ -3,11 +3,12 @@ using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 
-public class StorageExpandCtrl : MonoBehaviour
+public class ExpandCtrl : MonoBehaviour
 {
     [SerializeField] private Button[] _closeBtns;
     
     [SerializeField] private TextMeshProUGUI _titleTMP;
+    [SerializeField] private TextMeshProUGUI _descriptionTMP;
     [SerializeField] private TextMeshProUGUI _completeTMP;
     [SerializeField] private TextMeshProUGUI _resultTMP;
     
@@ -24,9 +25,6 @@ public class StorageExpandCtrl : MonoBehaviour
     {
         _rect = GetComponent<RectTransform>();
         
-        var titleData = App.GetData<TitleData>();
-        _titleTMP.text = titleData.GetString("STR_STORTAGE_UI_EXPAND_DESC");
-        _completeTMP.text = titleData.GetString("STR_STORTAGE_UI_EXPAND_COMPLETE");
         foreach (var button in _closeBtns)
         {
             button.onClick.AddListener(() =>
@@ -35,6 +33,14 @@ public class StorageExpandCtrl : MonoBehaviour
                     .OnComplete(() => gameObject.SetActive(false));
             });
         }
+    }
+
+    public void Initialize(string title, string description, string complete)
+    {
+        var titleData = App.GetData<TitleData>();
+        _titleTMP.text = titleData.GetString(title);
+        _descriptionTMP.text = titleData.GetString(description);
+        _completeTMP.text = titleData.GetString(complete);
     }
 
     private void Update()

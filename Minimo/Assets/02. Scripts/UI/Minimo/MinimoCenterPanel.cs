@@ -7,7 +7,7 @@ public class ManageMinimoPanel : UIBase
     public override bool IsUseBlur => true;
             
     [SerializeField] private TextMeshProUGUI _titleTMP;
-    //[SerializeField] private MinimoExpandCtrl _expandCtrl;
+    [SerializeField] private ExpandCtrl _expandCtrl;
     [SerializeField] private TextMeshProUGUI _capacityTMP;
     
     [SerializeField] private Button _openBtn;
@@ -24,7 +24,11 @@ public class ManageMinimoPanel : UIBase
         
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
-        //_capacityBtn.onClick.AddListener(_expandCtrl.Show);
+        _capacityBtn.onClick.AddListener(_expandCtrl.Show);
+        
+        _expandCtrl.Initialize("STR_MINIMOCENTER_NAME",
+            "STR_MC_RESIDENCEEXPAND_DESC",
+            "STR_MC_EXPANDSUCCEED_DESC");
         
         var slots = GetComponentsInChildren<MinimoSlot>(true);
         foreach (var slot in slots)
@@ -42,7 +46,7 @@ public class ManageMinimoPanel : UIBase
     {
         base.OpenPanel();
         
-        //_expandCtrl.gameObject.SetActive(false);
+        _expandCtrl.gameObject.SetActive(false);
     }
 
     private void OnItemSelected(InventorySlot<Minimo> slot)

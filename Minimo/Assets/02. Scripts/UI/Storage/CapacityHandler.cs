@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 using TMPro;
 
-public class CapacityHandler : TransactionHandler
+public abstract class CapacityHandler : TransactionHandler
 {
     [SerializeField] private TextMeshProUGUI _currentCapacityTMP;
     
@@ -12,41 +12,36 @@ public class CapacityHandler : TransactionHandler
     private UseCashPanel _useCashPanel;
 
     private Action _transactionAction;
-    private int _expandCost;
-    private int _currentCapacity;
+    protected int ExpandCost;
+    protected int CurrentCapacity;
+    protected int BaseCapacity;
     
     protected override void Awake()
     {
         base.Awake();
         
         _useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
-        
-        var titleData = App.GetData<TitleData>();
-        _expandCost = titleData.Common["StorageExpandCost"];
-        TransactionString = titleData.GetString("STR_STORAGE_EXPAND_COST");
     }
 
-    public void Initialize(Action transactionCallback)
+    public virtual void Initialize(Action transactionCallback)
     {
         _transactionAction = transactionCallback;
-        _currentCapacity = AccountInfo.Instance.StorageCapacity;
-        Quantity = _currentCapacity + 10;
-        _currentCapacityTMP.SetText($"{AccountInfo.Instance.CurrentItemCounts}/{_currentCapacity}");
+        Quantity = CurrentCapacity + 10;
+        _currentCapacityTMP.SetText($"{BaseCapacity}/{CurrentCapacity}");
         
         Initialize();
     }
     
-    protected override int CalculatePrice() => Mathf.Max(_expandCost * (Quantity - _currentCapacity), 0);
+    protected override int CalculatePrice() => Mathf.Max(ExpandCost * (Quantity - CurrentCapacity), 0);
 
     protected override int GetMaxQuantity() => 9999; //TODO : 레벨별로 다른 최대용량
-    protected override int GetMinQuantity() => _currentCapacity + 10;
+    protected override int GetMinQuantity() => CurrentCapacity + 10;
 
     protected override void Transaction()
     {
         if (Price <= AccountInfo.Instance.Cash)
         {
             AccountInfo.Instance.Cash -= Price;
-            AccountInfo.Instance.AddStorageCapacity(Quantity - _currentCapacity);
             
             _transactionAction?.Invoke();
         }
@@ -55,4 +50,6 @@ public class CapacityHandler : TransactionHandler
             _useCashPanel.OpenPanel();
         }
     }
+    
+    protected abstract void SuccessTransaction();
 }
