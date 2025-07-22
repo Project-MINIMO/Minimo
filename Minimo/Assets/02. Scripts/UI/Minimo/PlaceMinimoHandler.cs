@@ -11,7 +11,7 @@ public class PlaceMinimoHandler : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] _statTMPs;
     [SerializeField] private Button _placeBtn;
     
-    private Minimo _minimo;
+    private MinimoObject _minimo;
     private ProduceManager _produceManager;
     private PlaceMinimoPanel _minimoPanel;
 

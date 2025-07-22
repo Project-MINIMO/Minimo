@@ -9,7 +9,7 @@ public class MinimoInput : MonoBehaviour
     private InputManager _input;
     private CameraInput _cameraInput;
 
-    private Minimo _currentObject;
+    private MinimoObject _currentObject;
     
     private int _layerMask;
     private int _layerMask2;
@@ -104,11 +104,11 @@ public class MinimoInput : MonoBehaviour
         _currentObject.transform.position = worldPosition;
     }
 
-    private Minimo GetRaycastMinimo()
+    private MinimoObject GetRaycastMinimo()
     {
         var worldPosition = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
         var hit = Physics2D.OverlapPoint(worldPosition, _layerMask);
-        if (hit != null && hit.TryGetComponent<Minimo>(out var component))
+        if (hit != null && hit.TryGetComponent<MinimoObject>(out var component))
         {
             return component;
         }

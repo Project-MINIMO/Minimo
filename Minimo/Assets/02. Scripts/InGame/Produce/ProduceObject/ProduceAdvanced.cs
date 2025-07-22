@@ -7,7 +7,7 @@ public abstract class ProduceAdvanced : ProduceObject
     public bool IsMinimoWorking => MinimoWorkingPosition != null && MinimoWorkingPosition.childCount > 0;
     public string AnimTrigger;
 
-    protected Minimo _placedMinimo;
+    protected MinimoObject _placedMinimo;
     
     private float _globalTimeReduction;
     
@@ -50,7 +50,7 @@ public abstract class ProduceAdvanced : ProduceObject
         }
     }
 
-    public virtual void PlaceMinimo(Minimo minimo)
+    public virtual void PlaceMinimo(MinimoObject minimo)
     {
         _placedMinimo?.SetChillState();
         _placedMinimo = minimo;

@@ -24,16 +24,16 @@ public class MinimoManager : ManagerBase
     public ReactiveProperty<float> GlobalTimeSkipCostRatio { get; } = new(1f);
     private float _globalTimeSkipCostRatio = 1f;
     
-    public List<Minimo> Minimos { get; private set; }
+    public List<MinimoObject> Minimos { get; private set; }
     
     protected override void Awake()
     {
         base.Awake();
 
-        Minimos = GetComponentsInChildren<Minimo>().ToList();
+        Minimos = GetComponentsInChildren<MinimoObject>().ToList();
     }
     
-    public void OnMinimoAssigned(Minimo minimo)
+    public void OnMinimoAssigned(MinimoObject minimo)
     {
         foreach (var a in minimo.Abilities)
         {
@@ -78,7 +78,7 @@ public class MinimoManager : ManagerBase
         GlobalTimeSkipCostRatio.Value = _globalTimeSkipCostRatio;
     }
 
-    public void OnMinimoUnassigned(Minimo minimo)
+    public void OnMinimoUnassigned(MinimoObject minimo)
     {
         foreach (var a in minimo.Abilities)
         {

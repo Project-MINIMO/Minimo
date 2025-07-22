@@ -12,7 +12,7 @@ public class ManageMinimoHandler : MonoBehaviour
     [SerializeField] private Button _upBtn;
     [SerializeField] private Button _downBtn;
     
-    private Minimo _minimo;
+    private MinimoObject _minimo;
 
     private List<string> _statCodes = new(3);
 

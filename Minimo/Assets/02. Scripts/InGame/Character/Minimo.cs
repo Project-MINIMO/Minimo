@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public class Minimo : MonoBehaviour
+public class MinimoObject : MonoBehaviour
 {
     public UMData Data { get; private set; }
     public MinimoFSM FSM { get; private set; }

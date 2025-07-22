@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MinimoIdleState : StateBase<Minimo>
+public class MinimoIdleState : StateBase<MinimoObject>
 {
     private float _stateTimer;
     private bool _isUpdating;
@@ -8,7 +8,7 @@ public class MinimoIdleState : StateBase<Minimo>
     private readonly string[] _idleAnimations = { "IsSit", "IsStand" };
     private string _currentAnimation;
 
-    public MinimoIdleState(Minimo owner) : base(owner) { }
+    public MinimoIdleState(MinimoObject owner) : base(owner) { }
 
     public override void Enter()
     {

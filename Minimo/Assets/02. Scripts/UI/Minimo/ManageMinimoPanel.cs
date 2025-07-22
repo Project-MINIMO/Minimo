@@ -5,6 +5,7 @@ public class ManageMinimoPanel : UIBase
 {
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
+    
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
