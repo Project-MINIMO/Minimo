@@ -157,7 +157,7 @@ public class TitleData : DataBase
     public Dictionary<int, Item> Item { get; private set; } = new();
     public Dictionary<int, ProduceData> Produce { get; private set; } = new();
     public Dictionary<string, List<ProduceData>> GroupedProduce { get; private set; } = new();
-    public Dictionary<int, UMData> UserMinimo { get; private set; } = new();
+    public Dictionary<int, Minimo> UserMinimo { get; private set; } = new();
     public Dictionary<int, UMStatData> UMStat { get; private set; } = new();
     public Dictionary<int, UMStatGrowthData> UMStatGrowth { get; private set; } = new();
 
@@ -199,12 +199,6 @@ public class TitleData : DataBase
             Common.Add(data.ID, data.Value);
         }
         
-        var userMinimoDataRaw = DataLoader.LoadData<UMData>(UM_PATH);
-        foreach (var data in userMinimoDataRaw)
-        {
-            UserMinimo.Add(data.ID, data);
-        }
-        
         var umStatDataRaw = DataLoader.LoadData<UMStatData>(UMSTAT_PATH);
         foreach (var data in umStatDataRaw)
         {
@@ -215,6 +209,12 @@ public class TitleData : DataBase
         foreach (var data in umStatGrowthDataRaw)
         {
             UMStatGrowth.Add(data.ID, data);
+        }
+        
+        var userMinimoDataRaw = DataLoader.LoadData<UMData>(UM_PATH);
+        foreach (var data in userMinimoDataRaw)
+        {
+            UserMinimo.Add(data.ID, new Minimo(data, this));
         }
     }
     

@@ -1,14 +1,17 @@
 using System.Linq;
 using System.Collections.Generic;
 
+using UnityEngine;
 using UnityEngine.UI;
 
 public class MinimoInventory : Inventory<Minimo>
 {
+    [SerializeField] private RectTransform _content;
+    
     protected override void SetString(){ }
     protected override bool IsSlotFiltered(int index, Minimo item) => false;
     
-    protected override List<Minimo> GetFilteredItems() => App.GetManager<MinimoManager>().Minimos;
+    protected override List<Minimo> GetFilteredItems() => App.GetData<TitleData>().UserMinimo.Values.ToList();
 
     #region Sort
     public void SortDefault()
@@ -17,23 +20,23 @@ public class MinimoInventory : Inventory<Minimo>
 
         SortSlots(sorted);
     }
-    public void SortByCount(bool desc)    
+    public void SortByLevel(bool desc)    
     {
         var sorted = desc
-            ? _activeSlots.OrderBy(slot => slot.Item.Count).ThenBy(slot => slot.Item.ID).ToList()
-            : _activeSlots.OrderByDescending(slot => slot.Item.Count).ThenBy(slot => slot.Item.ID).ToList();
+            ? Slots.OrderBy(slot => slot.Item.Level).ThenBy(slot => slot.Item.ID).ToList()
+            : Slots.OrderByDescending(slot => slot.Item.Level).ThenBy(slot => slot.Item.ID).ToList();
 
         SortSlots(sorted);
     }
-    public void SortByPrice(bool desc)
+    public void SortByAcquisitionDate(bool desc)
     {
         var sorted = desc
-            ? _activeSlots.OrderBy(slot => slot.Item.SellCost).ThenBy(slot => slot.Item.ID).ToList()
-            : _activeSlots.OrderByDescending(slot => slot.Item.SellCost).ThenBy(slot => slot.Item.ID).ToList();
+            ? Slots.OrderBy(slot => slot.Item.AcquisitionDate).ThenBy(slot => slot.Item.ID).ToList()
+            : Slots.OrderByDescending(slot => slot.Item.AcquisitionDate).ThenBy(slot => slot.Item.ID).ToList();
 
         SortSlots(sorted);
     }
-    private void SortSlots(List<InventorySlot<Item>> slots)
+    private void SortSlots(List<InventorySlot<Minimo>> slots)
     {
         for (var i = 0; i < slots.Count; i++)
         {
@@ -45,20 +48,20 @@ public class MinimoInventory : Inventory<Minimo>
     #endregion
 
     #region Filter
-    public void FilterItem(bool[] activeArray)
+    public void FilterByAssingedBuilding(bool isAssinged)
     {
-        foreach (var slot in _activeSlots)
+        foreach (var slot in Slots)
         {
-            var isActive = activeArray[slot.Item.Level - 1];
+            var isActive = slot.Item.AssignedBuilding == isAssinged;
             
             slot.gameObject.SetActive(isActive);
         }
     }
-    public void FilterProps(bool[] activeArray)
+    public void FilterByType(int type)
     {
-        foreach (var slot in _activeSlots)
+        foreach (var slot in Slots)
         {
-            var isActive = activeArray[(int)slot.Item.Property - 1];
+            var isActive = slot.Item.Type == type;
             
             slot.gameObject.SetActive(isActive);
         }

@@ -62,7 +62,7 @@ public class StorageExpandCtrl : MonoBehaviour
     private void Hide()
     {
         _isCompleteExpand = true;
-        _resultTMP.SetText(AccountInfo.Instance.Capacity.ToString());
+        _resultTMP.SetText(AccountInfo.Instance.StorageCapacity.ToString());
         _completeTime = Time.time;
         _popUpRect.DOScale(1f, 0.1f).SetEase(Ease.OutCirc);
     }

@@ -26,9 +26,9 @@ public class ManageMinimoHandler : MonoBehaviour
         
         _statCodes = new List<string>
         {
-            titleData.GetString(titleData.UMStat[_minimo.Data.StatType1].Name),
-            titleData.GetString(titleData.UMStat[_minimo.Data.StatType2].Name),
-            titleData.GetString(titleData.UMStat[_minimo.Data.StatType3].Name)
+            //titleData.GetString(titleData.UMStat[_minimo.Data.StatType1].Name),
+            //titleData.GetString(titleData.UMStat[_minimo.Data.StatType2].Name),
+            //titleData.GetString(titleData.UMStat[_minimo.Data.StatType3].Name)
         };
 
         UpdateLevelInfo();
@@ -47,18 +47,18 @@ public class ManageMinimoHandler : MonoBehaviour
 
     private void UpdateLevelInfo()
     {
-        _levelTMP.text = _minimo.Level.ToString();
+        //_levelTMP.text = _minimo.Level.ToString();
         
         if (_statCodes == null) return;
 
         for (var i = 0; i < _statCodes.Count; i++)
         {
-            _statTMPs[i].text = string.Format(_statCodes[i], _minimo.Abilities[i].Value);
+            //_statTMPs[i].text = string.Format(_statCodes[i], _minimo.Abilities[i].Value);
 
-            if (!_minimo.Abilities[i].IsUnlocked)
-            {
-                _statTMPs[i].text += " <color=red>해금안됨</color>";
-            }
+            //if (!_minimo.Abilities[i].IsUnlocked)
+            //{
+            //    _statTMPs[i].text += " <color=red>해금안됨</color>";
+            //}
         }
     }
 }

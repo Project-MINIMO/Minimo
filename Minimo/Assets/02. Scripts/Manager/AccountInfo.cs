@@ -12,10 +12,12 @@ public class AccountInfo : Singleton<AccountInfo>
     public UserLevel Level { get; private set; }
     public UserGold Gold { get; private set; }
     public int Cash;
-    public int Capacity { get; private set; } = 100;
+    public int StorageCapacity { get; private set; } = 100;
+    public int MinimoCapacity { get; private set; } = 100;
 
     private GetItemPanel _itemPanel;
-    public event Action<int> OnCapacityChanged;
+    public event Action<int> OnStorageCapacityChanged;
+    public event Action<int> OnMinimoCapacityChanged;
     public int CurrentItemCounts => Items.Values.Count(item => item.Count > 0);
     
     [SerializeField] private Sprite LevelIcon;
@@ -38,7 +40,7 @@ public class AccountInfo : Singleton<AccountInfo>
     {
         if (Items[id].Count > 0) return true;
         
-        var cankeep = CurrentItemCounts < Capacity;
+        var cankeep = CurrentItemCounts < StorageCapacity;
         if (!cankeep)
         {
             App.Notification(NotifyType.CapacityLack);
@@ -56,30 +58,36 @@ public class AccountInfo : Singleton<AccountInfo>
             _itemPanel = App.GetManager<UIManager>().GetItem;
         }
         _itemPanel.EnqueueItem(id);
-        OnCapacityChanged?.Invoke(Capacity);
+        OnStorageCapacityChanged?.Invoke(StorageCapacity);
     }
 
     public void AddItem(Item item, int amount)
     {
         item.AddCount(amount);
-        OnCapacityChanged?.Invoke(Capacity);
+        OnStorageCapacityChanged?.Invoke(StorageCapacity);
     }
 
     public void RemoveItem(int id, int amount)
     {
         Items[id].AddCount(-amount);
-        OnCapacityChanged?.Invoke(Capacity);
+        OnStorageCapacityChanged?.Invoke(StorageCapacity);
     }
     
     public void RemoveItem(Item item, int amount)
     {
         item.AddCount(-amount);
-        OnCapacityChanged?.Invoke(Capacity);
+        OnStorageCapacityChanged?.Invoke(StorageCapacity);
     }
 
-    public void AddCapacity(int amount)
+    public void AddStorageCapacity(int amount)
     {
-        Capacity += amount;
-        OnCapacityChanged?.Invoke(Capacity);
+        StorageCapacity += amount;
+        OnStorageCapacityChanged?.Invoke(StorageCapacity);
+    }
+    
+    public void AddMinimoCapacity(int amount)
+    {
+        MinimoCapacity += amount;
+        OnMinimoCapacityChanged?.Invoke(MinimoCapacity);
     }
 }

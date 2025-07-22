@@ -29,7 +29,7 @@ public class CapacityHandler : TransactionHandler
     public void Initialize(Action transactionCallback)
     {
         _transactionAction = transactionCallback;
-        _currentCapacity = AccountInfo.Instance.Capacity;
+        _currentCapacity = AccountInfo.Instance.StorageCapacity;
         Quantity = _currentCapacity + 10;
         _currentCapacityTMP.SetText($"{AccountInfo.Instance.CurrentItemCounts}/{_currentCapacity}");
         
@@ -46,7 +46,7 @@ public class CapacityHandler : TransactionHandler
         if (Price <= AccountInfo.Instance.Cash)
         {
             AccountInfo.Instance.Cash -= Price;
-            AccountInfo.Instance.AddCapacity(Quantity - _currentCapacity);
+            AccountInfo.Instance.AddStorageCapacity(Quantity - _currentCapacity);
             
             _transactionAction?.Invoke();
         }

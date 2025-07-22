@@ -29,9 +29,9 @@ public class PlaceMinimoHandler : MonoBehaviour
 
         _statCodes = new List<string>
         {
-            titleData.GetString(titleData.UMStat[_minimo.Data.StatType1].Name),
-            titleData.GetString(titleData.UMStat[_minimo.Data.StatType2].Name),
-            titleData.GetString(titleData.UMStat[_minimo.Data.StatType3].Name)
+            //titleData.GetString(titleData.UMStat[_minimo.Data.StatType1].Name),
+            //titleData.GetString(titleData.UMStat[_minimo.Data.StatType2].Name),
+            //titleData.GetString(titleData.UMStat[_minimo.Data.StatType3].Name)
         };
   
         _placeBtn.onClick.AddListener(() =>
@@ -56,12 +56,12 @@ public class PlaceMinimoHandler : MonoBehaviour
 
         for (var i = 0; i < _statCodes.Count; i++)
         {
-            _statTMPs[i].text = string.Format(_statCodes[i], _minimo.Abilities[i].Value);
+            //_statTMPs[i].text = string.Format(_statCodes[i], _minimo.Abilities[i].Value);
             
-            if (!_minimo.Abilities[i].IsUnlocked)
-            {
-                _statTMPs[i].text += " <color=red>해금안됨</color>";
-            }
+            //if (!_minimo.Abilities[i].IsUnlocked)
+            //{
+            //    _statTMPs[i].text += " <color=red>해금안됨</color>";
+            //}
         }
 
         _currentPlaceTMP.text = _minimo.AssignedBuilding == null ? 

@@ -35,7 +35,7 @@ public class MinimoManager : ManagerBase
     
     public void OnMinimoAssigned(MinimoObject minimo)
     {
-        foreach (var a in minimo.Abilities)
+        foreach (var a in minimo.Data.Abilities)
         {
             if (!a.IsUnlocked) continue;
             
@@ -80,7 +80,7 @@ public class MinimoManager : ManagerBase
 
     public void OnMinimoUnassigned(MinimoObject minimo)
     {
-        foreach (var a in minimo.Abilities)
+        foreach (var a in minimo.Data.Abilities)
         {
             if (!a.IsUnlocked) continue;
             

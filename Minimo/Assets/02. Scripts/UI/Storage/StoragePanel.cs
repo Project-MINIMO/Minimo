@@ -31,8 +31,8 @@ public class StoragePanel : UIBase
 
         _titleTMP.text = App.GetData<TitleData>().GetString("STR_STORAGE_UI_NAME");
 
-        AccountInfo.Instance.OnCapacityChanged += SetCapacity;
-        SetCapacity(AccountInfo.Instance.Capacity);
+        AccountInfo.Instance.OnStorageCapacityChanged += SetStorageCapacity;
+        SetStorageCapacity(AccountInfo.Instance.StorageCapacity);
     }
 
     public override void OpenPanel()
@@ -48,7 +48,7 @@ public class StoragePanel : UIBase
         _infoCtrl.Show(slot);
     }
 
-    private void SetCapacity(int amount)
+    private void SetStorageCapacity(int amount)
     {
         _capacityTMP.SetText($"{AccountInfo.Instance.CurrentItemCounts}/{amount}");
     }
