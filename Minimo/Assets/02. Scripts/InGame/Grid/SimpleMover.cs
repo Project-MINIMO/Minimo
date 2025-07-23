@@ -14,7 +14,7 @@ public class SimpleMover : MonoBehaviour
         Vector3 newPosition = transform.position + (Vector3)_moveDirection.normalized * _moveSpeed * Time.deltaTime;
         
         // Check if the object has moved beyond the tiling distance
-        if (Vector2.Distance(transform.position, newPosition) >= _tilingDistance)
+        if (Vector2.Distance(Vector2.zero, newPosition) >= _tilingDistance)
         {
             // Reset position to create a tiling effect
             newPosition = Vector3.zero;
