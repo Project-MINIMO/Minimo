@@ -12,11 +12,14 @@ public class MinimoProfilePanel : UIBase
     
     [SerializeField] private MinimoInfoUpdater _infoUpdater;
 
-    [SerializeField] private Button _assignButton;
+    [SerializeField] private Button _prevBtn;
+    [SerializeField] private Button _nextBtn;
+    
     [SerializeField] private Button _levelUpBtn;
     [SerializeField] private Button _historyBtn;
     [SerializeField] private Button _filmBtn;
 
+    private MinimoManager _minimoManager;
     private MinimoFilmPanel _filmPanel;
     private Minimo _currentMinimo;
     private string _historyString;
@@ -43,6 +46,10 @@ public class MinimoProfilePanel : UIBase
             _menuTogs[index].GetComponentInChildren<TextMeshProUGUI>().text = GetMenuString(index, titleData);
         }
 
+        _minimoManager = App.GetManager<MinimoManager>();
+        _prevBtn.onClick.AddListener(() => MoveToNextMinimo(-1));
+        _nextBtn.onClick.AddListener(() => MoveToNextMinimo(1));
+        
         _levelUpBtn.onClick.AddListener(() => _currentMinimo?.AddLevel(1));
         _filmBtn.onClick.AddListener(() => _filmPanel.OpenPanel(_currentMinimo));
         _closeBtn.onClick.AddListener(ClosePanel);
@@ -78,4 +85,14 @@ public class MinimoProfilePanel : UIBase
         2 => title.GetString("STR_MINIMOPROFILE_TAB3_NAME"),
         _ => string.Empty
     };
+
+    private void MoveToNextMinimo(int num)
+    {
+        var index = _minimoManager.Minimos.IndexOf(_currentMinimo);
+        var nextIndex = (index + num + _minimoManager.Minimos.Count) % _minimoManager.Minimos.Count;
+        var nextObject = _minimoManager.Minimos[nextIndex];
+        
+        ClosePanel();
+        OpenPanel(nextObject);
+    }
 }
