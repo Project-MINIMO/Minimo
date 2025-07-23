@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,6 +29,17 @@ public class PopUpPanel : UIBase
     public void OpenPanel(PopUpType type)
     {
         OpenPanel();
+        
+        _currentWindow = _popUpMap[type];
+        _currentWindow.Show();
+    }
+    
+    public void OpenPanel(PopUpType type, ProduceAdvanced building, Minimo minimo)
+    {
+        OpenPanel();
+        
+        _currentWindow = _popUpMap[type];
+        _currentWindow.Show(building, minimo);
     }
 
     public override void ClosePanel()
@@ -37,13 +48,5 @@ public class PopUpPanel : UIBase
         _currentWindow = null;
         
         base.ClosePanel();
-    }
-
-    public void OpenPanel(PopUpType type, ProduceAdvanced building, Minimo minimo)
-    {
-        OpenPanel();
-
-        _currentWindow = _popUpMap[type];
-        _currentWindow.Show(building, minimo);
     }
 }

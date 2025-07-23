@@ -18,8 +18,8 @@ public class EditCirclePanel : UIBase
 
         _editManager = App.GetManager<EditManager>();
         
-        _editManager.IsEditing
-            .Subscribe((isEditing) =>
+        _editManager.IsBuildingEditing
+            .Subscribe(isEditing =>
             {
                 if (isEditing)
                 {

@@ -2,46 +2,76 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class TilePanel : UIBase
 {
-    [SerializeField] private TileBase[] _tileBases;
-    
-    [SerializeField] private MenuToggle[] _menuTogs;
+    [SerializeField] private TextMeshProUGUI _titleTMP;
+
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
-
-    private Tilemap _tilemap;
-    private int _selectedIndex;
+    [SerializeField] private Image _selectedTileImg;
+    [SerializeField] private Sprite _eraseSprite;
+    [SerializeField] private Toggle _eraseTog;
+    
+    private EditManager _editManager;
+    
     private bool _isPainting;
+    private Tilemap _tilemap;
+    private CustomTile _selectedTile;
+    private Tile _tile;
+    
     private Vector3Int _lastPaintedCell = new(int.MinValue, int.MinValue, int.MinValue);
     
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
-        
+
+        _editManager = App.GetManager<EditManager>();
         _tilemap = GameObject.FindWithTag("VillageTilemap").GetComponent<Tilemap>();
-        
-        for (var i = 0; i < _menuTogs.Length; i++)
-        {
-            var index = i;
-            _menuTogs[index].onValueChanged.AddListener((isOn) =>
-            {
-                if (isOn) _selectedIndex = index;
-            });
-        }
         
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
-    }
+        
+        var slots = GetComponentsInChildren<TileSlot>(true);
+        foreach (var slot in slots)
+        {
+            slot.OnItemSelected += OnItemSelected;
+        }
+        
+        _eraseTog.onValueChanged.AddListener((isOn) =>
+        {
+            if (isOn)
+            {
+                _tile = null;
+                _selectedTile = null;
+                _selectedTileImg.sprite = _eraseSprite;
+            }
+        });
 
+        _titleTMP.text = App.GetData<TitleData>().GetString("STR_TILEEDIT_NAME");
+    }
+    
     public override void OpenPanel()
     {
         base.OpenPanel();
         
-        _menuTogs[0].isOn = true;
+        _tile = null;
+        _selectedTile = null;
+        _selectedTileImg.sprite = null;
+        _selectedTileImg.gameObject.SetActive(false);
+        
         _isPainting = false;
         _lastPaintedCell = new Vector3Int(int.MinValue, int.MinValue, int.MinValue);
+        
+        _editManager.SetTileEditing(true);
+    }
+
+    public override void ClosePanel()
+    {
+        base.ClosePanel();
+        
+        _editManager.SetTileEditing(false);
     }
 
     private void Update()
@@ -71,23 +101,33 @@ public class TilePanel : UIBase
         if (cellPos == _lastPaintedCell) return;
         _lastPaintedCell = cellPos;
         
-        if (_tilemap.GetTile(cellPos) == _tileBases[_selectedIndex]) return;
+        if (_tilemap.GetTile(cellPos) == _tile) return;
         if (!UseGold()) return;
         
-        _tilemap.SetTile(cellPos, _tileBases[_selectedIndex]);
+        _tilemap.SetTile(cellPos, _tile);
     }
-
+    
     private bool UseGold()
     {
-        if (AccountInfo.Instance.Gold.Count < 10)
-        {
-            App.Notification(NotifyType.GoldLack);
-            return false;
-        }
-        else
+        if (_selectedTile == null) return true;
+        
+        if (_selectedTile.CanInstall())
         {
             AccountInfo.Instance.Gold.AddCount(-10);
             return true;
         }
+        else
+        {
+            App.Notification(NotifyType.GoldLack);
+            return false;
+        }
+    }
+    
+    private void OnItemSelected(InventorySlot<CustomTile> slot)
+    {
+        _tile = slot.Item.Tile;
+        _selectedTile = slot.Item;
+        _selectedTileImg.sprite = slot.Item.Icon;
+        _selectedTileImg.gameObject.SetActive(true);
     }
 }

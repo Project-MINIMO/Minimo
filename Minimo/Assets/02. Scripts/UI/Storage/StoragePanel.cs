@@ -8,11 +8,11 @@ public class StoragePanel : UIBase
             
     [SerializeField] private TextMeshProUGUI _titleTMP;
     [SerializeField] private StorageInfoCtrl _infoCtrl;
-    [SerializeField] private ExpandCtrl _expandCtrl;
     [SerializeField] private TextMeshProUGUI _capacityTMP;
     
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
+    [SerializeField] private Button _expandBtn;
 
     public override void Initialize(UIManager manager)
     {
@@ -20,11 +20,9 @@ public class StoragePanel : UIBase
 
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
-        
-        _expandCtrl.Initialize(
-            "STR_STORAGE_UI_NAME", 
-            "STR_STORTAGE_UI_EXPAND_DESC", 
-            "STR_STORTAGE_UI_EXPAND_COMPLETE");
+
+        var popUpPanel = manager.GetPanel<PopUpPanel>();
+        _expandBtn.onClick.AddListener(() => popUpPanel.OpenPanel(PopUpType.StorageExpand));
         
         var slots = GetComponentsInChildren<ItemSlot>(true);
         foreach (var slot in slots)
@@ -43,7 +41,6 @@ public class StoragePanel : UIBase
         base.OpenPanel();
         
         _infoCtrl.gameObject.SetActive(false);
-        _expandCtrl.gameObject.SetActive(false);
     }
 
     private void OnItemSelected(InventorySlot<Item> slot)

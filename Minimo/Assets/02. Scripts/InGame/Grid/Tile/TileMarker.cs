@@ -16,7 +16,7 @@ public class TileMarker : MonoBehaviour
         _installChecker = GetComponent<InstallChecker>();
         _editManager = App.GetManager<EditManager>();
 
-        _editManager.IsEditing
+        _editManager.IsBuildingEditing
             .Subscribe((isEditing) =>
             {
                 if (isEditing)
