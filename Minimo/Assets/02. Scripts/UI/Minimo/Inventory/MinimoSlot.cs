@@ -16,7 +16,7 @@ public class MinimoSlot : InventorySlot<Minimo>
         
         _infoUpdater.UpdateInfo(item);
         
-        Item.OnMinimoLevelChanged += _infoUpdater.UpdateLevelInfo;
-        Item.OnAssignedBuildingChanged += _infoUpdater.UpdateAssignedBuilding;
+        Item.OnLevelChanged += _infoUpdater.UpdateLevelInfo;
+        Item.OnAssignmentChanged += _infoUpdater.UpdateAssignedBuilding;
     }
 }

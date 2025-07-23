@@ -6,30 +6,37 @@ public class MinimoObject : MonoBehaviour
 {
     public Minimo Data { get; private set; }
     public MinimoFSM FSM { get; private set; }
-    public ProduceAdvanced AssignedBuilding { get; private set; }
-
+    
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
 
-    private Transform _parent;    //temp
-    
-    public MinimoManager _minimoManager;
-    
-    private void Awake()
-    {
-        var titleData = App.GetData<TitleData>();
-        _parent = transform.parent;   //temp
-        Data = titleData.UserMinimo[transform.GetSiblingIndex()];    //temp
-        
-        _minimoManager = App.GetManager<MinimoManager>();
+    private Transform _parent; 
 
+    public void Initialize(Minimo minimo)
+    {
+        Data = minimo;
+        Data.OnAssignmentChanged += HandleAssignmentChanged;
+        
+        _parent = transform.parent;
+        
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
 
         FSM = new MinimoFSM(this);
-        SetChillState();
+        
+        HandleAssignmentChanged(Data.AssignedBuilding);
+    }
 
-        AddLevel(1);
+    private void HandleAssignmentChanged(ProduceAdvanced building)
+    {
+        if (building == null)
+        {
+            SetChillState();
+        }
+        else
+        {
+            SetWorkState(building);
+        }
     }
 
     private void Update()
@@ -60,13 +67,6 @@ public class MinimoObject : MonoBehaviour
         
         transform.SetParent(_parent);   //temp
         transform.localPosition = Vector3.zero;   //temp
-
-        if (AssignedBuilding != null)
-        {
-            AssignedBuilding.UnplaceMinimo();
-            AssignedBuilding = null;
-            _minimoManager.OnMinimoUnassigned(this);
-        }
     }
 
     public void SetWorkState(ProduceAdvanced produceObject)
@@ -78,46 +78,5 @@ public class MinimoObject : MonoBehaviour
         transform.localPosition = Vector3.zero;
         
         SetSpriteFilp(false);
-
-        if (AssignedBuilding != null)
-        {
-            AssignedBuilding.UnplaceMinimo();
-            _minimoManager.OnMinimoUnassigned(this);
-        }
-        AssignedBuilding = produceObject;
-        //produceObject.PlaceMinimo(this);
-        
-        _minimoManager.OnMinimoAssigned(this);
-        
-        foreach (var ability in Data.Abilities)
-        {
-            if (ability.IsApplicableTo(produceObject))
-            {
-                ability.Apply(produceObject);
-            }
-        }
-    }
-
-    public void AddLevel(int amount)
-    {
-        if (AssignedBuilding != null)
-        {
-            _minimoManager.OnMinimoUnassigned(this);
-        }
-
-        Data.AddLevel(amount);
-        
-        if (AssignedBuilding != null)
-        {
-            foreach (var ability in Data.Abilities)
-            {
-                if (ability.IsApplicableTo(AssignedBuilding))
-                {
-                    ability.Apply(AssignedBuilding);
-                }
-            }
-            
-            _minimoManager.OnMinimoAssigned(this);
-        }
     }
 }

@@ -1,27 +1,35 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Minimo
 {
-    public event Action<int> OnMinimoLevelChanged;
-    public event Action<ProduceAdvanced> OnAssignedBuildingChanged;
-    
     public readonly int ID;
     public readonly int Type;
-    public List<IMinimoAbility> Abilities { get; private set; }
-    public List<string> AbilityDescriptions { get; private set; }
-    public readonly string Name;
-    public readonly string Description;
-    public readonly int AcquisitionDate;
-    public ProduceAdvanced AssignedBuilding { get; private set; }
     
     public int Level { get; private set; }
+    public ProduceAdvanced AssignedBuilding { get; private set; }
+    
+    public event Action<Minimo, int> OnLevelChanged;
+    public event Action<ProduceAdvanced> OnAssignmentChanged;
+    
+    public List<IMinimoAbility> Abilities { get; private set; }
+    public List<string> AbilityDescriptions { get; private set; }
+    
+    public readonly string Name;
+    public readonly string Description;
+    public readonly DateTime AcquisitionDate;
     
     public Minimo(UMData data, TitleData title)
     {
-        Name = title.GetFormatString(data.Name, data.ID.ToString());
+        ID = data.ID;
         Type = data.Type;
+        
+        Name = title.GetFormatString(data.Name, data.ID.ToString());
+        Description = title.GetString(data.Name);
+        AcquisitionDate = DateTime.Now;
+        
         float potentialValue = data.Potential;
         var rawPotential = 1 + (potentialValue - 1) * (((float)title.Common["PotentialGap"] - 1) / 9);
         var potential = Mathf.Round(rawPotential * 100f) / 100f;
@@ -39,6 +47,8 @@ public class Minimo
             title.GetString(title.UMStat[data.StatType2].Name),
             title.GetString(title.UMStat[data.StatType3].Name)
         };
+        
+        AddLevel(1);
     }
     
     private IMinimoAbility CreateAbility(int abilityType, int id, float potential) => (AbilityType)abilityType switch
@@ -65,6 +75,18 @@ public class Minimo
             ability.CalculateAbility(Level);
         }
         
-        OnMinimoLevelChanged?.Invoke(Level);
+        OnLevelChanged?.Invoke(this, Level);
+    }
+    
+    public void AssignTo(ProduceAdvanced building)
+    {
+        AssignedBuilding = building;
+        OnAssignmentChanged?.Invoke(building);
+    }
+
+    public void Unassign()
+    {
+        AssignedBuilding = null;
+        OnAssignmentChanged?.Invoke(null);
     }
 }

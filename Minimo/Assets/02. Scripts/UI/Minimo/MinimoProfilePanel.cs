@@ -40,8 +40,8 @@ public class MinimoProfilePanel : UIBase
         _currentMinimo = minimo;
         _infoUpdater.UpdateInfo(minimo);
         
-        minimo.OnMinimoLevelChanged += _infoUpdater.UpdateLevelInfo;
-        minimo.OnAssignedBuildingChanged += _infoUpdater.UpdateAssignedBuilding;
+        minimo.OnLevelChanged += _infoUpdater.UpdateLevelInfo;
+        minimo.OnAssignmentChanged += _infoUpdater.UpdateAssignedBuilding;
         
         _menuTogs[1].isOn = true;
     }
@@ -51,7 +51,7 @@ public class MinimoProfilePanel : UIBase
         base.ClosePanel();
 
         if (_currentMinimo == null) return;
-        _currentMinimo.OnMinimoLevelChanged -= _infoUpdater.UpdateLevelInfo;
-        _currentMinimo.OnAssignedBuildingChanged -= _infoUpdater.UpdateAssignedBuilding;
+        _currentMinimo.OnLevelChanged -= _infoUpdater.UpdateLevelInfo;
+        _currentMinimo.OnAssignmentChanged -= _infoUpdater.UpdateAssignedBuilding;
     }
 }

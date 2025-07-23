@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MinimoInput : MonoBehaviour
 {
+    /*
     private Camera _mainCamera;
     
     private InputManager _input;
@@ -127,4 +128,5 @@ public class MinimoInput : MonoBehaviour
         
         return null;
     }
+    */
 }
