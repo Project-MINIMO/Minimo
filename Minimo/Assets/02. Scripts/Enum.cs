@@ -102,5 +102,9 @@ public enum PopUpType
 {
     MinimoAssign,
     MinimoUnassign,
-    MinimoShift
+    MinimoShift,
+    StorageExpand,
+    StorageExpandResult,
+    MinimoExpand,
+    MinimoExpandResult,
 }

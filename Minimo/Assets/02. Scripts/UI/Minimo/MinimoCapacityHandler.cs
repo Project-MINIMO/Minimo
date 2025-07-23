@@ -1,25 +1,11 @@
 using System;
+using UnityEngine;
 
 public class MinimoCapacityHandler : CapacityHandler
 {
-    protected override void Awake()
-    {
-        base.Awake();
-        
-        var titleData = App.GetData<TitleData>();
-        ExpandCost = titleData.Common["ResidenceExpandCost"];
-        TransactionString = titleData.GetString("STR_STORAGE_EXPAND_COST");
-    }
-    
-    public override void Initialize(Action transactionCallback)
-    {
-        CurrentCapacity = AccountInfo.Instance.MinimoCapacity;
-        BaseCapacity = 20;
-        
-        base.Initialize(transactionCallback);
-        
-        Initialize();
-    }
+    protected override int GetExpandCost(TitleData title) => title.Common["ResidenceExpandCost"];
+    protected override int GetCurrentCapacity() => AccountInfo.Instance.MinimoCapacity;
+    protected override int GetBaseCapacity() => 20;
 
     protected override void SuccessTransaction()
     {
