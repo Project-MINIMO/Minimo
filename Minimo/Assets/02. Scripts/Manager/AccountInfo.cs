@@ -90,4 +90,16 @@ public class AccountInfo : Singleton<AccountInfo>
         MinimoCapacity += amount;
         OnMinimoCapacityChanged?.Invoke(MinimoCapacity);
     }
+
+    [ContextMenu("AddGold1000000")]
+    public void AddGold1000000()
+    {
+        Gold.AddCount(1000000);
+    }
+    
+    [ContextMenu("AddLevel1")]
+    public void AddLevel1()
+    {
+        Level.AddCount(100);
+    }
 }
