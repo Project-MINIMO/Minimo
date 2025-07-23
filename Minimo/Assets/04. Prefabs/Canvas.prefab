@@ -4994,6 +4994,7 @@ MonoBehaviour:
   _infoUpdater: {fileID: 8802393139551298897}
   _assignButton: {fileID: 4465528091109719746}
   _levelUpBtn: {fileID: 7993355516107678554}
+  _historyBtn: {fileID: 3423885810929055517}
 --- !u!114 &8802393139551298897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19554,7 +19555,7 @@ GameObject:
   - component: {fileID: 4861174004949265415}
   - component: {fileID: 1210967035852751744}
   m_Layer: 5
-  m_Name: Btn_Place
+  m_Name: Btn_Assign
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22812,6 +22813,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af42e46704db79d4789d340ecaa576e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _openBtn: {fileID: 4721752688714246258}
   _closeBtns:
   - {fileID: 2706150869099760954}
   - {fileID: 7054355932169829160}
@@ -44469,7 +44471,6 @@ MonoBehaviour:
   _capacityTMP: {fileID: 7563237801593278282}
   _openBtn: {fileID: 8378456008090855127}
   _closeBtn: {fileID: 7626642586436322264}
-  _capacityBtn: {fileID: 3171087562291665355}
 --- !u!1 &5706448917780518704
 GameObject:
   m_ObjectHideFlags: 0
@@ -65182,7 +65183,7 @@ MonoBehaviour:
   _capacityTMP: {fileID: 6890673425376031790}
   _openBtn: {fileID: 5007933494443373908}
   _closeBtn: {fileID: 2280452072076586094}
-  _capacityBtn: {fileID: 4721752688714246258}
+  _assignBtn: {fileID: 1210967035852751744}
 --- !u!1 &8326274891903131696
 GameObject:
   m_ObjectHideFlags: 0
@@ -70937,6 +70938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af42e46704db79d4789d340ecaa576e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _openBtn: {fileID: 3171087562291665355}
   _closeBtns:
   - {fileID: 5770804308110466691}
   - {fileID: 5594557260969907186}

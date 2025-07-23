@@ -13,7 +13,6 @@ public class StoragePanel : UIBase
     
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
-    [SerializeField] private Button _capacityBtn;
 
     public override void Initialize(UIManager manager)
     {
@@ -21,7 +20,6 @@ public class StoragePanel : UIBase
 
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
-        _capacityBtn.onClick.AddListener(_expandCtrl.Show);
         
         _expandCtrl.Initialize(
             "STR_STORAGE_UI_NAME", 
@@ -36,8 +34,8 @@ public class StoragePanel : UIBase
 
         _titleTMP.text = App.GetData<TitleData>().GetString("STR_STORAGE_UI_NAME");
 
-        AccountInfo.Instance.OnStorageCapacityChanged += SetStorageCapacity;
-        SetStorageCapacity(AccountInfo.Instance.StorageCapacity);
+        AccountInfo.Instance.OnStorageCapacityChanged += OnStorageCapacityChanged;
+        OnStorageCapacityChanged(AccountInfo.Instance.StorageCapacity);
     }
 
     public override void OpenPanel()
@@ -53,7 +51,7 @@ public class StoragePanel : UIBase
         _infoCtrl.Show(slot);
     }
 
-    private void SetStorageCapacity(int amount)
+    private void OnStorageCapacityChanged(int amount)
     {
         _capacityTMP.SetText($"{AccountInfo.Instance.CurrentItemCounts}/{amount}");
     }

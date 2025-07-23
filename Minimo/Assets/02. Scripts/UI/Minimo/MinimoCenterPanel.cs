@@ -12,19 +12,21 @@ public class ManageMinimoPanel : UIBase
     
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
-    [SerializeField] private Button _capacityBtn;
+    [SerializeField] private Button _assignBtn;
     
     private MinimoProfilePanel _profilePanel;
+    private MinimoAssignedPanel _assignedPanel;
 
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
 
         _profilePanel = manager.GetPanel<MinimoProfilePanel>();
+        _assignedPanel = manager.GetPanel<MinimoAssignedPanel>();
         
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
-        _capacityBtn.onClick.AddListener(_expandCtrl.Show);
+        _assignBtn.onClick.AddListener(_assignedPanel.OpenPanel);
         
         _expandCtrl.Initialize("STR_MINIMOCENTER_NAME",
             "STR_MC_RESIDENCEEXPAND_DESC",
@@ -38,8 +40,8 @@ public class ManageMinimoPanel : UIBase
 
         _titleTMP.text = App.GetData<TitleData>().GetString("STR_MINIMOCENTER_NAME");
 
-        AccountInfo.Instance.OnMinimoCapacityChanged += SetMinimoCapacity;
-        SetMinimoCapacity(AccountInfo.Instance.MinimoCapacity);
+        AccountInfo.Instance.OnMinimoCapacityChanged += OnMinimoCapacityChanged;
+        OnMinimoCapacityChanged(AccountInfo.Instance.MinimoCapacity);
     }
 
     public override void OpenPanel()
@@ -54,7 +56,7 @@ public class ManageMinimoPanel : UIBase
         _profilePanel.OpenPanel(slot.Item);
     }
 
-    private void SetMinimoCapacity(int amount)
+    private void OnMinimoCapacityChanged(int amount)
     {
         _capacityTMP.SetText($"{20}/{amount}");
     }

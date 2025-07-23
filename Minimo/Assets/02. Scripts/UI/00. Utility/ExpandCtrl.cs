@@ -5,6 +5,7 @@ using DG.Tweening;
 
 public class ExpandCtrl : MonoBehaviour
 {
+    [SerializeField] private Button _openBtn;
     [SerializeField] private Button[] _closeBtns;
     
     [SerializeField] private TextMeshProUGUI _titleTMP;
@@ -25,6 +26,7 @@ public class ExpandCtrl : MonoBehaviour
     {
         _rect = GetComponent<RectTransform>();
         
+        _openBtn.onClick.AddListener(Show);
         foreach (var button in _closeBtns)
         {
             button.onClick.AddListener(() =>
@@ -54,7 +56,7 @@ public class ExpandCtrl : MonoBehaviour
             .OnComplete(() => gameObject.SetActive(false));
     }
 
-    public void Show()
+    private void Show()
     {
         _isCompleteExpand = false;
         _rect.localScale = Vector3.zero;

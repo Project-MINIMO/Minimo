@@ -39,7 +39,6 @@ public abstract class ProduceObject : BuildingObject
             .Subscribe(value =>
             {
                 _globalTimeRatio = value;
-                
                 foreach (var task in AllTasks)
                 {
                     task.ApplyTimeRatio(TimeRatio); 
