@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public abstract class InventorySortHandler : MonoBehaviour
@@ -18,7 +19,9 @@ public abstract class InventorySortHandler : MonoBehaviour
         }
     }
     
-    [SerializeField] protected TMP_Dropdown Dropdown;
+    [SerializeField] protected SortDropdown Dropdown;
+    [SerializeField] private Image _labelImg;
+    [SerializeField] private Sprite _clearSprite;
 
     protected List<SortOption> OptionList;
     
@@ -28,6 +31,7 @@ public abstract class InventorySortHandler : MonoBehaviour
         CacheOptionData();
 
         Dropdown.onValueChanged.AddListener(OnDropdownChanged);
+        Dropdown.SetLabel(_labelImg, _clearSprite);
     }
 
     protected abstract void InitTabOptions();

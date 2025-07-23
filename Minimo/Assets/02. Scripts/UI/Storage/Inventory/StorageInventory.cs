@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class StorageInventory : ItemInventory
 {
     [SerializeField] private RectTransform _content;
-    [SerializeField] private StorageInventorySortHandler _sortDropdown;
-    [SerializeField] private StorageInventoryFilterHandler _filterDropdown;
+    [SerializeField] private StorageSortHandler _sortDropdown;
+    [SerializeField] private StorageFilterHandler _filterDropdown;
     
     private List<InventorySlot<Item>> _activeSlots;
    

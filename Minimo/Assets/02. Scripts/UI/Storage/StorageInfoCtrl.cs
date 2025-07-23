@@ -48,7 +48,5 @@ public class StorageInfoCtrl : MonoBehaviour
         var pivot = new Vector2(placeOnRight ? 0f : 1f, 0.5f);
         _rect.pivot = pivot;
         _rect.anchoredPosition = new Vector2(localPoint.x - 23, 0);
-        
-        Debug.Log($"screenPos: {screenPoint}, localPoint: {localPoint}, pivot: {pivot}");
     }
 }

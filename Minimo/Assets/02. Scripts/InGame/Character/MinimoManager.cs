@@ -15,7 +15,7 @@ public class MinimoManager : ManagerBase
     public ReactiveProperty<float> GlobalTimeSkipCostRatio { get; } = new(1f);
     
     private readonly Dictionary<Minimo, Dictionary<AbilityType, float>> _contributions = new();
-    
+    public List<Minimo> Minimos { get; private set; }
     protected override void Awake()
     {
         base.Awake();
@@ -26,6 +26,8 @@ public class MinimoManager : ManagerBase
         {
             minimo.Initialize(titleData.UserMinimo[minimo.transform.GetSiblingIndex()]);
         }
+
+        Minimos = minimos.OrderBy(x => x.Data.ID).Select(x => x.Data).ToList();
     }
     
     public void OnMinimoAssigned(Minimo minimo)

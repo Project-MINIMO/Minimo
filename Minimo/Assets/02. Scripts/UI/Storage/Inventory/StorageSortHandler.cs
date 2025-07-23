@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public class StorageInventorySortHandler : InventorySortHandler
+public class StorageSortHandler : InventorySortHandler
 {
     [SerializeField] protected StorageInventory _inventory;
     

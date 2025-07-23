@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public abstract class InventoryFilterHandler : MonoBehaviour
@@ -17,8 +18,10 @@ public abstract class InventoryFilterHandler : MonoBehaviour
         }
     }
     
-    [SerializeField] protected MultiSelectDropdown Dropdown;
-    [SerializeField] private TextMeshProUGUI _label;
+    [SerializeField] protected FilterDropdown Dropdown;
+    [SerializeField] private Image _labelImg;
+    [SerializeField] private Sprite _clearSprite;
+    [SerializeField] private TextMeshProUGUI _labelTMP;
     
     protected Dictionary<int, List<FilterOption>> OptionMap;
     protected Dictionary<int, Action<bool[]>> ActionMap;
@@ -26,18 +29,19 @@ public abstract class InventoryFilterHandler : MonoBehaviour
 
     protected int SelectedIndex = 1;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         InitTabOptions();
         CacheOptionData();
 
         Dropdown.OnSelectionChanged.AddListener(OnDropdownChanged);
+        Dropdown.SetLabel(_labelImg, _clearSprite);
     }
 
     protected virtual void InitTabOptions()
     {
         var titleData = App.GetData<TitleData>();
-        _label.SetText(titleData.GetString("STR_STORTAGE_UI_FILTER_NAME"));
+        _labelTMP.SetText(titleData.GetString("STR_STORTAGE_UI_FILTER_NAME"));
     }
 
     private void CacheOptionData()

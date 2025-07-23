@@ -4,9 +4,17 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public class StorageInventoryFilterHandler : InventoryFilterHandler
+public class StorageFilterHandler : InventoryFilterHandler
 {
     [SerializeField] protected StorageInventory _inventory;
+    [SerializeField] private GameObject[] _backgroundObjs;
+    
+    protected override void Awake()
+    {
+        base.Awake();
+
+        Dropdown.SetBackgroundObjects(_backgroundObjs);
+    }
     
     protected override void InitTabOptions()
     {
