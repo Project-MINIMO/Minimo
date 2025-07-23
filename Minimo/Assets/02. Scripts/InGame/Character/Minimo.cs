@@ -1,49 +1,56 @@
+using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
 
-public class Minimo : MonoBehaviour
+public class Minimo
 {
-    public UMData Data { get; private set; }
-    public MinimoFSM FSM { get; private set; }
-    public ProduceAdvanced AssignedBuilding { get; private set; }
+    public readonly int ID;
+    public readonly int Type;
+    
     public int Level { get; private set; }
-
-    private Animator _animator;
-    private SpriteRenderer _spriteRenderer;
-
-    private Transform _parent;    //temp
+    public ProduceAdvanced AssignedBuilding { get; private set; }
+    
+    public event Action<Minimo, int> OnLevelChanged;
+    public event Action<ProduceAdvanced> OnAssignmentChanged;
     
     public List<IMinimoAbility> Abilities { get; private set; }
+    public List<string> AbilityDescriptions { get; private set; }
     
-    public MinimoManager _minimoManager;
+    public readonly string Name;
+    public readonly string Description;
+    public readonly DateTime AcquisitionDate;
     
-    private void Awake()
+    public Minimo(UMData data, TitleData title)
     {
-        var titleData = App.GetData<TitleData>();
-        _parent = transform.parent;   //temp
-        Data = titleData.UserMinimo[transform.GetSiblingIndex()];    //temp
-        float potentialValue = Data.Potential;
-        var rawPotential = 1 + (potentialValue - 1) * (((float)titleData.Common["PotentialGap"] - 1) / 9);
+        ID = data.ID;
+        Type = data.Type;
+        
+        Name = title.GetFormatString(data.Name, data.ID.ToString());
+        Description = title.GetString(data.Name);
+        AcquisitionDate = DateTime.Now;
+        
+        float potentialValue = data.Potential;
+        var rawPotential = 1 + (potentialValue - 1) * (((float)title.Common["PotentialGap"] - 1) / 9);
         var potential = Mathf.Round(rawPotential * 100f) / 100f;
-        _minimoManager = App.GetManager<MinimoManager>();
-
+        
         Abilities = new List<IMinimoAbility>
         {
-            CreateAbility(titleData.UMStat[Data.StatType1].StatType, Data.StatType1, potential),
-            CreateAbility(titleData.UMStat[Data.StatType2].StatType, Data.StatType2, potential),
-            CreateAbility(titleData.UMStat[Data.StatType3].StatType, Data.StatType3, potential),
+            CreateAbility(title.UMStat[data.StatType1].StatType, data.StatType1, potential),
+            CreateAbility(title.UMStat[data.StatType2].StatType, data.StatType2, potential),
+            CreateAbility(title.UMStat[data.StatType3].StatType, data.StatType3, potential),
         };
         
-        _animator = GetComponent<Animator>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-
-        FSM = new MinimoFSM(this);
-        SetChillState();
-
+        AbilityDescriptions = new List<string>
+        {
+            title.GetString(title.UMStat[data.StatType1].Name),
+            title.GetString(title.UMStat[data.StatType2].Name),
+            title.GetString(title.UMStat[data.StatType3].Name)
+        };
+        
         AddLevel(1);
     }
-
+    
     private IMinimoAbility CreateAbility(int abilityType, int id, float potential) => (AbilityType)abilityType switch
     {
         AbilityType.None => null,
@@ -57,80 +64,9 @@ public class Minimo : MonoBehaviour
         AbilityType.MissionTime => new MissionTimeAbility(id, potential),
         _ => null
     };
-
-    private void Update()
-    {
-        FSM.Update();
-    }
     
-    public void SetSpriteFilp(bool isFlip)
-    {
-        _spriteRenderer.flipX = isFlip;
-    }
-    
-    public void SetSpriteOrder(int order)
-    {
-        _spriteRenderer.sortingOrder = order;
-    }
-
-    public void SetAnimation(string trigger, bool isActive)
-    {
-        _animator.SetBool(trigger, isActive);
-    }
-
-    public void SetChillState()
-    {
-        //var randomIndex = Random.Range(0, 2);
-        //FSM.ChangeState(randomIndex == 0 ? MinimoState.Idle : MinimoState.Walk);
-        FSM.ChangeState(MinimoState.Idle);
-        
-        transform.SetParent(_parent);   //temp
-        transform.localPosition = Vector3.zero;   //temp
-
-        if (AssignedBuilding != null)
-        {
-            AssignedBuilding.UnplaceMinimo();
-            AssignedBuilding = null;
-            _minimoManager.OnMinimoUnassigned(this);
-        }
-    }
-
-    public void SetWorkState(ProduceAdvanced produceObject)
-    {
-        FSM.ChangeState(MinimoState.Work);
-        //_animator.SetTrigger(produceObject.AnimTrigger);
-        
-        transform.SetParent(produceObject.MinimoWorkingPosition);
-        transform.localPosition = Vector3.zero;
-        
-        SetSpriteFilp(false);
-
-        if (AssignedBuilding != null)
-        {
-            AssignedBuilding.UnplaceMinimo();
-            _minimoManager.OnMinimoUnassigned(this);
-        }
-        AssignedBuilding = produceObject;
-        produceObject.PlaceMinimo(this);
-        
-        _minimoManager.OnMinimoAssigned(this);
-        
-        foreach (var ability in Abilities)
-        {
-            if (ability.IsApplicableTo(produceObject))
-            {
-                ability.Apply(produceObject);
-            }
-        }
-    }
-
     public void AddLevel(int amount)
     {
-        if (AssignedBuilding != null)
-        {
-            _minimoManager.OnMinimoUnassigned(this);
-        }
-        
         Level += amount;
         Level = Mathf.Clamp(Level, 1, 30);
 
@@ -138,18 +74,19 @@ public class Minimo : MonoBehaviour
         {
             ability.CalculateAbility(Level);
         }
+        
+        OnLevelChanged?.Invoke(this, Level);
+    }
+    
+    public void AssignTo(ProduceAdvanced building)
+    {
+        AssignedBuilding = building;
+        OnAssignmentChanged?.Invoke(building);
+    }
 
-        if (AssignedBuilding != null)
-        {
-            foreach (var ability in Abilities)
-            {
-                if (ability.IsApplicableTo(AssignedBuilding))
-                {
-                    ability.Apply(AssignedBuilding);
-                }
-            }
-            
-            _minimoManager.OnMinimoAssigned(this);
-        }
+    public void Unassign()
+    {
+        AssignedBuilding = null;
+        OnAssignmentChanged?.Invoke(null);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -7,119 +8,100 @@ using UnityEngine;
 public class MinimoManager : ManagerBase
 {
     public ReactiveProperty<float> GlobalTimeReduction { get; } = new(0f);
-    private float _globalTimeReduction = 0;
-    
     public ReactiveProperty<float> GlobalTimeRatio { get; } = new(1f);
-    private float _globalTimeRatio = 1f;
-    
     public ReactiveProperty<float> GlobalHarvestRatio { get; } = new(1f);
-    private float _globalHarvestRatio = 1f;
-    
     public ReactiveProperty<float> GlobalExpRatio { get; } = new(1f);
-    private float _globalExpRatio = 1f;
-    
     public ReactiveProperty<float> GlobalSellCostRatio { get; } = new(1f);
-    private float _globalSellCostRatio = 1f;
-    
     public ReactiveProperty<float> GlobalTimeSkipCostRatio { get; } = new(1f);
-    private float _globalTimeSkipCostRatio = 1f;
     
-    public List<Minimo> Minimos { get; private set; }
+    private readonly Dictionary<Minimo, Dictionary<AbilityType, float>> _contributions = new();
     
     protected override void Awake()
     {
         base.Awake();
 
-        Minimos = GetComponentsInChildren<Minimo>().ToList();
+        var titleData = App.GetData<TitleData>();
+        var minimos = GetComponentsInChildren<MinimoObject>().ToList();
+        foreach (var minimo in minimos)
+        {
+            minimo.Initialize(titleData.UserMinimo[minimo.transform.GetSiblingIndex()]);
+        }
     }
     
     public void OnMinimoAssigned(Minimo minimo)
     {
-        foreach (var a in minimo.Abilities)
-        {
-            if (!a.IsUnlocked) continue;
-            
-            if (a.Scope is not AbilityScope.Individual)
-            {
-                switch (a.Type)
-                {
-                    case AbilityType.ProdTime_Second:
-                        _globalTimeReduction += a.Value;
-                        break;
-                    
-                    case AbilityType.ProdTime_Percent:
-                        _globalTimeRatio *= 1 - a.Value / 100;
-                        break;
-                    
-                    case AbilityType.ProdAmount:
-                        _globalHarvestRatio *= 1 - a.Value / 100;
-                        break;
-                    
-                    case AbilityType.ProdEXP:
-                        _globalExpRatio *= 1 + a.Value / 100;
-                        break;
-                    
-                    case AbilityType.SellValue:
-                        _globalSellCostRatio *= 1 + a.Value / 100;
-                        break;
-                    
-                    case AbilityType.TimeSkipCost:
-                        _globalTimeSkipCostRatio *= 1 - a.Value / 100;
-                        break;
-                }
-            }
-        }
-
-        GlobalTimeReduction.Value = _globalTimeReduction;
-        GlobalTimeRatio.Value = _globalTimeRatio;
-        GlobalHarvestRatio.Value = _globalHarvestRatio;
-        GlobalExpRatio.Value = _globalExpRatio;
-        GlobalSellCostRatio.Value = _globalSellCostRatio;
-        GlobalTimeSkipCostRatio.Value = _globalTimeSkipCostRatio;
+        if (_contributions.ContainsKey(minimo))
+            return;
+        
+        var contrib = CalculateContribution(minimo);
+        _contributions[minimo] = contrib;
+        
+        minimo.OnLevelChanged += HandleMinimoLevelChanged;
+        
+        ApplyContribution(contrib, 1);
     }
-
+    
     public void OnMinimoUnassigned(Minimo minimo)
     {
-        foreach (var a in minimo.Abilities)
+        if (!_contributions.TryGetValue(minimo, out var contrib))
+            return;
+        
+        ApplyContribution(contrib, -1);
+        
+        minimo.OnLevelChanged -= HandleMinimoLevelChanged;
+        _contributions.Remove(minimo);
+    }
+    
+    private void HandleMinimoLevelChanged(Minimo minimo, int newLevel)
+    {
+        var oldContrib = _contributions[minimo];
+        ApplyContribution(oldContrib, -1);
+        
+        var updatedContrib = CalculateContribution(minimo);
+        _contributions[minimo] = updatedContrib;
+        
+        ApplyContribution(updatedContrib, 1);
+    }
+    
+    private Dictionary<AbilityType, float> CalculateContribution(Minimo minimo)
+    {
+        return minimo.Abilities
+            .Where(a => a.IsUnlocked && a.Scope != AbilityScope.Individual)
+            .ToDictionary(a => a.Type, a => a.Value);
+    }
+
+    private void ApplyContribution(Dictionary<AbilityType, float> contrib, int sign)
+    {
+        foreach (var (type, value) in contrib)
         {
-            if (!a.IsUnlocked) continue;
+            var delta = sign * value;
             
-            if (a.Scope is not AbilityScope.Individual)
+            switch (type)
             {
-                switch (a.Type)
-                {
-                    case AbilityType.ProdTime_Second:
-                        _globalTimeReduction -= a.Value;
-                        break;
-                    
-                    case AbilityType.ProdTime_Percent:
-                        _globalTimeRatio /= 1 - a.Value / 100;
-                        break;
-                    
-                    case AbilityType.ProdAmount:
-                        _globalHarvestRatio /= 1 - a.Value / 100;
-                        break;
-                    
-                    case AbilityType.ProdEXP:
-                        _globalExpRatio /= 1 + a.Value / 100;
-                        break;
-                    
-                    case AbilityType.SellValue:
-                        _globalSellCostRatio /= a.Value / 100;
-                        break;
-                    
-                    case AbilityType.TimeSkipCost:
-                        _globalTimeSkipCostRatio /= 1 - a.Value / 100;
-                        break;
-                }
+                case AbilityType.ProdTime_Second:
+                    GlobalTimeReduction.Value += delta;
+                    break;
+                
+                case AbilityType.ProdTime_Percent:
+                    GlobalTimeRatio.Value *= 1 - sign * (value / 100f);
+                    break;
+                
+                case AbilityType.ProdAmount:
+                    GlobalHarvestRatio.Value *= 1 - sign * (value / 100f);
+                    break;
+                
+                case AbilityType.ProdEXP:
+                    GlobalExpRatio.Value *= 1 + sign * (value / 100f);
+                    break;
+                
+                case AbilityType.SellValue:
+                    GlobalSellCostRatio.Value *= 1 + sign * (value / 100f);
+                    break;
+                
+                case AbilityType.TimeSkipCost:
+                    GlobalTimeSkipCostRatio.Value *= 1 - sign * (value / 100f);
+                    break;
             }
         }
-        
-        GlobalTimeReduction.Value = _globalTimeReduction;
-        GlobalTimeRatio.Value = _globalTimeRatio;
-        GlobalHarvestRatio.Value = _globalHarvestRatio;
-        GlobalExpRatio.Value = _globalExpRatio;
-        GlobalSellCostRatio.Value = _globalSellCostRatio;
-        GlobalTimeSkipCostRatio.Value = _globalTimeSkipCostRatio;
     }
 }

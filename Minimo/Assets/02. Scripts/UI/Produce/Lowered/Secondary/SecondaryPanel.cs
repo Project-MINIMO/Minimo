@@ -12,17 +12,18 @@ public class SecondaryPanel : UIBase
     
     private ProduceManager _produceManager;
     private ProduceObject _produceObject;
-    private PlaceMinimoPanel _placeMinimoPanel;
+    private MinimoPlacePanel _placePanel;
 
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
 
         _produceManager = App.GetManager<ProduceManager>();
-        _placeMinimoPanel = manager.GetPanel<PlaceMinimoPanel>();
+        _placePanel = manager.GetPanel<MinimoPlacePanel>();
 
         _closeBtn.onClick.AddListener(_produceManager.Deselect);
-        _minimoBtn.onClick.AddListener(_placeMinimoPanel.OpenPanel);
+        _minimoBtn.onClick.AddListener(() => 
+            _placePanel.OpenPanel(_produceManager.CurrentObject as ProduceAdvanced));
     }
 
     public override void OpenPanel()

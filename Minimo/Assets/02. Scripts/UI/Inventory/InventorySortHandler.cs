@@ -3,12 +3,11 @@ using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
-public class InventorySortHandler : MonoBehaviour
+public abstract class InventorySortHandler : MonoBehaviour
 {
-    private class SortOption
+    protected class SortOption
     {
         public readonly string Label;
         public readonly Action Action;
@@ -19,62 +18,30 @@ public class InventorySortHandler : MonoBehaviour
         }
     }
     
-    [SerializeField] private StorageInventory _inventory;
-    [SerializeField] private TMP_Dropdown _dropdown;
+    [SerializeField] protected TMP_Dropdown Dropdown;
 
-    private List<SortOption> _optionList;
+    protected List<SortOption> OptionList;
     
     private void Awake()
     {
         InitTabOptions();
         CacheOptionData();
 
-        _dropdown.onValueChanged.AddListener(OnDropdownChanged);
+        Dropdown.onValueChanged.AddListener(OnDropdownChanged);
     }
 
-    private void InitTabOptions()
-    {
-        var titleData = App.GetData<TitleData>();
-        
-        _optionList = new List<SortOption>
-        {
-            new(titleData.GetString("STR_STORTAGE_UI_ALIGN_COMPONENT1_NAME"), 
-                _inventory.SortDefault),
-            new(titleData.GetString("STR_STORTAGE_UI_ALIGN_COMPONENT2_NAME") + " ↓", 
-                () => _inventory.SortByCount(false)),
-            new(titleData.GetString("STR_STORTAGE_UI_ALIGN_COMPONENT2_NAME")+ " ↑", 
-                () => _inventory.SortByCount(true)),
-            new(titleData.GetString("STR_STORTAGE_UI_ALIGN_COMPONENT3_NAME") + " ↓", 
-                () => _inventory.SortByPrice(false)),
-            new(titleData.GetString("STR_STORTAGE_UI_ALIGN_COMPONENT3_NAME")+ " ↑", 
-                () => _inventory.SortByPrice(true))
-        };
-    }
+    protected abstract void InitTabOptions();
 
     private void CacheOptionData()
     {
-        var optionDatas = _optionList
+        var optionDatas = OptionList
             .Select(map => new TMP_Dropdown.OptionData(map.Label))
             .ToList();
-        _dropdown.options = optionDatas;
-    }
-
-    public void OnMenuChanged(int index)
-    {
-        if (index != 0)
-        {
-            gameObject.SetActive(false);
-            return;
-        }
-        
-        gameObject.SetActive(true);
-        
-        _dropdown.value = 0;
-        _dropdown.RefreshShownValue();
+        Dropdown.options = optionDatas;
     }
 
     private void OnDropdownChanged(int index)
     {
-        _optionList[index].Action?.Invoke();
+        OptionList[index].Action?.Invoke();
     }
 }

@@ -1,6 +1,6 @@
-public class MinimoWorkState : StateBase<Minimo>
+public class MinimoWorkState : StateBase<MinimoObject>
 {
-    public MinimoWorkState(Minimo owner) : base(owner) { }
+    public MinimoWorkState(MinimoObject owner) : base(owner) { }
 
     public override void Enter()
     {

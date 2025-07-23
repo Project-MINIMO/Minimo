@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public class MinimoWalkState : StateBase<Minimo>
+public class MinimoWalkState : StateBase<MinimoObject>
 {
     private const float SPEED = 0.3f;
 
@@ -13,7 +13,7 @@ public class MinimoWalkState : StateBase<Minimo>
 
     private int _currIndex;
 
-    public MinimoWalkState(Minimo owner) : base(owner) 
+    public MinimoWalkState(MinimoObject owner) : base(owner) 
     {
         _pathManager = App.GetManager<PathManager>();
     }

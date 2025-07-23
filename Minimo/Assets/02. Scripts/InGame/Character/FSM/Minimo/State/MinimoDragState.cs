@@ -1,6 +1,6 @@
-public class MinimoDragState : StateBase<Minimo>
+public class MinimoDragState : StateBase<MinimoObject>
 {
-    public MinimoDragState(Minimo owner) : base(owner) { }
+    public MinimoDragState(MinimoObject owner) : base(owner) { }
 
     public override void Enter()
     {

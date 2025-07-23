@@ -15,7 +15,7 @@ public abstract class ElevatedPanel : UIBase
     
     protected ProduceManager _produceManager;
     protected ProduceElevated _produceObject;
-    private PlaceMinimoPanel _placeMinimoPanel;
+    private MinimoPlacePanel _placePanel;
     
     private GameObject[] _slots;
     
@@ -24,13 +24,14 @@ public abstract class ElevatedPanel : UIBase
         base.Initialize(manager);
 
         _produceManager = App.GetManager<ProduceManager>();
-        _placeMinimoPanel = manager.GetPanel<PlaceMinimoPanel>();
+        _placePanel = manager.GetPanel<MinimoPlacePanel>();
         
         var produceSlots = GetComponentsInChildren<ProduceSlot>(true);
         _slots = produceSlots.Select(slot => slot.gameObject).ToArray();
         
         _closeBtn.onClick.AddListener(_produceManager.Deselect);
-        _placeMinimoBtn.onClick.AddListener(_placeMinimoPanel.OpenPanel);
+        _placeMinimoBtn.onClick.AddListener(() => 
+            _placePanel.OpenPanel(_produceManager.CurrentObject as ProduceAdvanced));
     }
 
     public override void OpenPanel()

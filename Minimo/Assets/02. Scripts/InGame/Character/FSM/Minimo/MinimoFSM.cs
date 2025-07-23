@@ -1,6 +1,6 @@
-public class MinimoFSM : FSM<Minimo, MinimoState>
+public class MinimoFSM : FSM<MinimoObject, MinimoState>
 {
-    public MinimoFSM(Minimo owner)
+    public MinimoFSM(MinimoObject owner)
     {
         AddState(MinimoState.Idle, new MinimoIdleState(owner));
         AddState(MinimoState.Walk, new MinimoWalkState(owner));
