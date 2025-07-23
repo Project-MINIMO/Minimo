@@ -97,3 +97,10 @@ public enum ProduceState
     Produce,
     Complete,
 }
+
+public enum PopUpType
+{
+    MinimoAssign,
+    MinimoUnassign,
+    MinimoShift
+}

@@ -5,8 +5,9 @@ using System;
 public abstract class ProduceAdvanced : ProduceObject
 {
     public event Action<Minimo> OnMinimoAssigned;
+
     private MinimoManager _minimoManager;
-    private Minimo _placedMinimo;
+    public Minimo AssignedMinimo { get; private set; }
     
     public Transform MinimoWorkingPosition;
     public string AnimTrigger;
@@ -43,7 +44,7 @@ public abstract class ProduceAdvanced : ProduceObject
     
     protected override void Update()
     {
-        if (_placedMinimo != null)
+        if (AssignedMinimo != null)
         {
             base.Update();
         }
@@ -51,16 +52,16 @@ public abstract class ProduceAdvanced : ProduceObject
 
     public void PlaceMinimo(Minimo minimo)
     {
-        if (_placedMinimo != null)
+        if (AssignedMinimo != null)
         {
             UnplaceMinimo();
         }
 
-        _placedMinimo = minimo;
+        AssignedMinimo = minimo;
         
-        _placedMinimo.OnLevelChanged += HandleMinimoLevelChanged;
-        _placedMinimo.AssignTo(this);
-        _minimoManager.OnMinimoAssigned(_placedMinimo);
+        AssignedMinimo.OnLevelChanged += HandleMinimoLevelChanged;
+        AssignedMinimo.AssignTo(this);
+        _minimoManager.OnMinimoAssigned(AssignedMinimo);
         
         ApplyAllAbilities(minimo);
         OnMinimoAssigned?.Invoke(minimo);
@@ -68,21 +69,21 @@ public abstract class ProduceAdvanced : ProduceObject
 
     public void UnplaceMinimo()
     {
-        if (_placedMinimo == null) return;
+        if (AssignedMinimo == null) return;
         
-        _placedMinimo.OnLevelChanged -= HandleMinimoLevelChanged;
-        _minimoManager.OnMinimoUnassigned(_placedMinimo);
-        _placedMinimo.Unassign();
+        AssignedMinimo.OnLevelChanged -= HandleMinimoLevelChanged;
+        _minimoManager.OnMinimoUnassigned(AssignedMinimo);
+        AssignedMinimo.Unassign();
         
         ResetRatios();
 
-        _placedMinimo = null;
+        AssignedMinimo = null;
     }
     
     private void HandleMinimoLevelChanged(Minimo minimo, int newLevel)
     {
         ResetRatios();
-        ApplyAllAbilities(_placedMinimo);
+        ApplyAllAbilities(AssignedMinimo);
     }
 
     private void ApplyAllAbilities(Minimo minimo)
@@ -105,7 +106,7 @@ public abstract class ProduceAdvanced : ProduceObject
         var result = base.CheckPlantCondition(option);
         if (result == NotifyType.Success)
         {
-            return _placedMinimo == null
+            return AssignedMinimo == null
                 ? NotifyType.MissMinimo
                 : NotifyType.Success;
         }
