@@ -133,7 +133,9 @@ public abstract class ProduceObject : BuildingObject
     {
         base.OnClickUp();
 
-        if (!_editManager.IsEditing.Value)
+        if (_editManager.IsTileEditing.Value) return;
+        
+        if (!_editManager.IsBuildingEditing.Value)
         {
             _produceManager.Select(this);
         }

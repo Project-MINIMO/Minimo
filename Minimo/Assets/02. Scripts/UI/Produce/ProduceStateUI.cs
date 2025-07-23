@@ -7,8 +7,14 @@ public class ProduceStateUI : MonoBehaviour
     
     private void Start()
     {
-        App.GetManager<EditManager>().IsEditing
-            .Subscribe((isEditing) =>
+        var editManager = App.GetManager<EditManager>();
+        editManager.IsBuildingEditing
+            .Subscribe(isEditing =>
+            {
+                gameObject.SetActive(!isEditing);
+            }).AddTo(gameObject);
+        editManager.IsTileEditing
+            .Subscribe(isEditing =>
             {
                 gameObject.SetActive(!isEditing);
             }).AddTo(gameObject);

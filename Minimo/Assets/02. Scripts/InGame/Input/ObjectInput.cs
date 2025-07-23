@@ -51,7 +51,9 @@ public class ObjectInput : MonoBehaviour
 
     private void HandleClickUp()
     {
-        if (_editManager.IsEditing.Value)
+        if (_editManager.IsTileEditing.Value) return;
+        
+        if (_editManager.IsBuildingEditing.Value)
         {
             if (_currentObject is not BuildingObject)
             {

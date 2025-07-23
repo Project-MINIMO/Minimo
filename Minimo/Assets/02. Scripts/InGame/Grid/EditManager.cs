@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class EditManager : ManagerBase
 {
-    public ReactiveProperty<bool> IsEditing { get; } = new(false);
+    public ReactiveProperty<bool> IsBuildingEditing { get; } = new(false);
+    public ReactiveProperty<bool> IsTileEditing { get; } = new(false);
     public ReactiveProperty<Vector3> CurrentCellPosition { get; } = new();
     public BuildingObject CurrentEditObject { get; private set; }
     public ReactiveCollection<ProduceAdvanced> ActiveAdvanceds { get; } = new();
@@ -77,7 +78,7 @@ public class EditManager : ManagerBase
         }
         
         CurrentEditObject = gridObject;
-        IsEditing.Value = true;
+        IsBuildingEditing.Value = true;
         
         CurrentCellPosition.Value = CurrentEditObject.transform.position;
     }
@@ -90,7 +91,7 @@ public class EditManager : ManagerBase
         }
         
         CurrentEditObject = null;
-        IsEditing.Value = false;
+        IsBuildingEditing.Value = false;
     }
     
     public async void ConfirmEdit()
@@ -123,7 +124,7 @@ public class EditManager : ManagerBase
             }
             
             CurrentEditObject = null;
-            IsEditing.Value = false;
+            IsBuildingEditing.Value = false;
         }
         else
         {
@@ -169,7 +170,7 @@ public class EditManager : ManagerBase
 
     public void MoveObject(Vector3 touchPosition)
     {
-        if (!IsEditing.Value) return;
+        if (!IsBuildingEditing.Value) return;
         
         var cellPosition = _gridLayout.WorldToCell(touchPosition);
         SetCurrentPosition(cellPosition);
@@ -194,5 +195,10 @@ public class EditManager : ManagerBase
     public Vector3 GetWorldPosition(Vector3Int position)
     {
         return _gridLayout.CellToWorld(position);
+    }
+
+    public void SetTileEditing(bool isEditing)
+    {
+        IsTileEditing.Value = isEditing;
     }
 }

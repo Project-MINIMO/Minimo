@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 
 
@@ -47,6 +48,16 @@ public class StringData
     public string English;
     public string Chinese;
     public string Japanese;
+}
+
+[Serializable]
+public class CustomTileData
+{
+    public int ID;
+    public int Type;
+    public int UnlockLevel;
+    public string Name;
+    public int Cost;
 }
 
 #region Quest
@@ -161,6 +172,7 @@ public class TitleData : DataBase
     public Dictionary<int, Minimo> UserMinimo { get; private set; } = new();
     public Dictionary<int, UMStatData> UMStat { get; private set; } = new();
     public Dictionary<int, UMStatGrowthData> UMStatGrowth { get; private set; } = new();
+    public Dictionary<int, CustomTile> CustomTile { get; private set; } = new();
 
     private Dictionary<string, StringData> _string = new();
 
@@ -176,6 +188,7 @@ public class TitleData : DataBase
     private const string UM_PATH = "Data/UMData";
     private const string UMSTAT_PATH = "Data/UMStatData";
     private const string UMSTATGROWTH_PATH = "Data/UMStatGrowthData";
+    private const string CUSTOMTILE_PATH = "Data/CustomTileData";
     #endregion
 
     protected override void Awake()
@@ -224,10 +237,12 @@ public class TitleData : DataBase
         var buildingRaw = DataLoader.LoadData<BuildingData>(BUILDING_PATH);
         var itemRaw = DataLoader.LoadData<ItemData>(ITEM_PATH);
         var questGroupRaw = DataLoader.LoadData<QuestGroupData>(QUESTGROUP_PATH);
+        var customTileRaw = DataLoader.LoadData<CustomTileData>(CUSTOMTILE_PATH);
         
         const string buildingAssetPath = "Assets/09. Scriptable Objects/Building/{0}.asset";
         const string itemIconPath = "Assets/03. Images/Item/{0}.png";
         const string questIconPath = "Assets/03. Images/Quest/{0}.png";
+        const string customTilePath = "Assets/03. Images/CustomTile/{0}.asset";
     
         var buildingTasks = buildingRaw
             .Select(d => LoadAddressableDataAsync<BuildingPositionData>(d.Name, buildingAssetPath))
@@ -235,13 +250,17 @@ public class TitleData : DataBase
         var iconTasks = itemRaw
             .Select(d => LoadAddressableDataAsync<Sprite>(d.Name, itemIconPath))
             .ToList();
-        var groupTasks = questGroupRaw
+        var questGroupTasks = questGroupRaw
             .Select(d => LoadAddressableDataAsync<Sprite>(d.Name, questIconPath))
+            .ToList();
+        var customTileTasks = customTileRaw
+            .Select(d => LoadAddressableDataAsync<Tile>(d.Name, customTilePath))
             .ToList();
         
         var buildingPositions = await Task.WhenAll(buildingTasks);
         var itemIcons = await Task.WhenAll(iconTasks);
-        var questGroupIcons = await Task.WhenAll(groupTasks);
+        var questGroupIcons = await Task.WhenAll(questGroupTasks);
+        var customTiles = await Task.WhenAll(customTileTasks);
 
         for (var i = 0; i < buildingRaw.Length; i++)
         {
@@ -257,6 +276,11 @@ public class TitleData : DataBase
         for (var i = 0; i < questGroupRaw.Length; i++)
         {
             questGroups.Add(questGroupRaw[i].ID, new QuestGroup(questGroupRaw[i], questGroupIcons[i], this));
+        }
+        
+        for (var i = 0; i < customTileRaw.Length; i++)
+        {
+            CustomTile.Add(customTileRaw[i].ID, new CustomTile(customTileRaw[i], customTiles[i]));
         }
         
         LoadQuestData(questGroups);

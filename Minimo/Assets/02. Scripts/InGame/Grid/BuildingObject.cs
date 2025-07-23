@@ -21,8 +21,10 @@ public class BuildingObject : InteractObject
     {
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _editManager = App.GetManager<EditManager>();
-        _editManager.IsEditing
-            .Subscribe((isEditing) => SetTransparency(isEditing ? 0.5f : 1)).AddTo((gameObject));
+        _editManager.IsBuildingEditing
+            .Subscribe(isEditing => SetTransparency(isEditing ? 0.5f : 1)).AddTo(gameObject);
+        _editManager.IsTileEditing
+            .Subscribe(isEditing => SetTransparency(isEditing ? 0.5f : 1)).AddTo(gameObject);
     }
     
     public virtual async Task Initialize(Building data)
@@ -60,14 +62,17 @@ public class BuildingObject : InteractObject
     #region InteractObject
     public override void OnLongPress()
     {
-        if (_editManager.IsEditing.Value) return;
+        if (_editManager.IsBuildingEditing.Value) return;
+        if (_editManager.IsTileEditing.Value) return;
         
         _editManager.StartEdit(this);
     }
 
     public override void OnClickUp()
     {
-        if (_editManager.IsEditing.Value)
+        if (_editManager.IsTileEditing.Value) return;
+        
+        if (_editManager.IsBuildingEditing.Value)
         {
             _editManager.StartEdit(this);
         }
