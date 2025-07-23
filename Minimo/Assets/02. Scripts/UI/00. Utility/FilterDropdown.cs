@@ -6,11 +6,14 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
-public class MultiSelectDropdown : TMP_Dropdown
+public class FilterDropdown : TMP_Dropdown
 {
-    public GameObject _backgroundObj;
-    public GameObject _backgroundObj2;
+    private Image _labelImg;
+    private Sprite _clearSprite;
+    private Sprite _startSprite;
+    private GameObject[] _backgroundObjs;
     
     [Serializable]
     public class SelectionChangedEvent : UnityEvent<bool[]> { }
@@ -81,16 +84,55 @@ public class MultiSelectDropdown : TMP_Dropdown
                 toggle.Select();
             }
         }
-
-        //if (_selectedStates.Length == 3) _backgroundObj.SetActive(true);
-        //if (_selectedStates.Length == 2) _backgroundObj2.SetActive(true);
     }
+    
+    protected override GameObject CreateDropdownList(GameObject template)
+    {
+        _labelImg.sprite = _clearSprite;
+
+        if (_backgroundObjs != null)
+        {
+            var selectedIndex = GetBackgroundIndex(_selectedStates.Length);
+            for (var i = 0; i < _backgroundObjs.Length; i++)
+            {
+                _backgroundObjs[i].SetActive(i == selectedIndex);
+            }
+        }
+        
+        return base.CreateDropdownList(template);
+    }
+    
+    private int GetBackgroundIndex(int count) => count switch
+    {
+        3 => 0,
+        2 => 1,
+        _ => 2,
+    };
 
     protected override void DestroyDropdownList(GameObject dropdownList)
     {
         base.DestroyDropdownList(dropdownList);
+
+        _labelImg.sprite = _startSprite;
         
-        //_backgroundObj.SetActive(false);
-        //_backgroundObj2.SetActive(false);
+        if (_backgroundObjs != null)
+        {
+            foreach (var obj in _backgroundObjs)
+            {
+                obj.SetActive(false);
+            }
+        }
+    }
+
+    public void SetLabel(Image label, Sprite sprite)
+    {
+        _labelImg = label;
+        _clearSprite = sprite;
+        _startSprite = _labelImg.sprite;
+    }
+
+    public void SetBackgroundObjects(GameObject[] backgroundObjs)
+    {
+        _backgroundObjs = backgroundObjs;
     }
 }
