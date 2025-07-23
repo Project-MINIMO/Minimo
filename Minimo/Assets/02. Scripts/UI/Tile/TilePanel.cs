@@ -46,6 +46,7 @@ public class TilePanel : UIBase
                 _tile = null;
                 _selectedTile = null;
                 _selectedTileImg.sprite = _eraseSprite;
+                _selectedTileImg.gameObject.SetActive(true);
             }
         });
 
