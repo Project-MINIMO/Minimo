@@ -286,6 +286,7 @@ public class TitleData : DataBase
         LoadQuestData(questGroups);
         LoadProduceData();
         AccountInfo.Instance.AddItems(Item);
+        App.LoadScene(SceneName.Title);
     }
    
     private Task<T> LoadAddressableDataAsync<T>(string assetName, string assetPath)
