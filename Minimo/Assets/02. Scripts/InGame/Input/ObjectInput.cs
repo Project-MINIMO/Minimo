@@ -46,7 +46,10 @@ public class ObjectInput : MonoBehaviour
     private void HandleClickDown()
     {
         var hit = GetRaycastObject();
+        if (hit == null) return;
+
         _currentObject = hit;
+        _currentObject.OnClickDown();
     }
 
     private void HandleClickUp()
@@ -84,6 +87,9 @@ public class ObjectInput : MonoBehaviour
     
     private void HandleDrag()
     {
+        if (_currentObject == null) return;
+        
+        _currentObject.OnDrag();
         _currentObject = null;
     }
 

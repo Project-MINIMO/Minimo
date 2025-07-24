@@ -4,24 +4,21 @@ public class ParallaxLayer : MonoBehaviour
 {
     [Tooltip("카메라 이동량에 곱해질 계수 (0에 가까울수록 더 멀리 있는 효과)")]
     [Range(0f, 1f)]
-    [SerializeField] private float parallaxFactor = 0.5f;
+    [SerializeField] private float _parallaxFactor = 0.5f;
 
-    private Transform cam;
-    private Vector3 previousCamPos;
-    private Vector3 startPos;
+    private Transform _camera;
+    private Vector3 _previousCamPos;
 
-    void Start()
+    private void Start()
     {
-        cam = Camera.main.transform;
-        previousCamPos = cam.position;
-        startPos = transform.position;
+        _camera = Camera.main.transform;
+        _previousCamPos = _camera.position;
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
-        Vector3 deltaCam = cam.position - previousCamPos;
-        // 레이어 이동: 카메라 이동량의 parallaxFactor만큼
-        transform.position += new Vector3(deltaCam.x * parallaxFactor, deltaCam.y * parallaxFactor, 0);
-        previousCamPos = cam.position;
+        var deltaCam = _camera.position - _previousCamPos;
+        transform.position += new Vector3(deltaCam.x * _parallaxFactor, deltaCam.y * _parallaxFactor, 0);
+        _previousCamPos = _camera.position;
     }
 }

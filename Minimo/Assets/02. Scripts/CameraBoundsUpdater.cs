@@ -8,13 +8,27 @@ public class CameraBoundsUpdater : MonoBehaviour
     [SerializeField] private Vector3 _margin = Vector2.one * 0f;
 
     private BoxCollider2D _collider;
+    private EditManager _editManager;
 
     private void Awake()
     {
         _collider = GetComponent<BoxCollider2D>();
+        _editManager = App.GetManager<EditManager>();
+    }
+
+    private void Start()
+    {
+        CalculateBounds();
     }
 
     private void LateUpdate()
+    {
+        if (!_editManager.IsTileEditing.Value) return;
+        
+        CalculateBounds();
+    }
+
+    private void CalculateBounds()
     {
         _tilemap.CompressBounds();
         
