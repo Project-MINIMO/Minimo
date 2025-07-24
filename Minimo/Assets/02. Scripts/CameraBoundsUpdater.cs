@@ -1,0 +1,28 @@
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+[RequireComponent(typeof(BoxCollider2D))]
+public class CameraBoundsUpdater : MonoBehaviour
+{
+    [SerializeField] private Tilemap _tilemap;
+    [SerializeField] private Vector3 _margin = Vector2.one * 0f;
+
+    private BoxCollider2D _collider;
+
+    private void Awake()
+    {
+        _collider = GetComponent<BoxCollider2D>();
+    }
+
+    private void LateUpdate()
+    {
+        _tilemap.CompressBounds();
+        
+        var lb = _tilemap.localBounds;
+
+        var sizeWithMargin = lb.size + _margin * 2f;
+        
+        _collider.offset = lb.center;
+        _collider.size = sizeWithMargin;
+    }
+}
