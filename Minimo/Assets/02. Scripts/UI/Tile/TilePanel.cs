@@ -16,11 +16,15 @@ public class TilePanel : UIBase
     [SerializeField] private Sprite _eraseSprite;
     [SerializeField] private Toggle _eraseTog;
     
+    [SerializeField] private TileBase _shadowTile;
+    
     private EditManager _editManager;
     
-    private Tilemap[] _tilemap;
+    private Tilemap _tilemap;
+    private Tilemap _shadowmap;
     private CustomTile _selectedTile;
     private Tile _tile;
+    
     private bool _isPainting;
     
     private Vector3Int _lastPaintedCell = new(int.MinValue, int.MinValue, int.MinValue);
@@ -30,11 +34,8 @@ public class TilePanel : UIBase
         base.Initialize(manager);
 
         _editManager = App.GetManager<EditManager>();
-        var villageObjects = GameObject.FindGameObjectsWithTag("VillageTilemap");
-        _tilemap = villageObjects
-            .Select(go => go.GetComponent<Tilemap>())
-            .Where(tm => tm != null)
-            .ToArray();
+        _tilemap = GameObject.FindWithTag("VillageTilemap").GetComponent<Tilemap>();
+        _shadowmap = GameObject.FindWithTag("ShadowTilemap").GetComponent<Tilemap>();
         
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
@@ -103,16 +104,16 @@ public class TilePanel : UIBase
     {
         var worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         worldPos.z = 0;
-        var cellPos = _tilemap[0].WorldToCell(worldPos);
+        var cellPos = _tilemap.WorldToCell(worldPos);
         
         if (cellPos == _lastPaintedCell) return;
         _lastPaintedCell = cellPos;
         
-        if (_tilemap[0].GetTile(cellPos) == _tile) return;
+        if (_tilemap.GetTile(cellPos) == _tile) return;
         if (!UseGold()) return;
         
-        _tilemap[0].SetTile(cellPos, _tile);
-        _tilemap[1].SetTile(cellPos, _tile);
+        _tilemap.SetTile(cellPos, _tile);
+        _shadowmap.SetTile(cellPos, _tile);
     }
     
     private bool UseGold()
