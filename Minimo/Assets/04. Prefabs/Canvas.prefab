@@ -925,14 +925,13 @@ GameObject:
   - component: {fileID: 6852682277240871700}
   - component: {fileID: 2418698063669769593}
   - component: {fileID: 7245612200481715286}
-  - component: {fileID: 7731700464451271030}
   m_Layer: 5
   m_Name: Panel_Switch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6852682277240871700
 RectTransform:
   m_ObjectHideFlags: 0
@@ -990,19 +989,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7731700464451271030
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 107984911170877481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9549fd9b4aa6ce42aa053f5e6e7a4fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _dragThreshold: 30
 --- !u!1 &109701264851890180
 GameObject:
   m_ObjectHideFlags: 0
@@ -1729,6 +1715,7 @@ MonoBehaviour:
   _selectedTileImg: {fileID: 8193926774585979276}
   _eraseSprite: {fileID: 21300000, guid: b867f17225b0b4744be899f9d0fa48d4, type: 3}
   _eraseTog: {fileID: 8464393179514383874}
+  _shadowTile: {fileID: 11400000, guid: 4b75a1c5e10960e4d87ef248e13ab753, type: 2}
 --- !u!1 &164774588963643273
 GameObject:
   m_ObjectHideFlags: 0

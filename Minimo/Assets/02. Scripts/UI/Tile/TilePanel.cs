@@ -1,3 +1,5 @@
+using System.Linq;
+
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
@@ -14,12 +16,16 @@ public class TilePanel : UIBase
     [SerializeField] private Sprite _eraseSprite;
     [SerializeField] private Toggle _eraseTog;
     
+    [SerializeField] private TileBase _shadowTile;
+    
     private EditManager _editManager;
     
-    private bool _isPainting;
     private Tilemap _tilemap;
+    private Tilemap _shadowmap;
     private CustomTile _selectedTile;
     private Tile _tile;
+    
+    private bool _isPainting;
     
     private Vector3Int _lastPaintedCell = new(int.MinValue, int.MinValue, int.MinValue);
     
@@ -29,6 +35,7 @@ public class TilePanel : UIBase
 
         _editManager = App.GetManager<EditManager>();
         _tilemap = GameObject.FindWithTag("VillageTilemap").GetComponent<Tilemap>();
+        _shadowmap = GameObject.FindWithTag("ShadowTilemap").GetComponent<Tilemap>();
         
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
@@ -106,6 +113,7 @@ public class TilePanel : UIBase
         if (!UseGold()) return;
         
         _tilemap.SetTile(cellPos, _tile);
+        _shadowmap.SetTile(cellPos, _tile);
     }
     
     private bool UseGold()
