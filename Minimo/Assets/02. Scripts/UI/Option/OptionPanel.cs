@@ -4,7 +4,7 @@ using TMPro;
 
 public class OptionPanel : UIBase
 {
-    protected override GameObject Panel => _optionBack;
+    public override bool IsUseBlur => true;
     
     [Header("Buttons")]
     [SerializeField] private Button _openBtn;
