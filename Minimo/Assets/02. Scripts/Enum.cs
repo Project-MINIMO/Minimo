@@ -19,7 +19,8 @@ public enum NotifyType
     
     GoldLack,
     
-    CannotEraseTile
+    CannotEraseTile,
+    DeselectTile,
 }
 
 public enum QuestState

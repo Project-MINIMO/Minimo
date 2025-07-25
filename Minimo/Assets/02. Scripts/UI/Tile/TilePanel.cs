@@ -96,7 +96,6 @@ public class TilePanel : UIBase
 
     private void Update()
     {
-        if (!_isErase && _selectedTile == null) return;
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             _isPainting = true;
@@ -132,6 +131,12 @@ public class TilePanel : UIBase
             
             _tilemap.SetTile(cellPos, null);
             _glowMap.SetTile(cellPos, null);
+            return;
+        }
+        
+        if (_selectedTile == null)
+        {
+            App.Notification(NotifyType.DeselectTile);
             return;
         }
 
