@@ -153,7 +153,7 @@ public class TilePanel : UIBase
         
         if (_selectedTile.CanInstall())
         {
-            AccountInfo.Instance.Gold.AddCount(-10);
+            AccountInfo.Instance.Gold.AddCount(-_selectedTile.Cost);
             return true;
         }
         else

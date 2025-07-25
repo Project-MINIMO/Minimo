@@ -28,7 +28,6 @@ public class UILongPressDetector : MonoBehaviour
             if (RectTransformUtility.RectangleContainsScreenPoint(_targetRect, Input.mousePosition))
             {
                 _isPressing = true;
-                _isHolding = true;
                 _pressTime = 0f;
             }
         }
@@ -41,6 +40,7 @@ public class UILongPressDetector : MonoBehaviour
                 if (_pressTime >= _holdTime)
                 {
                     _isPressing = false;
+                    _isHolding = true;
                     OnLongPress?.Invoke();
                 }
             }

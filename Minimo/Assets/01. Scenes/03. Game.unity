@@ -6595,7 +6595,6 @@ GameObject:
   - component: {fileID: 1575397485}
   - component: {fileID: 1575397484}
   - component: {fileID: 1575397488}
-  - component: {fileID: 1575397489}
   m_Layer: 6
   m_Name: Village
   m_TagString: VillageTilemap
@@ -7315,24 +7314,6 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
---- !u!114 &1575397489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1575397482}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33e7c0b1b7085cc4ea3088058d1d13c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _floatHeight: 0.1
-  _floatSpeed: 2
-  _pressOffsetY: 0.15
-  _pressDuration: 0.5
-  _bounceBackDuration: 0.15
-  _parentTransform: {fileID: 1444111433}
 --- !u!1001 &1620293120
 PrefabInstance:
   m_ObjectHideFlags: 0

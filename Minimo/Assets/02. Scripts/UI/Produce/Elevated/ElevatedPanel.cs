@@ -51,8 +51,6 @@ public abstract class ElevatedPanel : UIBase
 
     public override void OpenPanel()
     {
-        base.OpenPanel();
-
         _titleTMP.SetText(_produceManager.CurrentObject.BuildingData.Name);
         _minimoInfoObj.SetActive(false);
         
@@ -63,6 +61,8 @@ public abstract class ElevatedPanel : UIBase
         _produceObject.OnProduceStateChanged += UpdateResultInfo;
         UpdateSlots();
         UpdateResultInfo(_produceObject.CurrentState);
+        
+        base.OpenPanel();
     }
 
     public override void ClosePanel()
@@ -82,13 +82,7 @@ public abstract class ElevatedPanel : UIBase
         base.Show(isNew);
         
         _minimoImg.SetActive(_produceObject.AssignedMinimo != null);
-    }
-    
-    public override void Hide(bool isNew)
-    {
-        base.Hide(isNew);
-        
-        _minimoImg.SetActive(_produceObject.AssignedMinimo != null);
+        _minimoInfoObj.SetActive(false);
     }
 
     private void UpdateSlots()
