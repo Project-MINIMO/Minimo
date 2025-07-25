@@ -180,6 +180,11 @@ public class SoundManager : ManagerBase
     #endregion
 
     #region Mute Toggle
+
+    public void ToggleMute(bool mute)
+    {
+        _bgmPlayer.volume = mute ? 0f : 0.2f;
+    }
     public void ToggleMute(EVolumeType type)
     {
         _muted[type] = !_muted[type];

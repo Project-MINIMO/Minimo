@@ -21,14 +21,17 @@ public class BuildingPanel : UIBase
         
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
-        
+
+        _titleTMP.text = App.GetData<TitleData>().GetString("STR_BUILDING_UI_NAME");
+    }
+
+    private void Start()
+    {
         var slots = GetComponentsInChildren<BuildingSlot>(true);
         foreach (var slot in slots)
         {
             slot.OnItemSelected += OnItemSelected;
         }
-
-        _titleTMP.text = App.GetData<TitleData>().GetString("STR_BUILDING_UI_NAME");
     }
     
     private void OnItemSelected(InventorySlot<Building> slot)

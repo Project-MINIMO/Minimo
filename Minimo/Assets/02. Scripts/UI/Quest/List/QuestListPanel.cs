@@ -50,7 +50,7 @@ public abstract class QuestListPanel<T> : UIBase where T : QuestSlot
     protected abstract void AssignSlot(Quest quest);
     protected abstract void ReleaseSlot(Quest quest);
     
-    private void OnSlotSelected(Quest quest)
+    protected void OnSlotSelected(Quest quest)
     {
         _questManager.SelectQuest(quest);
         _panelMap[quest.Type].OpenPanel();

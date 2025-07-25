@@ -38,6 +38,9 @@ public class BottomNotification : MonoBehaviour
             [NotifyType.MissRecipe] = titleData.GetString("STR_NOTIFY_PRODUCE_MISSRECIPE"),
             
             [NotifyType.GoldLack] = "골드가 부족합니다.",
+            
+            [NotifyType.CannotEraseTile] = titleData.GetString("STR_TILEMANAGE_TAB3_DESC2"),
+            [NotifyType.DeselectTile] = titleData.GetString("STR_SELECTSLOTEMPTY_DESC"),
         };
         
         Reset();
@@ -45,8 +48,10 @@ public class BottomNotification : MonoBehaviour
 
     public void ShowNotification(NotifyType type)
     {
-        _messageTMP1.SetText(_notifications[type]);
-        _messageTMP2.SetText(_notifications[type]);
+        if (!_notifications.TryGetValue(type, out var notification)) return;
+        
+        _messageTMP1.SetText(notification);
+        _messageTMP2.SetText(notification);
         
         _sequence = DOTween.Sequence();
         _sequence

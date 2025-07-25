@@ -4,6 +4,8 @@ using TMPro;
 
 public class MinimoProfilePanel : UIBase
 {
+    public override bool IsUseBlur => true;
+    
     [SerializeField] private Button _closeBtn;
     
     [SerializeField] private TextMeshProUGUI _titleTMP;

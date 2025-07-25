@@ -13,13 +13,16 @@ public class QuizSubmissionView : QuestSubmissionView
     {
         base.Initialize(questManager, titleData);
         
+        _selectBtn.onClick.AddListener(ClearItem);
+    }
+
+    private void Start()
+    {
         var itemSlots = GetComponentsInChildren<ItemSlot>(true).ToList();
         foreach (var slot in itemSlots)
         {
             slot.OnItemSelected += OnItemSelected;
         }
-
-        _selectBtn.onClick.AddListener(ClearItem);
     }
     
     public override void Setup(Quest quest)

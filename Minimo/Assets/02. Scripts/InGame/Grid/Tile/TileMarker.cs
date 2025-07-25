@@ -34,10 +34,7 @@ public class TileMarker : MonoBehaviour
             .DistinctUntilChanged()
             .Subscribe((position) =>
             {
-                if(!_editManager.CurrentEditObject)
-                {
-                    return;
-                }
+                if (!_editManager.CurrentEditObject) return;
 
                 SetMarkTiles(_editManager.CurrentEditObject);
             }).AddTo(gameObject);
@@ -51,9 +48,9 @@ public class TileMarker : MonoBehaviour
     private void SetMarkTiles(BuildingObject gridObject)
     {
         ClearMarkTiles();
-
-        var baseCell = _markTilemap.WorldToCell(gridObject.transform.position);
         
+        var baseCell = _markTilemap.WorldToCell(gridObject.transform.position);
+ 
         foreach (var relativePos in gridObject.PositionData.GroundTilePositions)
         {
             var cellPos = baseCell + new Vector3Int(relativePos.x, relativePos.y, 0);

@@ -31,7 +31,11 @@ public class QuestDetailListPanel : QuestListPanel<QuestDetailSlot>
     protected override void AssignSlot(Quest quest)
     {
         var tabIndex = GetTabIndexFor(quest.Type);
-        _menuBacks[tabIndex].AddQuest(quest);
+        var (slot, isNew) = _menuBacks[tabIndex].AddQuest(quest);
+        if (isNew)
+        {
+            slot.OnSlotSelected += OnSlotSelected;
+        }
     }
 
     protected override void ReleaseSlot(Quest quest)

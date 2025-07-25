@@ -7,6 +7,9 @@ using TMPro;
 
 public class QuestDetailListView : MonoBehaviour
 {
+    [SerializeField] private QuestDetailSlot _slotPrefab;
+    [SerializeField] private Transform _contentParent;  
+    
     [SerializeField] private ScrollRect _scrollRect;
     
     [SerializeField] private TextMeshProUGUI _titleTMP;
@@ -46,15 +49,29 @@ public class QuestDetailListView : MonoBehaviour
         _alertObj.SetActive(false);
     }
     
-    public void AddQuest(Quest quest)
+    public (QuestDetailSlot, bool) AddQuest(Quest quest)
     {
-        var slot = _slotPool.Dequeue();
-
+        QuestDetailSlot slot;
+        bool isNew;
+        
+        if (_slotPool.Count > 0)
+        {
+            slot = _slotPool.Dequeue();
+            isNew = false;
+        }
+        else
+        {
+            slot = Instantiate(_slotPrefab, _contentParent);
+            isNew = true;
+        }
+        
         slot.gameObject.SetActive(true);
         slot.Initialize(quest);
         _activeMap[quest] = slot;
         
         _alertObj.SetActive(true);
+
+        return (slot, isNew);
     }
 
     public void RemoveQuest(Quest quest)

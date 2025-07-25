@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PopUpPanel : UIBase
 {
+    public override bool IsUseBlur => true;
+    
     [SerializeField] private Button _closeBtn;
     
     private Dictionary<PopUpType, PopUpWindow> _popUpMap = new();

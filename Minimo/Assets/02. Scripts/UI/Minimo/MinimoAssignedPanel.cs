@@ -9,7 +9,10 @@ using TMPro;
 public class MinimoAssignedPanel : UIBase
 {
     public override bool IsUseBlur => true;
-            
+    
+    [SerializeField] private MinimoAssignedSlot _slotPrefab;
+    [SerializeField] private RectTransform _contentParent;   
+    
     [SerializeField] private TextMeshProUGUI _titleTMP;
     [SerializeField] private TextMeshProUGUI _descriptionTMP;
     [SerializeField] private RectTransform _content;
@@ -47,13 +50,26 @@ public class MinimoAssignedPanel : UIBase
     
     private void AssignSlot(ProduceAdvanced building)
     {
-        var activeSlot = _slotPool.Dequeue();
-
-        activeSlot.gameObject.SetActive(true);
-        activeSlot.Initialize(building);
-        _activeSlots.Add(activeSlot);
+        MinimoAssignedSlot slot;
         
-        var sorted = _activeSlots.OrderBy(slot => slot.Item.BuildingData.ID).ToList();
+        if (_slotPool.Count > 0)
+        {
+            slot = _slotPool.Dequeue();
+        }
+        else
+        {
+            slot = Instantiate(_slotPrefab, _content);
+            slot.OnItemSelected += OnItemSelected;
+        }
+        
+        slot.gameObject.SetActive(true);
+        slot.Initialize(building);
+        _activeSlots.Add(slot);
+        
+        var sorted = _activeSlots
+            .OrderBy(s => s.Item.BuildingData.ID)
+            .ToList();
+        
         for (var i = 0; i < sorted.Count; i++)
         {
             sorted[i].transform.SetSiblingIndex(i);
