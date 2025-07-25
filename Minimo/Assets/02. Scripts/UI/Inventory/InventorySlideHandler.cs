@@ -14,6 +14,8 @@ public class InventorySlideHandler : MonoBehaviour, IBeginDragHandler, IDragHand
     [SerializeField] private float _maxY = -20f;
     [SerializeField] private float _outerMargin = 20f;
 
+    [SerializeField] private bool _openWhenEnable = true;
+
     private const float _duration = 0.25f;
     
     private Vector2 _dragStartPos;
@@ -24,7 +26,7 @@ public class InventorySlideHandler : MonoBehaviour, IBeginDragHandler, IDragHand
 
     private void OnEnable()
     {
-        _targetRect.anchoredPosition = new Vector2(_targetRect.anchoredPosition.x, _minY);
+        _targetRect.anchoredPosition = new Vector2(_targetRect.anchoredPosition.x, _openWhenEnable ? _maxY : _minY);
     }
 
     public void Open()
