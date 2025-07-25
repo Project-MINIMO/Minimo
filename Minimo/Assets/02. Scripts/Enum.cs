@@ -17,7 +17,9 @@ public enum NotifyType
     MissRecipe,
     MaterialLack,
     
-    GoldLack
+    GoldLack,
+    
+    CannotEraseTile
 }
 
 public enum QuestState

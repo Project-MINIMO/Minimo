@@ -22,6 +22,7 @@ public class TilePanel : UIBase
     
     private Tilemap _tilemap;
     private Tilemap _shadowmap;
+    private Tilemap _installMap;
     private CustomTile _selectedTile;
     private Tile _tile;
     
@@ -36,6 +37,7 @@ public class TilePanel : UIBase
         _editManager = App.GetManager<EditManager>();
         _tilemap = GameObject.FindWithTag("VillageTilemap").GetComponent<Tilemap>();
         _shadowmap = GameObject.FindWithTag("ShadowTilemap").GetComponent<Tilemap>();
+        _installMap = GameObject.FindWithTag("InstallTilemap").GetComponent<Tilemap>();
         
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
@@ -109,6 +111,19 @@ public class TilePanel : UIBase
         if (cellPos == _lastPaintedCell) return;
         _lastPaintedCell = cellPos;
         
+        if (_tile == null)
+        {
+            if (_installMap.GetTile(cellPos) != null)
+            {
+                App.Notification(NotifyType.CannotEraseTile);
+                return;
+            }
+            
+            _tilemap.SetTile(cellPos, null);
+            _shadowmap.SetTile(cellPos, null);
+            return;
+        }
+
         if (_tilemap.GetTile(cellPos) == _tile) return;
         if (!UseGold()) return;
         

@@ -45,8 +45,10 @@ public class BottomNotification : MonoBehaviour
 
     public void ShowNotification(NotifyType type)
     {
-        _messageTMP1.SetText(_notifications[type]);
-        _messageTMP2.SetText(_notifications[type]);
+        if (!_notifications.TryGetValue(type, out var notification)) return;
+        
+        _messageTMP1.SetText(notification);
+        _messageTMP2.SetText(notification);
         
         _sequence = DOTween.Sequence();
         _sequence
