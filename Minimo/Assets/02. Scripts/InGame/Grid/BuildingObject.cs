@@ -25,6 +25,7 @@ public class BuildingObject : InteractObject
             .Subscribe(isEditing => SetTransparency(isEditing ? 0.5f : 1)).AddTo(gameObject);
         _editManager.IsTileEditing
             .Subscribe(isEditing => SetTransparency(isEditing ? 0.5f : 1)).AddTo(gameObject);
+        SetTransparency(_editManager.IsBuildingEditing.Value ? 0.5f : 1);
     }
     
     public virtual async Task Initialize(Building data)
