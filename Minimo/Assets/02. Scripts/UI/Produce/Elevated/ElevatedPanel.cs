@@ -18,6 +18,7 @@ public abstract class ElevatedPanel : UIBase
     [SerializeField] private UILongPressDetector _longPressDetector;
     [SerializeField] private GameObject _minimoInfoObj;
     [SerializeField] private TextMeshProUGUI _minimoInfoTMP;
+    [SerializeField] private GameObject _minimoImg;
     
     protected ProduceManager _produceManager;
     protected ProduceElevated _produceObject;
@@ -74,6 +75,20 @@ public abstract class ElevatedPanel : UIBase
         }
         
         base.ClosePanel();
+    }
+
+    public override void Show(bool isNew)
+    {
+        base.Show(isNew);
+        
+        _minimoImg.SetActive(_produceObject.AssignedMinimo != null);
+    }
+    
+    public override void Hide(bool isNew)
+    {
+        base.Hide(isNew);
+        
+        _minimoImg.SetActive(_produceObject.AssignedMinimo != null);
     }
 
     private void UpdateSlots()
