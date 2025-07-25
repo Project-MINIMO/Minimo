@@ -34,6 +34,11 @@ public class InventorySlideHandler : MonoBehaviour, IBeginDragHandler, IDragHand
         SnapTo(_maxY);
     }
 
+    public void Close()
+    {
+        SnapTo(_minY);
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         _dragStartPos = eventData.position;

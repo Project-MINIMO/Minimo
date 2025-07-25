@@ -16,16 +16,17 @@ public class TilePanel : UIBase
     [SerializeField] private Sprite _eraseSprite;
     [SerializeField] private Toggle _eraseTog;
     
-    [SerializeField] private TileBase _shadowTile;
+    [SerializeField] private InventorySlideHandler _slideHandler;
     
     private EditManager _editManager;
     
     private Tilemap _tilemap;
-    private Tilemap _shadowmap;
+    private Tilemap _glowMap;
     private Tilemap _installMap;
     private CustomTile _selectedTile;
     private Tile _tile;
     
+    private bool _isErase;
     private bool _isPainting;
     
     private Vector3Int _lastPaintedCell = new(int.MinValue, int.MinValue, int.MinValue);
@@ -36,7 +37,7 @@ public class TilePanel : UIBase
 
         _editManager = App.GetManager<EditManager>();
         _tilemap = GameObject.FindWithTag("VillageTilemap").GetComponent<Tilemap>();
-        _shadowmap = GameObject.FindWithTag("ShadowTilemap").GetComponent<Tilemap>();
+        _glowMap = GameObject.FindWithTag("GlowTilemap").GetComponent<Tilemap>();
         _installMap = GameObject.FindWithTag("InstallTilemap").GetComponent<Tilemap>();
         
         _openBtn.onClick.AddListener(OpenPanel);
@@ -54,8 +55,16 @@ public class TilePanel : UIBase
             {
                 _tile = null;
                 _selectedTile = null;
+                _isErase = true;
                 _selectedTileImg.sprite = _eraseSprite;
                 _selectedTileImg.gameObject.SetActive(true);
+                _slideHandler.Close();
+            }
+            else
+            {
+                _isErase = false;
+                _selectedTileImg.sprite = null;
+                _selectedTileImg.gameObject.SetActive(false);
             }
         });
 
@@ -66,6 +75,7 @@ public class TilePanel : UIBase
     {
         base.OpenPanel();
         
+        _isErase = false;
         _tile = null;
         _selectedTile = null;
         _selectedTileImg.sprite = null;
@@ -86,6 +96,7 @@ public class TilePanel : UIBase
 
     private void Update()
     {
+        if (!_isErase && _selectedTile == null) return;
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             _isPainting = true;
@@ -111,7 +122,7 @@ public class TilePanel : UIBase
         if (cellPos == _lastPaintedCell) return;
         _lastPaintedCell = cellPos;
         
-        if (_tile == null)
+        if (_isErase)
         {
             if (_installMap.GetTile(cellPos) != null)
             {
@@ -120,7 +131,7 @@ public class TilePanel : UIBase
             }
             
             _tilemap.SetTile(cellPos, null);
-            _shadowmap.SetTile(cellPos, null);
+            _glowMap.SetTile(cellPos, null);
             return;
         }
 
@@ -128,7 +139,7 @@ public class TilePanel : UIBase
         if (!UseGold()) return;
         
         _tilemap.SetTile(cellPos, _tile);
-        _shadowmap.SetTile(cellPos, _tile);
+        _glowMap.SetTile(cellPos, _tile);
     }
     
     private bool UseGold()
@@ -153,5 +164,6 @@ public class TilePanel : UIBase
         _selectedTile = slot.Item;
         _selectedTileImg.sprite = slot.Item.Icon;
         _selectedTileImg.gameObject.SetActive(true);
+        _slideHandler.Close();
     }
 }
