@@ -18,7 +18,7 @@ public class AccountInfo : Singleton<AccountInfo>
     private GetItemPanel _itemPanel;
     public event Action<int> OnStorageCapacityChanged;
     public event Action<int> OnMinimoCapacityChanged;
-    public int CurrentItemCounts => Items.Values.Count(item => item.Count > 0);
+    public int CurrentItemCounts => Items.Values.Where(item => item.Level > 0).Sum(item => item.Count);
     
     [SerializeField] private Sprite LevelIcon;
     [SerializeField] private Sprite GoldIcon;
@@ -38,8 +38,6 @@ public class AccountInfo : Singleton<AccountInfo>
     
     public bool CanKeepItem(int id)
     {
-        if (Items[id].Count > 0) return true;
-        
         var cankeep = CurrentItemCounts < StorageCapacity;
         if (!cankeep)
         {
