@@ -22,15 +22,18 @@ public class MinimoPlacePanel : UIBase
         _popUpPanel = manager.GetPanel<PopUpPanel>();
         
         _closeBtn.onClick.AddListener(ClosePanel);
+        
+        _titleTMP.text = App.GetData<TitleData>().GetString("STR_POPUP_PLACEBUILDING_NAME");
+        _descriptionTMP.text = App.GetData<TitleData>().GetString("STR_POPUP_PLACEBUILDING_DESC");
+    }
 
+    private void Start()
+    {
         var slots = GetComponentsInChildren<MinimoSlot>(true);
         foreach (var slot in slots)
         {
             slot.OnItemSelected += OnItemSelected;
         }
-
-        _titleTMP.text = App.GetData<TitleData>().GetString("STR_POPUP_PLACEBUILDING_NAME");
-        _descriptionTMP.text = App.GetData<TitleData>().GetString("STR_POPUP_PLACEBUILDING_DESC");
     }
     
     public void OpenPanel(ProduceAdvanced building)

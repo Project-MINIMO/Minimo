@@ -22,7 +22,10 @@ public class QuaternaryPanel : ElevatedPanel
             var index = i;
             _selectBtns[index].onClick.AddListener(() => OnClickSelectBtn(index));
         }
+    }
 
+    private void Start()
+    {
         var slots = GetComponentsInChildren<ItemSlot>(true);
         foreach (var slot in slots)
         {

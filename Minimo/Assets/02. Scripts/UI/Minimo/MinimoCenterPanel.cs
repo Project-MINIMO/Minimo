@@ -29,16 +29,19 @@ public class MinimoCenterPanel : UIBase
         _assignBtn.onClick.AddListener(assignedPanel.OpenPanel);
         _expandBtn.onClick.AddListener(() => popUpPanel.OpenPanel(PopUpType.MinimoExpand));
         
+        _titleTMP.text = App.GetData<TitleData>().GetString("STR_MINIMOCENTER_NAME");
+
+        AccountInfo.Instance.OnMinimoCapacityChanged += OnMinimoCapacityChanged;
+        OnMinimoCapacityChanged(AccountInfo.Instance.MinimoCapacity);
+    }
+    
+    private void Start()
+    {
         var slots = GetComponentsInChildren<MinimoSlot>(true);
         foreach (var slot in slots)
         {
             slot.OnItemSelected += OnItemSelected;
         }
-
-        _titleTMP.text = App.GetData<TitleData>().GetString("STR_MINIMOCENTER_NAME");
-
-        AccountInfo.Instance.OnMinimoCapacityChanged += OnMinimoCapacityChanged;
-        OnMinimoCapacityChanged(AccountInfo.Instance.MinimoCapacity);
     }
 
     private void OnItemSelected(InventorySlot<Minimo> slot)

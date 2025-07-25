@@ -8,6 +8,9 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
 {
     public override bool IsDefaultPanel => true;
     
+    [SerializeField] private QuestCompactSlot _slotPrefab;
+    [SerializeField] private Transform _contentParent;   
+    
     private RectTransform _rect;
     
     private readonly Vector2 _showPosition = new(-2, 0);
@@ -52,10 +55,23 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
    
     protected override void AssignSlot(Quest quest)
     {
-        var slot = _slotPool.Dequeue();
+        QuestCompactSlot slot;
+
+        if (_slotPool.Count > 0)
+        {
+            slot = _slotPool.Dequeue();
+        }
+        else
+        {
+            slot = Instantiate(_slotPrefab, _contentParent);
+            slot.OnSlotOpened += OnSlotOpened;
+        }
 
         slot.gameObject.SetActive(true);
         slot.Initialize(quest);
+        
+        slot.transform.SetAsLastSibling();
+        
         _activeMap[quest] = slot;
     }
 

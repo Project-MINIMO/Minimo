@@ -23,17 +23,20 @@ public class StoragePanel : UIBase
 
         var popUpPanel = manager.GetPanel<PopUpPanel>();
         _expandBtn.onClick.AddListener(() => popUpPanel.OpenPanel(PopUpType.StorageExpand));
-        
-        var slots = GetComponentsInChildren<ItemSlot>(true);
-        foreach (var slot in slots)
-        {
-            slot.OnItemSelected += OnItemSelected;
-        }
 
         _titleTMP.text = App.GetData<TitleData>().GetString("STR_STORAGE_UI_NAME");
 
         AccountInfo.Instance.OnStorageCapacityChanged += OnStorageCapacityChanged;
         OnStorageCapacityChanged(AccountInfo.Instance.StorageCapacity);
+    }
+    
+    private void Start()
+    {
+        var slots = GetComponentsInChildren<ItemSlot>(true);
+        foreach (var slot in slots)
+        {
+            slot.OnItemSelected += OnItemSelected;
+        }
     }
 
     public override void OpenPanel()
