@@ -14,14 +14,12 @@ public class ProduceSlotExpandHandler : MonoBehaviour
     
     private ProduceManager _produceManager;
     private ProduceElevated _produceObject;
-    private UseCashPanel _useCashPanel;
     
     private int _currentPrice;
 
     private void Awake()
     {
         _produceManager = App.GetManager<ProduceManager>();
-        _useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
         
         _expandBtn.onClick.AddListener(Expand);
         _confirmBtn.onClick.AddListener(Confirm);
@@ -46,19 +44,21 @@ public class ProduceSlotExpandHandler : MonoBehaviour
 
     private void Expand()
     {
-        if (_currentPrice <= AccountInfo.Instance.Cash)
+        if (_currentPrice <= AccountInfo.Instance.Gold.Count)
         {
             _expandBtn.gameObject.SetActive(false);
             _confirmBack.SetActive(true);
         }
         else
         {
-            _useCashPanel.OpenPanel();
+            App.Notification(NotifyType.GoldLack);
         }
     }
 
     private void Confirm()
     {
+        AccountInfo.Instance.Gold.AddCount(-_currentPrice);
+        
         _expandBtn.gameObject.SetActive(true);
         _confirmBack.SetActive(false);
         _produceObject.AddSlotCount();

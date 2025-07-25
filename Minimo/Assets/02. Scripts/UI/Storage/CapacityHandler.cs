@@ -9,8 +9,6 @@ public abstract class CapacityHandler : TransactionHandler
     
     protected override int Step => 10;
     protected int CurrentCapacity;
-    
-    private UseCashPanel _useCashPanel;
 
     private Action _transactionAction;
     private int _expandCost;
@@ -19,9 +17,7 @@ public abstract class CapacityHandler : TransactionHandler
     protected override void Awake()
     {
         base.Awake();
-        
-        _useCashPanel = App.GetManager<UIManager>().GetPanel<UseCashPanel>();
-
+      
         var titleData = App.GetData<TitleData>();
         _expandCost = GetExpandCost(titleData);
         TransactionString = titleData.GetString("STR_STORAGE_EXPAND_COST");
@@ -49,15 +45,15 @@ public abstract class CapacityHandler : TransactionHandler
 
     protected override void Transaction()
     {
-        if (Price <= AccountInfo.Instance.Cash)
+        if (Price <= AccountInfo.Instance.Gold.Count)
         {
-            AccountInfo.Instance.Cash -= Price;
+            AccountInfo.Instance.Gold.AddCount(-Price);
             SuccessTransaction();
             _transactionAction?.Invoke();
         }
         else
         {
-            _useCashPanel.OpenPanel();
+            App.Notification(NotifyType.GoldLack);
         }
     }
 
