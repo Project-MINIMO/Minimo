@@ -22,7 +22,7 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         
         var questListPanel = manager.GetPanel<QuestDetailListPanel>();
         var longPressDetector = GetComponentInChildren<UILongPressDetector>();
-        longPressDetector.OnLongPress = questListPanel.OpenPanel;
+        longPressDetector.OnLongPress += questListPanel.OpenPanel;
         
         foreach (var slot in Slots)
         {
