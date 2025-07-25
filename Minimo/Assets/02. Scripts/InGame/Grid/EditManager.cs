@@ -59,10 +59,13 @@ public class EditManager : ManagerBase
         }
     }
 
-    public void CreateAndStartEdit(Building data, Vector3 position)
+    public async void CreateAndStartEdit(Building data, Vector3 position)
     {
-        var gridObject = CreateObject(data, position);
-        StartEdit(gridObject.Result, true);
+        var gridObject = await CreateObject(data, position);
+        var cell = _gridLayout.WorldToCell(position);
+        var worldPos = _gridLayout.CellToWorld(cell);
+        gridObject.transform.position = worldPos;
+        StartEdit(gridObject, true);
     }
     
     public void StartEdit(BuildingObject gridObject, bool isNew = false)
