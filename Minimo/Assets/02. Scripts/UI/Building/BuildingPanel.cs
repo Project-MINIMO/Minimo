@@ -10,6 +10,8 @@ public class BuildingPanel : UIBase
 
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
+    
+    [SerializeField] private MenuToggleGroup _toggleGroup;
 
     private EditManager _editManager;
     
@@ -32,6 +34,13 @@ public class BuildingPanel : UIBase
         {
             slot.OnItemSelected += OnItemSelected;
         }
+    }
+    
+    public override void Show(bool isNew)
+    {
+        base.Show(isNew);
+        
+        _toggleGroup.Show(isNew);
     }
     
     private void OnItemSelected(InventorySlot<Building> slot)

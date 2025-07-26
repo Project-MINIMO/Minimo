@@ -15,6 +15,7 @@ public class TilePanel : UIBase
     [SerializeField] private Image _selectedTileImg;
     [SerializeField] private Sprite _eraseSprite;
     [SerializeField] private Toggle _eraseTog;
+    [SerializeField] private MenuToggleGroup _toggleGroup;
     
     [SerializeField] private InventorySlideHandler _slideHandler;
     
@@ -80,6 +81,7 @@ public class TilePanel : UIBase
         _selectedTile = null;
         _selectedTileImg.sprite = null;
         _selectedTileImg.gameObject.SetActive(false);
+        _toggleGroup.Show(true);
         
         _isPainting = false;
         _lastPaintedCell = new Vector3Int(int.MinValue, int.MinValue, int.MinValue);

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class QuizSubmissionView : QuestSubmissionView
 {
     [SerializeField] private Button _selectBtn;
+    [SerializeField] private MenuToggleGroup _toggleGroup;
     
     private Item _selectedItem;
     
@@ -30,6 +31,7 @@ public class QuizSubmissionView : QuestSubmissionView
         base.Setup(quest);
 
         ClearItem();
+        _toggleGroup.Show(true);
     }
 
     protected override void Submit()

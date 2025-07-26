@@ -32,6 +32,11 @@ public class ChoiceSubmissionView : QuestSubmissionView
         {
             _infoUpdaters[i].gameObject.SetActive(false);
         }
+
+        foreach (var toggle in _selectTogs)
+        {
+            toggle.isOn = false;
+        }
     }
 
     protected override void Submit()
