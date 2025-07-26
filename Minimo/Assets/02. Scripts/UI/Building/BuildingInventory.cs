@@ -5,11 +5,6 @@ using TMPro;
 
 public class BuildingInventory : Inventory<Building>
 {
-    private void OnEnable()
-    {
-        _menuTogs[0].isOn = true;
-    }
-    
     protected override void SetString()
     {
         var titleData = App.GetData<TitleData>();

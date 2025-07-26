@@ -568,7 +568,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 152, y: 160}
+  m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7884967535768543819
 CanvasRenderer:
@@ -685,6 +685,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemNameTMP: {fileID: 5782643552684888581}
+  _itemDescriptionTMP: {fileID: 0}
   _itemCountTMP: {fileID: 6480928949733039880}
   _iconImg: {fileID: 2447327266320858399}
 --- !u!114 &2786483727520473117
@@ -736,7 +737,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 156, y: 160}
+  m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3978395326335615502
 CanvasRenderer:
@@ -809,7 +810,7 @@ RectTransform:
   - {fileID: 2705642120792847089}
   - {fileID: 6471148683597661042}
   - {fileID: 8837403314687466070}
-  - {fileID: 6220319947100506322}
+  - {fileID: 9129941452198730030}
   m_Father: {fileID: 5623134141195041568}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
@@ -1024,7 +1025,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 156, y: 160}
+  m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4896938372783428045
 CanvasRenderer:
@@ -1081,7 +1082,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2654537351832381601
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1174,7 +1175,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 156, y: 160}
+  m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1902046351466626703
 CanvasRenderer:
@@ -1214,7 +1215,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1001 &8853500902626838788
+--- !u!1001 &5925295926598228216
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1248,11 +1249,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3210767607739154902, guid: 043fc7ce4f9fcea43a79c3abf5282612, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 144
+      value: 152
       objectReference: {fileID: 0}
     - target: {fileID: 3210767607739154902, guid: 043fc7ce4f9fcea43a79c3abf5282612, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 50
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 3210767607739154902, guid: 043fc7ce4f9fcea43a79c3abf5282612, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1306,17 +1307,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: ProduceSkipHandler
       objectReference: {fileID: 0}
-    - target: {fileID: 7801179265175028097, guid: 043fc7ce4f9fcea43a79c3abf5282612, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -3.800003
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 043fc7ce4f9fcea43a79c3abf5282612, type: 3}
---- !u!224 &6220319947100506322 stripped
+--- !u!224 &9129941452198730030 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3210767607739154902, guid: 043fc7ce4f9fcea43a79c3abf5282612, type: 3}
-  m_PrefabInstance: {fileID: 8853500902626838788}
+  m_PrefabInstance: {fileID: 5925295926598228216}
   m_PrefabAsset: {fileID: 0}

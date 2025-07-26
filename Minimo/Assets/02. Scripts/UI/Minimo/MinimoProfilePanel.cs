@@ -9,6 +9,7 @@ public class MinimoProfilePanel : UIBase
     [SerializeField] private Button _closeBtn;
     
     [SerializeField] private TextMeshProUGUI _titleTMP;
+    [SerializeField] private MenuToggleGroup _toggleGroup;
     [SerializeField] private Toggle[] _menuTogs;
     [SerializeField] private GameObject[] _menuBacks;
     
@@ -67,8 +68,6 @@ public class MinimoProfilePanel : UIBase
         
         minimo.OnLevelChanged += _infoUpdater.UpdateLevelInfo;
         minimo.OnAssignmentChanged += _infoUpdater.UpdateAssignedBuilding;
-        
-        _menuTogs[1].isOn = true;
     }
 
     public override void ClosePanel()
@@ -78,6 +77,13 @@ public class MinimoProfilePanel : UIBase
         if (_currentMinimo == null) return;
         _currentMinimo.OnLevelChanged -= _infoUpdater.UpdateLevelInfo;
         _currentMinimo.OnAssignmentChanged -= _infoUpdater.UpdateAssignedBuilding;
+    }
+    
+    public override void Show(bool isNew)
+    {
+        base.Show(isNew);
+        
+        _toggleGroup.Show(isNew, 1);
     }
 
     private string GetMenuString(int index, TitleData title) => index switch

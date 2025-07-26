@@ -22,7 +22,6 @@ public class QuestInfoPanel : UIBase
             .Subscribe(quest =>
             {
                 if (quest != null) SelectedQuest = quest;
-                else ClosePanel();
             })
             .AddTo(this);
         

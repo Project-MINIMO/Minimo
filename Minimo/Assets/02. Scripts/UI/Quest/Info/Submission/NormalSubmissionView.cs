@@ -28,5 +28,6 @@ public class NormalSubmissionView : QuestSubmissionView
         if (Quest.Clear.Any(clear => !clear.IsCompleted)) return;
         
         QuestManager.SubmitQuest();
+        base.Submit();
     }
 }

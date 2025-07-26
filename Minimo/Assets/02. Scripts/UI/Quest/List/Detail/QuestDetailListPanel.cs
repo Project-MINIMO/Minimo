@@ -6,6 +6,7 @@ public class QuestDetailListPanel : QuestListPanel<QuestDetailSlot>
     public override bool IsUseBlur => true;
     
     [SerializeField] private Button _closeBtn;
+    [SerializeField] private MenuToggleGroup _toggleGroup;
     [SerializeField] private Toggle[] _menuTogs;
     [SerializeField] private QuestDetailListView[] _menuBacks;
     
@@ -26,6 +27,13 @@ public class QuestDetailListPanel : QuestListPanel<QuestDetailSlot>
         }
         
         _closeBtn.onClick.AddListener(ClosePanel);
+    }
+    
+    public override void Show(bool isNew)
+    {
+        base.Show(isNew);
+        
+        _toggleGroup.Show(isNew);
     }
     
     protected override void AssignSlot(Quest quest)

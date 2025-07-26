@@ -6,12 +6,13 @@ using UnityEngine.UI;
 public class QuizSubmissionView : QuestSubmissionView
 {
     [SerializeField] private Button _selectBtn;
+    [SerializeField] private MenuToggleGroup _toggleGroup;
     
     private Item _selectedItem;
     
-    public override void Initialize(QuestManager questManager, TitleData titleData)
+    public override void Initialize(QuestManager questManager, QuestSubmissionPanel submissionPanel, TitleData titleData)
     {
-        base.Initialize(questManager, titleData);
+        base.Initialize(questManager, submissionPanel, titleData);
         
         _selectBtn.onClick.AddListener(ClearItem);
     }
@@ -30,6 +31,7 @@ public class QuizSubmissionView : QuestSubmissionView
         base.Setup(quest);
 
         ClearItem();
+        _toggleGroup.Show(true);
     }
 
     protected override void Submit()
@@ -37,6 +39,7 @@ public class QuizSubmissionView : QuestSubmissionView
         if (_selectedItem == null) return;
 
         QuestManager.SubmitQuest(_selectedItem);
+        base.Submit();
     }
 
     private void OnItemSelected(InventorySlot<Item> slot)
