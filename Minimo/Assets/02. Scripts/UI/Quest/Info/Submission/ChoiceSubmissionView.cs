@@ -6,9 +6,9 @@ public class ChoiceSubmissionView : QuestSubmissionView
 {
     private Toggle[] _selectTogs;
 
-    public override void Initialize(QuestManager questManager, TitleData titleData)
+    public override void Initialize(QuestManager questManager, QuestSubmissionPanel submissionPanel, TitleData titleData)
     {
-        base.Initialize(questManager, titleData);
+        base.Initialize(questManager, submissionPanel, titleData);
         
         _selectTogs = _infoUpdaters.Select(x => x.GetComponent<Toggle>()).ToArray();
     }
@@ -41,7 +41,7 @@ public class ChoiceSubmissionView : QuestSubmissionView
 
     protected override void Submit()
     {
-        var activeIndex = 0;
+        var activeIndex = -1;
         
         for (var i = 0; i < _selectTogs.Length; i++)
         {
@@ -49,7 +49,10 @@ public class ChoiceSubmissionView : QuestSubmissionView
             if (!Quest.Clear[i].IsCompleted) return;
             activeIndex = i;
         }
+
+        if (activeIndex == -1) return;
         
         QuestManager.SubmitQuest(activeIndex);
+        base.Submit();
     }
 }

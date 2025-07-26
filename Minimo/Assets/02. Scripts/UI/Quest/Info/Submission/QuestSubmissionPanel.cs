@@ -12,7 +12,7 @@ public class QuestSubmissionPanel : QuestInfoPanel
         var titleData = App.GetData<TitleData>();
         foreach (var view in _stateViews)
         {
-            view.Initialize(QuestManager, titleData);
+            view.Initialize(QuestManager, this, titleData);
         }
     }
 

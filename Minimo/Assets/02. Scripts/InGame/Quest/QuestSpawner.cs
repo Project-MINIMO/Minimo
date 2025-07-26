@@ -18,11 +18,6 @@ public class QuestSpawner
         _questManager = questManager;
         _level = AccountInfo.Instance.Level;  
         
-        questManager.ActiveQuests
-            .ObserveRemove()
-            .Subscribe(endEvent => UpdateCompletedQuest(endEvent.Value.ID))
-            .AddTo(questManager); 
-        
         _dependents = App.GetData<TitleData>().Quest
             .Values
             .GroupBy(data => data.PreQuestID)
@@ -40,7 +35,7 @@ public class QuestSpawner
         TrySpawnByLevel(_level.Count);
     }
 
-    private void UpdateCompletedQuest(int questId)
+    public void UpdateCompletedQuest(int questId)
     {
         if (_dependents.TryGetValue(questId, out var list))
         {

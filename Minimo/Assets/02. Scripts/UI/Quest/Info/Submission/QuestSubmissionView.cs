@@ -9,10 +9,12 @@ public abstract class QuestSubmissionView : MonoBehaviour
     
     protected QuestManager QuestManager;
     protected Quest Quest;
+    private QuestSubmissionPanel _submissionPanel;
     
-    public virtual void Initialize(QuestManager questManager, TitleData titleData)
+    public virtual void Initialize(QuestManager questManager, QuestSubmissionPanel submissionPanel, TitleData titleData)
     {
         QuestManager = questManager;
+        _submissionPanel = submissionPanel;
 
         _submitBtn.GetComponentInChildren<TextMeshProUGUI>()
             .SetText(titleData.GetString("STR_BUTTON_CONFIRM"));
@@ -23,6 +25,9 @@ public abstract class QuestSubmissionView : MonoBehaviour
     {
         Quest = quest;
     }
-    
-    protected abstract void Submit();
+
+    protected virtual void Submit()
+    {
+        _submissionPanel.ClosePanel();
+    }
 }

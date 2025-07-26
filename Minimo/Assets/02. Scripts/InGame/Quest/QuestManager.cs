@@ -69,6 +69,7 @@ public class QuestManager : ManagerBase
     public void RemoveQuest(Quest quest)
     {
         ActiveQuests.Remove(quest);
+        _spawner.UpdateCompletedQuest(quest.ID);
     }
     
     public void SelectQuest(Quest quest)
@@ -110,6 +111,19 @@ public class QuestManager : ManagerBase
         }
         
         RemoveQuest(CurrentQuest.Value);
-        DeselectQuest();
+        if (CurrentQuest.Value.Type == QuestType.Constellation)
+        {
+            var first = ActiveQuests
+                .Where(item => item.Type == QuestType.Constellation)
+                .FirstOrDefault(item => item.Group.ID == CurrentQuest.Value.Group.ID);
+            if (first != null)
+            {
+                SelectQuest(first);
+            }
+        }
+        else
+        {
+            DeselectQuest();
+        }
     }
 }
