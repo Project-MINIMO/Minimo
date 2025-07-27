@@ -16,7 +16,7 @@ public class StarSpawner : MonoBehaviour
         if (AccountInfo.Instance.Star >= 100)
         {
             AccountInfo.Instance.Star = 0;
-            Instantiate(_starObj, new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f), 0), Quaternion.identity);
+            Instantiate(_starObj, new Vector3(Random.Range(-6f, 6f), Random.Range(-2.5f, 2.5f), 0), Quaternion.identity);
         }
     }
 }
