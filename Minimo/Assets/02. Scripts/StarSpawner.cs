@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class StarSpawner : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class StarSpawner : MonoBehaviour
         if (AccountInfo.Instance.Star >= 100)
         {
             AccountInfo.Instance.Star = 0;
-            Instantiate(_starObj);
+            Instantiate(_starObj, new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f), 0), Quaternion.identity);
         }
     }
 }
