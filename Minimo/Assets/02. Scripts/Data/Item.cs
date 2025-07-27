@@ -7,7 +7,7 @@ public class Item : IQuestClearTarget, IQuestRewardTarget
     public event Action OnItemCountChanged;
     
     public string Name { get; }
-    public int Count { get; private set; }
+    public int Count { get; private set; } = 100;
     public Sprite Icon { get; }
     
     public readonly int ID;

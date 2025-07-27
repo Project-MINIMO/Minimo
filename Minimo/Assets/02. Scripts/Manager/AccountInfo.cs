@@ -14,6 +14,7 @@ public class AccountInfo : Singleton<AccountInfo>
     public int Cash;
     public int StorageCapacity { get; private set; } = 100;
     public int MinimoCapacity { get; private set; } = 100;
+    public int Star;
 
     private GetItemPanel _itemPanel;
     public event Action<int> OnStorageCapacityChanged;
