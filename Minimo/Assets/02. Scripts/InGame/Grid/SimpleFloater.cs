@@ -6,6 +6,8 @@ public class SimpleFloater : MonoBehaviour
 {
     [SerializeField] private float _floatSpeed = 1f;
     [SerializeField] private float _floatHeight = 0.5f;
+    [SerializeField] private float _floatWidth = 0.1f;
+    [SerializeField] private float _widthHeightOffset = 0f;
 
     private Transform _transform;
     private float _randomOffset;
@@ -22,10 +24,11 @@ public class SimpleFloater : MonoBehaviour
     {
         // Calculate the new position based on sine wave for floating effect
         float newY = Mathf.Sin(Time.time * _floatSpeed + _randomOffset) * _floatHeight;
+        float newX = Mathf.Cos(Time.time * _floatSpeed + _randomOffset + _widthHeightOffset) * _floatWidth;
         
         // Apply the new position to the object
         var localPosition = _transform.localPosition;
-        localPosition = new Vector3(localPosition.x, newY, localPosition.z);
+        localPosition = new Vector3(newX, newY, localPosition.z);
         _transform.localPosition = localPosition;
     }
 }
