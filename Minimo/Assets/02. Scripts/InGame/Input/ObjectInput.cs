@@ -40,6 +40,10 @@ public class ObjectInput : MonoBehaviour
             case InputState.Drag:
                 HandleDrag();
                 break;
+            
+            case InputState.DragEnd:
+                HandleDragEnd();
+                break;
         }
     }
 
@@ -90,6 +94,13 @@ public class ObjectInput : MonoBehaviour
         if (_currentObject == null) return;
         
         _currentObject.OnDrag();
+    }
+    
+    private void HandleDragEnd()
+    {
+        if (_currentObject == null) return;
+        
+        _currentObject.OnDragEnd();
         _currentObject = null;
     }
 
