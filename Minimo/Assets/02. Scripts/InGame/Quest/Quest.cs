@@ -38,6 +38,14 @@ public class Quest
             Target = target;
             Amount = data.Amount;
         }
+
+        public void Clear()
+        {
+            if (Type == ClearType.Wish)
+            {
+                Target.AddCount(-Amount);
+            }
+        }
     }
     
     [Serializable]
