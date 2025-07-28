@@ -3,12 +3,13 @@ using System.Threading.Tasks;
 
 public class ProduceTertiary : ProduceElevated
 {
-    protected override Task<bool> CreateBuilding()
+    public override async Task Initialize(Building data)
     {
+        base.Initialize(data);
+        
         _produceManager.RegisterTertiary(this);
-        return base.CreateBuilding();
     }
-    
+
     public override void Destroy()
     {
         _produceManager.UnregisterTertiary(this);

@@ -14,14 +14,17 @@ public class UIGuide : MonoBehaviour
     private int _currentIndex = 0;
     private int _totalPages;
     
-    private void Start()
+    private void Awake()
     {
         _totalPages = _guideObjs.Length;
 
         _prevBtn.onClick.AddListener(Prev);
         _nextBtn.onClick.AddListener(Next);
         _closeBtn.onClick.AddListener(Close);
+    }
 
+    private void OnEnable()
+    {
         ShowPage(0);
     }
 
