@@ -54,7 +54,7 @@ public class ProduceManager : ManagerBase
         Deselect();
         
         CurrentObject = obj;
-        MoveCamera(_panelMap[(BuildingType)obj.BuildingData.Type].OpenPanel);
+        MoveCamera(_panelMap[obj.BuildingData.Type].OpenPanel);
     }
 
     public void Deselect()
