@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UniRx;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EditManager : ManagerBase
@@ -23,10 +23,10 @@ public class EditManager : ManagerBase
         _installChecker = GetComponent<InstallChecker>();
         _tileStateModifier = GetComponent<TileStateModifier>();
 
-        InstallExistBuildings();
+        LoadExistingBuildingsAsync().Forget();
     }
     
-    private async void InstallExistBuildings()
+    private async UniTaskVoid LoadExistingBuildingsAsync()
     {
         var firebaseManager = App.GetManager<FirebaseManager>();
         var titleData = App.GetData<TitleData>();
@@ -35,37 +35,29 @@ public class EditManager : ManagerBase
         foreach (var building in buildings)
         {
             // 임시 필터링: 필요 없으면 제거 가능
-            if (building.BuildingDataId == -1) continue;
+            if (building.BuildingDataId < 0) continue;
             
             // 셀 위치를 월드 위치로 변환
             var cellPosition = _gridLayout.CellToWorld(building.Position);
-            
             var buildingData = titleData.Building[building.BuildingDataId];
-            var produce = await CreateObject(buildingData, cellPosition);
-            if (produce != null)
-            {
-                if (produce is ProduceAdvanced advanced)
-                {
-                    ActiveAdvanceds.Add(advanced);
-                }
-                
-                produce.BuildingId = building.BuildingId;
-                produce.PreviousPosition = cellPosition;
-                produce.transform.position = cellPosition;
-                produce.IsPlaced = true;
-                _tileStateModifier.ModifyTileState(produce, TileState.Installed);
-                buildingData.AddCount(1);
-            }
+            var produce = await SpawnBuildingAsync(buildingData, cellPosition);
+
+            if (produce == null) continue;
+            
+            produce.BuildingId = building.BuildingId;
+            produce.PreviousPosition = cellPosition;
+            produce.transform.position = cellPosition;
+            produce.IsPlaced = true;
+            _tileStateModifier.ModifyTileState(produce, TileState.Installed);
+            buildingData.AddCount(1);
+            if (produce is ProduceAdvanced advanced) ActiveAdvanceds.Add(advanced);
         }
     }
 
-    public async void CreateAndStartEdit(Building data, Vector3 position)
+    public async UniTask CreateAndEditAsync(Building data, Vector3 position)
     {
-        var gridObject = await CreateObject(data, position);
-        var cell = _gridLayout.WorldToCell(position);
-        var worldPos = _gridLayout.CellToWorld(cell);
-        gridObject.transform.position = worldPos;
-        StartEdit(gridObject, true);
+        var obj = await SpawnBuildingAsync(data, AlignToCell(position));
+        StartEdit(obj, isNew: true);
     }
     
     public void StartEdit(BuildingObject gridObject, bool isNew = false)
@@ -97,78 +89,39 @@ public class EditManager : ManagerBase
         IsBuildingEditing.Value = false;
     }
     
-    public async void ConfirmEdit()
+    public async Task ConfirmEdit()
     {
         if (!_installChecker.CheckCanInstall(CurrentEditObject)) return;
 
         var isNew = !CurrentEditObject.IsPlaced;
-        var success = await CurrentEditObject.Install();
-
-        if (success)
+        if (!await CurrentEditObject.Install())
         {
-            _tileStateModifier.ModifyTileState(CurrentEditObject, TileState.Installed);
+            Debug.LogError("Installation failed");
+            return;
+        }
+       
+        _tileStateModifier.ModifyTileState(CurrentEditObject, TileState.Installed);
             
-            if (isNew)
-            {
-                if (CurrentEditObject is ProduceAdvanced advanced)
-                {
-                    ActiveAdvanceds.Add(advanced);
-                }
-                
-                var currentCell = _gridLayout.WorldToCell(CurrentEditObject.transform.position);
-                var diagonalOffset = new Vector3Int(0, -1, 0);
-                var newCell = currentCell + diagonalOffset;
-                var newWorldPos = _gridLayout.CellToWorld(newCell);
-
-                var buildingData = CurrentEditObject.BuildingData;
-                CurrentEditObject = null;
-                CreateAndStartEdit(buildingData, newWorldPos);
-                return;
-            }
-            
+        if (isNew)
+        {
+            HandlePostInstall();
+        }
+        else
+        {
             CurrentEditObject = null;
             IsBuildingEditing.Value = false;
         }
-        else
-        {
-            Debug.LogError("Failed to confirm edit. Installation check failed or installation process failed.");
-        }
     }
     
-    private async Task<ProduceObject> CreateObject(Building data, Vector3 position)
+    private void HandlePostInstall()
     {
-        var gridObject = Instantiate(_objectPrefab, position, Quaternion.identity, _buildingParent);
-        switch (data.Type)
-        {
-            case BuildingType.Tier1:
-                gridObject.AddComponent<ProducePrimary>();
-                break;
-            
-            case BuildingType.Tier2:
-                gridObject.AddComponent<ProduceSecondary>();
-                break;
-            
-            case BuildingType.Tier3:
-                gridObject.AddComponent<ProduceTertiary>();
-                break;
-            
-            default:
-                gridObject.AddComponent<ProduceQuaternary>();
-                break;
-        }
-       
-
-        if (gridObject.TryGetComponent<ProduceObject>(out var produce))
-        {
-            await produce.Initialize(data);
-            return produce;
-        }
-        else
-        {
-            Debug.LogError("GridObject component not found in instantiated prefab.");
-            Destroy(gridObject.gameObject);
-            return null;
-        }
+        if (CurrentEditObject is ProduceAdvanced adv) ActiveAdvanceds.Add(adv);
+        
+        var nextCell = _gridLayout.WorldToCell(CurrentEditObject.transform.position) + Vector3Int.down;
+        var buildingData = CurrentEditObject.BuildingData;
+        CurrentEditObject = null;
+        IsBuildingEditing.Value = false;
+        CreateAndEditAsync(buildingData, _gridLayout.CellToWorld(nextCell)).Forget();
     }
     
     public void RotateObject()
@@ -188,23 +141,27 @@ public class EditManager : ManagerBase
         IsBuildingEditing.Value = false;
     }
 
-    public void MoveObject(Vector3 touchPosition)
+    public void MoveObject(Vector3 worldPosition)
     {
         if (!IsBuildingEditing.Value) return;
         
-        var cellPosition = _gridLayout.WorldToCell(touchPosition);
-        SetCurrentPosition(cellPosition);
+        var aligned = AlignToCell(worldPosition);
+        CurrentEditObject.transform.position = aligned;
+        if (CurrentCellPosition.Value != aligned)
+        {
+            CurrentCellPosition.Value = aligned;
+        }
     }
     
-    public void MoveObject(BoundsInt area)
+    private Vector3 AlignToCell(Vector3 worldPos)
     {
-        SetCurrentPosition(area.position);
+        var cell = _gridLayout.WorldToCell(worldPos);
+        return _gridLayout.CellToWorld(cell);
     }
     
-    private void SetCurrentPosition(Vector3Int position)
+    public void SetTileEditing(bool isEditing)
     {
-        CurrentEditObject.transform.position = _gridLayout.CellToWorld(position);
-        CurrentCellPosition.Value = CurrentEditObject.transform.position;
+        IsTileEditing.Value = isEditing;
     }
     
     public Vector3Int GetCellPosition(Vector3 position)
@@ -212,13 +169,28 @@ public class EditManager : ManagerBase
         return _gridLayout.WorldToCell(position);
     }
     
-    public Vector3 GetWorldPosition(Vector3Int position)
+    private ProduceObject AddComponentByBuildingType(GameObject gridObject, BuildingType type)
     {
-        return _gridLayout.CellToWorld(position);
+        return type switch
+        {
+            BuildingType.Tier1 => gridObject.AddComponent<ProducePrimary>(),
+            BuildingType.Tier2 => gridObject.AddComponent<ProduceSecondary>(),
+            BuildingType.Tier3 => gridObject.AddComponent<ProduceTertiary>(),
+            _ => gridObject.AddComponent<ProduceQuaternary>(),
+        };
     }
-
-    public void SetTileEditing(bool isEditing)
+    
+    private async Task<ProduceObject> SpawnBuildingAsync(Building data, Vector3 position)
     {
-        IsTileEditing.Value = isEditing;
+        var gridObject = Instantiate(_objectPrefab, position, Quaternion.identity, _buildingParent);
+        var compenet = AddComponentByBuildingType(gridObject, data.Type);
+        if (compenet == null)
+        {
+            Destroy(gridObject);
+            Debug.LogError("Missing ProduceObject component");
+            return null;
+        }
+        await compenet.Initialize(data);
+        return compenet;
     }
 }

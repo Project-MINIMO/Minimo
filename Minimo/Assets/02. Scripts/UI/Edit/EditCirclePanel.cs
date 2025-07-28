@@ -1,3 +1,6 @@
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,7 +39,7 @@ public class EditCirclePanel : UIBase
         _editManager.CurrentCellPosition
             .Subscribe(SetPosition).AddTo(gameObject);
         
-        _confirmBtn.onClick.AddListener(_editManager.ConfirmEdit);
+        _confirmBtn.onClick.AddListener(() => ConfirmEdit().Forget());
         _cancelBtn.onClick.AddListener(_editManager.CancelEdit);
         _rotateBtn.onClick.AddListener(_editManager.RotateObject);
         _deleteBtn.onClick.AddListener(_editManager.DeleteObject);
@@ -55,5 +58,12 @@ public class EditCirclePanel : UIBase
         var target = _editManager.CurrentEditObject;
         var screenPos = Camera.main.WorldToScreenPoint(target.transform.position);
         _rect.position = screenPos;
+    }
+
+    private async UniTask ConfirmEdit()
+    {
+        _confirmBtn.interactable = false;
+        await _editManager.ConfirmEdit();
+        _confirmBtn.interactable = true;
     }
 }
