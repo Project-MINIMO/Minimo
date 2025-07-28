@@ -62,11 +62,15 @@ public class MinimoObject : MonoBehaviour
         _animator.SetBool(trigger, isActive);
     }
 
+    public void SetAnimation(string trigger)
+    {
+        _animator.SetTrigger(trigger);
+    }
+
     public void SetChillState()
     {
         var randomIndex = UnityEngine.Random.Range(0, 2);
-        FSM.ChangeState(randomIndex == 0 ? MinimoState.Idle : MinimoState.Walk);
-        FSM.ChangeState(MinimoState.Idle);
+        FSM.ChangeState(MinimoState.Walk);
         
         transform.SetParent(_parent);   //temp
         transform.localPosition = Vector3.zero;   //temp

@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class PathManager : ManagerBase
 {
     [SerializeField] private Tilemap _checkTilemap;
-    [SerializeField] private TileBase _emptyTile;
+    [SerializeField] private InstallChecker _installChecker;
 
     private Dictionary<Vector3Int, bool> _walkableCache = new();
 
@@ -49,6 +49,19 @@ public class PathManager : ManagerBase
 
         Debug.LogWarning("No walkable positions found.");
         return Vector3Int.zero;
+    }
+    
+    private bool IsWalkable(Vector3Int position)
+    {
+        if (_walkableCache.TryGetValue(position, out var isWalkable))
+        {
+            return isWalkable;
+        }
+
+        isWalkable = _installChecker.CheckCanInstall(position);
+        _walkableCache[position] = isWalkable;
+
+        return isWalkable;
     }
 
     #region A* Algorithm
@@ -124,20 +137,7 @@ public class PathManager : ManagerBase
         yield return new Vector3Int(position.x - 1, position.y + 1, position.z);
         yield return new Vector3Int(position.x - 1, position.y - 1, position.z);
     }
-
-    private bool IsWalkable(Vector3Int position)
-    {
-        if (_walkableCache.TryGetValue(position, out var isWalkable))
-        {
-            return isWalkable;
-        }
-
-        isWalkable = _checkTilemap.GetTile(position) == _emptyTile;
-        _walkableCache[position] = isWalkable;
-
-        return isWalkable;
-    }
-
+    
     private List<Vector3Int> ConstructPath(AStarNode node)
     {
         List<Vector3Int> path = new();
