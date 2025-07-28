@@ -88,7 +88,7 @@ public class EditManager : ManagerBase
         IsBuildingEditing.Value = false;
     }
     
-    public async Task ConfirmEdit()
+    public async UniTask ConfirmEdit()
     {
         if (!_installChecker.CheckCanInstall(CurrentEditObject)) return;
 

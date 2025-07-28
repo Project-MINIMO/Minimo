@@ -2,12 +2,11 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
 
 
 [Serializable]
@@ -196,7 +195,7 @@ public class TitleData : DataBase
         base.Awake();
 
         LoadData();
-        LoadDataAsync();
+        App.Loading.RunWithSpinnerAsync(LoadDataAsync()).Forget();
     }
 
     private void LoadData()
@@ -232,7 +231,7 @@ public class TitleData : DataBase
         }
     }
     
-    private async Task LoadDataAsync()
+    private async UniTask LoadDataAsync()
     {
         var buildingRaw = DataLoader.LoadData<BuildingData>(BUILDING_PATH);
         var itemRaw = DataLoader.LoadData<ItemData>(ITEM_PATH);

@@ -23,6 +23,7 @@ public class App : Singleton<App>
     
     private static BottomNotification _notification;
     private static BlackScreen _blackScreen;
+    public static LoadingSpinner Loading;
 
     protected override void Awake()
     {
@@ -30,6 +31,7 @@ public class App : Singleton<App>
 
         _notification = GetComponentInChildren<BottomNotification>();
         _blackScreen = GetComponentInChildren<BlackScreen>();
+        Loading = GetComponentInChildren<LoadingSpinner>();
         
         QualitySettings.vSyncCount = 1;
         Application.targetFrameRate = 120;
