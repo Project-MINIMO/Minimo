@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -29,7 +28,6 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         
         foreach (var slot in Slots)
         {
-            slot.OnSlotOpened += OnSlotOpened;
             slot.gameObject.SetActive(false);
             _slotPool.Enqueue(slot);
         }
@@ -40,16 +38,14 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
     public override void Show(bool isNew)
     {
         base.Show(isNew);
-
-        OnSlotOpened(null);
+        
         _rect.DOAnchorPos(_showPosition, 0.3f).SetEase(Ease.OutCubic);
     }
 
     public override void Hide(bool isNew)
     {
         base.Hide(isNew);
-
-        OnSlotOpened(null);
+        
         _rect.DOAnchorPos(_hidePosition, 0.3f).SetEase(Ease.InCubic);
     }
    
@@ -64,7 +60,6 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         else
         {
             slot = Instantiate(_slotPrefab, _contentParent);
-            slot.OnSlotOpened += OnSlotOpened;
         }
 
         slot.gameObject.SetActive(true);
@@ -82,13 +77,5 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         slot.gameObject.SetActive(false);
         _activeMap.Remove(quest);
         _slotPool.Enqueue(slot);
-    }
-  
-    private void OnSlotOpened(QuestCompactSlot openedSlot)
-    {
-        foreach (var slot in _activeMap.Values.Where(slot => openedSlot != slot))
-        {
-            slot.Close();
-        }
     }
 }
