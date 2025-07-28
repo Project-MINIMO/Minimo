@@ -36,6 +36,8 @@ public class TilePanel : UIBase
     
     private Dictionary<Vector3Int, (TileBase origTile, TileBase origGlow)> _backupTiles = new();
 
+    private List<TileChange> _pendingTileChanges = new();
+
     [SerializeField] private Button _confirmBtn;
     [SerializeField] private Button _cancelBtn;
     
@@ -82,7 +84,7 @@ public class TilePanel : UIBase
         _titleTMP.text = App.GetData<TitleData>().GetString("STR_TILEEDIT_NAME");
     }
     
-    public override void OpenPanel()
+    public override async void OpenPanel()
     {
         base.OpenPanel();
         
@@ -158,6 +160,15 @@ public class TilePanel : UIBase
                 _backupTiles[cellPos] = (origTile, origGlow);
             }
             
+            // 변경사항 기록 (삭제)
+            int prevTileId = _selectedTile != null ? _selectedTile.ID : -1;
+            _pendingTileChanges.Add(new TileChange
+            {
+                ChangeType = TileChangeType.Remove,
+                TileId = prevTileId,
+                Position = cellPos
+            });
+
             _tilemap.SetTile(cellPos, null);
             _glowMap.SetTile(cellPos, null);
             return;
@@ -173,6 +184,14 @@ public class TilePanel : UIBase
             _backupTiles[cellPos] = (origTile, origGlow);
         }
         
+        // 변경사항 기록 (설치)
+        _pendingTileChanges.Add(new TileChange
+        {
+            ChangeType = TileChangeType.Install,
+            TileId = _selectedTile != null ? _selectedTile.ID : -1,
+            Position = cellPos
+        });
+
         _tilemap.SetTile(cellPos, _tile);
         _glowMap.SetTile(cellPos, _tile);
     }
@@ -203,9 +222,16 @@ public class TilePanel : UIBase
         _selectedObj.SetActive(true);
     }
     
-    private void Confirm()
+    private async void Confirm()
     {
         _backupTiles.Clear();
+        // 일괄 저장
+        if (_pendingTileChanges.Count > 0)
+        {
+            var firebaseManager = App.GetManager<FirebaseManager>();
+            await firebaseManager.BatchUpdateTiles(_pendingTileChanges);
+            _pendingTileChanges.Clear();
+        }
         _slideHandler.Open();
         _selectedObj.SetActive(false);
     }
@@ -228,4 +254,12 @@ public class TilePanel : UIBase
         _slideHandler.Open();
         _selectedObj.SetActive(false);
     }
+}
+
+public enum TileChangeType { Install, Remove }
+public class TileChange
+{
+    public TileChangeType ChangeType;
+    public int TileId;
+    public Vector3Int Position;
 }
