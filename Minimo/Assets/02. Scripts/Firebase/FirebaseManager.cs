@@ -6,6 +6,7 @@ using Firebase.Auth;
 using Firebase.Extensions;
 using Firebase.Firestore;
 using Firebase.Functions;
+using System.Linq;
 
 /// <summary>
 /// Firebase Authentication을 관리하는 매니저 클래스
@@ -336,6 +337,50 @@ public class FirebaseManager : ManagerBase
     }
 #endregion
 
+    public async Task<List<TileDTO>> LoadUserTiles()
+    {
+        var uid = FirebaseAuth.DefaultInstance.CurrentUser?.UserId;
+        if (string.IsNullOrEmpty(uid)) return new List<TileDTO>();
+        var snapshot = await FirebaseFirestore.DefaultInstance
+            .Collection("users").Document(uid)
+            .Collection("tiles").GetSnapshotAsync();
+        var tiles = new List<TileDTO>();
+        foreach (var doc in snapshot.Documents)
+        {
+            var data = doc.ToDictionary();
+            var idParts = doc.Id.Split('_');
+            var position = new Vector3Int(
+                int.Parse(idParts[0]),
+                int.Parse(idParts[1]),
+                int.Parse(idParts[2])
+            );
+            var dto = new TileDTO
+            {
+                TileId = Convert.ToInt32(data["tileId"]),
+                Position = position
+            };
+            tiles.Add(dto);
+        }
+        return tiles;
+    }
+
+    public async Task<bool> BatchUpdateTiles(List<TileChange> changes)
+    {
+        var callable = _functions.GetHttpsCallable("batchUpdateTiles");
+        var data = new Dictionary<string, object>
+        {
+            { "changes", changes.Select(c => new Dictionary<string, object>
+                {
+                    { "type", c.ChangeType.ToString() },
+                    { "tileId", c.TileId },
+                    { "position", new[] { c.Position.x, c.Position.y, c.Position.z } }
+                }).ToList()
+            }
+        };
+        var (success, _) = await TryGet(() => callable.CallAsync(data));
+        return success;
+    }
+
 #region Private
     private void AuthStateChanged(object sender, EventArgs args)
     {
@@ -383,4 +428,11 @@ public class FirebaseManager : ManagerBase
         return result;
     }
 #endregion
+}
+
+// TileDTO를 파일 상단에 명확히 선언
+public class TileDTO
+{
+    public int TileId;
+    public Vector3Int Position;
 }

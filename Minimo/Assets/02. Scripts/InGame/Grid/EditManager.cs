@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class EditManager : ManagerBase
 {
@@ -30,8 +31,19 @@ public class EditManager : ManagerBase
     {
         var firebaseManager = App.GetManager<FirebaseManager>();
         var titleData = App.GetData<TitleData>();
-        var buildings = await firebaseManager.LoadUserBuildings();
 
+        // --- 타일 서버에서 불러와 설치 ---
+        var tiles = await firebaseManager.LoadUserTiles();
+        var tilemap = GameObject.FindWithTag("VillageTilemap").GetComponent<Tilemap>();
+        var glowMap = GameObject.FindWithTag("GlowTilemap").GetComponent<Tilemap>();
+        foreach (var tile in tiles)
+        {
+            var customTile = titleData.CustomTile[tile.TileId];
+            tilemap.SetTile(tile.Position, customTile.Tile);
+            glowMap.SetTile(tile.Position, customTile.Tile);
+        }
+
+        var buildings = await firebaseManager.LoadUserBuildings();
         foreach (var building in buildings)
         {
             // 임시 필터링: 필요 없으면 제거 가능

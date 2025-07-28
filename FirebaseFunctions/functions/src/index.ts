@@ -262,3 +262,29 @@ export const moveBuilding = onCall(
     }
   }
 );
+
+export const batchUpdateTiles = onCall(
+  { region: "asia-northeast3" },
+  async (request) => {
+    if (!request.auth) throw new HttpsError("unauthenticated", "로그인이 필요합니다.");
+    const uid = request.auth.uid;
+    const { changes } = request.data; // [{type, tileId, position}]
+    const firestore = admin.firestore();
+    const batch = firestore.batch();
+
+    for (const change of changes) {
+      const docId = `${change.position[0]}_${change.position[1]}_${change.position[2]}`;
+      const tileRef = firestore.collection("users").doc(uid).collection("tiles").doc(docId);
+      if (change.type === "Install") {
+        batch.set(tileRef, {
+          tileId: change.tileId,
+          installedAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+      } else if (change.type === "Remove") {
+        batch.delete(tileRef);
+      }
+    }
+    await batch.commit();
+    return { success: true };
+  }
+);
