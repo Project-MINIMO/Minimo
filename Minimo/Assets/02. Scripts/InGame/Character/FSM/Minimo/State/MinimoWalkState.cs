@@ -15,7 +15,7 @@ public class MinimoWalkState : StateBase<MinimoObject>
 
     public MinimoWalkState(MinimoObject owner) : base(owner) 
     {
-        //_pathManager = App.GetManager<PathManager>();
+        _pathManager = App.GetManager<PathManager>();
     }
 
     public override void Enter()

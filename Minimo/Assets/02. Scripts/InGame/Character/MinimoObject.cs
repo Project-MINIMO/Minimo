@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -21,9 +22,11 @@ public class MinimoObject : MonoBehaviour
         
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
+    private void Start()
+    {
         FSM = new MinimoFSM(this);
-        
         HandleAssignmentChanged(Data.AssignedBuilding);
     }
 
@@ -61,8 +64,8 @@ public class MinimoObject : MonoBehaviour
 
     public void SetChillState()
     {
-        //var randomIndex = Random.Range(0, 2);
-        //FSM.ChangeState(randomIndex == 0 ? MinimoState.Idle : MinimoState.Walk);
+        var randomIndex = UnityEngine.Random.Range(0, 2);
+        FSM.ChangeState(randomIndex == 0 ? MinimoState.Idle : MinimoState.Walk);
         FSM.ChangeState(MinimoState.Idle);
         
         transform.SetParent(_parent);   //temp
