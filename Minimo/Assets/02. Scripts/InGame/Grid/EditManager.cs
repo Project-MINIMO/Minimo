@@ -49,7 +49,6 @@ public class EditManager : ManagerBase
             produce.transform.position = cellPosition;
             produce.IsPlaced = true;
             _tileStateModifier.ModifyTileState(produce, TileState.Installed);
-            buildingData.AddCount(1);
             if (produce is ProduceAdvanced advanced) ActiveAdvanceds.Add(advanced);
         }
     }

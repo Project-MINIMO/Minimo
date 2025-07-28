@@ -78,4 +78,24 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         _activeMap.Remove(quest);
         _slotPool.Enqueue(slot);
     }
+    
+    protected override void OnSlotSelected(Quest quest)
+    {
+        if (quest.Condition != QuestCondition.Normal)
+        {
+            base.OnSlotSelected(quest);
+            return;
+        }
+        
+        foreach (var clear in quest.Clear)
+        {
+            if (!clear.IsCompleted)
+            {
+                base.OnSlotSelected(quest);
+                return;
+            }
+        }
+        
+        QuestManager.SubmitQuest(quest);
+    }
 }

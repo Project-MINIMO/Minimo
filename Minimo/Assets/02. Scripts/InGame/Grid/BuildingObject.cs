@@ -38,6 +38,8 @@ public class BuildingObject : InteractObject
         _spriteRenderer.transform.localPosition = new Vector3(PositionData.Offset.x, PositionData.Offset.y, 0);
             
         PreviousPosition = transform.position;
+        
+        BuildingData.AddCount(1);
     }
 
     private void SetPolygonCollider(PolygonCollider2D polyCollider)

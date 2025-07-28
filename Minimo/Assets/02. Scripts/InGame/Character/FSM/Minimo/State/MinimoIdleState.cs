@@ -16,7 +16,7 @@ public class MinimoIdleState : StateBase<MinimoObject>
         _isUpdating = true;
 
         var randomIndex = Random.Range(0, _idleAnimations.Length);
-        _currentAnimation = _idleAnimations[0];
+        _currentAnimation = _idleAnimations[randomIndex];
 
         _owner.SetAnimation(_currentAnimation, true);
     }

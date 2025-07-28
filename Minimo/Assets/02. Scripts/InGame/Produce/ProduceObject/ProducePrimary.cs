@@ -45,7 +45,7 @@ public class ProducePrimary : ProduceObject
     public override ProduceTask CreateTask(ProduceData option)
     {
         var task = base.CreateTask(option);
-        AccountInfo.Instance.Items[option.MaterialItems[0].ID].AddCount(1);
+        AccountInfo.Instance.Items[option.MaterialItems[0].ID].AddCount(option.ResultItems[0].Amount);
         BindTask(task);
         return task;
     }
