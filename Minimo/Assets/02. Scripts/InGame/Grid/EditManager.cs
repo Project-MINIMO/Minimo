@@ -170,6 +170,23 @@ public class EditManager : ManagerBase
             return null;
         }
     }
+    
+    public void RotateObject()
+    {
+        if (!IsBuildingEditing.Value) return;
+        
+        CurrentEditObject.Rotate();
+    }
+
+    public void DeleteObject()
+    {
+        if (!IsBuildingEditing.Value) return;
+        
+        CurrentEditObject.Destroy();
+        
+        CurrentEditObject = null;
+        IsBuildingEditing.Value = false;
+    }
 
     public void MoveObject(Vector3 touchPosition)
     {

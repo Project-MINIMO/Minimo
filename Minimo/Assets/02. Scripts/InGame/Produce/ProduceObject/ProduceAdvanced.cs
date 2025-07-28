@@ -121,6 +121,12 @@ public abstract class ProduceAdvanced : ProduceObject
         task.ApplyTimeReduction(_globalTimeReduction);
         return task;
     }
+
+    public override void Destroy()
+    {
+        UnplaceMinimo();
+        base.Destroy();
+    }
     
     #region Apply Minimo Abilities
     public void ApplyTimeRatio(float value)

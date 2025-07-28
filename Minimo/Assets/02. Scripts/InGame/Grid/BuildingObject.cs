@@ -12,7 +12,6 @@ public class BuildingObject : InteractObject
     public BuildingPositionData PositionData { get; private set; }
 
     public bool IsPlaced {get; set;}
-    private bool _isFlipped = false;
     
     protected EditManager _editManager;
     private SpriteRenderer _spriteRenderer;
@@ -145,7 +144,7 @@ public class BuildingObject : InteractObject
         }
         else
         {
-            Destroy(gameObject);
+            Destroy();
         }
 
         return IsPlaced;
@@ -153,8 +152,13 @@ public class BuildingObject : InteractObject
 
     public void Rotate()
     {
-        transform.Rotate(0, _isFlipped ? -180 : 180, 0);
-        _isFlipped = !_isFlipped;
+        _spriteRenderer.flipX = !_spriteRenderer.flipX;
+    }
+
+    public virtual void Destroy()
+    {
+        BuildingData.AddCount(-1);
+        Destroy(gameObject);
     }
     #endregion
 }

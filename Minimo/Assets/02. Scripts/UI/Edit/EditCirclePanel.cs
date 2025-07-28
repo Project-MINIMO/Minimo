@@ -8,6 +8,8 @@ public class EditCirclePanel : UIBase
     
     [SerializeField] private Button _confirmBtn;
     [SerializeField] private Button _cancelBtn;
+    [SerializeField] private Button _rotateBtn;
+    [SerializeField] private Button _deleteBtn;
 
     private EditManager _editManager;
     private Transform _target;
@@ -36,6 +38,8 @@ public class EditCirclePanel : UIBase
         
         _confirmBtn.onClick.AddListener(_editManager.ConfirmEdit);
         _cancelBtn.onClick.AddListener(_editManager.CancelEdit);
+        _rotateBtn.onClick.AddListener(_editManager.RotateObject);
+        _deleteBtn.onClick.AddListener(_editManager.DeleteObject);
     }
     
     private void SetPosition(Vector3 position)

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 
 public class ProduceTertiary : ProduceElevated
@@ -6,5 +7,11 @@ public class ProduceTertiary : ProduceElevated
     {
         _produceManager.RegisterTertiary(this);
         return base.CreateBuilding();
+    }
+    
+    public override void Destroy()
+    {
+        _produceManager.UnregisterTertiary(this);
+        base.Destroy();
     }
 }
