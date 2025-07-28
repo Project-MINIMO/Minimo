@@ -1,19 +1,30 @@
+using UnityEditor.iOS.Extensions.Common;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class QuestSubmissionPanel : QuestInfoPanel
 {
     [SerializeField] private QuestSubmissionView[] _stateViews;
     [SerializeField] private ItemInfoUpdater[] _resultInfos;
+    [SerializeField] private Button _guideBtn;
+    
+    private UIManager _uiManager;
+    private BuildingPanel _buildingPanel;
     
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
+
+        _uiManager = manager;
+        _buildingPanel = manager.GetPanel<BuildingPanel>();
         
         var titleData = App.GetData<TitleData>();
         foreach (var view in _stateViews)
         {
             view.Initialize(QuestManager, this, titleData);
         }
+        
+        _guideBtn.onClick.AddListener(Guide);
     }
 
     public override void OpenPanel()
@@ -50,6 +61,15 @@ public class QuestSubmissionPanel : QuestInfoPanel
         for (; i < _resultInfos.Length; i++)
         {
             _resultInfos[i].gameObject.SetActive(false);
+        }
+    }
+
+    private void Guide()
+    {
+        _uiManager.PopAllPanels();
+        if (SelectedQuest.Clear[0].Type == ClearType.Build)
+        {
+            _buildingPanel.OpenPanel();
         }
     }
 }

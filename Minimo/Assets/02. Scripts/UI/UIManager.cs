@@ -118,7 +118,16 @@ public class UIManager : ManagerBase
         }
     }
 
-    public void Back()
+    public void PopAllPanels()
+    {
+        while (_uiStack.Count > 0 && !_uiStack.Peek().IsDefaultPanel)
+        {
+            var top = _uiStack.Peek();
+            top.ClosePanel();
+        }
+    }
+
+    private void Back()
     {
         if (_uiStack.Count == 0) return;
         if (_uiStack.Peek().IsDefaultPanel) return;
