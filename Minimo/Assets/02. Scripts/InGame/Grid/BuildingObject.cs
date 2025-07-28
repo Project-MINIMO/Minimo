@@ -99,7 +99,7 @@ public class BuildingObject : InteractObject
         }
     }
 
-    protected virtual async Task<bool> CreateBuilding()
+    protected async Task<bool> CreateBuilding()
     {
         // Firebase. 건물 설치 요청
         var firebaseManager = App.GetManager<FirebaseManager>();
@@ -116,7 +116,6 @@ public class BuildingObject : InteractObject
 
         IsPlaced = true;
         PreviousPosition = transform.position;
-        BuildingData.AddCount(1);
         return true;
     }
     

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -16,6 +17,7 @@ public class TilePanel : UIBase
     [SerializeField] private Sprite _eraseSprite;
     [SerializeField] private Toggle _eraseTog;
     [SerializeField] private MenuToggleGroup _toggleGroup;
+    [SerializeField] private GameObject _selectedObj;
     
     [SerializeField] private InventorySlideHandler _slideHandler;
     
@@ -32,6 +34,11 @@ public class TilePanel : UIBase
     
     private Vector3Int _lastPaintedCell = new(int.MinValue, int.MinValue, int.MinValue);
     
+    private Dictionary<Vector3Int, (TileBase origTile, TileBase origGlow)> _backupTiles = new();
+
+    [SerializeField] private Button _confirmBtn;
+    [SerializeField] private Button _cancelBtn;
+    
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
@@ -43,6 +50,8 @@ public class TilePanel : UIBase
         
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
+        _confirmBtn.onClick.AddListener(Confirm);
+        _cancelBtn.onClick.AddListener(Cancel);
         
         var slots = GetComponentsInChildren<TileSlot>(true);
         foreach (var slot in slots)
@@ -60,6 +69,7 @@ public class TilePanel : UIBase
                 _selectedTileImg.sprite = _eraseSprite;
                 _selectedTileImg.gameObject.SetActive(true);
                 _slideHandler.Close();
+                _selectedObj.SetActive(true);
             }
             else
             {
@@ -76,12 +86,15 @@ public class TilePanel : UIBase
     {
         base.OpenPanel();
         
+        _backupTiles.Clear();
+        
         _isErase = false;
         _tile = null;
         _selectedTile = null;
         _selectedTileImg.sprite = null;
         _selectedTileImg.gameObject.SetActive(false);
         _toggleGroup.Show(true);
+        _selectedObj.SetActive(false);
         
         _isPainting = false;
         _lastPaintedCell = new Vector3Int(int.MinValue, int.MinValue, int.MinValue);
@@ -131,19 +144,34 @@ public class TilePanel : UIBase
                 return;
             }
             
+            if (!_backupTiles.ContainsKey(cellPos))
+            {
+                var origTile = _tilemap.GetTile(cellPos);
+                var origGlow = _glowMap.GetTile(cellPos);
+                _backupTiles[cellPos] = (origTile, origGlow);
+            }
+            
+            if (!_backupTiles.ContainsKey(cellPos))
+            {
+                var origTile = _tilemap.GetTile(cellPos);
+                var origGlow = _glowMap.GetTile(cellPos);
+                _backupTiles[cellPos] = (origTile, origGlow);
+            }
+            
             _tilemap.SetTile(cellPos, null);
             _glowMap.SetTile(cellPos, null);
             return;
         }
         
-        if (_selectedTile == null)
-        {
-            App.Notification(NotifyType.DeselectTile);
-            return;
-        }
-
         if (_tilemap.GetTile(cellPos) == _tile) return;
         if (!UseGold()) return;
+        
+        if (!_backupTiles.ContainsKey(cellPos))
+        {
+            var origTile = _tilemap.GetTile(cellPos);
+            var origGlow = _glowMap.GetTile(cellPos);
+            _backupTiles[cellPos] = (origTile, origGlow);
+        }
         
         _tilemap.SetTile(cellPos, _tile);
         _glowMap.SetTile(cellPos, _tile);
@@ -172,5 +200,32 @@ public class TilePanel : UIBase
         _selectedTileImg.sprite = slot.Item.Icon;
         _selectedTileImg.gameObject.SetActive(true);
         _slideHandler.Close();
+        _selectedObj.SetActive(true);
+    }
+    
+    private void Confirm()
+    {
+        _backupTiles.Clear();
+        _slideHandler.Open();
+        _selectedObj.SetActive(false);
+    }
+
+    private void Cancel()
+    {
+        foreach (var kv in _backupTiles)
+        {
+            var cell = kv.Key;
+            var (origTile, origGlow) = kv.Value;
+            _tilemap.SetTile(cell, origTile);
+            _glowMap.SetTile(cell, origGlow);
+
+            if (!_isErase)
+            {
+                AccountInfo.Instance.Gold.AddCount(_selectedTile.Cost);
+            }
+        }
+        _backupTiles.Clear();
+        _slideHandler.Open();
+        _selectedObj.SetActive(false);
     }
 }

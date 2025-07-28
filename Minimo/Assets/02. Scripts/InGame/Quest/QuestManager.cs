@@ -82,13 +82,33 @@ public class QuestManager : ManagerBase
         CurrentQuest.Value = null;
     }
     
-    public void SubmitQuest() => SubmitQuestInternal(quest => 1);
-    public void SubmitQuest(int index) => SubmitQuestInternal(quest => quest.Clear[index].Result ? 2 : 1);
-    public void SubmitQuest(Item item) => SubmitQuestInternal(quest => ComputeBonus(quest, item));
+    public void SubmitQuest()
+    {
+        var current = CurrentQuest.Value;
+        if (current == null) return;
+        current.Clear[0].Clear();
+        
+        SubmitQuestInternal(quest => 1);
+    }
+
+    public void SubmitQuest(int index)
+    {
+        var current = CurrentQuest.Value;
+        if (current == null) return;
+        current.Clear[index].Clear();
+        
+        SubmitQuestInternal(quest => quest.Clear[index].Result ? 2 : 1);
+    }
+    public void SubmitQuest(Item item)
+    {
+        item.AddCount(-1);
+        
+        SubmitQuestInternal(quest => ComputeBonus(quest, item));
+    }
 
     private int ComputeBonus(Quest quest, Item item)
     {
-        foreach (var clear in CurrentQuest.Value.Clear)
+        foreach (var clear in quest.Clear)
         {
             if (clear.Target == item)
             {
