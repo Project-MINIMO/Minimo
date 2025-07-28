@@ -6,9 +6,6 @@ using Random = UnityEngine.Random;
 public class MeteorSpawner : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer[] _meteors;
-    [SerializeField] private Vector2 _startXRange = new(-5f, 9f);
-    [SerializeField] private float _startY = 4f;
-    [SerializeField] private Vector2 _endOffsetRange = new(5f, 11.6f);
     [SerializeField] private Vector2 _spawnInterval = new(3f, 10f);
     [SerializeField] private Vector2 _speedRange = new(0.5f, 1f);
 
@@ -39,16 +36,26 @@ public class MeteorSpawner : MonoBehaviour
     {
         meteor.transform.DOKill();
         
-        var startX = Random.Range(_startXRange.x, _startXRange.y);
-        var startY = _startY;
-        meteor.transform.localPosition = new Vector3(startX, startY, 10);
+        var cam = Camera.main;
+        var topY = cam.transform.position.y + cam.orthographicSize;
+        var spawnY = topY; 
+        
+        var halfWidth = cam.orthographicSize * cam.aspect;
+        var spawnX = Random.Range(-halfWidth, halfWidth) + cam.transform.position.x;
+        
+        meteor.transform.position = new Vector3(spawnX, spawnY, 10);
         meteor.transform.localScale = _startScale;
+
+        var offsetRatio = Random.Range(0f, 1f);
+        var bottomY = cam.transform.position.y - cam.orthographicSize;
+        var screenHeight = cam.orthographicSize * 2f;
+        var endY = bottomY + offsetRatio * screenHeight;
+
+        var fallHeight = spawnY - endY;
+        var endX = spawnX - fallHeight * 2f;
         
-        var randomOffset = Random.Range(_endOffsetRange.x, _endOffsetRange.y);
-        var endX = startX - randomOffset;
-        var endY = startY - randomOffset / 2;
         var duration = Random.Range(_speedRange.x, _speedRange.y);
-        
+
         var sequence = DOTween.Sequence();
         sequence.Append(meteor.transform.DOLocalMove(new Vector3(endX, endY, 10), duration).SetEase(Ease.OutQuad))
             .Insert(duration - 0.3f, meteor.transform.DOScale(Vector3.zero, 0.3f))
