@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-
-
 public class TileStateModifier : MonoBehaviour
 {
     [SerializeField] private Tilemap _installTilemap;
