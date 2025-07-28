@@ -2,9 +2,13 @@ using UnityEngine;
 
 public abstract class UIBase : MonoBehaviour
 {
-    protected virtual GameObject Panel => gameObject;
+    [SerializeField] private UIGuide _guide;
+    
     public virtual bool IsDefaultPanel => false;
     public virtual bool IsUseBlur => false;
+
+    protected virtual bool IsUseGuide => false;
+    private bool _isFirstOpen = true;
     
     private UIManager _manager;
 
@@ -14,9 +18,21 @@ public abstract class UIBase : MonoBehaviour
     /// </summary>
     public virtual void Initialize(UIManager manager) => _manager = manager;
 
-    public virtual void OpenPanel() => _manager.PushPanel(this);
+    public virtual void OpenPanel()
+    {
+        _manager.PushPanel(this);
+
+        if (IsUseGuide && _isFirstOpen)
+        {
+            ShowGuide();
+            _isFirstOpen = false;
+        }
+    }
+
     public virtual void ClosePanel() => _manager.PopPanel(this);
     
-    public virtual void Show(bool isNew) => Panel.SetActive(true);
-    public virtual void Hide(bool isNew) => Panel.SetActive(false);
+    public virtual void Show(bool isNew) => gameObject.SetActive(true);
+    public virtual void Hide(bool isNew) => gameObject.SetActive(false);
+
+    protected void ShowGuide() => _guide.gameObject.SetActive(true);
 }
