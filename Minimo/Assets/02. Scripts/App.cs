@@ -29,9 +29,9 @@ public class App : Singleton<App>
     {
         base.Awake();
 
-        _notification = GetComponentInChildren<BottomNotification>();
-        _blackScreen = GetComponentInChildren<BlackScreen>();
-        Loading = GetComponentInChildren<LoadingSpinner>();
+        _notification = GetComponentInChildren<BottomNotification>(true);
+        _blackScreen = GetComponentInChildren<BlackScreen>(true);
+        Loading = GetComponentInChildren<LoadingSpinner>(true);
         
         QualitySettings.vSyncCount = 1;
         Application.targetFrameRate = 120;
