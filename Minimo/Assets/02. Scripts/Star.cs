@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor.iOS.Extensions.Common;
 using UnityEngine;
 
 public class Star : InteractObject
