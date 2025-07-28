@@ -28,6 +28,7 @@ public class QuestCompactSlot : QuestSlot
     private void Update()
     {
         if (_currentQuest == null) return;
+        if (_currentQuest.Condition != QuestCondition.Normal) return;
         
         foreach (var clear in _currentQuest.Clear)
         {

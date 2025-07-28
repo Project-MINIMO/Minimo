@@ -84,26 +84,36 @@ public class QuestManager : ManagerBase
     
     public void SubmitQuest()
     {
-        var current = CurrentQuest.Value;
-        if (current == null) return;
-        current.Clear[0].Clear();
+        var quest = CurrentQuest.Value;
+        if (quest == null) return;
+        quest.Clear[0].Clear();
         
-        SubmitQuestInternal(quest => 1);
+        SubmitQuestInternal(quest, 1);
+    }
+    
+    public void SubmitQuest(Quest quest)
+    {
+        if (!ActiveQuests.Contains(quest)) return;
+        quest.Clear[0].Clear();
+        
+        SubmitQuestInternal(quest, 1);
     }
 
     public void SubmitQuest(int index)
     {
-        var current = CurrentQuest.Value;
-        if (current == null) return;
-        current.Clear[index].Clear();
+        var quest = CurrentQuest.Value;
+        if (quest == null) return;
+        quest.Clear[index].Clear();
         
-        SubmitQuestInternal(quest => quest.Clear[index].Result ? 2 : 1);
+        SubmitQuestInternal(quest, quest.Clear[index].Result ? 2 : 1);
     }
     public void SubmitQuest(Item item)
     {
+        var quest = CurrentQuest.Value;
+        if (quest == null) return;
         item.AddCount(-1);
         
-        SubmitQuestInternal(quest => ComputeBonus(quest, item));
+        SubmitQuestInternal(quest, ComputeBonus(quest, item));
     }
 
     private int ComputeBonus(Quest quest, Item item)
@@ -119,23 +129,21 @@ public class QuestManager : ManagerBase
         return 0;
     }
         
-    private void SubmitQuestInternal(Func<Quest, int> getBonus)
+    private void SubmitQuestInternal(Quest quest, int bonus)
     {
-        var quest = CurrentQuest.Value;
         if (quest == null) return;
-    
-        var bonus = getBonus(quest);
+        
         foreach (var reward in quest.Reward)
         {
             reward.GetReward(bonus);
         }
         
-        RemoveQuest(CurrentQuest.Value);
-        if (CurrentQuest.Value.Type == QuestType.Constellation)
+        RemoveQuest(quest);
+        if (quest.Type == QuestType.Constellation)
         {
             var first = ActiveQuests
                 .Where(item => item.Type == QuestType.Constellation)
-                .FirstOrDefault(item => item.Group.ID == CurrentQuest.Value.Group.ID);
+                .FirstOrDefault(item => item.Group.ID == quest.Group.ID);
             if (first != null)
             {
                 SelectQuest(first);

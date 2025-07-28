@@ -7,7 +7,7 @@ public class MinimoWalkState : StateBase<MinimoObject>
     private const float SPEED = 0.3f;
 
     private bool _isUpdating = false;
-    private PathManager _pathManager;
+    private readonly PathManager _pathManager;
     private List<Vector3Int> _path;
     private Vector3 _targetPosition;
 
@@ -15,7 +15,7 @@ public class MinimoWalkState : StateBase<MinimoObject>
 
     public MinimoWalkState(MinimoObject owner) : base(owner) 
     {
-        //_pathManager = App.GetManager<PathManager>();
+        _pathManager = App.GetManager<PathManager>();
     }
 
     public override void Enter()
@@ -49,12 +49,27 @@ public class MinimoWalkState : StateBase<MinimoObject>
             if ((_targetPosition - _owner.transform.position).sqrMagnitude > 0.05f)
             {
                 var deltaX = _targetPosition.x - _owner.transform.position.x;
-                if (deltaX != 0)
+                var deltaY = _targetPosition.y - _owner.transform.position.y;
+                
+                if (deltaX > 0 && deltaY > 0)
                 {
-                    _owner.SetSpriteFilp(deltaX >= 0);
+                    _owner.SetAnimation("TR");
+                }
+                else if (deltaX < 0 && deltaY > 0)
+                {
+                    _owner.SetAnimation("TL");
+                }
+                else if (deltaX < 0 && deltaY < 0)
+                {
+                    _owner.SetAnimation("BL");
+                }
+                else if (deltaX > 0 && deltaY < 0)
+                {
+                    _owner.SetAnimation("BR");
                 }
                 
                 _owner.transform.position = Vector3.MoveTowards(_owner.transform.position, _targetPosition, SPEED * Time.deltaTime);
+                
             }
             else
             {
