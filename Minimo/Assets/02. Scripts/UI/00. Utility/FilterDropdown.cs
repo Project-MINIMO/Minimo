@@ -84,6 +84,11 @@ public class FilterDropdown : TMP_Dropdown
                 toggle.Select();
             }
         }
+        
+        var dropdownListRect = transform.GetChild(transform.childCount - 1).GetComponent<RectTransform>();
+        var contentRect = dropdownListRect.GetComponent<ScrollRect>().content;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contentRect);
+        dropdownListRect.sizeDelta = new Vector2(dropdownListRect.sizeDelta.x, contentRect.sizeDelta.y);
     }
     
     protected override GameObject CreateDropdownList(GameObject template)
