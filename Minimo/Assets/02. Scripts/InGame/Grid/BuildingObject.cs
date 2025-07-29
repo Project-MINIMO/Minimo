@@ -13,18 +13,18 @@ public class BuildingObject : InteractObject
 
     public bool IsPlaced {get; set;}
     
-    protected EditManager _editManager;
-    private SpriteRenderer _spriteRenderer;
+    protected EditManager EditManager;
+    protected SpriteRenderer SpriteRenderer;
 
     protected virtual void Awake()
     {
-        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        _editManager = App.GetManager<EditManager>();
-        _editManager.IsBuildingEditing
+        SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        EditManager = App.GetManager<EditManager>();
+        EditManager.IsBuildingEditing
             .Subscribe(isEditing => SetTransparency(isEditing ? 0.5f : 1)).AddTo(gameObject);
-        _editManager.IsTileEditing
+        EditManager.IsTileEditing
             .Subscribe(isEditing => SetTransparency(isEditing ? 0.5f : 1)).AddTo(gameObject);
-        SetTransparency(_editManager.IsBuildingEditing.Value ? 0.5f : 1);
+        SetTransparency(EditManager.IsBuildingEditing.Value ? 0.5f : 1);
     }
     
     public virtual async Task Initialize(Building data)
@@ -34,8 +34,8 @@ public class BuildingObject : InteractObject
         
         SetPolygonCollider(GetComponent<PolygonCollider2D>());
         GetComponent<PolygonCollider2D>().offset = PositionData.ColliderOffset;
-        _spriteRenderer.sprite = PositionData.Sprite;
-        _spriteRenderer.transform.localPosition = new Vector3(PositionData.Offset.x, PositionData.Offset.y, 0);
+        SpriteRenderer.sprite = PositionData.Sprite;
+        SpriteRenderer.transform.localPosition = new Vector3(PositionData.Offset.x, PositionData.Offset.y, 0);
             
         PreviousPosition = transform.position;
         
@@ -64,19 +64,19 @@ public class BuildingObject : InteractObject
     #region InteractObject
     public override void OnLongPress()
     {
-        if (_editManager.IsBuildingEditing.Value) return;
-        if (_editManager.IsTileEditing.Value) return;
+        if (EditManager.IsBuildingEditing.Value) return;
+        if (EditManager.IsTileEditing.Value) return;
         
-        _editManager.StartEdit(this);
+        EditManager.StartEdit(this);
     }
 
     public override void OnClickUp()
     {
-        if (_editManager.IsTileEditing.Value) return;
+        if (EditManager.IsTileEditing.Value) return;
         
-        if (_editManager.IsBuildingEditing.Value)
+        if (EditManager.IsBuildingEditing.Value)
         {
-            _editManager.StartEdit(this);
+            EditManager.StartEdit(this);
         }
     }
     #endregion
@@ -84,9 +84,9 @@ public class BuildingObject : InteractObject
     #region Edit Functions
     private void SetTransparency(float alpha)
     {
-        var color = _spriteRenderer.color;
+        var color = SpriteRenderer.color;
         color.a = alpha;
-        _spriteRenderer.color = color;
+        SpriteRenderer.color = color;
     }
 
     public async Task<bool> Install()
@@ -105,7 +105,7 @@ public class BuildingObject : InteractObject
     {
         // Firebase. 건물 설치 요청
         var firebaseManager = App.GetManager<FirebaseManager>();
-        var targetCell = _editManager.GetCellPosition(transform.position);
+        var targetCell = EditManager.GetCellPosition(transform.position);
 
         string? buildingId = await firebaseManager.InstallBuilding(BuildingData.ID, targetCell);
         if (buildingId == null)
@@ -125,7 +125,7 @@ public class BuildingObject : InteractObject
     {
         // Firebase. 건물 위치 업데이트 요청
         var firebaseManager = App.GetManager<FirebaseManager>();
-        var targetCell = _editManager.GetCellPosition(transform.position);
+        var targetCell = EditManager.GetCellPosition(transform.position);
         var success = await firebaseManager.MoveBuilding(BuildingId, targetCell);
         if (!success)
         {
@@ -141,7 +141,7 @@ public class BuildingObject : InteractObject
     {
         if (IsPlaced)
         {
-            _editManager.MoveObject(PreviousPosition);
+            EditManager.MoveObject(PreviousPosition);
         }
         else
         {
@@ -153,7 +153,7 @@ public class BuildingObject : InteractObject
 
     public void Rotate()
     {
-        _spriteRenderer.flipX = !_spriteRenderer.flipX;
+        SpriteRenderer.flipX = !SpriteRenderer.flipX;
     }
 
     public virtual void Destroy()

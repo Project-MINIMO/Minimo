@@ -40,6 +40,8 @@ public class ProducePrimary : ProduceObject
         {
             BindTask(ActiveTask);
         }
+
+        SpriteRenderer.sortingOrder = -1;
     }
     
     public override ProduceTask CreateTask(ProduceData option)
