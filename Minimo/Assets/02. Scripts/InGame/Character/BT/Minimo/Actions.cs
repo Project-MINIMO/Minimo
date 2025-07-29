@@ -132,17 +132,32 @@ public class MoveAction : ActionNode
         
         if (_currentIndex < Blackboard.Path.Count)
         {
-            if ((_targetPosition - Blackboard.Agent.transform.position).sqrMagnitude > 0.05f)
+            if ((_targetPosition - Blackboard.Agent.transform.position).sqrMagnitude > 0f)
             {
                 var deltaX = _targetPosition.x - Blackboard.Agent.transform.position.x;
                 var deltaY = _targetPosition.y - Blackboard.Agent.transform.position.y;
 
-                var trigger = deltaX switch
+                var trigger = (deltaX, deltaY) switch
                 {
-                    > 0 when deltaY > 0 => TopRight,
-                    < 0 when deltaY > 0 => TopLeft,
-                    < 0 when deltaY < 0 => BottomLeft,
-                    > 0 when deltaY < 0 => BottomRight,
+                    (> 0, > 0) => TopRight,
+                    (> 0, < 0) => BottomRight,
+                    (> 0, 0) => BottomRight,
+
+                    (< 0, > 0) => TopLeft,
+                    (< 0, < 0) => BottomLeft,
+                    (< 0, 0) => BottomLeft,
+
+                    (0, > 0) => // 수직 ↑
+                        Blackboard.AnimatorIsPlaying(BottomLeft) 
+                        || Blackboard.AnimatorIsPlaying(TopLeft) 
+                            ? TopLeft : TopRight,
+
+                    (0, < 0) => // 수직 ↓
+                        Blackboard.AnimatorIsPlaying(BottomLeft) 
+                        || Blackboard.AnimatorIsPlaying(TopLeft)
+                            ? BottomLeft : BottomRight,
+
+                    (0, 0) => TopRight,
                     _ => TopRight
                 };
                 
@@ -152,7 +167,6 @@ public class MoveAction : ActionNode
                     Blackboard.Agent.transform.position, 
                     _targetPosition, 
                     Speed * Time.deltaTime);
-                
             }
             else
             {

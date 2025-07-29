@@ -14,7 +14,7 @@ public class MinimoHideState : State<MinimoObject>
     public override void Enter()
     {
         Animator.SetTrigger(Default);
-        _minimo.transform.position = Vector3.zero;
+        _minimo.transform.localPosition = Vector3.zero;
         _minimo.gameObject.SetActive(false);
     }
 
@@ -23,7 +23,7 @@ public class MinimoHideState : State<MinimoObject>
     public override void Exit()
     {
         Animator.SetTrigger(Default);
-        _minimo.transform.position = Vector3.zero;
+        _minimo.transform.localPosition = Vector3.zero;
         _minimo.gameObject.SetActive(true);
     }
 }

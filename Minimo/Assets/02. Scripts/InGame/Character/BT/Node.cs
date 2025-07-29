@@ -23,7 +23,7 @@ public class Blackboard
     public Blackboard(MinimoObject agent)
     {
         Agent = agent;
-        Animator = agent.GetComponent<Animator>();
+        Animator = agent.GetComponentInChildren<Animator>();
     }
 
     public bool AnimatorIsPlaying(string stateName)

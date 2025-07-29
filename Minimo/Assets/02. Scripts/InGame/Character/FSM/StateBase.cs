@@ -6,7 +6,7 @@ public abstract class State<T> where T : MonoBehaviour
 
     public State(T owner)
     {
-        Animator = owner.GetComponent<Animator>();
+        Animator = owner.GetComponentInChildren<Animator>();
     }
 
     public abstract void Enter();

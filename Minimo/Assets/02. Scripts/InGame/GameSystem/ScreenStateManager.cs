@@ -22,7 +22,7 @@ public class ScreenStateManager : ManagerBase
         ChangeState(ScreenState.Sky);
         
         _planetObj.SetActive(false);
-        Camera.main.orthographicSize = 3f;
+        Camera.main.orthographicSize = 4f;
         _villageMap.color = Color.white;
     }
     

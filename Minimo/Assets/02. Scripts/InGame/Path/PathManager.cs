@@ -7,12 +7,10 @@ public class PathManager : ManagerBase
 {
     [SerializeField] private Tilemap _checkTilemap;
     [SerializeField] private InstallChecker _installChecker;
-
-    private Dictionary<Vector3Int, bool> _walkableCache = new();
     
     public Vector3 GetTileWorldPosition(Vector3Int tilePosition)
     {
-        return _checkTilemap.CellToWorld(tilePosition) + _checkTilemap.cellSize * 0.5f;
+        return _checkTilemap.GetCellCenterWorld(tilePosition);
     }
 
     public List<Vector3Int> GetRandomPath(Vector3 currentPosition, int searchRadius = 10)
@@ -36,9 +34,9 @@ public class PathManager : ManagerBase
     {
         List<Vector3Int> walkableTiles = new();
 
-        for (int x = center.x - size / 2; x <= center.x + size / 2; x++)
+        for (var x = center.x - size / 2; x <= center.x + size / 2; x++)
         {
-            for (int y = center.y - size / 2; y <= center.y + size / 2; y++)
+            for (var y = center.y - size / 2; y <= center.y + size / 2; y++)
             {
                 Vector3Int position = new(x, y, 0);
                 if (IsWalkable(position))
@@ -50,26 +48,15 @@ public class PathManager : ManagerBase
 
         if (walkableTiles.Count > 0)
         {
-            int randomIndex = Random.Range(0, walkableTiles.Count);
+            var randomIndex = Random.Range(0, walkableTiles.Count);
             return walkableTiles[randomIndex];
         }
 
-        //Debug.LogWarning("No walkable positions found.");
+        Debug.LogWarning("No walkable positions found.");
         return Vector3Int.zero;
     }
     
-    private bool IsWalkable(Vector3Int position)
-    {
-        if (_walkableCache.TryGetValue(position, out var isWalkable))
-        {
-            return isWalkable;
-        }
-
-        isWalkable = _installChecker.CheckCanInstall(position);
-        _walkableCache[position] = isWalkable;
-
-        return isWalkable;
-    }
+    private bool IsWalkable(Vector3Int position) => _installChecker.CheckCanInstall(position);
 
     #region A* Algorithm
     private List<Vector3Int> FindPath(Vector3Int start, Vector3Int target)
@@ -91,7 +78,7 @@ public class PathManager : ManagerBase
                 return null;
             }
             
-            AStarNode currentNode = openList.Dequeue();
+            var currentNode = openList.Dequeue();
 
             if (currentNode.Position == target)
             {
@@ -109,7 +96,7 @@ public class PathManager : ManagerBase
 
                 var tentativeGScore = currentNode.G + GetDistance(currentNode.Position, neighborPos);
 
-                AStarNode existingNode = openList.Find(n => n.Position == neighborPos);
+                var existingNode = openList.Find(n => n.Position == neighborPos);
 
                 if (existingNode == null || tentativeGScore < existingNode.G)
                 {
@@ -122,15 +109,11 @@ public class PathManager : ManagerBase
         return null; // Path not found
     }
 
-    private float GetHeuristic(Vector3Int a, Vector3Int b)
-    {
-        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y); // Manhattan distance
-    }
+    private float GetHeuristic(Vector3Int a, Vector3Int b) 
+        => Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y); // Manhattan distance
 
     private float GetDistance(Vector3Int a, Vector3Int b)
-    {
-        return Mathf.Sqrt(Mathf.Pow(a.x - b.x, 2) + Mathf.Pow(a.y - b.y, 2)); // Euclidean distance for isometric
-    }
+        => Mathf.Sqrt(Mathf.Pow(a.x - b.x, 2) + Mathf.Pow(a.y - b.y, 2)); // Euclidean distance for isometric
 
     private IEnumerable<Vector3Int> GetNeighbors(Vector3Int position)
     {
@@ -138,7 +121,7 @@ public class PathManager : ManagerBase
         yield return new Vector3Int(position.x - 1, position.y, position.z);
         yield return new Vector3Int(position.x, position.y + 1, position.z);
         yield return new Vector3Int(position.x, position.y - 1, position.z);
-        // Adjusted diagonal directions for isometric
+
         yield return new Vector3Int(position.x + 1, position.y + 1, position.z);
         yield return new Vector3Int(position.x + 1, position.y - 1, position.z);
         yield return new Vector3Int(position.x - 1, position.y + 1, position.z);
