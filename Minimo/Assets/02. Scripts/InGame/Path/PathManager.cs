@@ -47,7 +47,7 @@ public class PathManager : ManagerBase
             return walkableTiles[randomIndex];
         }
 
-        Debug.LogWarning("No walkable positions found.");
+        //Debug.LogWarning("No walkable positions found.");
         return Vector3Int.zero;
     }
     
