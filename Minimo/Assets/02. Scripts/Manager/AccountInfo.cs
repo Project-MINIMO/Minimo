@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class AccountInfo : Singleton<AccountInfo>
 {
-    private TitleData _titleData;
-    
     public Dictionary<int, Item> Items { get; private set; }
     public UserLevel Level { get; private set; }
     public UserGold Gold { get; private set; }
@@ -15,19 +13,19 @@ public class AccountInfo : Singleton<AccountInfo>
     public int StorageCapacity { get; private set; } = 100;
     public int MinimoCapacity { get; private set; } = 100;
     public int Star;
+    public bool IsAutoAssign;
 
     private GetItemPanel _itemPanel;
     public event Action<int> OnStorageCapacityChanged;
     public event Action<int> OnMinimoCapacityChanged;
     public int CurrentItemCounts => Items.Values.Where(item => item.Level > 0).Sum(item => item.Count);
+    public event Action<bool> OnAutoAssign;
     
     [SerializeField] private Sprite LevelIcon;
     [SerializeField] private Sprite GoldIcon;
 
     private void Start()
     {
-        _titleData = App.GetData<TitleData>();
-        
         Level = new UserLevel(LevelIcon);
         Gold = new UserGold(GoldIcon);
     }
@@ -88,6 +86,12 @@ public class AccountInfo : Singleton<AccountInfo>
     {
         MinimoCapacity += amount;
         OnMinimoCapacityChanged?.Invoke(MinimoCapacity);
+    }
+
+    public void AutoAssign(bool isAutoAssign)
+    {
+        IsAutoAssign = isAutoAssign;
+        OnAutoAssign?.Invoke(isAutoAssign);
     }
 
     [ContextMenu("AddGold1000000")]

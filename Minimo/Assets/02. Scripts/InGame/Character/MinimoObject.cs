@@ -6,18 +6,20 @@ public class MinimoObject : MonoBehaviour
     public MinimoFSM FSM { get; private set; }
 
     private ProduceAdvanced _assignedBuilding;
-    private ProduceState _currentState = ProduceState.Complete;
+    private MinimoState _currentState = MinimoState.None;
 
     public void Initialize(Minimo minimo)
     {
         Data = minimo;
         Data.OnAssignmentChanged += OnAssignmentChanged;
+        AccountInfo.Instance.OnAutoAssign += OnAutoAssign;
     }
 
     private void Start()
     {
         FSM = new MinimoFSM(this);
         OnAssignmentChanged(Data.AssignedBuilding);
+        OnAutoAssign(AccountInfo.Instance.IsAutoAssign);
     }
 
     private void Update()
@@ -34,7 +36,7 @@ public class MinimoObject : MonoBehaviour
                 _assignedBuilding.OnProduceStateChanged -= OnProduceStateChanged;
                 _assignedBuilding = null;
             }
-            OnProduceStateChanged(ProduceState.Idle);
+            OnAutoAssign(AccountInfo.Instance.IsAutoAssign);
         }
         else
         {
@@ -46,8 +48,8 @@ public class MinimoObject : MonoBehaviour
 
     private void OnProduceStateChanged(ProduceState state)
     {
-        if (_currentState == state) return;
-        _currentState = state;
+        if ((int)_currentState == (int)state) return;
+        _currentState = (MinimoState)state;
         
         switch (state)
         {
@@ -58,6 +60,31 @@ public class MinimoObject : MonoBehaviour
             case ProduceState.Produce:
                 FSM.ChangeState(MinimoState.Work);
                 break;
+        }
+    }
+
+    private void OnAutoAssign(bool isAutoAssign)
+    {
+        if (isAutoAssign)
+        {
+            if (FSM.CurrentState == MinimoState.Hide)
+            {
+                _currentState = MinimoState.Idle;
+                FSM.ChangeState(MinimoState.Idle);
+            }
+        }
+        else
+        {
+            if (_assignedBuilding == null)
+            {
+                _currentState = MinimoState.Hide;
+                FSM.ChangeState(MinimoState.Hide);
+            }
+            else
+            {
+                _currentState = MinimoState.Idle;
+                FSM.ChangeState(MinimoState.Idle);
+            }
         }
     }
 }

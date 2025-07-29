@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FSM<T, TStateType> where T : MonoBehaviour where TStateType : Enum
 {
+    public TStateType CurrentState { get; private set; }
+    
     private readonly Dictionary<TStateType, State<T>> _stateDictionary = new();
     private State<T> _currentState;
 
@@ -18,6 +20,7 @@ public class FSM<T, TStateType> where T : MonoBehaviour where TStateType : Enum
 
         if (_stateDictionary.TryGetValue(newStateType, out var newState))
         {
+            CurrentState = newStateType;
             _currentState = newState;
             _currentState.Enter();
         }

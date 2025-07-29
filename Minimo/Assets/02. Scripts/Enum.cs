@@ -40,9 +40,9 @@ public enum UseCashType
 public enum MinimoState
 {
     Idle,
-    Walk,
     Work,
-    Drag
+    Hide,
+    None,
 }
 
 public enum ResourceType

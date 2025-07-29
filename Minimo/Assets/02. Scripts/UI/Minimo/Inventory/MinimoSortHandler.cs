@@ -11,15 +11,15 @@ public class MinimoSortHandler : InventorySortHandler
         
         OptionList = new List<SortOption>
         {
-            new(titleData.GetString("STR_MC_ALIGN_COMPONENT1_NAME"), 
+            new(titleData.GetString("STR_MINIMOCENTER_ALIGN_COMPONENT1_NAME"), 
                 _inventory.SortDefault),
-            new(titleData.GetString("STR_MC_ALIGN_COMPONENT2_NAME") + " ↓", 
+            new(titleData.GetString("STR_MINIMOCENTER_ALIGN_COMPONENT2_NAME") + " ↓", 
                 () => _inventory.SortByLevel(false)),
-            new(titleData.GetString("STR_MC_ALIGN_COMPONENT2_NAME")+ " ↑", 
+            new(titleData.GetString("STR_MINIMOCENTER_ALIGN_COMPONENT2_NAME")+ " ↑", 
                 () => _inventory.SortByLevel(true)),
-            new(titleData.GetString("STR_MC_ALIGN_COMPONENT3_NAME") + " ↓", 
+            new(titleData.GetString("STR_MINIMOCENTER_ALIGN_COMPONENT3_NAME") + " ↓", 
                 () => _inventory.SortByAcquisitionDate(false)),
-            new(titleData.GetString("STR_MC_ALIGN_COMPONENT3_NAME")+ " ↑", 
+            new(titleData.GetString("STR_MINIMOCENTER_ALIGN_COMPONENT3_NAME")+ " ↑", 
                 () => _inventory.SortByAcquisitionDate(true))
         };
     }
