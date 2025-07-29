@@ -18,7 +18,7 @@ public abstract class DecoratorNode : Node
 /// </summary>
 public class RepeatUntilFailNode : DecoratorNode
 {
-    protected RepeatUntilFailNode(Blackboard blackboard, Node node) : base(blackboard, node) { }
+    public RepeatUntilFailNode(Blackboard blackboard, Node node) : base(blackboard, node) { }
 
     public override NodeStatus Tick()
     {
@@ -37,7 +37,7 @@ public class RepeatUntilFailNode : DecoratorNode
 /// </summary>
 public class RepeatWhileSuccessNode : DecoratorNode
 {
-    protected RepeatWhileSuccessNode(Blackboard blackboard, Node node) : base(blackboard, node) { }
+    public RepeatWhileSuccessNode(Blackboard blackboard, Node node) : base(blackboard, node) { }
 
     public override NodeStatus Tick()
     {

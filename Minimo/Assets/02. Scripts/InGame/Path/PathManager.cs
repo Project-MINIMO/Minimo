@@ -17,12 +17,18 @@ public class PathManager : ManagerBase
 
     public List<Vector3Int> GetRandomPath(Vector3 currentPosition, int searchRadius = 10)
     {
-        Vector3Int currentCell = _checkTilemap.WorldToCell(currentPosition);
-        Vector3Int targetCell = GetRandomWalkableTile(currentCell, searchRadius);
+        var currentCell = _checkTilemap.WorldToCell(currentPosition);
+        var targetCell = GetRandomWalkableTile(currentCell, searchRadius);
 
-        if (targetCell == Vector3Int.zero) return null;
+        return targetCell == Vector3Int.zero ? null : FindPath(currentCell, targetCell);
+    }
 
-        return FindPath(currentCell, targetCell);
+    public List<Vector3Int> GetPath(Vector3 currentPosition, Vector3 targetPosition)
+    {
+        var currentCell = _checkTilemap.WorldToCell(currentPosition);
+        var targetCell = _checkTilemap.WorldToCell(targetPosition);
+
+        return targetCell == Vector3Int.zero ? null : FindPath(currentCell, targetCell);
     }
 
     private Vector3Int GetRandomWalkableTile(Vector3Int center, int size)

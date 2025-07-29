@@ -1,20 +1,18 @@
-using UnityEngine;
 
 public class MinimoIdleState : State<MinimoObject>
 {
     private readonly BehaviorTree _idleTree;
-    private readonly Blackboard _blackboard;
 
     public MinimoIdleState(MinimoObject owner) : base(owner)
     {
-        _blackboard = new Blackboard(owner);
+        var blackboard = new Blackboard(owner);
         
         var idleSequence = new SequenceNode
         (
-            _blackboard,
-            new FindRestPositionAction(_blackboard),
-            new MoveAction(_blackboard),
-            new LayDownAction(_blackboard)
+            blackboard,
+            new FindRestPositionAction(blackboard),
+            new MoveAction(blackboard),
+            new LayDownAction(blackboard)
         );
         
         _idleTree = new BehaviorTree(idleSequence);
@@ -22,7 +20,6 @@ public class MinimoIdleState : State<MinimoObject>
 
     public override void Enter()
     {
-        Debug.Log("MinimoIdleState");
         _idleTree.Reset();
     }
 

@@ -17,6 +17,8 @@ public class Blackboard
     public readonly MinimoObject Agent;
     public readonly Animator Animator;
     public List<Vector3Int> Path;
+    
+    public ProduceAdvanced Building => Agent.Data.AssignedBuilding;
 
     public Blackboard(MinimoObject agent)
     {

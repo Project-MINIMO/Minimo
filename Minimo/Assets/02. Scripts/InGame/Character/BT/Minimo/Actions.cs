@@ -1,63 +1,93 @@
+using System.Linq;
 using UnityEngine;
 
-public class MoveToBuildingActionNode : ActionNode
+public class ActiveProductionAction : ActionNode
 {
-    public MoveToBuildingActionNode(Blackboard blackboard) : base(blackboard) { }
+    private static readonly int IsWork = Animator.StringToHash("IsWork");
+    private bool _shouldReset = true;
     
+    public ActiveProductionAction(Blackboard blackboard) : base(blackboard) { }
+    
+    public override void Reset()
+    {
+        _shouldReset = true;
+    }
+
     public override NodeStatus Tick()
     {
-        // TODO: implement movement towards building
-        bool arrived = /* movement logic */ false;
-        if (!arrived)
-            return NodeStatus.Running;
+        if (_shouldReset)
+        {
+            _shouldReset = false;
+            Blackboard.Animator.SetBool(IsWork, true);
+        }
 
-        return NodeStatus.Success;
+        return Blackboard.Building.CurrentState == ProduceState.Produce 
+            ? NodeStatus.Running 
+            : NodeStatus.Success;
     }
 }
 
-public class PlaceMinimoActionNode : ActionNode
+public class CompleteProduceAction : ActionNode
 {
-    public PlaceMinimoActionNode(Blackboard blackboard) : base(blackboard) { }
+    private static readonly int Complete = Animator.StringToHash("Complete");
+    private static readonly int IsWork = Animator.StringToHash("IsWork");
+    private bool _shouldReset = true;
+    
+    private float _startTime;
+    
+    public CompleteProduceAction(Blackboard blackboard) : base(blackboard) { }
+
+    public override void Reset()
+    {
+        _shouldReset = true;
+    }
 
     public override NodeStatus Tick()
     {
-        // TODO: implement placement logic
-        return NodeStatus.Success;
+        if (_shouldReset)
+        {
+            _shouldReset = false;
+            _startTime = Time.time;
+            
+            Blackboard.Animator.SetTrigger(Complete);
+        }
+       
+        if (Time.time - _startTime >= 2.1f)
+        {
+            _shouldReset = true;
+            Blackboard.Animator.SetBool(IsWork, false);
+            return Blackboard.Building.ActiveTask == null ? NodeStatus.Failure : NodeStatus.Success;
+        }
+        
+        return NodeStatus.Running;
     }
 }
 
-public class PlayProductionAnimationActionNode : ActionNode
+public class FindWorkPositionAction : ActionNode
 {
-    public PlayProductionAnimationActionNode(Blackboard blackboard) : base(blackboard) { }
-
-    public override NodeStatus Tick()
+    private readonly PathManager _pathManager;
+    
+    public FindWorkPositionAction(Blackboard blackboard) : base(blackboard)
     {
-        // TODO: trigger production animation
-        bool animationDone = /* check animation state */ true;
-        return animationDone ? NodeStatus.Success : NodeStatus.Running;
+        _pathManager = App.GetManager<PathManager>();
     }
-}
-
-public class PlayCompletionAnimationActionNode : ActionNode
-{
-    public PlayCompletionAnimationActionNode(Blackboard blackboard) : base(blackboard) { }
 
     public override NodeStatus Tick()
     {
-        // TODO: trigger completion animation
-        bool animationDone = /* check animation state */ true;
-        return animationDone ? NodeStatus.Success : NodeStatus.Running;
-    }
-}
+        var path = _pathManager.GetPath(
+            Blackboard.Agent.transform.position, 
+            Blackboard.Building.transform.position
+            );
 
-public class PlayIdleAnimationActionNode : ActionNode
-{
-    public PlayIdleAnimationActionNode(Blackboard blackboard) : base(blackboard) { }
-
-    public override NodeStatus Tick()
-    {
-        // TODO: trigger idle animation
-        return NodeStatus.Success;
+        if (path is { Count: > 0 })
+        {
+            Blackboard.Path = path;
+            return NodeStatus.Success;
+        }
+        else
+        {
+            return NodeStatus.Failure;
+        }
     }
 }
 
