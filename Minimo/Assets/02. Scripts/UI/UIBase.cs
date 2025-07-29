@@ -6,6 +6,7 @@ public abstract class UIBase : MonoBehaviour
     
     public virtual bool IsDefaultPanel => false;
     public virtual bool IsUseBlur => false;
+    public virtual bool IsUseProduceBlur => false;
 
     protected virtual bool IsUseGuide => false;
     private bool _isFirstOpen = true;

@@ -54,7 +54,7 @@ public class ProduceManager : ManagerBase
         Deselect();
         
         CurrentObject = obj;
-        MoveCamera(_panelMap[obj.BuildingData.Type].OpenPanel);
+        MoveCamera(obj, _panelMap[obj.BuildingData.Type].OpenPanel);
     }
 
     public void Deselect()
@@ -65,13 +65,19 @@ public class ProduceManager : ManagerBase
         CurrentObject = null;
     }
 
-    private void MoveCamera(Action onComplete = null)
+    private void MoveCamera(ProduceObject obj, Action onComplete = null)
     {
+        var offset = obj switch
+        {
+            ProduceElevated => -0.5f,
+            _ => 0f
+        };
+        
         if (CurrentObject == null) return;
         
         var targetPos = new Vector3(
             CurrentObject.transform.position.x,
-            CurrentObject.transform.position.y,
+            CurrentObject.transform.position.y + offset,
             _camera.transform.position.z
         );
 

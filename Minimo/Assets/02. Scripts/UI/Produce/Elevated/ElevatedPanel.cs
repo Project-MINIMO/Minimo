@@ -6,7 +6,8 @@ using TMPro;
 
 public abstract class ElevatedPanel : UIBase
 {
-    public override bool IsUseBlur => true;
+    public override bool IsUseBlur => false;
+    public override bool IsUseProduceBlur => true;
     
     [SerializeField] private Button _closeBtn;
     [SerializeField] private TextMeshProUGUI _titleTMP;

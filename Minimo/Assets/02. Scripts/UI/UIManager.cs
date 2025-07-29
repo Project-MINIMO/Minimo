@@ -8,6 +8,7 @@ using LeTai.Asset.TranslucentImage;
 public class UIManager : ManagerBase
 {
     [SerializeField] private GameObject _blurImg;
+    [SerializeField] private GameObject _produceBlurImg;
     [SerializeField] private GetItemPanel _getItem;
     public GetItemPanel GetItem => _getItem;
     
@@ -88,6 +89,7 @@ public class UIManager : ManagerBase
         }
         
         _blurImg.SetActive(panel.IsUseBlur);
+        _produceBlurImg.SetActive(panel.IsUseProduceBlur);
         panel.Show(true);
         _uiStack.Push(panel);
     }
@@ -104,6 +106,7 @@ public class UIManager : ManagerBase
             if (_uiStack.Peek().IsDefaultPanel)
             {
                 _blurImg.SetActive(false);
+                _produceBlurImg.SetActive(false);
                 foreach (var peek in _uiStack)
                 {
                     peek.Show(false);
@@ -114,6 +117,7 @@ public class UIManager : ManagerBase
                 var newPanel = _uiStack.Peek();
                 newPanel.Show(false);
                 _blurImg.SetActive(newPanel.IsUseBlur);
+                _produceBlurImg.SetActive(newPanel.IsUseProduceBlur);
             }
         }
     }
