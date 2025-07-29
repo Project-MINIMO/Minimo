@@ -25,8 +25,11 @@ public class Blackboard
         Agent = agent;
         Animator = agent.GetComponent<Animator>();
     }
-    
-    // TODO: add other shared data (e.g., target positions, timers)
+
+    public bool AnimatorIsPlaying(string stateName)
+    {
+        return Animator.GetCurrentAnimatorStateInfo(0).IsName(stateName);
+    }
 }
 
 public abstract class Node

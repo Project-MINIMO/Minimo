@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -19,16 +19,17 @@ public class PathManager : ManagerBase
     {
         var currentCell = _checkTilemap.WorldToCell(currentPosition);
         var targetCell = GetRandomWalkableTile(currentCell, searchRadius);
-
-        return targetCell == Vector3Int.zero ? null : FindPath(currentCell, targetCell);
+        
+        return FindPath(currentCell, targetCell);
     }
 
     public List<Vector3Int> GetPath(Vector3 currentPosition, Vector3 targetPosition)
     {
         var currentCell = _checkTilemap.WorldToCell(currentPosition);
-        var targetCell = _checkTilemap.WorldToCell(targetPosition);
+        var neighborCells = GetNeighbors(_checkTilemap.WorldToCell(targetPosition));
+        var targetCell = neighborCells.FirstOrDefault(IsWalkable);
 
-        return targetCell == Vector3Int.zero ? null : FindPath(currentCell, targetCell);
+        return FindPath(currentCell, targetCell);
     }
 
     private Vector3Int GetRandomWalkableTile(Vector3Int center, int size)

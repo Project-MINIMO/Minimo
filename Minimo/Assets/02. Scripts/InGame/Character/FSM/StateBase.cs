@@ -2,11 +2,11 @@ using UnityEngine;
 
 public abstract class State<T> where T : MonoBehaviour
 {
-    protected readonly T _owner;
+    protected readonly Animator Animator;
 
     public State(T owner)
     {
-        _owner = owner;
+        Animator = owner.GetComponent<Animator>();
     }
 
     public abstract void Enter();

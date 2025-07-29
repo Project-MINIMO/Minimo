@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 
 public class ActiveProductionAction : ActionNode
@@ -29,37 +28,15 @@ public class ActiveProductionAction : ActionNode
 
 public class CompleteProduceAction : ActionNode
 {
-    private static readonly int Complete = Animator.StringToHash("Complete");
     private static readonly int IsWork = Animator.StringToHash("IsWork");
-    private bool _shouldReset = true;
-    
-    private float _startTime;
-    
+
     public CompleteProduceAction(Blackboard blackboard) : base(blackboard) { }
-
-    public override void Reset()
-    {
-        _shouldReset = true;
-    }
-
+    
     public override NodeStatus Tick()
     {
-        if (_shouldReset)
-        {
-            _shouldReset = false;
-            _startTime = Time.time;
-            
-            Blackboard.Animator.SetTrigger(Complete);
-        }
-       
-        if (Time.time - _startTime >= 2.1f)
-        {
-            _shouldReset = true;
-            Blackboard.Animator.SetBool(IsWork, false);
-            return Blackboard.Building.ActiveTask == null ? NodeStatus.Failure : NodeStatus.Success;
-        }
+        Blackboard.Animator.SetBool(IsWork, false);
         
-        return NodeStatus.Running;
+        return NodeStatus.Success;
     }
 }
 
@@ -119,10 +96,10 @@ public class FindRestPositionAction : ActionNode
 public class MoveAction : ActionNode
 {
     private static readonly int IsWalk = Animator.StringToHash("IsWalk");
-    private const string TopRight = "TR";
-    private const string TopLeft = "TL";
-    private const string BottomRight = "BR";
-    private const string BottomLeft = "BL";
+    private const string TopRight = "Walk_TR";
+    private const string TopLeft = "Walk_TL";
+    private const string BottomRight = "Walk_BR";
+    private const string BottomLeft = "Walk_BL";
     
     private const float Speed = 0.3f;
     
@@ -150,6 +127,8 @@ public class MoveAction : ActionNode
             _targetPosition = _pathManager.GetTileWorldPosition(Blackboard.Path[_currentIndex]);
             Blackboard.Animator.SetBool(IsWalk, true);
         }
+
+        if (Blackboard.AnimatorIsPlaying("LayToStand")) return NodeStatus.Running;
         
         if (_currentIndex < Blackboard.Path.Count)
         {
@@ -167,7 +146,7 @@ public class MoveAction : ActionNode
                     _ => TopRight
                 };
                 
-                Blackboard.Agent.SetAnimation(trigger);
+                Blackboard.Animator.SetTrigger(trigger);
                 
                 Blackboard.Agent.transform.position = Vector3.MoveTowards(
                     Blackboard.Agent.transform.position, 
@@ -201,7 +180,6 @@ public class LayDownAction : ActionNode
     private float _duration;
     private float _startTime;
     private bool _shouldReset = true;
-    private bool _isLayEnd = false;
 
     public LayDownAction(Blackboard blackboard) : base(blackboard) { }
 
@@ -215,24 +193,17 @@ public class LayDownAction : ActionNode
         if (_shouldReset)
         {
             _shouldReset = false;
-            _isLayEnd = false;
             
             _duration = Random.Range(15f, 20f);
             _startTime = Time.time;
             Blackboard.Animator.SetBool(IsLay, true);
         }
-
-        if (Time.time - _startTime >= _duration + 2.1f)
+        
+        if (Time.time - _startTime >= _duration)
         {
             _shouldReset = true;
-            return NodeStatus.Success;
-        }
-        
-        if (!_isLayEnd && Time.time - _startTime >= _duration)
-        {
-            _isLayEnd = true;
             Blackboard.Animator.SetBool(IsLay, false);
-            return NodeStatus.Running;
+            return NodeStatus.Success;
         }
         
         return NodeStatus.Running;
