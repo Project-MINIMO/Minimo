@@ -76,9 +76,9 @@ public class TitlePanel : MonoBehaviour
     {
         _rect.DOKill();
         _rect.anchoredPosition = new Vector2(Random.Range(_width.x, _width.y), _height);
-        _rect.localScale = Vector3.one;
+        _rect.localScale = new Vector3(0.5f, 0.5f, 1);
         var randomDiff = Random.Range(_diff.x, _diff.y);
-        var randomSpeeed = Random.Range(0.5f, 1);
+        var randomSpeeed = Random.Range(0.25f, 0.75f);
         
         var sequence = DOTween.Sequence();
         sequence.Append(_rect.DOAnchorPos(
