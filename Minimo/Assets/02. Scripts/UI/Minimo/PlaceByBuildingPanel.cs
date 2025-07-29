@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class MinimoPlacePanel : UIBase
+public class PlaceByBuildingPanel : UIBase
 {
     public override bool IsUseBlur => true;
             

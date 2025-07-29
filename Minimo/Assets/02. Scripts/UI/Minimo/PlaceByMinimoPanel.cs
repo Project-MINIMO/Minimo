@@ -6,28 +6,28 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class MinimoAssignedPanel : UIBase
+public class PlaceByMinimoPanel : UIBase
 {
     public override bool IsUseBlur => true;
     
     [SerializeField] private MinimoAssignedSlot _slotPrefab;
-    [SerializeField] private RectTransform _contentParent;   
+    [SerializeField] private RectTransform _contentParent;
     
     [SerializeField] private TextMeshProUGUI _titleTMP;
     [SerializeField] private TextMeshProUGUI _descriptionTMP;
     [SerializeField] private RectTransform _content;
-    [SerializeField] private Button _openBtn;
+    
     [SerializeField] private Button _closeBtn;
     
     private readonly Queue<MinimoAssignedSlot> _slotPool = new();
     private readonly List<MinimoAssignedSlot> _activeSlots = new();
-    private PlaceByBuildingPanel _placePanel;
     
+    private PopUpPanel _popUpPanel;
+    private Minimo _currentMinimo;
+
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
-
-        _placePanel = manager.GetPanel<PlaceByBuildingPanel>();
 
         App.GetManager<EditManager>().ActiveAdvanceds.ObserveAdd()
             .Subscribe(addEvent => AssignSlot(addEvent.Value))
@@ -41,11 +41,23 @@ public class MinimoAssignedPanel : UIBase
             _slotPool.Enqueue(slot);
         }
 
-        _titleTMP.text = App.GetData<TitleData>().GetString("STR_POPUP_PRODUCEPLACE_NAME");
-        _descriptionTMP.text = App.GetData<TitleData>().GetString("STR_POPUP_PRODUCEPLACE_DESC");
+        _popUpPanel = manager.GetPanel<PopUpPanel>();
         
-        _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
+        
+        _titleTMP.text = App.GetData<TitleData>().GetString("STR_POPUP_PLACEBUILDING_NAME");
+        _descriptionTMP.text = App.GetData<TitleData>().GetString("STR_POPUP_PLACEBUILDING_DESC");
+    }
+
+    public void OpenPanel(Minimo minimo)
+    {
+        OpenPanel();
+        
+        _currentMinimo = minimo;
+        foreach (var slot in _activeSlots)
+        {
+            slot.gameObject.SetActive(true);
+        }
     }
     
     private void AssignSlot(ProduceAdvanced building)
@@ -61,7 +73,7 @@ public class MinimoAssignedPanel : UIBase
             slot = Instantiate(_slotPrefab, _content);
             slot.OnItemSelected += OnItemSelected;
         }
-   
+        
         slot.gameObject.SetActive(true);
         slot.Initialize(building);
         _activeSlots.Add(slot);
@@ -77,9 +89,16 @@ public class MinimoAssignedPanel : UIBase
         
         LayoutRebuilder.ForceRebuildLayoutImmediate(_content);
     }
-
+    
     private void OnItemSelected(InventorySlot<ProduceAdvanced> slot)
     {
-        _placePanel.OpenPanel(slot.Item);
+        var type = slot.Item.AssignedMinimo switch
+        {
+            null => PopUpType.MinimoAssign,
+            var assigned when assigned == _currentMinimo => PopUpType.MinimoUnassign,
+            _ => PopUpType.MinimoShift
+        };
+
+        _popUpPanel.OpenPanel(type, slot.Item, _currentMinimo);
     }
 }

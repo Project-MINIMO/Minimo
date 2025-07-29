@@ -18,12 +18,14 @@ public class MinimoProfilePanel : UIBase
     [SerializeField] private Button _prevBtn;
     [SerializeField] private Button _nextBtn;
     
+    [SerializeField] private Button _assignBtn;
     [SerializeField] private Button _levelUpBtn;
     [SerializeField] private Button _historyBtn;
     [SerializeField] private Button _filmBtn;
 
     private MinimoManager _minimoManager;
     private MinimoFilmPanel _filmPanel;
+    private PlaceByMinimoPanel _placePanel;
     private Minimo _currentMinimo;
     private string _historyString;
     
@@ -32,6 +34,7 @@ public class MinimoProfilePanel : UIBase
         base.Initialize(manager);
 
         _filmPanel = manager.GetPanel<MinimoFilmPanel>();
+        _placePanel = manager.GetPanel<PlaceByMinimoPanel>();
         
         var titleData = App.GetData<TitleData>();
         _titleTMP.SetText(titleData.GetString("STR_MINIMOPROFILE_NAME"));
@@ -53,6 +56,7 @@ public class MinimoProfilePanel : UIBase
         _prevBtn.onClick.AddListener(() => MoveToNextMinimo(-1));
         _nextBtn.onClick.AddListener(() => MoveToNextMinimo(1));
         
+        _assignBtn.onClick.AddListener(() => _placePanel.OpenPanel(_currentMinimo));
         _levelUpBtn.onClick.AddListener(() => _currentMinimo?.AddLevel(1));
         _filmBtn.onClick.AddListener(() => _filmPanel.OpenPanel(_currentMinimo));
         _closeBtn.onClick.AddListener(ClosePanel);

@@ -18,14 +18,14 @@ public class SecondaryPanel : UIBase
     
     private ProduceManager _produceManager;
     private ProduceSecondary _produceObject;
-    private MinimoPlacePanel _placePanel;
+    private PlaceByBuildingPanel _placePanel;
 
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
 
         _produceManager = App.GetManager<ProduceManager>();
-        _placePanel = manager.GetPanel<MinimoPlacePanel>();
+        _placePanel = manager.GetPanel<PlaceByBuildingPanel>();
 
         _longPressDetector.OnLongPress += () =>
         {
