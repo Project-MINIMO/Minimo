@@ -19,6 +19,7 @@ public class Blackboard
     public List<Vector3Int> Path;
     
     public ProduceAdvanced Building => Agent.Data.AssignedBuilding;
+    public ProduceAdvanced TargetBuilding;
 
     public Blackboard(MinimoObject agent)
     {

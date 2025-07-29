@@ -10,9 +10,9 @@ public class BehaviorTree
     /// <summary>
     /// Call this every frame or tick interval.
     /// </summary>
-    public void Tick()
+    public NodeStatus Tick()
     {
-        _root.Tick();
+        return _root.Tick();
     }
 
     public void Reset()

@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class MinimoIdleState : State<MinimoObject>
 {
-    private static readonly int Work = Animator.StringToHash("Work");
     private static readonly int IsWalk = Animator.StringToHash("IsWalk");
     private static readonly int IsLay = Animator.StringToHash("IsLay");
     
@@ -35,7 +34,6 @@ public class MinimoIdleState : State<MinimoObject>
 
     public override void Exit()
     {
-        Animator.SetTrigger(Work);
         Animator.SetBool(IsWalk, false);
         Animator.SetBool(IsLay, false);
     }

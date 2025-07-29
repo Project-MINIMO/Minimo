@@ -1,8 +1,9 @@
+using System.Linq;
 using UnityEngine;
 
 public class ActiveProductionAction : ActionNode
 {
-    private static readonly int IsWork = Animator.StringToHash("IsWork");
+    private readonly int _isWork = Animator.StringToHash("IsWork");
     private bool _shouldReset = true;
     
     public ActiveProductionAction(Blackboard blackboard) : base(blackboard) { }
@@ -17,7 +18,7 @@ public class ActiveProductionAction : ActionNode
         if (_shouldReset)
         {
             _shouldReset = false;
-            Blackboard.Animator.SetBool(IsWork, true);
+            Blackboard.Animator.SetBool(_isWork, true);
         }
 
         return Blackboard.Building.CurrentState == ProduceState.Produce 
@@ -28,15 +29,15 @@ public class ActiveProductionAction : ActionNode
 
 public class CompleteProduceAction : ActionNode
 {
-    private static readonly int IsWork = Animator.StringToHash("IsWork");
+    private readonly int _isWork = Animator.StringToHash("IsWork");
 
     public CompleteProduceAction(Blackboard blackboard) : base(blackboard) { }
     
     public override NodeStatus Tick()
     {
-        Blackboard.Animator.SetBool(IsWork, false);
-        
-        return NodeStatus.Success;
+        Blackboard.Animator.SetBool(_isWork, false);
+
+        return Blackboard.Building.ActiveTask == null ? NodeStatus.Failure : NodeStatus.Success;
     }
 }
 
@@ -68,6 +69,53 @@ public class FindWorkPositionAction : ActionNode
     }
 }
 
+public class FindNearestWorkPositionAction : ActionNode
+{
+    private readonly PathManager _pathManager;
+    private readonly EditManager _editManager;
+    
+    public FindNearestWorkPositionAction(Blackboard blackboard) : base(blackboard)
+    {
+        _pathManager = App.GetManager<PathManager>();
+        _editManager = App.GetManager<EditManager>();
+    }
+
+    public override NodeStatus Tick()
+    {
+        var emptyAdvances = _editManager.ActiveAdvanceds
+            .Where(building => building.AssignedMinimo == null)
+            .ToList();
+        
+        Debug.Log(emptyAdvances.Count == 0);
+        if (emptyAdvances.Count == 0) return NodeStatus.Failure;
+        
+        var agentPos = Blackboard.Agent.transform.position;
+        var nearest = emptyAdvances
+            .OrderBy(b => Vector3.SqrMagnitude(b.transform.position - agentPos))
+            .First();
+
+        Blackboard.TargetBuilding = nearest;
+
+        var path = _pathManager.GetPath(agentPos, nearest.transform.position);
+        Debug.Log(path == null || path.Count == 0);
+        if (path == null || path.Count == 0) return NodeStatus.Failure;
+
+        Blackboard.Path = path;
+        return NodeStatus.Success;
+    }
+}
+
+public class AssignAction : ActionNode
+{
+    public AssignAction(Blackboard blackboard) : base(blackboard) { }
+
+    public override NodeStatus Tick()
+    {
+        Blackboard.TargetBuilding.PlaceMinimo(Blackboard.Agent.Data);
+        return NodeStatus.Success;
+    }
+}
+
 public class FindRestPositionAction : ActionNode
 {
     private readonly PathManager _pathManager;
@@ -95,7 +143,7 @@ public class FindRestPositionAction : ActionNode
 
 public class MoveAction : ActionNode
 {
-    private static readonly int IsWalk = Animator.StringToHash("IsWalk");
+    private readonly int _isWalk = Animator.StringToHash("IsWalk");
     private const string TopRight = "Walk_TR";
     private const string TopLeft = "Walk_TL";
     private const string BottomRight = "Walk_BR";
@@ -125,10 +173,12 @@ public class MoveAction : ActionNode
             _shouldReset = false;
             _currentIndex = 0;
             _targetPosition = _pathManager.GetTileWorldPosition(Blackboard.Path[_currentIndex]);
-            Blackboard.Animator.SetBool(IsWalk, true);
+            Blackboard.Animator.SetBool(_isWalk, true);
         }
 
         if (Blackboard.AnimatorIsPlaying("LayToStand")) return NodeStatus.Running;
+        if (Blackboard.TargetBuilding != null 
+            && Blackboard.TargetBuilding.AssignedMinimo != null) return NodeStatus.Failure;
         
         if (_currentIndex < Blackboard.Path.Count)
         {
@@ -181,7 +231,7 @@ public class MoveAction : ActionNode
         else
         {
             _shouldReset = true;
-            Blackboard.Animator.SetBool(IsWalk, false);
+            Blackboard.Animator.SetBool(_isWalk, false);
             return NodeStatus.Success;
         }
     }
@@ -189,7 +239,7 @@ public class MoveAction : ActionNode
 
 public class LayDownAction : ActionNode
 {
-    private static readonly int IsLay = Animator.StringToHash("IsLay");
+    private readonly int _isLay = Animator.StringToHash("IsLay");
     
     private float _duration;
     private float _startTime;
@@ -210,13 +260,13 @@ public class LayDownAction : ActionNode
             
             _duration = Random.Range(15f, 20f);
             _startTime = Time.time;
-            Blackboard.Animator.SetBool(IsLay, true);
+            Blackboard.Animator.SetBool(_isLay, true);
         }
         
         if (Time.time - _startTime >= _duration)
         {
             _shouldReset = true;
-            Blackboard.Animator.SetBool(IsLay, false);
+            Blackboard.Animator.SetBool(_isLay, false);
             return NodeStatus.Success;
         }
         

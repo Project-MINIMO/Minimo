@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class MinimoWorkState : State<MinimoObject>
 {
-    private static readonly int Idle = Animator.StringToHash("Idle");
     private static readonly int IsWalk = Animator.StringToHash("IsWalk");
     private static readonly int IsWork = Animator.StringToHash("IsWork");
     
@@ -35,12 +34,15 @@ public class MinimoWorkState : State<MinimoObject>
 
     public override void Execute()
     {
-        _workTree.Tick();
+        var result = _workTree.Tick();
+        if (result == NodeStatus.Failure)
+        {
+            Owner.EvaluateAndApplyState();
+        }
     }
 
     public override void Exit()
     {
-        Animator.SetTrigger(Idle);
         Animator.SetBool(IsWalk, false);
         Animator.SetBool(IsWork, false);
     }

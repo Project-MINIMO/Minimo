@@ -41,6 +41,7 @@ public enum MinimoState
 {
     Idle,
     Work,
+    Assign,
     Hide,
     None,
 }
