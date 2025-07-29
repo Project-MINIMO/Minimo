@@ -114,7 +114,6 @@ public class MoveAction : ActionNode
     {
         if (_shouldReset)
         {
-            Debug.Log("MoveAction");
             _shouldReset = false;
             _currentIndex = 0;
             _targetPosition = _pathManager.GetTileWorldPosition(Blackboard.Path[_currentIndex]);
@@ -187,7 +186,6 @@ public class LayDownAction : ActionNode
         if (Time.time - _startTime >= _duration)
         {
             _shouldReset = true;
-            Debug.Log("LayDownAction");
             return NodeStatus.Success;
         }
         else

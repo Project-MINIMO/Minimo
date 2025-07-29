@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 
 using UniRx;
-using UnityEditor.iOS.Extensions.Common;
 using UnityEngine;
 using UnityEngine.UI;
 
