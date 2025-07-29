@@ -27,7 +27,7 @@ public class TilePanel : UIBase
     private Tilemap _glowMap;
     private Tilemap _installMap;
     private CustomTile _selectedTile;
-    private Tile _tile;
+    private TileBase _tile;
     
     private bool _isErase;
     private bool _isPainting;

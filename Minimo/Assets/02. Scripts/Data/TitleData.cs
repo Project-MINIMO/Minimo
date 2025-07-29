@@ -253,7 +253,7 @@ public class TitleData : DataBase
             .Select(d => LoadAddressableDataAsync<Sprite>(d.Name, questIconPath))
             .ToList();
         var customTileTasks = customTileRaw
-            .Select(d => LoadAddressableDataAsync<Tile>(d.Name, customTilePath))
+            .Select(d => LoadAddressableDataAsync<TileBase>(d.Name, customTilePath))
             .ToList();
         
         var buildingPositions = await Task.WhenAll(buildingTasks);

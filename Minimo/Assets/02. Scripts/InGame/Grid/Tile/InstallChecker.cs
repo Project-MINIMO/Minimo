@@ -9,7 +9,7 @@ public class InstallChecker : MonoBehaviour
     [SerializeField] private Tilemap _checkTilemap;
     [SerializeField] private Tilemap _installTilemap;
     
-    private Dictionary<TileType, List<Tile>> _tileGroup = new();
+    private Dictionary<TileType, List<TileBase>> _tileGroup = new();
 
     private void Awake()
     {
