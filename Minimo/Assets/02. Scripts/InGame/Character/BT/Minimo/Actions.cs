@@ -88,17 +88,18 @@ public class FindRestPositionAction : ActionNode
 
 public class MoveAction : ActionNode
 {
+    private static readonly int IsWalk = Animator.StringToHash("IsWalk");
+    private const string TopRight = "TR";
+    private const string TopLeft = "TL";
+    private const string BottomRight = "BR";
+    private const string BottomLeft = "BL";
+    
     private const float Speed = 0.3f;
     
     private readonly PathManager _pathManager;
     private Vector3 _targetPosition;
     private int _currentIndex;
     private bool _shouldReset = true;
-    
-    private const string TopRight = "TR";
-    private const string TopLeft = "TL";
-    private const string BottomRight = "BR";
-    private const string BottomLeft = "BL";
     
     public MoveAction(Blackboard blackboard) : base(blackboard)
     {
@@ -117,6 +118,7 @@ public class MoveAction : ActionNode
             _shouldReset = false;
             _currentIndex = 0;
             _targetPosition = _pathManager.GetTileWorldPosition(Blackboard.Path[_currentIndex]);
+            Blackboard.Animator.SetBool(IsWalk, true);
         }
         
         if (_currentIndex < Blackboard.Path.Count)
@@ -156,6 +158,7 @@ public class MoveAction : ActionNode
         else
         {
             _shouldReset = true;
+            Blackboard.Animator.SetBool(IsWalk, false);
             return NodeStatus.Success;
         }
     }
@@ -163,9 +166,12 @@ public class MoveAction : ActionNode
 
 public class LayDownAction : ActionNode
 {
+    private static readonly int IsLay = Animator.StringToHash("IsLay");
+    
     private float _duration;
     private float _startTime;
     private bool _shouldReset = true;
+    private bool _isLayEnd = false;
 
     public LayDownAction(Blackboard blackboard) : base(blackboard) { }
 
@@ -179,18 +185,26 @@ public class LayDownAction : ActionNode
         if (_shouldReset)
         {
             _shouldReset = false;
+            _isLayEnd = false;
+            
             _duration = Random.Range(15f, 20f);
             _startTime = Time.time;
+            Blackboard.Animator.SetBool(IsLay, true);
         }
 
-        if (Time.time - _startTime >= _duration)
+        if (Time.time - _startTime >= _duration + 2.1f)
         {
             _shouldReset = true;
             return NodeStatus.Success;
         }
-        else
+        
+        if (!_isLayEnd && Time.time - _startTime >= _duration)
         {
+            _isLayEnd = true;
+            Blackboard.Animator.SetBool(IsLay, false);
             return NodeStatus.Running;
         }
+        
+        return NodeStatus.Running;
     }
 }

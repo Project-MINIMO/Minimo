@@ -15,12 +15,13 @@ public enum NodeStatus
 public class Blackboard
 {
     public readonly MinimoObject Agent;
-    public float Duration;
+    public readonly Animator Animator;
     public List<Vector3Int> Path;
 
     public Blackboard(MinimoObject agent)
     {
         Agent = agent;
+        Animator = agent.GetComponent<Animator>();
     }
     
     // TODO: add other shared data (e.g., target positions, timers)
