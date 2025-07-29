@@ -3899,84 +3899,91 @@
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_RESIDENCEEXPAND_DESC",
+    "ID": "STR_MINIMOCENTER_MANAGEPORDBUILDING_NAME",
+    "Korean": "생산건물 배치",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MINIMOCENTER_RESIDENCEEXPAND_DESC",
     "Korean": "미니모 거주공간을 확장하시겠습니까?",
     "English": -1,
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_EXPANDSUCCEED_DESC",
+    "ID": "STR_MINIMOCENTER_EXPANDSUCCEED_DESC",
     "Korean": "거주공간이 확장되었습니다!",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_FILTER_NAME",
+    "ID": "STR_MINIMOCENTER_FILTER_NAME",
     "Korean": "필터",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_FILTER_COMPONENT1_NAME",
+    "ID": "STR_MINIMOCENTER_FILTER_COMPONENT1_NAME",
     "Korean": "전체",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_FILTER_COMPONENT2_NAME",
+    "ID": "STR_MINIMOCENTER_FILTER_COMPONENT2_NAME",
     "Korean": "배치O",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_FILTER_COMPONENT3_NAME",
+    "ID": "STR_MINIMOCENTER_FILTER_COMPONENT3_NAME",
     "Korean": "배치X",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_FILTER_COMPONENT4_NAME",
+    "ID": "STR_MINIMOCENTER_FILTER_COMPONENT4_NAME",
     "Korean": "고유",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_FILTER_COMPONENT5_NAME",
+    "ID": "STR_MINIMOCENTER_FILTER_COMPONENT5_NAME",
     "Korean": "일반",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_ALIGN_NAME",
+    "ID": "STR_MINIMOCENTER_ALIGN_NAME",
     "Korean": "정렬",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_ALIGN_COMPONENT1_NAME",
+    "ID": "STR_MINIMOCENTER_ALIGN_COMPONENT1_NAME",
     "Korean": "기본",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_ALIGN_COMPONENT2_NAME",
+    "ID": "STR_MINIMOCENTER_ALIGN_COMPONENT2_NAME",
     "Korean": "성장",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_ALIGN_COMPONENT3_NAME",
+    "ID": "STR_MINIMOCENTER_ALIGN_COMPONENT3_NAME",
     "Korean": "획득",
     "English": "",
     "Chinese": "",
@@ -3984,7 +3991,7 @@
   },
   {
     "ID": "STR_MINIMOPROFILE_NAME",
-    "Korean": "프로필",
+    "Korean": "미니모 프로필",
     "English": "",
     "Chinese": "",
     "Japanese": ""
@@ -4025,14 +4032,14 @@
     "Japanese": ""
   },
   {
-    "ID": "STR_POPUP_PRODUCEPLACE_NAME",
-    "Korean": "생산 배치",
+    "ID": "STR_MANAGEPORDBUILDING_NAME",
+    "Korean": "생산건물 배치 관리",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_POPUP_PRODUCEPLACE_DESC",
+    "ID": "STR_MANAGEPORDBUILDING_DESC",
     "Korean": "클릭 시 해당 건물에 미니모를 배치할 수 있습니다",
     "English": "",
     "Chinese": "",
@@ -4046,16 +4053,58 @@
     "Japanese": ""
   },
   {
-    "ID": "STR_POPUP_PLACEBUILDING_NAME",
-    "Korean": "건물 배치",
+    "ID": "STR_SELECTMINIMO_NAME",
+    "Korean": "미니모 선택",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_POPUP_PLACEBUILDING_DESC",
+    "ID": "STR_SELECTMINIMO_DESC",
     "Korean": "배치할 미니모를 선택하세요",
     "English": -1,
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_SELECTBUILDING_NAME",
+    "Korean": "배치 건물 선택",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_SELECTBUILDING_DESC",
+    "Korean": "미니모를 배치할 건물을 선택하세요",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_SELECTBUILDING_FILTER_NAME",
+    "Korean": "필터",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_SELECTBUILDING_FILTER_COMPONENT1_NAME",
+    "Korean": "전체",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_SELECTBUILDING_FILTER_COMPONENT2_NAME",
+    "Korean": "배치O",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_SELECTBUILDING_FILTER_COMPONENT3_NAME",
+    "Korean": "배치X",
+    "English": "",
     "Chinese": "",
     "Japanese": ""
   },
@@ -4083,6 +4132,13 @@
   {
     "ID": "STR_POPUP_DISPLACE_DESC2",
     "Korean": "*미니모가 없는 건물은 생산이 되지 않습니다",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MINIMOPLACE_AUTOPLACE_NAME",
+    "Korean": "자율 배치",
     "English": "",
     "Chinese": "",
     "Japanese": ""

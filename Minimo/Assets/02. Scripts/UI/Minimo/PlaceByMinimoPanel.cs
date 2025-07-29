@@ -45,8 +45,8 @@ public class PlaceByMinimoPanel : UIBase
         
         _closeBtn.onClick.AddListener(ClosePanel);
         
-        _titleTMP.text = App.GetData<TitleData>().GetString("STR_POPUP_PLACEBUILDING_NAME");
-        _descriptionTMP.text = App.GetData<TitleData>().GetString("STR_POPUP_PLACEBUILDING_DESC");
+        _titleTMP.text = App.GetData<TitleData>().GetString("STR_SELECTBUILDING_NAME");
+        _descriptionTMP.text = App.GetData<TitleData>().GetString("STR_SELECTBUILDING_DESC");
     }
 
     public void OpenPanel(Minimo minimo)

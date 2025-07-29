@@ -41,8 +41,8 @@ public class MinimoAssignedPanel : UIBase
             _slotPool.Enqueue(slot);
         }
 
-        _titleTMP.text = App.GetData<TitleData>().GetString("STR_POPUP_PRODUCEPLACE_NAME");
-        _descriptionTMP.text = App.GetData<TitleData>().GetString("STR_POPUP_PRODUCEPLACE_DESC");
+        _titleTMP.text = App.GetData<TitleData>().GetString("STR_MANAGEPORDBUILDING_NAME");
+        _descriptionTMP.text = App.GetData<TitleData>().GetString("STR_MANAGEPORDBUILDING_DESC");
         
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);

@@ -23,7 +23,7 @@ public class PlaceByBuildingPanel : UIBase
         
         _closeBtn.onClick.AddListener(ClosePanel);
         
-        _titleTMP.text = App.GetData<TitleData>().GetString("STR_POPUP_PLACEBUILDING_NAME");
+        _titleTMP.text = App.GetData<TitleData>().GetString("STR_SELECTMINIMO_NAME");
         _descriptionTMP.text = App.GetData<TitleData>().GetString("STR_POPUP_PLACEBUILDING_DESC");
     }
 
