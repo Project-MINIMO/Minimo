@@ -14,4 +14,9 @@ public class BehaviorTree
     {
         _root.Tick();
     }
+
+    public void Reset()
+    {
+        _root.Reset();
+    }
 }

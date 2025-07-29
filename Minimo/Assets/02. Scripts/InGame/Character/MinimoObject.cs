@@ -69,8 +69,7 @@ public class MinimoObject : MonoBehaviour
 
     public void SetChillState()
     {
-        var randomIndex = UnityEngine.Random.Range(0, 2);
-        FSM.ChangeState(MinimoState.Walk);
+        FSM.ChangeState(MinimoState.Idle);
         
         transform.SetParent(_parent);   //temp
         transform.localPosition = Vector3.zero;   //temp

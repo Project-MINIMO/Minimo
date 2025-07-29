@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+
+using UnityEngine;
+
 public enum NodeStatus
 {
     Success,
@@ -10,7 +14,15 @@ public enum NodeStatus
 /// </summary>
 public class Blackboard
 {
-    public MinimoObject Agent { get; set; }
+    public readonly MinimoObject Agent;
+    public float Duration;
+    public List<Vector3Int> Path;
+
+    public Blackboard(MinimoObject agent)
+    {
+        Agent = agent;
+    }
+    
     // TODO: add other shared data (e.g., target positions, timers)
 }
 
@@ -27,14 +39,17 @@ public abstract class Node
     /// Executes the node logic and returns its status.
     /// </summary>
     public abstract NodeStatus Tick();
+    public abstract void Reset();
 }
 
 public abstract class ActionNode : Node
 {
     protected ActionNode(Blackboard blackboard) : base(blackboard) { }
+    public override void Reset() { }
 }
 
 public abstract class ConditionNode : Node
 {
     protected ConditionNode(Blackboard blackboard) : base(blackboard) { }
+    public override void Reset() { }
 }

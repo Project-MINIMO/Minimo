@@ -1,4 +1,4 @@
-public class MinimoWorkState : StateBase<MinimoObject>
+public class MinimoWorkState : State<MinimoObject>
 {
     public MinimoWorkState(MinimoObject owner) : base(owner) { }
 

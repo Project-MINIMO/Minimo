@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public abstract class StateBase<T> where T : MonoBehaviour
+public abstract class State<T> where T : MonoBehaviour
 {
     protected readonly T _owner;
 
-    public StateBase(T owner)
+    public State(T owner)
     {
         _owner = owner;
     }

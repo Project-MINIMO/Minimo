@@ -1,6 +1,6 @@
-public class IsAssignedToBuildingCondition : ConditionNode
+public class IsAssignedToBuildingConditionNode : ConditionNode
 {
-    public IsAssignedToBuildingCondition(Blackboard blackboard) : base(blackboard) { }
+    public IsAssignedToBuildingConditionNode(Blackboard blackboard) : base(blackboard) { }
     
     public override NodeStatus Tick()
     {
@@ -9,9 +9,9 @@ public class IsAssignedToBuildingCondition : ConditionNode
     }
 }
 
-public class IsTooFarFromBuildingCondition : ConditionNode
+public class IsTooFarFromBuildingConditionNode : ConditionNode
 {
-    public IsTooFarFromBuildingCondition(Blackboard blackboard) : base(blackboard) { }
+    public IsTooFarFromBuildingConditionNode(Blackboard blackboard) : base(blackboard) { }
     
     public override NodeStatus Tick()
     {
@@ -20,9 +20,9 @@ public class IsTooFarFromBuildingCondition : ConditionNode
     }
 }
 
-public class IsProductionCompleteCondition : ConditionNode
+public class IsProductionCompleteConditionNode : ConditionNode
 {
-    public IsProductionCompleteCondition(Blackboard blackboard) : base(blackboard) { }
+    public IsProductionCompleteConditionNode(Blackboard blackboard) : base(blackboard) { }
     
     public override NodeStatus Tick()
     {
@@ -31,9 +31,9 @@ public class IsProductionCompleteCondition : ConditionNode
     }
 }
 
-public class HasRemainingTasksCondition : ConditionNode
+public class HasRemainingTasksConditionNode : ConditionNode
 {
-    public HasRemainingTasksCondition(Blackboard blackboard) : base(blackboard) { }
+    public HasRemainingTasksConditionNode(Blackboard blackboard) : base(blackboard) { }
     
     public override NodeStatus Tick()
     {

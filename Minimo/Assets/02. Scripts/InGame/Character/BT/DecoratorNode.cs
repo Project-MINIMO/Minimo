@@ -6,14 +6,19 @@ public abstract class DecoratorNode : Node
     {
         Child = node;
     }
+    
+    public override void Reset()
+    {
+        Child.Reset();
+    }
 }
 
 /// <summary>
 /// Repeats the child until it fails; returns Success when child fails.
 /// </summary>
-public class RepeatUntilFail : DecoratorNode
+public class RepeatUntilFailNode : DecoratorNode
 {
-    protected RepeatUntilFail(Blackboard blackboard, Node node) : base(blackboard, node) { }
+    protected RepeatUntilFailNode(Blackboard blackboard, Node node) : base(blackboard, node) { }
 
     public override NodeStatus Tick()
     {
@@ -30,9 +35,9 @@ public class RepeatUntilFail : DecoratorNode
 /// <summary>
 /// Repeats the child while it succeeds; returns Failure when child fails.
 /// </summary>
-public class RepeatWhileSuccess : DecoratorNode
+public class RepeatWhileSuccessNode : DecoratorNode
 {
-    protected RepeatWhileSuccess(Blackboard blackboard, Node node) : base(blackboard, node) { }
+    protected RepeatWhileSuccessNode(Blackboard blackboard, Node node) : base(blackboard, node) { }
 
     public override NodeStatus Tick()
     {

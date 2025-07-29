@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public abstract class CompositeNode : Node
 {
     protected readonly List<Node> Children = new();
+    protected int CurrentIndex = 0;
 
     protected CompositeNode(Blackboard blackboard, params Node[] nodes) : base(blackboard)
     {
@@ -13,66 +15,71 @@ public abstract class CompositeNode : Node
     {
         Children.Add(node);
     }
+
+    public override void Reset()
+    {
+        CurrentIndex = 0;
+        foreach (var child in Children)
+        {
+            child.Reset();
+        }
+    }
 }
 
-public class Sequence : CompositeNode
+public class SequenceNode : CompositeNode
 {
-    private int _currentIndex = 0;
-
-    protected Sequence(Blackboard blackboard, params Node[] nodes) : base(blackboard) { }
+    public SequenceNode(Blackboard blackboard, params Node[] nodes) : base(blackboard, nodes) { }
 
     public override NodeStatus Tick()
     {
-        while (_currentIndex < Children.Count)
+        while (CurrentIndex < Children.Count)
         {
-            var status = Children[_currentIndex].Tick();
+            var status = Children[CurrentIndex].Tick();
             switch (status)
             {
                 case NodeStatus.Running:
                     return NodeStatus.Running;
                 
                 case NodeStatus.Failure:
-                    _currentIndex = 0;
+                    CurrentIndex = 0;
                     return NodeStatus.Failure;
                 
                 case NodeStatus.Success:
-                    _currentIndex++;
+                    CurrentIndex++;
                     break;
             }
         }
 
-        _currentIndex = 0;
+        CurrentIndex = 0;
         return NodeStatus.Success;
     }
 }
 
-public class Selector : CompositeNode
+public class SelectorNode : CompositeNode
 {
-    private int _currentIndex = 0;
-
-    protected Selector(Blackboard blackboard, params Node[] nodes) : base(blackboard) { }
+    public SelectorNode(Blackboard blackboard, params Node[] nodes) : base(blackboard, nodes) { }
 
     public override NodeStatus Tick()
     {
-        while (_currentIndex < Children.Count)
+        while (CurrentIndex < Children.Count)
         {
-            var status = Children[_currentIndex].Tick();
+            var status = Children[CurrentIndex].Tick();
             switch (status)
             {
                 case NodeStatus.Running:
                     return NodeStatus.Running;
                 
                 case NodeStatus.Success:
-                    _currentIndex = 0;
+                    CurrentIndex = 0;
                     return NodeStatus.Success;
                 
                 case NodeStatus.Failure:
-                    _currentIndex++;
+                    CurrentIndex++;
                     break;
             }
         }
 
-        _currentIndex = 0;
+        CurrentIndex = 0;
         return NodeStatus.Failure;
     }
 }

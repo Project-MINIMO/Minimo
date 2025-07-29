@@ -1,44 +1,38 @@
 using UnityEngine;
 
-public class MinimoIdleState : StateBase<MinimoObject>
+public class MinimoIdleState : State<MinimoObject>
 {
-    private float _stateTimer;
-    private bool _isUpdating;
+    private readonly BehaviorTree _idleTree;
+    private readonly Blackboard _blackboard;
 
-    private readonly string[] _idleAnimations = { "IsSit", "IsStand" };
-    private string _currentAnimation;
-
-    public MinimoIdleState(MinimoObject owner) : base(owner) { }
+    public MinimoIdleState(MinimoObject owner) : base(owner)
+    {
+        _blackboard = new Blackboard(owner);
+        
+        var idleSequence = new SequenceNode
+        (
+            _blackboard,
+            new FindRestPositionAction(_blackboard),
+            new MoveAction(_blackboard),
+            new LayDownAction(_blackboard)
+        );
+        
+        _idleTree = new BehaviorTree(idleSequence);
+    }
 
     public override void Enter()
     {
-        _stateTimer = Random.Range(15f, 20f);
-        _isUpdating = true;
-
-        var randomIndex = Random.Range(0, _idleAnimations.Length);
-        _currentAnimation = _idleAnimations[randomIndex];
-
-        _owner.SetAnimation(_currentAnimation, true);
+        Debug.Log("MinimoIdleState");
+        _idleTree.Reset();
     }
 
     public override void Execute()
     {
-        if (!_isUpdating)
-        {
-            return;
-        }
-
-        _stateTimer -= Time.deltaTime;
-
-        if (_stateTimer <= 0)
-        {
-            _owner.SetChillState();
-        }
+        _idleTree.Tick();
     }
 
     public override void Exit()
     {
-        _isUpdating = false;
-        _owner.SetAnimation(_currentAnimation, false);
+
     }
 }

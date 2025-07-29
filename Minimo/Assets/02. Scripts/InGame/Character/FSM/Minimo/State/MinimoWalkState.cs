@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public class MinimoWalkState : StateBase<MinimoObject>
+public class MinimoWalkState : State<MinimoObject>
 {
     private const float SPEED = 0.3f;
 
