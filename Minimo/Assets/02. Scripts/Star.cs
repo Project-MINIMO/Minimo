@@ -22,7 +22,6 @@ public class Star : InteractObject
     public override void OnDrag()
     {
         _constellationPanel.OpenPanel();
-        Debug.Log("OnDrag");
         foreach (var line in _activeLines)
         {
             line.gameObject.SetActive(false);

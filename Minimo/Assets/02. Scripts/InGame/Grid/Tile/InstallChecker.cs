@@ -32,9 +32,7 @@ public class InstallChecker : MonoBehaviour
         foreach (var tile in gridObject.PositionData.GroundTilePositions)
         {
             var cellPos = baseCell + new Vector3Int(tile.x, tile.y, 0);
-            var checkTile = _checkTilemap.GetTile(cellPos);
-            var installTile = _installTilemap.GetTile(cellPos);
-            if (!_tileGroup[TileType.Ground].Contains(checkTile) || installTile != null)
+            if (!CheckCanInstall(cellPos, TileType.Ground))
             {
                 return false;
             }
@@ -42,9 +40,7 @@ public class InstallChecker : MonoBehaviour
         foreach (var tile in gridObject.PositionData.WaterTilePositions)
         {
             var cellPos = baseCell + new Vector3Int(tile.x, tile.y, 0);
-            var checkTile = _checkTilemap.GetTile(cellPos);
-            var installTile = _installTilemap.GetTile(cellPos);
-            if (!_tileGroup[TileType.Water].Contains(checkTile) || installTile != null)
+            if (!CheckCanInstall(cellPos, TileType.Water))
             {
                 return false;
             }
@@ -52,20 +48,17 @@ public class InstallChecker : MonoBehaviour
         return true;
     }
 
-    public bool CheckCanInstall(Vector3Int position)
-    {
-        var checkTile = _checkTilemap.GetTile(position);
-        var installTile = _installTilemap.GetTile(position);
-        
-        return _tileGroup[TileType.Ground].Contains(checkTile) && installTile == null;
-    }
+    public bool CheckCanInstall(Vector3Int position) => CheckCanInstall(position, TileType.Ground);
     
     public bool CheckCanInstall(Vector3Int position, TileType tileType)
     {
         var checkTile = _checkTilemap.GetTile(position);
         var installTile = _installTilemap.GetTile(position);
         
-        return _tileGroup[tileType].Contains(checkTile) && installTile == null;
+        var typeCheck = _tileGroup[tileType].Any(tile => tile.name == checkTile?.name);
+        var installCheck = installTile == null;
+        
+        return typeCheck && installCheck;
     }
 
     public List<Vector3> GetInstallablePositions()

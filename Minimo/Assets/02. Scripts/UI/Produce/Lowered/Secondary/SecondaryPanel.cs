@@ -46,8 +46,6 @@ public class SecondaryPanel : UIBase
         _minimoInfoObj.SetActive(false);
 
         _produceObject = _produceManager.CurrentObject as ProduceSecondary;
-        Debug.Log(_produceManager.CurrentObject.name);
-        Debug.Log(_produceObject == null);
         if (_produceObject == null) return;
         _produceObject.OnProduceStateChanged += ShowCtrls;
         

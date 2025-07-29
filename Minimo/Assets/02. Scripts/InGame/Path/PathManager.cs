@@ -9,7 +9,7 @@ public class PathManager : ManagerBase
     [SerializeField] private InstallChecker _installChecker;
 
     private Dictionary<Vector3Int, bool> _walkableCache = new();
-
+    
     public Vector3 GetTileWorldPosition(Vector3Int tilePosition)
     {
         return _checkTilemap.CellToWorld(tilePosition) + _checkTilemap.cellSize * 0.5f;
