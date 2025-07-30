@@ -10,7 +10,8 @@ public class Minimo
     
     public int Level { get; private set; }
     public ProduceAdvanced AssignedBuilding { get; private set; }
-    public MinimoObject Agent;
+    public MinimoObject Agent { get; private set; }
+    public DateTime AcquisitionDate { get; private set; }
     
     public event Action<Minimo, int> OnLevelChanged;
     public event Action<ProduceAdvanced> OnAssignmentChanged;
@@ -20,7 +21,7 @@ public class Minimo
     
     public readonly string Name;
     public readonly string Description;
-    public readonly DateTime AcquisitionDate;
+
     
     public Minimo(UMData data, TitleData title)
     {
@@ -29,7 +30,6 @@ public class Minimo
         
         Name = title.GetFormatString(data.Name, data.ID.ToString());
         Description = title.GetString(data.Name);
-        AcquisitionDate = DateTime.Now;
         
         float potentialValue = data.Potential;
         var rawPotential = 1 + (potentialValue - 1) * (((float)title.Common["PotentialGap"] - 1) / 9);
@@ -89,5 +89,11 @@ public class Minimo
     {
         AssignedBuilding = null;
         OnAssignmentChanged?.Invoke(null);
+    }
+
+    public void SetAgent(MinimoObject agent)
+    {
+        Agent = agent;
+        Agent.OnAcquired += _ => AcquisitionDate = DateTime.Now;
     }
 }

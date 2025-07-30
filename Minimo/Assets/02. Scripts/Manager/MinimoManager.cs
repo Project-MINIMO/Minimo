@@ -15,6 +15,7 @@ public class MinimoManager : ManagerBase
     public ReactiveProperty<float> GlobalTimeSkipCostRatio { get; } = new(1f);
     
     private readonly Dictionary<Minimo, Dictionary<AbilityType, float>> _contributions = new();
+    
     public List<Minimo> Minimos { get; private set; }
     protected override void Awake()
     {

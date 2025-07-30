@@ -36,11 +36,7 @@ public class MinimoWorkState : State<MinimoObject>
 
     public override void Execute()
     {
-        var result = _workTree.Tick();
-        if (result == NodeStatus.Failure)
-        {
-            Owner.EvaluateAndApplyState();
-        }
+        _workTree.Tick();
     }
 
     public override void Exit()

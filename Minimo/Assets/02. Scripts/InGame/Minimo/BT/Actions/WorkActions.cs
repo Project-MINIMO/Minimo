@@ -50,6 +50,6 @@ public class CompleteProduceAction : ActionNode
         Blackboard.Animator.SetInteger(_randomIndex, Random.Range(0, 2));
         Blackboard.Animator.SetBool(_isWork, false);
 
-        return Building.ActiveTask == null ? NodeStatus.Failure : NodeStatus.Success;
+        return NodeStatus.Success;
     }
 }

@@ -1,88 +1,79 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
+
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class MinimoSpawner : MonoBehaviour
 {
-    [SerializeField] private Tilemap _groundTilemap; 
+    [SerializeField] private CameraBoundsUpdater _mapBounds;
+    [SerializeField] private GameObject _minimoPrefab;
     
-    private List<StrayMinimoObject> _minimoPool;
-    private StrayMinimoObject _currentMinimo;
-    
-    private float _spawnInterval;
-    private float _goldenSpawnRate;
+    private List<Minimo> _minimoDatas;
+    private readonly List<MinimoObject> _activeMinimos = new(); 
+    private readonly Queue<Minimo> _pendingQueue = new(); 
+    private const int MaxMinimoCount = 10;
+
+    private int _prevLevel;
 
     private void Awake()
     {
-        var common = App.GetData<TitleData>().Common;
-        _spawnInterval = common["MiaSpawnInterval"];
-        _goldenSpawnRate = common["GoldMiaSpawnRate"] / 100f;
-        
-        _minimoPool = GetComponentsInChildren<StrayMinimoObject>().ToList();
-
-        var i = 0;
-        
-        for (; i < _minimoPool.Count / 2; i++)
-        {
-            _minimoPool[i].Initialize(true, common);
-        }
-        
-        for (; i < _minimoPool.Count; i++)
-        {
-            _minimoPool[i].Initialize(false, common);
-        }
-        
-        StartCoroutine(SpawnLoop());
+        _minimoDatas = App.GetData<TitleData>().UserMinimo.Values.ToList();
+        AccountInfo.Instance.Level.OnLevelUp += OnLevelUp;
     }
 
-    private IEnumerator SpawnLoop()
+    private void Start()
     {
-        while (true)
+        OnLevelUp(AccountInfo.Instance.Level.Count);
+    }
+
+    private void OnLevelUp(int level)
+    {
+        for (var i = 0; i < level - _prevLevel; i++)
         {
-            yield return new WaitForSeconds(_spawnInterval);
-            SpawnMinimo();
+            var data = _minimoDatas[Random.Range(0, _minimoDatas.Count)];
+            _minimoDatas.Remove(data);
+            EnqueueOrSpawn(data);
         }
+        
+        _prevLevel = level;
     }
 
-    private void SpawnMinimo()
+    private void EnqueueOrSpawn(Minimo data)
     {
-        var spawnPos = GetRandomSpawnPosition();
-        
-        var isGolden = Random.Range(0, 1f) < _goldenSpawnRate;
-        var strayMinimo = _minimoPool.First(x => x.IsGolden == isGolden);
-        
-        DespawnCurrentMinimo();
-
-        strayMinimo.Spawn(spawnPos);
-        _currentMinimo = strayMinimo;
-        _minimoPool.Remove(_currentMinimo);
-    }
-
-    private void DespawnCurrentMinimo()
-    {
-        if (_currentMinimo != null)
+        if (_activeMinimos.Count < MaxMinimoCount)
         {
-            _currentMinimo.Despawn();
-            _minimoPool.Add(_currentMinimo);
-            _currentMinimo = null;
+            SpawnMinimo(data);
+        }
+        else
+        {
+            _pendingQueue.Enqueue(data);
         }
     }
     
-    private Vector3 GetRandomSpawnPosition()
+    private void SpawnMinimo(Minimo data)
     {
-        var bounds = _groundTilemap.cellBounds;
-        Vector3Int cell;
+        var spawnPos = _mapBounds.GetRandomOutPoint();
+        var minimoObject = Instantiate(_minimoPrefab, spawnPos, Quaternion.identity, transform);
 
-        do
-        {
-            var x = Random.Range(bounds.xMin, bounds.xMax);
-            var y = Random.Range(bounds.yMin, bounds.yMax);
-            cell  = new Vector3Int(x, y, 0);
-        }
-        while (_groundTilemap.HasTile(cell));
+        var instance = minimoObject.GetComponent<MinimoObject>();
+        instance.Initialize(data);
+        _activeMinimos.Add(instance);
         
-        return _groundTilemap.GetCellCenterWorld(cell);
+        instance.OnAcquired += HandleMinimoAcquired;
+    }
+ 
+    private void HandleMinimoAcquired(MinimoObject instance)
+    {
+        instance.OnAcquired -= HandleMinimoAcquired;
+        _activeMinimos.Remove(instance);
+        TrySpawnFromQueue();
+    }
+    
+    private void TrySpawnFromQueue()
+    {
+        if (_pendingQueue.Count == 0 || _activeMinimos.Count >= MaxMinimoCount) return;
+
+        var nextData = _pendingQueue.Dequeue();
+        SpawnMinimo(nextData);
     }
 }

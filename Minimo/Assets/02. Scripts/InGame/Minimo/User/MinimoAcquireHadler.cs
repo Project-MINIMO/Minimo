@@ -34,6 +34,11 @@ public class MinimoAcquireHadler : InteractObject
         {
             case MinimoState.Swim:
                 var getCurrency = _requiredCurreny - _lostCurrentAmount > 0 ? _lostCurrentAmount : _requiredCurreny;
+                if (AccountInfo.Instance.Gold.Count < getCurrency)
+                {
+                    App.Notification(NotifyType.GoldLack);
+                    return;
+                }
                 _requiredCurreny -= getCurrency;
                 AccountInfo.Instance.Gold.AddCount(-getCurrency);
                 _coinEffect.ShowEffect(-getCurrency);

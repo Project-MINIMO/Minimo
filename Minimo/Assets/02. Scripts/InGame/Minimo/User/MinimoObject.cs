@@ -1,9 +1,13 @@
+using System;
+
 using UnityEngine;
 
 public class MinimoObject : MonoBehaviour
 {
     public Minimo Data { get; private set; }
     public MinimoState CurrentState { get; private set; } = MinimoState.None;
+    
+    public event Action<MinimoObject> OnAcquired;
 
     private MinimoFSM _fsm;
     private ProduceAdvanced _assignedBuilding;
@@ -11,7 +15,7 @@ public class MinimoObject : MonoBehaviour
     public void Initialize(Minimo minimo)
     {
         Data = minimo;
-        minimo.Agent = this;
+        minimo.SetAgent(this);
         Data.OnAssignmentChanged += OnAssignmentChanged;
     }
 
@@ -26,25 +30,10 @@ public class MinimoObject : MonoBehaviour
         _fsm.Update();
     }
     
-    public void EvaluateAndApplyState()
+    public void Acquire()
     {
-        var target = DetermineTargetState();
-        ApplyState(target);
-    }
-    
-    public void ApplyState(MinimoState target)
-    {
-        if (target == CurrentState) return;
-
-        CurrentState = target;
-        _fsm.ChangeState(target);
-    }
-    
-    private MinimoState DetermineTargetState()
-    {
-        if (_assignedBuilding == null) return MinimoState.Idle;
-        if (_assignedBuilding.ActiveTask != null) return MinimoState.Work;
-        return MinimoState.Idle;
+        OnAcquired?.Invoke(this);
+        EvaluateAndApplyState();
     }
     
     private void OnAssignmentChanged(ProduceAdvanced building)
@@ -67,4 +56,25 @@ public class MinimoObject : MonoBehaviour
     }
 
     private void OnProduceStateChanged(ProduceState state) => EvaluateAndApplyState();
+    
+    private void EvaluateAndApplyState()
+    {
+        var target = DetermineTargetState();
+        ApplyState(target);
+    }
+    
+    public void ApplyState(MinimoState target)
+    {
+        if (target == CurrentState) return;
+
+        CurrentState = target;
+        _fsm.ChangeState(target);
+    }
+    
+    private MinimoState DetermineTargetState()
+    {
+        if (_assignedBuilding == null) return MinimoState.Idle;
+        if (_assignedBuilding.ActiveTask != null) return MinimoState.Work;
+        return MinimoState.Idle;
+    }
 }

@@ -36,7 +36,7 @@ public class MinimoAcquireState : State<MinimoObject>
         var result = _acquireTree.Tick();
         if (result == NodeStatus.Success)
         {
-            Owner.EvaluateAndApplyState();
+            Owner.Acquire();
         }
     }
 

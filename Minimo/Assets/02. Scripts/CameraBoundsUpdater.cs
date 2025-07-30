@@ -16,10 +16,7 @@ public class CameraBoundsUpdater : MonoBehaviour
     {
         _collider = GetComponent<BoxCollider2D>();
         _editManager = App.GetManager<EditManager>();
-    }
-
-    private void Start()
-    {
+        
         CalculateBounds();
     }
 
@@ -104,6 +101,19 @@ public class CameraBoundsUpdater : MonoBehaviour
         var newX = Random.Range(xMin, xMax);
         var newY = Random.Range(yMin, yMax);
         return new Vector3(newX, newY, origin.z);
+    }
+    
+    public Vector3 GetRandomOutPoint()
+    {
+        var colliderBounds = _collider.bounds;
+        var colliderLeft = colliderBounds.min.x;
+        var colliderRight = colliderBounds.max.x;
+        var colliderBottom = colliderBounds.min.y;
+        var colliderTop = colliderBounds.max.y;
+
+        var newX = Random.Range(0, 2) == 0 ? colliderLeft : colliderRight;
+        var newY = Random.Range(0, 2) == 0 ? colliderBottom : colliderTop;
+        return new Vector3(newX, newY, 0);
     }
     
     public Vector3[] GetCorners()
