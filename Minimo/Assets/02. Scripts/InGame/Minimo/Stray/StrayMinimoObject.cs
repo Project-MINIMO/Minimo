@@ -81,13 +81,10 @@ public class StrayMinimoObject : InteractObject
         
         var holdCurreny = (_currency + AccountInfo.Instance.Level.Count * _currency * 0.1f) * _currencyRate;
         _holdCurreny = Mathf.RoundToInt(holdCurreny);
-        Debug.Log(holdCurreny);
-        Debug.Log(_holdCurreny);
 
         var lostCurrentAmount = _holdCurreny * _currencyLostRate;
         _lostCurrentAmount = Mathf.RoundToInt(lostCurrentAmount);
-        Debug.Log(_lostCurrentAmount);
-
+        
         _holdItem = (null, 0);
         _plunderItemObj.SetActive(false);
         

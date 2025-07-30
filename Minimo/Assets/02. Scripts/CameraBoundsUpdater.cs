@@ -9,6 +9,8 @@ public class CameraBoundsUpdater : MonoBehaviour
 
     private BoxCollider2D _collider;
     private EditManager _editManager;
+    
+    private Bounds _localBounds;
 
     private void Awake()
     {
@@ -32,12 +34,76 @@ public class CameraBoundsUpdater : MonoBehaviour
     {
         _tilemap.CompressBounds();
         
-        var localBounds = _tilemap.localBounds;
+        _localBounds = _tilemap.localBounds;
 
-        var sizeWithMargin = localBounds.size + _margin * 2f;
+        var sizeWithMargin = _localBounds.size + _margin * 2f;
         
-        _collider.offset = localBounds.center;
+        _collider.offset = _localBounds.center;
         _collider.size = sizeWithMargin;
+    }
+
+    public Vector3 GetRandomPoint(Vector3 origin, float radius)
+    {
+        var mapMin = _tilemap.transform.TransformPoint(_localBounds.min);
+        var mapMax = _tilemap.transform.TransformPoint(_localBounds.max);
+        var mapLeft = mapMin.x;
+        var mapRight = mapMax.x;
+        var mapBottom = mapMin.y;
+        var mapTop = mapMax.y;
+
+        var colliderBounds = _collider.bounds;
+        var colliderLeft = colliderBounds.min.x;
+        var colliderRight = colliderBounds.max.x;
+        var colliderBottom = colliderBounds.min.y;
+        var colliderTop = colliderBounds.max.y;
+
+        float xZoneMin, xZoneMax;
+        if (origin.x < mapLeft)
+        {
+            xZoneMin = colliderLeft;
+            xZoneMax = mapLeft;
+        }
+        else if (origin.x > mapRight)
+        {
+            xZoneMin = mapRight;
+            xZoneMax = colliderRight;
+        }
+        else
+        {
+            xZoneMin = colliderLeft;
+            xZoneMax = colliderRight;
+        }
+        
+        float yZoneMin, yZoneMax;
+        if (origin.y < mapBottom)
+        {
+            yZoneMin = colliderBottom;
+            yZoneMax = mapBottom;
+        }
+        else if (origin.y > mapTop)
+        {
+            yZoneMin = mapTop;
+            yZoneMax = colliderTop; 
+        }
+        else
+        {
+            yZoneMin = colliderBottom;
+            yZoneMax = colliderTop;
+        }
+        
+        var xMin = Mathf.Max(xZoneMin, origin.x - radius);
+        var xMax = Mathf.Min(xZoneMax, origin.x + radius);
+        var yMin = Mathf.Max(yZoneMin, origin.y - radius);
+        var yMax = Mathf.Min(yZoneMax, origin.y + radius);
+
+        if (xMin > xMax || yMin > yMax)
+        {
+            return origin;
+        }
+        
+        var newX = Random.Range(xMin, xMax);
+        var newY = Random.Range(yMin, yMax);
+        return new Vector3(newX, newY, origin.z);
     }
     
     public Vector3[] GetCorners()

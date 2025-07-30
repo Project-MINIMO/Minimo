@@ -2,47 +2,22 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class FindWorkPositionAction : ActionNode
+#region User
+public class FindSwimPositionAction : ActionNode
 {
-    private ProduceAdvanced Building => _owner.Data.AssignedBuilding;
-    private readonly MinimoObject _owner;
-    private readonly PathManager _pathManager;
-    
-    public FindWorkPositionAction(Blackboard blackboard) : base(blackboard)
+    private readonly CameraBoundsUpdater _mapBounds;
+
+    public FindSwimPositionAction(Blackboard blackboard) : base(blackboard)
     {
-        _pathManager = App.GetManager<PathManager>();
-        _owner = blackboard.Agent.GetComponent<MinimoObject>();
+        _mapBounds = GameObject.FindWithTag("MapBounds").GetComponent<CameraBoundsUpdater>();
     }
 
     public override NodeStatus Tick()
     {
-        var groundTiles = Building.PositionData.GroundTilePositions;
-        var leftmost = groundTiles.OrderBy(p => p.x)
-            .ThenByDescending(p => p.y)
-            .First();
-        var targetOffset = new Vector3Int(leftmost.x - 1, leftmost.y - 1, 0);
-        
-        var path = _pathManager.GetPath(
-            Blackboard.Agent.transform.position, 
-            Building.transform.position,
-            targetOffset
-            );
+        var agentPos = Blackboard.Agent.transform.position;
+        var nearest = _mapBounds.GetRandomPoint(agentPos, 5);
 
-        if (path is { Count: > 0 })
-        {
-            Blackboard.Path = path;
-            Blackboard.Speed = 2;
-        }
-        else
-        {
-            var targetPos = _pathManager.GetTileWorldPosition(Building.transform.position, targetOffset);
-            Blackboard.Path = new()
-            {
-                targetPos.Item2
-            };
-            Blackboard.Agent.transform.position = targetPos.Item1;
-
-        }
+        Blackboard.TargetPosition = nearest;
         
         return NodeStatus.Success;
     }
@@ -73,6 +48,57 @@ public class FindRestPositionAction : ActionNode
     }
 }
 
+public class FindWorkPositionAction : ActionNode
+{
+    private ProduceAdvanced Building => _owner.Data.AssignedBuilding;
+    private readonly MinimoObject _owner;
+    private readonly PathManager _pathManager;
+    
+    public FindWorkPositionAction(Blackboard blackboard) : base(blackboard)
+    {
+        _pathManager = App.GetManager<PathManager>();
+        _owner = blackboard.Agent.GetComponent<MinimoObject>();
+    }
+
+    public override NodeStatus Tick()
+    {
+        var groundTiles = Building.PositionData.GroundTilePositions;
+        var leftmost = groundTiles.OrderBy(p => p.x)
+            .ThenByDescending(p => p.y)
+            .First();
+        var targetOffset = new Vector3Int(leftmost.x - 1, leftmost.y - 1, 0);
+        
+        var path = _pathManager.GetPath(
+            Blackboard.Agent.transform.position, 
+            Building.transform.position,
+            targetOffset
+        );
+
+        if (path is { Count: > 0 })
+        {
+            Blackboard.Path = path;
+            Blackboard.Speed = 2;
+        }
+        else
+        {
+            var targetPos = _pathManager.GetTileWorldPosition(Building.transform.position, targetOffset);
+            Blackboard.Path = new()
+            {
+                targetPos.Item2
+            };
+            Blackboard.Agent.transform.position = targetPos.Item1;
+
+        }
+        
+        return NodeStatus.Success;
+    }
+}
+#endregion
+
+
+
+
+#region Stray
 public class FindStrayPositionAction  : ActionNode
 {
     private readonly Tilemap _groundTilemap;
@@ -169,5 +195,4 @@ public class FindNearestCornerPositionAction : ActionNode
         return NodeStatus.Success;
     }
 }
-
-
+#endregion

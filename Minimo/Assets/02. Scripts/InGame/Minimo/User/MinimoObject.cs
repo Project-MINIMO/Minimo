@@ -1,16 +1,13 @@
-using System.Collections.Generic;
-using System.Linq;
-
 using UnityEngine;
 
 public class MinimoObject : MonoBehaviour
 {
     public Minimo Data { get; private set; }
-    public MinimoFSM FSM { get; private set; }
+    public MinimoState CurrentState { get; private set; } = MinimoState.None;
 
+    private MinimoFSM _fsm;
     private ProduceAdvanced _assignedBuilding;
-    private MinimoState _currentState = MinimoState.None;
-
+    
     public void Initialize(Minimo minimo)
     {
         Data = minimo;
@@ -20,13 +17,13 @@ public class MinimoObject : MonoBehaviour
 
     private void Start()
     {
-        FSM = new MinimoFSM(this);
-        OnAssignmentChanged(Data.AssignedBuilding);
+        _fsm = new MinimoFSM(this);
+        ApplyState(MinimoState.Swim);
     }
 
     private void Update()
     {
-        FSM.Update();
+        _fsm.Update();
     }
     
     public void EvaluateAndApplyState()
@@ -35,12 +32,12 @@ public class MinimoObject : MonoBehaviour
         ApplyState(target);
     }
     
-    private void ApplyState(MinimoState target)
+    public void ApplyState(MinimoState target)
     {
-        if (target == _currentState) return;
+        if (target == CurrentState) return;
 
-        _currentState = target;
-        FSM.ChangeState(target);
+        CurrentState = target;
+        _fsm.ChangeState(target);
     }
     
     private MinimoState DetermineTargetState()

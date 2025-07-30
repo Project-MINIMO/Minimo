@@ -10,17 +10,17 @@ public class StrayMinimoPlunderState : State<StrayMinimoObject>
     {
         var blackboard = new Blackboard(owner.gameObject);
         
-        var idleSequence = new SequenceNode
+        var plunderSequence = new SequenceNode
         (
             blackboard,
             new FindCompletePositionAction(blackboard),
-            new MoveForwardAction(blackboard),
+            new MoveForwardAction(blackboard, IsWalk),
             new PlunderAction(blackboard),
             new FindNearestCornerPositionAction(blackboard),
-            new MoveForwardAction(blackboard)
+            new MoveForwardAction(blackboard, IsWalk)
         );
         
-        _plunderTree = new BehaviorTree(idleSequence);
+        _plunderTree = new BehaviorTree(plunderSequence);
     }
 
     public override void Enter()

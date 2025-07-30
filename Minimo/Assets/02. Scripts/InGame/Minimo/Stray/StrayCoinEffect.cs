@@ -22,6 +22,9 @@ public class StrayCoinEffect : MonoBehaviour
     private readonly Queue<EffectItem> _pool = new();
     private readonly List<EffectItem> _activeEffects = new();
 
+    private const string PositiveString = "+ {0}";
+    private const string NegativeString = "- {0}";
+
     private void Awake()
     {
         foreach (var effect in _effects)
@@ -42,7 +45,10 @@ public class StrayCoinEffect : MonoBehaviour
         
         var item = _pool.Dequeue();
         
-        item.AmountTMP.text = amount.ToString();
+        var number = amount > 0 ? amount : -amount;
+        item.AmountTMP.text = amount >= 0 
+            ? string.Format(PositiveString, number) 
+            : string.Format(NegativeString, number);
         _activeEffects.Add(item);
         
         item.Rect.gameObject.SetActive(true);

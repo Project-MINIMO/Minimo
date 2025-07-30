@@ -16,7 +16,7 @@ public class StrayMinimoIdleState : State<StrayMinimoObject>
         (
             blackboard,
             new FindStrayPositionAction(blackboard),
-            new MoveForwardAction(blackboard)
+            new MoveForwardAction(blackboard, IsWalk)
         );
         
         _idleTree = new BehaviorTree(idleSequence);

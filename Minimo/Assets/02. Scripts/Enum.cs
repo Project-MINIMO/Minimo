@@ -39,6 +39,9 @@ public enum UseCashType
 
 public enum MinimoState
 {
+    Swim,
+    Happy,
+    Acquire,
     Idle,
     Work,
     None,

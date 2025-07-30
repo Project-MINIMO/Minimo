@@ -128,18 +128,21 @@ public class MoveAction : ActionNode
 
 public class MoveForwardAction : ActionNode
 {
-    private readonly int _isWalk = Animator.StringToHash("IsWalk");
     private const string TopRight = "Walk_TR";
     private const string TopLeft = "Walk_TL";
     private const string BottomRight = "Walk_BR";
     private const string BottomLeft = "Walk_BL";
 
+    private readonly int _triggerName;
     private const float Speed = 0.3f;
     private Vector3 _targetPosition;
     private Vector3 _prevPosition;
     private bool _shouldReset = true;
-    
-    public MoveForwardAction(Blackboard blackboard) : base(blackboard) { }
+
+    public MoveForwardAction(Blackboard blackboard, int triggerName) : base(blackboard)
+    {
+        _triggerName = triggerName;
+    }
 
     public override void Reset()
     {
@@ -154,7 +157,7 @@ public class MoveForwardAction : ActionNode
             _targetPosition = Blackboard.TargetPosition;
             _prevPosition = Blackboard.Agent.transform.position;
             Blackboard.Animator.speed = Blackboard.Speed;
-            Blackboard.Animator.SetBool(_isWalk, true);
+            Blackboard.Animator.SetBool(_triggerName, true);
             
             SetAnimationDirection();
         }
@@ -185,7 +188,7 @@ public class MoveForwardAction : ActionNode
         _shouldReset = true;
         Blackboard.Speed = 1;
         Blackboard.Animator.speed = 1;
-        Blackboard.Animator.SetBool(_isWalk, false);
+        Blackboard.Animator.SetBool(_triggerName, false);
     }
 
     private void SetAnimationDirection()
