@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EditCirclePanel : MonoBehaviour
+public class EditCircleHandler : MonoBehaviour
 {
     [SerializeField] private RectTransform _rect;
     
@@ -31,7 +31,7 @@ public class EditCirclePanel : MonoBehaviour
     {
         var canvas = buildingObject.GetComponentInChildren<Canvas>();
         transform.SetParent(canvas.transform);
-        _rect.position = Vector3.zero;
+        _rect.localPosition = Vector3.zero;
         _rect.localScale = Vector3.one;
         gameObject.SetActive(true);
     }
@@ -39,7 +39,7 @@ public class EditCirclePanel : MonoBehaviour
     public void Detach()
     {
         transform.SetParent(_startParent);
-        _rect.position = Vector3.zero;
+        _rect.localPosition = Vector3.zero;
         _rect.localScale = Vector3.one;
         gameObject.SetActive(false);
     }

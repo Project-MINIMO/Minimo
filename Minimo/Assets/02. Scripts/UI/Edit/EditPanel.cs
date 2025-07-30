@@ -6,7 +6,7 @@ public class EditPanel : UIBase
 {
     [SerializeField] private Button _buildingBtn;
     [SerializeField] private Button _closeBtn;
-    [SerializeField] private EditCirclePanel _editHandler;
+    [SerializeField] private EditCircleHandler _editHandler;
     
     private EditManager _editManager;
 
