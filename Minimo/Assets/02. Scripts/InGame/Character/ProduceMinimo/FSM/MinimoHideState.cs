@@ -2,24 +2,22 @@ using UnityEngine;
 
 public class MinimoHideState : State<MinimoObject>
 {
-    private MinimoObject _minimo;
-
-    public MinimoHideState(MinimoObject owner) : base(owner)
-    {
-        _minimo = owner;
-    }
+    private readonly int _default = Animator.StringToHash("Default");
+    
+    public MinimoHideState(MinimoObject owner) : base(owner) { }
 
     public override void Enter()
     {
-        _minimo.transform.localPosition = Vector3.zero;
-        _minimo.gameObject.SetActive(false);
+        Animator.SetTrigger(_default);
+        Owner.transform.localPosition = Vector3.zero;
+        Owner.gameObject.SetActive(false);
     }
 
     public override void Execute() { }
 
     public override void Exit()
     {
-        _minimo.transform.localPosition = Vector3.zero;
-        _minimo.gameObject.SetActive(true);
+        Owner.transform.localPosition = Vector3.zero;
+        Owner.gameObject.SetActive(true);
     }
 }

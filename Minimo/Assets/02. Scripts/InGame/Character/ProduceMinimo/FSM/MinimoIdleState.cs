@@ -4,6 +4,7 @@ public class MinimoIdleState : State<MinimoObject>
 {
     private static readonly int IsWalk = Animator.StringToHash("IsWalk");
     private static readonly int IsLay = Animator.StringToHash("IsLay");
+    private readonly int _idle = Animator.StringToHash("Idle");
     
     private readonly BehaviorTree _idleTree;
 
@@ -24,6 +25,7 @@ public class MinimoIdleState : State<MinimoObject>
 
     public override void Enter()
     {
+        Animator.SetTrigger(_idle);
         _idleTree.Reset();
     }
 

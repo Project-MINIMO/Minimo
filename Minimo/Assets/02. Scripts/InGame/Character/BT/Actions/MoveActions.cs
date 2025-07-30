@@ -54,7 +54,11 @@ public class MoveAction : ActionNode
                     _targetPosition, 
                     _speed * Time.deltaTime);
 
-                if (_prevPosition == Blackboard.Agent.transform.position) return NodeStatus.Failure;
+                if (_prevPosition == Blackboard.Agent.transform.position)
+                {
+                    Exit();
+                    return NodeStatus.Failure;
+                }
                 _prevPosition = Blackboard.Agent.transform.position;
             }
             else
@@ -69,12 +73,17 @@ public class MoveAction : ActionNode
         }
         else
         {
-            _shouldReset = true;
-            Blackboard.Animator.speed = 1;
-            Blackboard.Animator.SetBool(_isWalk, false);
-            Blackboard.TargetBuilding = null;
+            Exit();
             return NodeStatus.Success;
         }
+    }
+
+    private void Exit()
+    {
+        _shouldReset = true;
+        Blackboard.Animator.speed = 1;
+        Blackboard.Animator.SetBool(_isWalk, false);
+        Blackboard.TargetBuilding = null;
     }
     
     private void SetAnimationDirection()
@@ -142,6 +151,7 @@ public class MoveForwardAction : ActionNode
             Blackboard.Animator.SetBool(_isWalk, true);
             
             SetAnimationDirection();
+            Debug.Log("Enter MoveForwardAction");
         }
         
         if ((_targetPosition - Blackboard.Agent.transform.position).sqrMagnitude > 0f)
@@ -150,17 +160,27 @@ public class MoveForwardAction : ActionNode
                 Blackboard.Agent.transform.position, 
                 _targetPosition, 
                 _speed * Time.deltaTime);
-            
-            if (_prevPosition == Blackboard.Agent.transform.position) return NodeStatus.Failure;
+
+            if (_prevPosition == Blackboard.Agent.transform.position)
+            {
+                Exit();
+                return NodeStatus.Failure;
+            }
             _prevPosition = Blackboard.Agent.transform.position;
             
             return NodeStatus.Running;
         }
-        
+
+        Exit();
+        Debug.Log("exit MoveForwardAction");
+        return NodeStatus.Success;
+    }
+
+    private void Exit()
+    {
         _shouldReset = true;
         Blackboard.Animator.speed = 1;
         Blackboard.Animator.SetBool(_isWalk, false);
-        return NodeStatus.Success;
     }
 
     private void SetAnimationDirection()

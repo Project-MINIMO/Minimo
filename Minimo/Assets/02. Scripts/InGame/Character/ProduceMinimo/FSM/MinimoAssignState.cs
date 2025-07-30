@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class MinimoAssignState : State<MinimoObject>
 {
-    private static readonly int IsWalk = Animator.StringToHash("IsWalk");
+    private readonly int _isWalk = Animator.StringToHash("IsWalk");
+    private readonly int _assign = Animator.StringToHash("Assign");
     
     private readonly BehaviorTree _assignTree;
 
@@ -23,6 +24,7 @@ public class MinimoAssignState : State<MinimoObject>
 
     public override void Enter()
     {
+        Animator.SetTrigger(_assign);
         _assignTree.Reset();
     }
 
@@ -38,6 +40,6 @@ public class MinimoAssignState : State<MinimoObject>
     public override void Exit()
     {
         Animator.speed = 1;
-        Animator.SetBool(IsWalk, false);
+        Animator.SetBool(_isWalk, false);
     }
 }

@@ -4,5 +4,6 @@ public class StrayMinimoFSM : FSM<StrayMinimoObject, StrayMinimoState>
     {
         AddState(StrayMinimoState.Idle, new StrayMinimoIdleState(owner));
         AddState(StrayMinimoState.Plunder, new StrayMinimoPlunderState(owner));
+        AddState(StrayMinimoState.Hide, new StrayMinimoHideState(owner));
     }
 }

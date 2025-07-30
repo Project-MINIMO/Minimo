@@ -20,14 +20,6 @@ public class PathManager : ManagerBase
         
         return FindPath(currentCell, targetCell);
     }
-    
-    public List<Vector3Int> GetRandomPathIgnoreWalkable(Vector3 currentPosition, int searchRadius = 10)
-    {
-        var currentCell = _checkTilemap.WorldToCell(currentPosition);
-        var targetCell = GetRandomTile(currentCell, searchRadius);
-        
-        return FindPath(currentCell, targetCell, true);
-    }
 
     public List<Vector3Int> GetPath(Vector3 currentPosition, Vector3 targetPosition, Vector3Int offset)
     {
@@ -75,7 +67,7 @@ public class PathManager : ManagerBase
     private bool IsWalkable(Vector3Int position) => _installChecker.CheckCanInstall(position);
 
     #region A* Algorithm
-    private List<Vector3Int> FindPath(Vector3Int start, Vector3Int target, bool ignoreWalkable = false)
+    private List<Vector3Int> FindPath(Vector3Int start, Vector3Int target)
     {
         PriorityQueue<AStarNode> openList = new();
         HashSet<Vector3Int> closedSet = new();
@@ -110,7 +102,7 @@ public class PathManager : ManagerBase
                     continue;
                 }
                 
-                if (!ignoreWalkable && !IsWalkable(neighborPos)) continue;
+                if (!IsWalkable(neighborPos)) continue;
 
                 var tentativeGScore = currentNode.G + GetDistance(currentNode.Position, neighborPos);
 

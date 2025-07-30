@@ -1,17 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+
 using UnityEngine;
 
 public class MinimoObject : MonoBehaviour
 {
     public Minimo Data { get; private set; }
     public MinimoFSM FSM { get; private set; }
-    
-    private readonly int _default = Animator.StringToHash("Default");
-    private readonly int _idle = Animator.StringToHash("Idle");
-    private readonly int _work = Animator.StringToHash("Work");
-    
-    private readonly Dictionary<MinimoState, int> _states = new(4);
 
     private ProduceAdvanced _assignedBuilding;
     private MinimoState _currentState = MinimoState.None;
@@ -26,11 +21,6 @@ public class MinimoObject : MonoBehaviour
         AccountInfo.Instance.OnAutoAssign += OnAutoAssign;
         
         _animator = GetComponentInChildren<Animator>();
-        
-        _states.Add(MinimoState.Idle, _idle);
-        _states.Add(MinimoState.Work, _work);
-        _states.Add(MinimoState.Assign, _default);
-        _states.Add(MinimoState.Hide, _default);
     }
 
     private void Start()
@@ -39,7 +29,6 @@ public class MinimoObject : MonoBehaviour
         
         FSM = new MinimoFSM(this);
         OnAssignmentChanged(Data.AssignedBuilding);
-        OnAutoAssign(AccountInfo.Instance.IsAutoAssign);
     }
 
     private void Update()
@@ -51,7 +40,7 @@ public class MinimoObject : MonoBehaviour
         {
             if (IsAnyEmptyAdvances())
             {
-                EvaluateAndApplyState(MinimoState.Assign);
+                ApplyState(MinimoState.Assign);
             }
         }
     }
@@ -59,16 +48,15 @@ public class MinimoObject : MonoBehaviour
     public void EvaluateAndApplyState()
     {
         var target = DetermineTargetState();
-        EvaluateAndApplyState(target);
+        ApplyState(target);
     }
     
-    private void EvaluateAndApplyState(MinimoState target)
+    private void ApplyState(MinimoState target)
     {
         if (target == _currentState) return;
 
         _currentState = target;
         FSM.ChangeState(target);
-        _animator.SetTrigger(_states[target]);
     }
     
     private MinimoState DetermineTargetState()

@@ -4,6 +4,7 @@ public class MinimoWorkState : State<MinimoObject>
 {
     private static readonly int IsWalk = Animator.StringToHash("IsWalk");
     private static readonly int IsWork = Animator.StringToHash("IsWork");
+    private readonly int _work = Animator.StringToHash("Work");
     
     private readonly BehaviorTree _workTree;
 
@@ -29,6 +30,7 @@ public class MinimoWorkState : State<MinimoObject>
 
     public override void Enter()
     {
+        Animator.SetTrigger(_work);
         _workTree.Reset();
     }
 

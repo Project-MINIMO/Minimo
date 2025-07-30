@@ -50,6 +50,7 @@ public enum StrayMinimoState
 {
     Idle,
     Plunder,
+    Hide,
     None,
 }
 

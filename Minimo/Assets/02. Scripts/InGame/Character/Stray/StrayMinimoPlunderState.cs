@@ -35,7 +35,7 @@ public class StrayMinimoPlunderState : State<StrayMinimoObject>
         var result = _plunderTree.Tick();
         if (result is NodeStatus.Success or NodeStatus.Failure)
         {
-            //Owner.EvaluateAndApplyState();
+            Owner.ApplyState(StrayMinimoState.Idle);
         }
     }
 

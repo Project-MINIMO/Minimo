@@ -32,11 +32,11 @@ public class CameraBoundsUpdater : MonoBehaviour
     {
         _tilemap.CompressBounds();
         
-        var lb = _tilemap.localBounds;
+        var localBounds = _tilemap.localBounds;
 
-        var sizeWithMargin = lb.size + _margin * 2f;
+        var sizeWithMargin = localBounds.size + _margin * 2f;
         
-        _collider.offset = lb.center;
+        _collider.offset = localBounds.center;
         _collider.size = sizeWithMargin;
     }
     

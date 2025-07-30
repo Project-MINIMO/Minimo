@@ -111,26 +111,21 @@ public class FindRestPositionAction : ActionNode
 
 public class FindStrayPositionAction  : ActionNode
 {
-    private readonly PathManager _pathManager;
-    
-    public FindStrayPositionAction(Blackboard blackboard) : base(blackboard)
-    {
-        _pathManager = App.GetManager<PathManager>();
-    }
+    public FindStrayPositionAction(Blackboard blackboard) : base(blackboard) { }
 
     public override NodeStatus Tick()
     {
-        var path = _pathManager.GetRandomPathIgnoreWalkable(Blackboard.Agent.transform.position, 10);
-
-        if (path is { Count: > 0 })
-        {
-            Blackboard.Path = path;
-            return NodeStatus.Success;
-        }
-        else
-        {
-            return NodeStatus.Failure;
-        }
+        var currentPos = Blackboard.Agent.transform.position;
+        var randomOffset2D = Random.insideUnitCircle * 5f;
+        var randomPos = new Vector3(
+            currentPos.x + randomOffset2D.x,
+            currentPos.y + randomOffset2D.y,
+            currentPos.z);
+        
+        Blackboard.TargetPosition = randomPos;
+    
+        Debug.Log($"Picked random world position within radius 5: {randomPos}");
+        return NodeStatus.Success;
     }
 }
 
