@@ -13,13 +13,11 @@ public class AccountInfo : Singleton<AccountInfo>
     public int StorageCapacity { get; private set; } = 100;
     public int MinimoCapacity { get; private set; } = 100;
     public int Star;
-    public bool IsAutoAssign;
 
     private GetItemPanel _itemPanel;
     public event Action<int> OnStorageCapacityChanged;
     public event Action<int> OnMinimoCapacityChanged;
     public int CurrentItemCounts => Items.Values.Where(item => item.Level > 0).Sum(item => item.Count);
-    public event Action<bool> OnAutoAssign;
     
     [SerializeField] private Sprite LevelIcon;
     [SerializeField] private Sprite GoldIcon;
@@ -87,13 +85,7 @@ public class AccountInfo : Singleton<AccountInfo>
         MinimoCapacity += amount;
         OnMinimoCapacityChanged?.Invoke(MinimoCapacity);
     }
-
-    public void AutoAssign(bool isAutoAssign)
-    {
-        IsAutoAssign = isAutoAssign;
-        OnAutoAssign?.Invoke(isAutoAssign);
-    }
-
+    
     [ContextMenu("AddGold1000000")]
     public void AddGold1000000()
     {

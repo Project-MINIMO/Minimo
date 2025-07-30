@@ -108,9 +108,12 @@ public abstract class ProduceAdvanced : ProduceObject
         var result = base.CheckPlantCondition(option);
         if (result == NotifyType.Success)
         {
-            return AssignedMinimo == null
-                ? NotifyType.MissMinimo
-                : NotifyType.Success;
+            if (AssignedMinimo == null)
+            {
+                return _minimoManager.AssignNearestMinimo(this) 
+                    ? NotifyType.Success 
+                    : NotifyType.MissMinimo;
+            }
         }
         
         return result;

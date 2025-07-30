@@ -10,23 +10,16 @@ public class MinimoObject : MonoBehaviour
 
     private ProduceAdvanced _assignedBuilding;
     private MinimoState _currentState = MinimoState.None;
-    
-    private EditManager _editManager;
-    private Animator _animator;
 
     public void Initialize(Minimo minimo)
     {
         Data = minimo;
+        minimo.Agent = this;
         Data.OnAssignmentChanged += OnAssignmentChanged;
-        AccountInfo.Instance.OnAutoAssign += OnAutoAssign;
-        
-        _animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()
     {
-        _editManager = App.GetManager<EditManager>();
-        
         FSM = new MinimoFSM(this);
         OnAssignmentChanged(Data.AssignedBuilding);
     }
@@ -34,15 +27,6 @@ public class MinimoObject : MonoBehaviour
     private void Update()
     {
         FSM.Update();
-
-        if (_assignedBuilding == null
-            && _currentState == MinimoState.Idle)
-        {
-            if (IsAnyEmptyAdvances())
-            {
-                ApplyState(MinimoState.Assign);
-            }
-        }
     }
     
     public void EvaluateAndApplyState()
@@ -61,18 +45,9 @@ public class MinimoObject : MonoBehaviour
     
     private MinimoState DetermineTargetState()
     {
-        if (_assignedBuilding == null && !AccountInfo.Instance.IsAutoAssign) return MinimoState.Hide;
-        
         if (_assignedBuilding == null) return MinimoState.Idle;
-        
         if (_assignedBuilding.ActiveTask != null) return MinimoState.Work;
-        
         return MinimoState.Idle;
-    }
-
-    private bool IsAnyEmptyAdvances()
-    {
-        return _editManager.ActiveAdvanceds.Any(x => x.AssignedMinimo == null);
     }
     
     private void OnAssignmentChanged(ProduceAdvanced building)
@@ -95,5 +70,4 @@ public class MinimoObject : MonoBehaviour
     }
 
     private void OnProduceStateChanged(ProduceState state) => EvaluateAndApplyState();
-    private void OnAutoAssign(bool isAutoAssign) => EvaluateAndApplyState();
 }

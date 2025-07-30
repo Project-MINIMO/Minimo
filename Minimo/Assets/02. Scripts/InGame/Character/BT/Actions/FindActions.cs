@@ -32,57 +32,18 @@ public class FindWorkPositionAction : ActionNode
         {
             Blackboard.Path = path;
             Blackboard.Speed = 2;
-            return NodeStatus.Success;
         }
         else
         {
-            return NodeStatus.Failure;
+            var targetPos = _pathManager.GetTileWorldPosition(Building.transform.position, targetOffset);
+            Blackboard.Path = new()
+            {
+                targetPos.Item2
+            };
+            Blackboard.Agent.transform.position = targetPos.Item1;
+
         }
-    }
-}
-
-public class FindNearestWorkPositionAction : ActionNode
-{
-    private readonly PathManager _pathManager;
-    private readonly EditManager _editManager;
-    
-    public FindNearestWorkPositionAction(Blackboard blackboard) : base(blackboard)
-    {
-        _pathManager = App.GetManager<PathManager>();
-        _editManager = App.GetManager<EditManager>();
-    }
-
-    public override NodeStatus Tick()
-    {
-        var emptyAdvances = _editManager.ActiveAdvanceds
-            .Where(building => building.AssignedMinimo == null)
-            .ToList();
         
-        if (emptyAdvances.Count == 0) return NodeStatus.Failure;
-        
-        var agentPos = Blackboard.Agent.transform.position;
-        var nearest = emptyAdvances
-            .OrderBy(b => Vector3.SqrMagnitude(b.transform.position - agentPos))
-            .First();
-
-        Blackboard.TargetBuilding = nearest;
-        
-        var groundTiles = nearest.PositionData.GroundTilePositions;
-        var leftmost = groundTiles.OrderBy(p => p.x)
-            .ThenByDescending(p => p.y)
-            .First();
-        var targetOffset = new Vector3Int(leftmost.x - 1, leftmost.y - 1, 0);
-   
-        var path = _pathManager.GetPath(
-            agentPos, 
-            nearest.transform.position, 
-            targetOffset
-            );
-
-        if (path == null || path.Count == 0) return NodeStatus.Failure;
-
-        Blackboard.Path = path;
-        Blackboard.Speed = 2;
         return NodeStatus.Success;
     }
 }
@@ -180,7 +141,7 @@ public class FindCompletePositionAction : ActionNode
 
         Blackboard.TargetBuilding = nearest;
         Blackboard.TargetPosition = nearest.transform.position;
-        Blackboard.Speed = 2;
+        Blackboard.Speed = 4;
         
         return NodeStatus.Success;
     }
@@ -203,6 +164,7 @@ public class FindNearestCornerPositionAction : ActionNode
             .First();
 
         Blackboard.TargetPosition = nearest;
+        Blackboard.Speed = 5;
         
         return NodeStatus.Success;
     }

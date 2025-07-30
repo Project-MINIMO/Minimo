@@ -18,7 +18,6 @@ public class MinimoAssignedPanel : UIBase
     [SerializeField] private RectTransform _content;
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
-    [SerializeField] private Toggle _autoAssignTog;
     
     private readonly Queue<MinimoAssignedSlot> _slotPool = new();
     private readonly List<MinimoAssignedSlot> _activeSlots = new();
@@ -51,7 +50,6 @@ public class MinimoAssignedPanel : UIBase
         
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
-        _autoAssignTog.onValueChanged.AddListener(isOn => AccountInfo.Instance.AutoAssign(isOn));
     }
     
     private void AssignSlot(ProduceAdvanced building)

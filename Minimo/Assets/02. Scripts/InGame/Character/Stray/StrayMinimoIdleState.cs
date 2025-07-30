@@ -6,7 +6,7 @@ public class StrayMinimoIdleState : State<StrayMinimoObject>
     private static readonly int IsWalk = Animator.StringToHash("IsWalk");
     
     private readonly BehaviorTree _idleTree;
-    private readonly Vector3 _scale = new(0.4f, 0.4f, 0.4f);
+    private readonly Vector3 _scale = new(0.23f, 0.23f, 0.23f);
     private readonly Quaternion _startRotation = new(0f, 0f, 0f, 0f);
     private readonly Vector3 _endRotation = new(0f, 0f, 360f);
 

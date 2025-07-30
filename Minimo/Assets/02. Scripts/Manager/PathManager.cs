@@ -13,6 +13,13 @@ public class PathManager : ManagerBase
         return _checkTilemap.GetCellCenterWorld(tilePosition);
     }
 
+    public (Vector3, Vector3Int) GetTileWorldPosition(Vector3 targetPosition, Vector3Int offset)
+    {
+        var targetPos = targetPosition + GetTileWorldPosition(offset);
+        var targetCell = _checkTilemap.WorldToCell(targetPos);
+        return (targetPos, targetCell);
+    }
+
     public List<Vector3Int> GetRandomPath(Vector3 currentPosition, int searchRadius = 10)
     {
         var currentCell = _checkTilemap.WorldToCell(currentPosition);

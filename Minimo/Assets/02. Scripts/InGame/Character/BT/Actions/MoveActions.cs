@@ -38,7 +38,10 @@ public class MoveAction : ActionNode
         }
 
         if (Blackboard.AnimatorIsPlaying("LayToStand")) return NodeStatus.Running;
+        if (Blackboard.AnimatorIsPlaying("SitToStand")) return NodeStatus.Running;
         if (Blackboard.AnimatorIsPlaying("Boast01")) return NodeStatus.Running;
+        if (Blackboard.AnimatorIsPlaying("Boast02")) return NodeStatus.Running;
+
         if (Blackboard.TargetBuilding != null 
             && Blackboard.TargetBuilding.AssignedMinimo != null)
         {

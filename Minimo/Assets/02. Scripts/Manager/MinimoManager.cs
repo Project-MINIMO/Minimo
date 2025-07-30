@@ -53,6 +53,23 @@ public class MinimoManager : ManagerBase
         minimo.OnLevelChanged -= HandleMinimoLevelChanged;
         _contributions.Remove(minimo);
     }
+
+    public bool AssignNearestMinimo(ProduceAdvanced advanced)
+    {
+        var unassignedMinimos = Minimos
+            .Where(x => x.AssignedBuilding == null)
+            .Select(x => x.Agent)
+            .ToList();
+        if (unassignedMinimos.Count == 0) return false;
+        
+        var advancedPos = advanced.transform.position;
+        var nearest = unassignedMinimos
+            .OrderBy(x => Vector3.SqrMagnitude(x.transform.position - advancedPos))
+            .First();
+        
+        advanced.PlaceMinimo(nearest.Data);
+        return true;
+    }
     
     private void HandleMinimoLevelChanged(Minimo minimo, int newLevel)
     {
