@@ -10,9 +10,13 @@ public class ProduceTertiary : ProduceElevated
         _produceManager.RegisterTertiary(this);
     }
 
-    public override void Destroy()
+    public override bool Destroy()
     {
-        _produceManager.UnregisterTertiary(this);
-        base.Destroy();
+        if (AssignedMinimo == null && AllTasks.Count == 0)
+        {
+            _produceManager.UnregisterTertiary(this);
+        }
+        
+        return base.Destroy();
     }
 }

@@ -43,6 +43,9 @@ public class BottomNotification : MonoBehaviour
             [NotifyType.CannotEraseTile] = titleData.GetString("STR_TILEMANAGE_TAB3_DESC2"),
             [NotifyType.CannotInstallWaterTile] = "건물이 설치된 타일입니다.",
             [NotifyType.DeselectTile] = titleData.GetString("STR_SELECTSLOTEMPTY_DESC"),
+            
+            [NotifyType.DeleteBuildingFailProduce] = "생산을 완료해 주세요.",
+            [NotifyType.DeleteBuildingFailMinimo] = "미니모를 해제해 주세요.",
         };
         
         Reset();

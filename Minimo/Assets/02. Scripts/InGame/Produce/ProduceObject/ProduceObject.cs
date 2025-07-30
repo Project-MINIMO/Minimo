@@ -161,6 +161,17 @@ public abstract class ProduceObject : BuildingObject
         SetNextActiveTask();
         return task;
     }
+
+    public override bool Destroy()
+    {
+        if (AllTasks.Count != 0)
+        {
+            App.Notification(NotifyType.DeleteBuildingFailProduce);
+            return false;
+        }
+        
+        return base.Destroy();
+    }
     
     #region Produce
     internal virtual void StartHarvest()

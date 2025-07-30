@@ -23,6 +23,9 @@ public enum NotifyType
     CannotEraseTile,
     CannotInstallWaterTile,
     DeselectTile,
+    
+    DeleteBuildingFailProduce,
+    DeleteBuildingFailMinimo,
 }
 
 public enum QuestState

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -44,6 +45,7 @@ public class MinimoManager : ManagerBase
     public bool AssignNearestMinimo(ProduceAdvanced advanced)
     {
         var unassignedMinimos = ActiveMinimos
+            .Where(x => x.AcquisitionDate != DateTime.MinValue)
             .Where(x => x.AssignedBuilding == null)
             .Select(x => x.Agent)
             .ToList();

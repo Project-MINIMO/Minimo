@@ -156,10 +156,11 @@ public class BuildingObject : InteractObject
         SpriteRenderer.flipX = !SpriteRenderer.flipX;
     }
 
-    public virtual void Destroy()
+    public virtual bool Destroy()
     {
         BuildingData.AddCount(-1);
         Destroy(gameObject);
+        return true;
     }
     #endregion
 }

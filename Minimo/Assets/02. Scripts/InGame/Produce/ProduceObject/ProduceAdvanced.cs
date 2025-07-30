@@ -134,11 +134,16 @@ public abstract class ProduceAdvanced : ProduceObject
         return result;
     }
 
-    public override void Destroy()
+    public override bool Destroy()
     {
+        if (AssignedMinimo != null)
+        {
+            App.Notification(NotifyType.DeleteBuildingFailMinimo);
+            return false;
+        }
+        
         EditManager.HandleAdvanced(this, false);
-        UnplaceMinimo();
-        base.Destroy();
+        return base.Destroy();
     }
 
     public (Item, int) PlunderedResult()

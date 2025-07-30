@@ -3,7 +3,7 @@ using DG.Tweening;
 
 public class StrayMinimoIdleState : State<StrayMinimoObject>
 {
-    private static readonly int IsWalk = Animator.StringToHash("IsWalk");
+    private readonly int _isWalk = Animator.StringToHash("IsWalk");
     
     private readonly BehaviorTree _idleTree;
     private readonly Vector3 _scale = new(0.23f, 0.23f, 0.23f);
@@ -16,7 +16,7 @@ public class StrayMinimoIdleState : State<StrayMinimoObject>
         (
             blackboard,
             new FindStrayPositionAction(blackboard),
-            new MoveForwardAction(blackboard, IsWalk)
+            new MoveForwardAction(blackboard, _isWalk)
         );
         
         _idleTree = new BehaviorTree(idleSequence);
@@ -41,6 +41,6 @@ public class StrayMinimoIdleState : State<StrayMinimoObject>
         Owner.transform.localScale = _scale;
         
         Animator.speed = 1;
-        Animator.SetBool(IsWalk, false);
+        Animator.SetBool(_isWalk, false);
     }
 }

@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class MinimoWorkState : State<MinimoObject>
 {
-    private static readonly int IsWalk = Animator.StringToHash("IsWalk");
-    private static readonly int IsWork = Animator.StringToHash("IsWork");
+    private readonly int _isWalk = Animator.StringToHash("IsWalk");
+    private readonly int _isWork = Animator.StringToHash("IsWork");
+    private readonly int _randomIndex = Animator.StringToHash("RandomIndex");
     private readonly int _work = Animator.StringToHash("Work");
     
     private readonly BehaviorTree _workTree;
@@ -42,7 +43,8 @@ public class MinimoWorkState : State<MinimoObject>
     public override void Exit()
     {
         Animator.speed = 1;
-        Animator.SetBool(IsWalk, false);
-        Animator.SetBool(IsWork, false);
+        Animator.SetBool(_isWalk, false);
+        Animator.SetBool(_isWork, false);
+        Animator.SetInteger(_randomIndex, 2);
     }
 }

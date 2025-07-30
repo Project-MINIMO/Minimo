@@ -156,10 +156,12 @@ public class EditManager : ManagerBase
     {
         if (!IsBuildingEditing.Value) return;
         
-        CurrentEditObject.Destroy();
-        
-        CurrentEditObject = null;
-        IsBuildingEditing.Value = false;
+        var result = CurrentEditObject.Destroy();
+        if (result)
+        {
+            CurrentEditObject = null;
+            IsBuildingEditing.Value = false;
+        }
     }
 
     public void MoveObject(Vector3 worldPosition)

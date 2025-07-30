@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class StrayMinimoPlunderState : State<StrayMinimoObject>
 {
-    private static readonly int IsWalk = Animator.StringToHash("IsWalk");
+    private readonly int _isWalk = Animator.StringToHash("IsWalk");
     
     private readonly BehaviorTree _plunderTree;
 
@@ -14,10 +14,10 @@ public class StrayMinimoPlunderState : State<StrayMinimoObject>
         (
             blackboard,
             new FindCompletePositionAction(blackboard),
-            new MoveForwardAction(blackboard, IsWalk),
+            new MoveForwardAction(blackboard, _isWalk),
             new PlunderAction(blackboard),
             new FindNearestCornerPositionAction(blackboard),
-            new MoveForwardAction(blackboard, IsWalk)
+            new MoveForwardAction(blackboard, _isWalk)
         );
         
         _plunderTree = new BehaviorTree(plunderSequence);
@@ -40,6 +40,6 @@ public class StrayMinimoPlunderState : State<StrayMinimoObject>
     public override void Exit()
     {
         Animator.speed = 1;
-        Animator.SetBool(IsWalk, false);
+        Animator.SetBool(_isWalk, false);
     }
 }
