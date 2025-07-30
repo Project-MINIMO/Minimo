@@ -35,7 +35,7 @@ public class StrayMinimoObject : InteractObject
     private (Item, int) _holdItem;
     
     private Coroutine _lifeTimeRoutine;
-    private bool _canClick;
+    private Coroutine _clickAnimationRoutine;
     
     public void Initialize(bool isGorden, Dictionary<string, int> common)
     {
@@ -74,8 +74,6 @@ public class StrayMinimoObject : InteractObject
 
     public void Spawn(Vector3 position)
     {
-        _canClick = true;
-        
         transform.position = position;
         ApplyState(StrayMinimoState.Idle);
         _lifeRemaining = _lifeTime;
@@ -108,8 +106,11 @@ public class StrayMinimoObject : InteractObject
 
     public void Despawn()
     {
-        _canClick = false;
-        transform.DOKill();
+        if (_clickAnimationRoutine != null)
+        {
+            StopCoroutine(_clickAnimationRoutine);
+            _clickAnimationRoutine = null;
+        }
         
         if (_lifeTimeRoutine != null)
         {
@@ -141,19 +142,10 @@ public class StrayMinimoObject : InteractObject
         return _editManager.ActiveAdvanceds.Any(x => x.CurrentState == ProduceState.Complete);
     }
 
-    public override void OnLongPress()
-    {
-        if (!_canClick) return;
-        transform.DOKill();
-        transform.DOScale(_startScale, 0.3f);
-    }
+    public override void OnLongPress() { }
 
     public override void OnClickUp()
     {
-        if (!_canClick) return;
-        transform.DOKill();
-        transform.DOScale(_startScale, 0.3f);
-        
         var getCurrency = _holdCurreny - _lostCurrentAmount > 0 ? _lostCurrentAmount : _holdCurreny;
         _holdCurreny -= getCurrency;
         AccountInfo.Instance.Gold.AddCount(getCurrency);
@@ -170,8 +162,25 @@ public class StrayMinimoObject : InteractObject
     
     public override void OnClickDown()
     {
-        if (!_canClick) return;
+        if (_clickAnimationRoutine != null)
+        {
+            StopCoroutine(_clickAnimationRoutine);
+            _clickAnimationRoutine = null;
+        }
+        
+        _clickAnimationRoutine = StartCoroutine(ClickAnimation());
+    }
+
+    private IEnumerator ClickAnimation()
+    {
+        if (_currentState == StrayMinimoState.Hide) yield break;
+        
         transform.DOKill();
         transform.DOScale(_endScale, 0.3f);
+        yield return new WaitForSeconds(0.3f);
+        
+        if (_currentState == StrayMinimoState.Hide) yield break;
+        
+        transform.DOScale(_startScale, 0.3f);
     }
 }
