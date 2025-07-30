@@ -34,6 +34,7 @@ public class ActiveProductionAction : ActionNode
 
 public class CompleteProduceAction : ActionNode
 {
+    private readonly int _randomIndex = Animator.StringToHash("RandomIndex");
     private readonly int _isWork = Animator.StringToHash("IsWork");
     
     private ProduceAdvanced Building => _owner.Data.AssignedBuilding;
@@ -46,6 +47,7 @@ public class CompleteProduceAction : ActionNode
     
     public override NodeStatus Tick()
     {
+        Blackboard.Animator.SetInteger(_randomIndex, Random.Range(0, 2));
         Blackboard.Animator.SetBool(_isWork, false);
 
         return Building.ActiveTask == null ? NodeStatus.Failure : NodeStatus.Success;

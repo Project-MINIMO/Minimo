@@ -12,12 +12,24 @@ public class MinimoIdleState : State<MinimoObject>
     {
         var blackboard = new Blackboard(owner.gameObject);
         
-        var idleSequence = new SequenceNode
+        var idleSequence = new SelectorNode
         (
             blackboard,
-            new FindRestPositionAction(blackboard),
-            new MoveAction(blackboard),
-            new LayDownAction(blackboard)
+            new GetRandomActionIndex(blackboard, 2),
+            new SequenceNode
+            (
+                blackboard,
+                new IsEqualIndex(blackboard, 0),
+                new FindRestPositionAction(blackboard),
+                new MoveAction(blackboard),
+                new LayDownAction(blackboard)
+            ),
+            new SequenceNode
+            (
+                blackboard,
+                new IsEqualIndex(blackboard, 1),
+                new SitAction(blackboard)
+            )
         );
         
         _idleTree = new BehaviorTree(idleSequence);

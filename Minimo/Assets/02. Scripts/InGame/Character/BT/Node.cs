@@ -17,7 +17,8 @@ public class Blackboard
     public readonly GameObject Agent;
     public readonly Animator Animator;
     public List<Vector3Int> Path;
-    
+
+    public int RandomActionIndex;
     public int Speed = 1;
     public Vector3 TargetPosition;
     public ProduceAdvanced TargetBuilding;
