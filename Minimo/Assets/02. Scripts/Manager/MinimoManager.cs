@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -16,20 +15,7 @@ public class MinimoManager : ManagerBase
     
     private readonly Dictionary<Minimo, Dictionary<AbilityType, float>> _contributions = new();
     
-    public List<Minimo> Minimos { get; private set; }
-    protected override void Awake()
-    {
-        base.Awake();
-
-        var titleData = App.GetData<TitleData>();
-        var minimos = GetComponentsInChildren<MinimoObject>().ToList();
-        foreach (var minimo in minimos)
-        {
-            minimo.Initialize(titleData.UserMinimo[minimo.transform.GetSiblingIndex()]);
-        }
-
-        Minimos = minimos.OrderBy(x => x.Data.ID).Select(x => x.Data).ToList();
-    }
+    public ReactiveCollection<Minimo> ActiveMinimos { get; } = new();
     
     public void OnMinimoAssigned(Minimo minimo)
     {
@@ -57,7 +43,7 @@ public class MinimoManager : ManagerBase
 
     public bool AssignNearestMinimo(ProduceAdvanced advanced)
     {
-        var unassignedMinimos = Minimos
+        var unassignedMinimos = ActiveMinimos
             .Where(x => x.AssignedBuilding == null)
             .Select(x => x.Agent)
             .ToList();

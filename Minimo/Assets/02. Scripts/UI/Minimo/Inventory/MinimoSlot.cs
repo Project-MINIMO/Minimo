@@ -1,6 +1,5 @@
+using System;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class MinimoSlot : InventorySlot<Minimo>
 {
@@ -18,5 +17,10 @@ public class MinimoSlot : InventorySlot<Minimo>
         
         Item.OnLevelChanged += _infoUpdater.UpdateLevelInfo;
         Item.OnAssignmentChanged += _infoUpdater.UpdateAssignedBuilding;
+    }
+
+    private void OnEnable()
+    {
+        if (Item.AcquisitionDate == DateTime.MinValue) gameObject.SetActive(false);
     }
 }

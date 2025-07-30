@@ -8,7 +8,8 @@ public enum TaskState
 
 public enum NotifyType
 {
-    CapacityLack,
+    StorageCapacityLack,
+    MinimoCapacityLack,
     
     Success,
     SlotLack,

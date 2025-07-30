@@ -11,7 +11,7 @@ public class AccountInfo : Singleton<AccountInfo>
     public UserGold Gold { get; private set; }
     public int Cash;
     public int StorageCapacity { get; private set; } = 100;
-    public int MinimoCapacity { get; private set; } = 100;
+    public int MinimoCapacity { get; private set; } = 5;
     public int Star;
 
     private GetItemPanel _itemPanel;
@@ -38,7 +38,7 @@ public class AccountInfo : Singleton<AccountInfo>
         var cankeep = CurrentItemCounts < StorageCapacity;
         if (!cankeep)
         {
-            App.Notification(NotifyType.CapacityLack);
+            App.Notification(NotifyType.StorageCapacityLack);
         }
 
         return cankeep;

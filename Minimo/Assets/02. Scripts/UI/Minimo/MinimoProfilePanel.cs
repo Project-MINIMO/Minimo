@@ -100,9 +100,9 @@ public class MinimoProfilePanel : UIBase
 
     private void MoveToNextMinimo(int num)
     {
-        var index = _minimoManager.Minimos.IndexOf(_currentMinimo);
-        var nextIndex = (index + num + _minimoManager.Minimos.Count) % _minimoManager.Minimos.Count;
-        var nextObject = _minimoManager.Minimos[nextIndex];
+        var index = _minimoManager.ActiveMinimos.IndexOf(_currentMinimo);
+        var nextIndex = (index + num + _minimoManager.ActiveMinimos.Count) % _minimoManager.ActiveMinimos.Count;
+        var nextObject = _minimoManager.ActiveMinimos[nextIndex];
         
         ClosePanel();
         OpenPanel(nextObject);

@@ -13,13 +13,16 @@ public class MinimoCenterPanel : UIBase
     [SerializeField] private Button _closeBtn;
     [SerializeField] private Button _assignBtn;
     [SerializeField] private Button _expandBtn;
-    
+
+    private MinimoManager _minimoManager;
     private MinimoProfilePanel _profilePanel;
 
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
 
+        _minimoManager = App.GetManager<MinimoManager>();
+        
         _profilePanel = manager.GetPanel<MinimoProfilePanel>();
         var assignedPanel = manager.GetPanel<MinimoAssignedPanel>();
         var popUpPanel = manager.GetPanel<PopUpPanel>();
@@ -44,6 +47,13 @@ public class MinimoCenterPanel : UIBase
         }
     }
 
+    public override void Show(bool isNew)
+    {
+        base.Show(isNew);
+        
+        OnMinimoCapacityChanged(AccountInfo.Instance.MinimoCapacity);
+    }
+
     private void OnItemSelected(InventorySlot<Minimo> slot)
     {
         _profilePanel.OpenPanel(slot.Item);
@@ -51,6 +61,6 @@ public class MinimoCenterPanel : UIBase
 
     private void OnMinimoCapacityChanged(int amount)
     {
-        _capacityTMP.SetText($"{20}/{amount}");
+        _capacityTMP.SetText($"{_minimoManager.ActiveMinimos.Count}/{amount}");
     }
 }

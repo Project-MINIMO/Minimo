@@ -11,6 +11,7 @@ public class MinimoAcquireHadler : InteractObject
     private readonly Vector3 _startScale = new(0.2f, 0.2f, 0.2f);
     private readonly Vector3 _endScale = new(0.17f, 0.17f, 0.17f);
     
+    private MinimoManager _minimoManager;
     private MinimoObject _minimoObject;
     private Coroutine _clickAnimationRoutine;
     
@@ -22,7 +23,8 @@ public class MinimoAcquireHadler : InteractObject
         _requiredCurreny = 100 + AccountInfo.Instance.Level.Count * 20;
         var lostCurrentAmount = _requiredCurreny / 3f;
         _lostCurrentAmount = Mathf.RoundToInt(lostCurrentAmount);
-        
+
+        _minimoManager = App.GetManager<MinimoManager>();
         _minimoObject = GetComponent<MinimoObject>();
     }
 
@@ -50,7 +52,13 @@ public class MinimoAcquireHadler : InteractObject
                 break;
             
             case MinimoState.Happy:
+                if (AccountInfo.Instance.MinimoCapacity <= _minimoManager.ActiveMinimos.Count)
+                {
+                    App.Notification(NotifyType.MinimoCapacityLack);
+                    return;
+                }
                 _minimoObject.ApplyState(MinimoState.Acquire);
+                _minimoManager.ActiveMinimos.Add(_minimoObject.Data);
                 _happyEffect.SetActive(false);
                 break;
         }
