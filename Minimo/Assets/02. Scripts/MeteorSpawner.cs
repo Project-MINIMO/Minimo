@@ -46,7 +46,7 @@ public class MeteorSpawner : MonoBehaviour
         meteor.transform.position = new Vector3(spawnX, spawnY, 10);
         meteor.transform.localScale = _startScale;
 
-        var offsetRatio = Random.Range(0f, 1f);
+        var offsetRatio = Random.Range(0f, 0.5f);
         var bottomY = cam.transform.position.y - cam.orthographicSize;
         var screenHeight = cam.orthographicSize * 2f;
         var endY = bottomY + offsetRatio * screenHeight;
@@ -57,7 +57,7 @@ public class MeteorSpawner : MonoBehaviour
         var duration = Random.Range(_speedRange.x, _speedRange.y);
 
         var sequence = DOTween.Sequence();
-        sequence.Append(meteor.transform.DOLocalMove(new Vector3(endX, endY, 10), duration).SetEase(Ease.OutQuad))
+        sequence.Append(meteor.transform.DOMove(new Vector3(endX, endY, 10), duration).SetEase(Ease.OutQuad))
             .Insert(duration - 0.3f, meteor.transform.DOScale(Vector3.zero, 0.3f))
             .Play();
     }
