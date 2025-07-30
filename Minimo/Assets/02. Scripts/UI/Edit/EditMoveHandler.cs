@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class EditMoveBtn : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class EditMoveHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     private EditManager _editManager;
     

@@ -17,8 +17,6 @@ public class CameraInput : MonoBehaviour
     private InputManager _input;
     private UIManager _ui;
     private Camera _mainCamera;
-
-    private EditCirclePanel _editCirclePanel;
     
     private void Start()
     {
@@ -26,8 +24,6 @@ public class CameraInput : MonoBehaviour
         _ui = App.GetManager<UIManager>();
 
         _mainCamera = Camera.main;
-        
-        _editCirclePanel = _ui.GetPanel<EditCirclePanel>();
     }
     
     private void Update()
@@ -51,7 +47,6 @@ public class CameraInput : MonoBehaviour
         _mainCamera.transform.Translate(delta * Time.deltaTime, Space.World);
         
         ClampCameraPosition();
-        _editCirclePanel.SetPosition();
     }
 
     private void Zoom()
@@ -81,7 +76,6 @@ public class CameraInput : MonoBehaviour
             
             _mainCamera.orthographicSize = newSizePinch;
             ClampCameraPosition();
-            _editCirclePanel.SetPosition();
             return;
         }
         
@@ -101,7 +95,6 @@ public class CameraInput : MonoBehaviour
           
             _mainCamera.orthographicSize = newSizeWheel;
             ClampCameraPosition();
-            _editCirclePanel.SetPosition();
         }
     }
     

@@ -6,6 +6,7 @@ using UniRx;
 
 public class ProduceStateUI : MonoBehaviour
 {
+    [SerializeField] private GameObject _stateBack;
     [SerializeField] private GameObject _idleObj;
     [SerializeField] private GameObject _completeObj;
     [SerializeField] private Image _completeImg;
@@ -29,12 +30,12 @@ public class ProduceStateUI : MonoBehaviour
         editManager.IsBuildingEditing
             .Subscribe(isEditing =>
             {
-                gameObject.SetActive(!isEditing);
+                _stateBack.SetActive(!isEditing);
             }).AddTo(gameObject);
         editManager.IsTileEditing
             .Subscribe(isEditing =>
             {
-                gameObject.SetActive(!isEditing);
+                _stateBack.SetActive(!isEditing);
             }).AddTo(gameObject);
         gameObject.SetActive(!editManager.IsBuildingEditing.Value);
     }
