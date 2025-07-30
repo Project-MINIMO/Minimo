@@ -1,22 +1,20 @@
 using UnityEngine;
 
-public class MinimoIdleState : State<MinimoObject>
+public class StrayMinimoIdleState : State<StrayMinimoObject>
 {
     private static readonly int IsWalk = Animator.StringToHash("IsWalk");
-    private static readonly int IsLay = Animator.StringToHash("IsLay");
     
     private readonly BehaviorTree _idleTree;
 
-    public MinimoIdleState(MinimoObject owner) : base(owner)
+    public StrayMinimoIdleState(StrayMinimoObject owner) : base(owner)
     {
         var blackboard = new Blackboard(owner.gameObject);
         
         var idleSequence = new SequenceNode
         (
             blackboard,
-            new FindRestPositionAction(blackboard),
-            new MoveAction(blackboard),
-            new LayDownAction(blackboard)
+            new FindStrayPositionAction(blackboard),
+            new MoveAction(blackboard)
         );
         
         _idleTree = new BehaviorTree(idleSequence);
@@ -36,6 +34,5 @@ public class MinimoIdleState : State<MinimoObject>
     {
         Animator.speed = 1;
         Animator.SetBool(IsWalk, false);
-        Animator.SetBool(IsLay, false);
     }
 }

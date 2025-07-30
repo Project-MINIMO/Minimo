@@ -9,7 +9,7 @@ public class MinimoWorkState : State<MinimoObject>
 
     public MinimoWorkState(MinimoObject owner) : base(owner)
     {
-        var blackboard = new Blackboard(owner);
+        var blackboard = new Blackboard(owner.gameObject);
         
         var workSequence = new SequenceNode
         (

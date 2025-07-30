@@ -1,6 +1,7 @@
 using UnityEngine;
 using UniRx;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 public abstract class ProduceAdvanced : ProduceObject
@@ -135,6 +136,17 @@ public abstract class ProduceAdvanced : ProduceObject
         EditManager.HandleAdvanced(this, false);
         UnplaceMinimo();
         base.Destroy();
+    }
+
+    public (Item, int) PlunderedResult()
+    {
+        var completeTask = AllTasks.FirstOrDefault(x => x.CurrentState == CompletedState.Instance);
+        if (completeTask == null) return (null, 0);
+        var itemID = completeTask.Data.ResultItems[0].ID;
+        var item = AccountInfo.Instance.Items[itemID];
+        AllTasks.Remove(completeTask);
+        GetCurrentProduceState();
+        return (item, completeTask.Data.ResultItems[0].Amount);
     }
     
     #region Apply Minimo Abilities

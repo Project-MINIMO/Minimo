@@ -8,7 +8,7 @@ public class MinimoAssignState : State<MinimoObject>
 
     public MinimoAssignState(MinimoObject owner) : base(owner)
     {
-        var blackboard = new Blackboard(owner);
+        var blackboard = new Blackboard(owner.gameObject);
         
         var idleSequence = new SequenceNode
         (

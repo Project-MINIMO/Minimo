@@ -116,7 +116,7 @@ public abstract class ProduceObject : BuildingObject
         GetCurrentProduceState();
     }
     
-    private ProduceState GetCurrentProduceState()
+    protected ProduceState GetCurrentProduceState()
     {
         if (AllTasks.Any(x => x.CurrentState is CompletedState))
         {

@@ -39,4 +39,19 @@ public class CameraBoundsUpdater : MonoBehaviour
         _collider.offset = lb.center;
         _collider.size = sizeWithMargin;
     }
+    
+    public Vector3[] GetCorners()
+    {
+        var bounds = _collider.bounds;
+        var min = bounds.min;
+        var max = bounds.max;
+
+        return new Vector3[]
+        {
+            new (min.x, min.y),
+            new (max.x, min.y),
+            new (max.x, max.y),
+            new (min.x, max.y)
+        };
+    }
 }

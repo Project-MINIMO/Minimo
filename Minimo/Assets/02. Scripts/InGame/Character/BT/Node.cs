@@ -14,14 +14,14 @@ public enum NodeStatus
 /// </summary>
 public class Blackboard
 {
-    public readonly MinimoObject Agent;
+    public readonly GameObject Agent;
     public readonly Animator Animator;
     public List<Vector3Int> Path;
     
-    public ProduceAdvanced Building => Agent.Data.AssignedBuilding;
+    public Vector3 TargetPosition;
     public ProduceAdvanced TargetBuilding;
 
-    public Blackboard(MinimoObject agent)
+    public Blackboard(GameObject agent)
     {
         Agent = agent;
         Animator = agent.GetComponentInChildren<Animator>();

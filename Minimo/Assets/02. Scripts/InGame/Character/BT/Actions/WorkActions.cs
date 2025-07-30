@@ -3,9 +3,15 @@ using UnityEngine;
 public class ActiveProductionAction : ActionNode
 {
     private readonly int _isWork = Animator.StringToHash("IsWork");
-    private bool _shouldReset = true;
     
-    public ActiveProductionAction(Blackboard blackboard) : base(blackboard) { }
+    private ProduceAdvanced Building => _owner.Data.AssignedBuilding;
+    private readonly MinimoObject _owner;
+    private bool _shouldReset = true;
+
+    public ActiveProductionAction(Blackboard blackboard) : base(blackboard)
+    {
+        _owner = blackboard.Agent.GetComponent<MinimoObject>();
+    }
     
     public override void Reset()
     {
@@ -20,7 +26,7 @@ public class ActiveProductionAction : ActionNode
             Blackboard.Animator.SetBool(_isWork, true);
         }
 
-        return Blackboard.Building.CurrentState == ProduceState.Produce 
+        return Building.CurrentState == ProduceState.Produce 
             ? NodeStatus.Running 
             : NodeStatus.Success;
     }
@@ -29,13 +35,19 @@ public class ActiveProductionAction : ActionNode
 public class CompleteProduceAction : ActionNode
 {
     private readonly int _isWork = Animator.StringToHash("IsWork");
+    
+    private ProduceAdvanced Building => _owner.Data.AssignedBuilding;
+    private readonly MinimoObject _owner;
 
-    public CompleteProduceAction(Blackboard blackboard) : base(blackboard) { }
+    public CompleteProduceAction(Blackboard blackboard) : base(blackboard)
+    {
+        _owner = blackboard.Agent.GetComponent<MinimoObject>();
+    }
     
     public override NodeStatus Tick()
     {
         Blackboard.Animator.SetBool(_isWork, false);
 
-        return Blackboard.Building.ActiveTask == null ? NodeStatus.Failure : NodeStatus.Success;
+        return Building.ActiveTask == null ? NodeStatus.Failure : NodeStatus.Success;
     }
 }

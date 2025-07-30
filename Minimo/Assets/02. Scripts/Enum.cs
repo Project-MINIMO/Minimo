@@ -46,6 +46,13 @@ public enum MinimoState
     None,
 }
 
+public enum StrayMinimoState
+{
+    Idle,
+    Plunder,
+    None,
+}
+
 public enum ResourceType
 {
     Resource,
