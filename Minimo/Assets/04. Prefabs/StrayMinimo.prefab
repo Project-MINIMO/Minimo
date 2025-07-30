@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1860301983267078501}
   - component: {fileID: 4103749394858459633}
   - component: {fileID: 7959276420473650937}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 290630004089941599}
   - component: {fileID: 1961486054741992399}
   - component: {fileID: 7258775877745572845}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,7 +188,7 @@ GameObject:
   - component: {fileID: 3015444685264303764}
   - component: {fileID: 2207149748482327290}
   - component: {fileID: 2311586116861789905}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -293,7 +293,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3611692693751181185}
   - component: {fileID: 4077638060502462968}
-  m_Layer: 7
+  - component: {fileID: 7488545997062181796}
+  m_Layer: 6
   m_Name: StrayMinimo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -333,6 +334,41 @@ MonoBehaviour:
   _goldenSprite: {fileID: 21300000, guid: b4420c2012a0e4f44a099eab814622fe, type: 3}
   _plunderItemObj: {fileID: 9198545327519521703}
   _plunderItemImg: {fileID: 7258775877745572845}
+--- !u!58 &7488545997062181796
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6770512339090311191}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 1.5}
+  serializedVersion: 2
+  m_Radius: 2.5
 --- !u!1 &9198545327519521703
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,7 +380,7 @@ GameObject:
   - component: {fileID: 4906985802071579365}
   - component: {fileID: 8312359270320766744}
   - component: {fileID: 4367824509504360443}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}

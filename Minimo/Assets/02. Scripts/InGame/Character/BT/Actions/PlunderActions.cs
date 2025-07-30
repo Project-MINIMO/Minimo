@@ -1,17 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class PlunderAction : ActionNode
 {
     private readonly int _isPlunder = Animator.StringToHash("IsPlunder");
-    
+
+    private readonly StrayMinimoObject _owner;
     private float _duration;
     private float _startTime;
     private bool _shouldReset = true;
-    
-    public PlunderAction(Blackboard blackboard) : base(blackboard) { }
+
+    public PlunderAction(Blackboard blackboard) : base(blackboard)
+    {
+        _owner = Blackboard.Agent.GetComponent<StrayMinimoObject>();
+    }
 
     public override void Reset()
     {
@@ -36,6 +37,7 @@ public class PlunderAction : ActionNode
             _shouldReset = true;
             Blackboard.Animator.SetBool(_isPlunder, false);
             var (item, amount) = Blackboard.TargetBuilding.PlunderedResult();
+            _owner.SuccessPlunder(item, amount);
             Blackboard.TargetBuilding = null;
             return NodeStatus.Success;
         }

@@ -123,8 +123,7 @@ public class FindStrayPositionAction  : ActionNode
             currentPos.z);
         
         Blackboard.TargetPosition = randomPos;
-    
-        Debug.Log($"Picked random world position within radius 5: {randomPos}");
+
         return NodeStatus.Success;
     }
 }

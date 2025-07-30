@@ -151,7 +151,6 @@ public class MoveForwardAction : ActionNode
             Blackboard.Animator.SetBool(_isWalk, true);
             
             SetAnimationDirection();
-            Debug.Log("Enter MoveForwardAction");
         }
         
         if ((_targetPosition - Blackboard.Agent.transform.position).sqrMagnitude > 0f)
@@ -172,7 +171,6 @@ public class MoveForwardAction : ActionNode
         }
 
         Exit();
-        Debug.Log("exit MoveForwardAction");
         return NodeStatus.Success;
     }
 

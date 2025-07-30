@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StrayMinimoObject : MonoBehaviour
+public class StrayMinimoObject : InteractObject
 {
     public StrayMinimoFSM FSM { get; private set; }
     public bool IsGolden { get; private set; }
@@ -19,13 +19,15 @@ public class StrayMinimoObject : MonoBehaviour
     
     private EditManager _editManager;
     
-    private float _lifeTime;
-    private float _additionalLifeTime;
-    private float _currency;
+    private int _lifeTime;
+    private int _afterPlunderLifeTime;
+    private int _currency;
     private float _currencyRate;
+    private float _currencyLostRate;
     
-    private float _lifeRemaining;
-    private float _holdCurreny;
+    private int _lifeRemaining;
+    private int _holdCurreny;
+    private int _lostCurrentAmount;
     private (Item, int) _holdItem;
     
     private Coroutine _lifeTimeRoutine;
@@ -37,10 +39,11 @@ public class StrayMinimoObject : MonoBehaviour
         GetComponentInChildren<SpriteRenderer>().sprite = isGorden ? _goldenSprite : _normalSprite;
 
         _lifeTime = common["MiaLifeTime"];
-        _additionalLifeTime = common[isGorden ? "GoldMiaLootLifeTime" : "MiaLootLifeTime"];
+        _afterPlunderLifeTime = common[isGorden ? "GoldMiaLootLifeTime" : "MiaLootLifeTime"];
         
         _currency = common["MiaCurrency"];
         _currencyRate = isGorden ? common["GoldMiaCurrency"] : 1;
+        _currencyLostRate = common["CurrencyLostRate"] / 100f;
     }
 
     private void Start()
@@ -69,7 +72,14 @@ public class StrayMinimoObject : MonoBehaviour
         transform.position = position;
         ApplyState(StrayMinimoState.Idle);
         _lifeRemaining = _lifeTime;
-        _holdCurreny = (_currency + AccountInfo.Instance.Level.Count * _currency * 0.1f) * _currencyRate;
+        
+        var holdCurreny = (_currency + AccountInfo.Instance.Level.Count * _currency * 0.1f) * _currencyRate;
+        _holdCurreny = Mathf.RoundToInt(holdCurreny);
+
+        var lostCurrentAmount = _holdCurreny * _currencyLostRate;
+        _lostCurrentAmount = Mathf.RoundToInt(lostCurrentAmount);
+
+        _holdItem = (null, 0);
         _plunderItemObj.SetActive(false);
         
         _lifeTimeRoutine = StartCoroutine(LifetimeRoutine());
@@ -80,7 +90,7 @@ public class StrayMinimoObject : MonoBehaviour
         while (_lifeRemaining > 0f)
         {
             yield return new WaitForSeconds(1f);
-            _lifeRemaining -= 1f;
+            _lifeRemaining -= 1;
         }
         
         Despawn();
@@ -99,7 +109,7 @@ public class StrayMinimoObject : MonoBehaviour
 
     public void SuccessPlunder(Item item, int amount)
     {
-        _lifeRemaining += _additionalLifeTime;
+        _lifeRemaining = _afterPlunderLifeTime;
         _holdItem = (item, amount);
         _plunderItemObj.SetActive(true);
         _plunderItemImg.sprite = item.Icon;
@@ -116,5 +126,19 @@ public class StrayMinimoObject : MonoBehaviour
     private bool IsAnyCompleteAdvances()
     {
         return _editManager.ActiveAdvanceds.Any(x => x.CurrentState == ProduceState.Complete);
+    }
+
+    public override void OnLongPress() { }
+
+    public override void OnClickUp()
+    {
+        var amount = _holdCurreny - _lostCurrentAmount >= 0 ? _lostCurrentAmount : _holdCurreny;
+        _holdCurreny -= amount;
+        AccountInfo.Instance.Gold.AddCount(amount);
+        if (_holdCurreny <= 0)
+        {
+            _holdItem.Item1?.AddCount(_holdItem.Item2);
+            Despawn();
+        }
     }
 }
