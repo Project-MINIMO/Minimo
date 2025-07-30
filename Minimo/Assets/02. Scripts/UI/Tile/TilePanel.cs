@@ -174,6 +174,12 @@ public class TilePanel : UIBase
             return;
         }
         
+        if (_installMap.GetTile(cellPos) != null && _selectedTile.Type == TileType.Water)
+        {
+            App.Notification(NotifyType.CannotInstallWaterTile);
+            return;
+        }
+        
         if (_tilemap.GetTile(cellPos) == _tile) return;
         if (!UseGold()) return;
         

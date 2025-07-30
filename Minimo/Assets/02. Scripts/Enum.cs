@@ -21,6 +21,7 @@ public enum NotifyType
     GoldLack,
     
     CannotEraseTile,
+    CannotInstallWaterTile,
     DeselectTile,
 }
 
