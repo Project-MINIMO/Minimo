@@ -127,6 +127,9 @@ public class AssignAction : ActionNode
 
     public override NodeStatus Tick()
     {
+        if (Blackboard.TargetBuilding != null 
+            && Blackboard.TargetBuilding.AssignedMinimo != null) return NodeStatus.Failure;
+        
         Blackboard.TargetBuilding.PlaceMinimo(Blackboard.Agent.Data);
         return NodeStatus.Success;
     }
@@ -165,11 +168,10 @@ public class MoveAction : ActionNode
     private const string BottomRight = "Walk_BR";
     private const string BottomLeft = "Walk_BL";
     
-    private const float Speed = 0.3f;
-    
     private readonly PathManager _pathManager;
     private Vector3 _targetPosition;
     private int _currentIndex;
+    private float _speed;
     private bool _shouldReset = true;
     
     public MoveAction(Blackboard blackboard) : base(blackboard)
@@ -189,10 +191,13 @@ public class MoveAction : ActionNode
             _shouldReset = false;
             _currentIndex = 0;
             _targetPosition = _pathManager.GetTileWorldPosition(Blackboard.Path[_currentIndex]);
+            _speed = Blackboard.Path.Count > 3 ? 0.6f : 0.3f;
+            Blackboard.Animator.speed = Mathf.Approximately(_speed, 0.3f) ? 1 : 2;
             Blackboard.Animator.SetBool(_isWalk, true);
         }
 
         if (Blackboard.AnimatorIsPlaying("LayToStand")) return NodeStatus.Running;
+        if (Blackboard.AnimatorIsPlaying("Boast01")) return NodeStatus.Running;
         if (Blackboard.TargetBuilding != null 
             && Blackboard.TargetBuilding.AssignedMinimo != null) return NodeStatus.Failure;
         
@@ -232,7 +237,7 @@ public class MoveAction : ActionNode
                 Blackboard.Agent.transform.position = Vector3.MoveTowards(
                     Blackboard.Agent.transform.position, 
                     _targetPosition, 
-                    Speed * Time.deltaTime);
+                    _speed * Time.deltaTime);
             }
             else
             {
@@ -247,6 +252,7 @@ public class MoveAction : ActionNode
         else
         {
             _shouldReset = true;
+            Blackboard.Animator.speed = 1;
             Blackboard.Animator.SetBool(_isWalk, false);
             return NodeStatus.Success;
         }

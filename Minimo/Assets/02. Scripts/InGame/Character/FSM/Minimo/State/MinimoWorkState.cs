@@ -43,6 +43,7 @@ public class MinimoWorkState : State<MinimoObject>
 
     public override void Exit()
     {
+        Animator.speed = 1;
         Animator.SetBool(IsWalk, false);
         Animator.SetBool(IsWork, false);
     }
