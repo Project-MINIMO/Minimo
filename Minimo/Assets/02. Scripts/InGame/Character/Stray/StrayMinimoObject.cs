@@ -4,6 +4,7 @@ using System.Linq;
 
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class StrayMinimoObject : InteractObject
 {
@@ -15,9 +16,12 @@ public class StrayMinimoObject : InteractObject
     [SerializeField] private GameObject _plunderItemObj;
     [SerializeField] private Image _plunderItemImg;
     
-    private StrayMinimoState _currentState = StrayMinimoState.None;
+    private StrayMinimoState _currentState = StrayMinimoState.Idle;
     
     private EditManager _editManager;
+
+    private readonly Vector3 _startScale = new(0.23f, 0.23f, 0.23f);
+    private readonly Vector3 _endScale = new(0.2f, 0.2f, 0.2f);
     
     private int _lifeTime;
     private int _afterPlunderLifeTime;
@@ -31,6 +35,7 @@ public class StrayMinimoObject : InteractObject
     private (Item, int) _holdItem;
     
     private Coroutine _lifeTimeRoutine;
+    private bool _canClick;
     
     public void Initialize(bool isGorden, Dictionary<string, int> common)
     {
@@ -69,15 +74,20 @@ public class StrayMinimoObject : InteractObject
 
     public void Spawn(Vector3 position)
     {
+        _canClick = true;
+        
         transform.position = position;
         ApplyState(StrayMinimoState.Idle);
         _lifeRemaining = _lifeTime;
         
         var holdCurreny = (_currency + AccountInfo.Instance.Level.Count * _currency * 0.1f) * _currencyRate;
         _holdCurreny = Mathf.RoundToInt(holdCurreny);
+        Debug.Log(holdCurreny);
+        Debug.Log(_holdCurreny);
 
         var lostCurrentAmount = _holdCurreny * _currencyLostRate;
         _lostCurrentAmount = Mathf.RoundToInt(lostCurrentAmount);
+        Debug.Log(_lostCurrentAmount);
 
         _holdItem = (null, 0);
         _plunderItemObj.SetActive(false);
@@ -98,6 +108,9 @@ public class StrayMinimoObject : InteractObject
 
     public void Despawn()
     {
+        _canClick = false;
+        transform.DOKill();
+        
         if (_lifeTimeRoutine != null)
         {
             StopCoroutine(_lifeTimeRoutine);
@@ -115,7 +128,7 @@ public class StrayMinimoObject : InteractObject
         _plunderItemImg.sprite = item.Icon;
     }
 
-    public void ApplyState(StrayMinimoState target)
+    private void ApplyState(StrayMinimoState target)
     {
         if (target == _currentState) return;
 
@@ -128,11 +141,20 @@ public class StrayMinimoObject : InteractObject
         return _editManager.ActiveAdvanceds.Any(x => x.CurrentState == ProduceState.Complete);
     }
 
-    public override void OnLongPress() { }
+    public override void OnLongPress()
+    {
+        if (!_canClick) return;
+        transform.DOKill();
+        transform.DOScale(_startScale, 0.3f);
+    }
 
     public override void OnClickUp()
     {
-        var getCurrency = _holdCurreny - _lostCurrentAmount >= 0 ? _lostCurrentAmount : _holdCurreny;
+        if (!_canClick) return;
+        transform.DOKill();
+        transform.DOScale(_startScale, 0.3f);
+        
+        var getCurrency = _holdCurreny - _lostCurrentAmount > 0 ? _lostCurrentAmount : _holdCurreny;
         _holdCurreny -= getCurrency;
         AccountInfo.Instance.Gold.AddCount(getCurrency);
         if (_holdCurreny <= 0)
@@ -144,5 +166,12 @@ public class StrayMinimoObject : InteractObject
             }
             Despawn();
         }
+    }
+    
+    public override void OnClickDown()
+    {
+        if (!_canClick) return;
+        transform.DOKill();
+        transform.DOScale(_endScale, 0.3f);
     }
 }
