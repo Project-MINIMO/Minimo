@@ -10,6 +10,7 @@ public class Minimo
     
     public int Level { get; private set; }
     public ProduceAdvanced AssignedBuilding { get; private set; }
+    public MinimoObject Agent;
     
     public event Action<Minimo, int> OnLevelChanged;
     public event Action<ProduceAdvanced> OnAssignmentChanged;
