@@ -15,6 +15,7 @@ public class StrayMinimoObject : InteractObject
     [SerializeField] private Sprite _goldenSprite;
     [SerializeField] private GameObject _plunderItemObj;
     [SerializeField] private Image _plunderItemImg;
+    [SerializeField] private StrayCoinEffect _coinEffect;
     
     private StrayMinimoState _currentState = StrayMinimoState.Idle;
     
@@ -149,6 +150,7 @@ public class StrayMinimoObject : InteractObject
         var getCurrency = _holdCurreny - _lostCurrentAmount > 0 ? _lostCurrentAmount : _holdCurreny;
         _holdCurreny -= getCurrency;
         AccountInfo.Instance.Gold.AddCount(getCurrency);
+        _coinEffect.ShowEffect(getCurrency);
         if (_holdCurreny <= 0)
         {
             var (item, amount) = _holdItem;
@@ -156,6 +158,7 @@ public class StrayMinimoObject : InteractObject
             {
                 AccountInfo.Instance.AddItem(item.ID, amount);
             }
+            
             Despawn();
         }
     }
