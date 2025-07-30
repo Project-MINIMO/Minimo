@@ -52,9 +52,16 @@ public class FindWorkPositionAction : ActionNode
 
     public override NodeStatus Tick()
     {
+        var groundTiles = Blackboard.Building.PositionData.GroundTilePositions;
+        var leftmost = groundTiles.OrderBy(p => p.x)
+            .ThenByDescending(p => p.y)
+            .First();
+        var targetOffset = new Vector3Int(leftmost.x - 1, leftmost.y - 1, 0);
+        
         var path = _pathManager.GetPath(
             Blackboard.Agent.transform.position, 
-            Blackboard.Building.transform.position
+            Blackboard.Building.transform.position,
+            targetOffset
             );
 
         if (path is { Count: > 0 })
@@ -86,7 +93,6 @@ public class FindNearestWorkPositionAction : ActionNode
             .Where(building => building.AssignedMinimo == null)
             .ToList();
         
-        Debug.Log(emptyAdvances.Count == 0);
         if (emptyAdvances.Count == 0) return NodeStatus.Failure;
         
         var agentPos = Blackboard.Agent.transform.position;
@@ -95,9 +101,19 @@ public class FindNearestWorkPositionAction : ActionNode
             .First();
 
         Blackboard.TargetBuilding = nearest;
+        
+        var groundTiles = nearest.PositionData.GroundTilePositions;
+        var leftmost = groundTiles.OrderBy(p => p.x)
+            .ThenByDescending(p => p.y)
+            .First();
+        var targetOffset = new Vector3Int(leftmost.x - 1, leftmost.y - 1, 0);
+   
+        var path = _pathManager.GetPath(
+            agentPos, 
+            nearest.transform.position, 
+            targetOffset
+            );
 
-        var path = _pathManager.GetPath(agentPos, nearest.transform.position);
-        Debug.Log(path == null || path.Count == 0);
         if (path == null || path.Count == 0) return NodeStatus.Failure;
 
         Blackboard.Path = path;

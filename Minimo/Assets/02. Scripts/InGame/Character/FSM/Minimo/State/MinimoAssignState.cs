@@ -31,7 +31,6 @@ public class MinimoAssignState : State<MinimoObject>
         var result = _assignTree.Tick();
         if (result is NodeStatus.Success or NodeStatus.Failure)
         {
-            Debug.Log("Execute");
             Owner.EvaluateAndApplyState();
         }
     }

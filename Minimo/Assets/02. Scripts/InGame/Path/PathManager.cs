@@ -21,12 +21,11 @@ public class PathManager : ManagerBase
         return FindPath(currentCell, targetCell);
     }
 
-    public List<Vector3Int> GetPath(Vector3 currentPosition, Vector3 targetPosition)
+    public List<Vector3Int> GetPath(Vector3 currentPosition, Vector3 targetPosition, Vector3Int offset)
     {
         var currentCell = _checkTilemap.WorldToCell(currentPosition);
-        var neighborCells = GetNeighbors(_checkTilemap.WorldToCell(targetPosition));
-        var targetCell = neighborCells.FirstOrDefault(IsWalkable);
-
+        var targetPos = targetPosition + GetTileWorldPosition(offset);
+        var targetCell = _checkTilemap.WorldToCell(targetPos);
         return FindPath(currentCell, targetCell);
     }
 

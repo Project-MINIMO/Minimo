@@ -84,7 +84,6 @@ public class MinimoObject : MonoBehaviour
 
     private bool IsAnyEmptyAdvances()
     {
-        Debug.Log("isAnyEmptyAdvances");
         return _editManager.ActiveAdvanceds.Any(x => x.AssignedMinimo == null);
     }
     
