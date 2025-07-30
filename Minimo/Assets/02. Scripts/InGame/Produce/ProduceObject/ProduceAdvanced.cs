@@ -1,6 +1,7 @@
 using UnityEngine;
 using UniRx;
 using System;
+using System.Threading.Tasks;
 
 public abstract class ProduceAdvanced : ProduceObject
 {
@@ -121,9 +122,17 @@ public abstract class ProduceAdvanced : ProduceObject
         task.ApplyTimeReduction(_globalTimeReduction);
         return task;
     }
+    
+    protected override async Task<bool> CreateBuilding()
+    {
+        var result = await base.CreateBuilding();
+        if (result) EditManager.HandleAdvanced(this, true);
+        return result;
+    }
 
     public override void Destroy()
     {
+        EditManager.HandleAdvanced(this, false);
         UnplaceMinimo();
         base.Destroy();
     }

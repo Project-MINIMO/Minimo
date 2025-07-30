@@ -70,6 +70,18 @@ public class EditManager : ManagerBase
         var obj = await SpawnBuildingAsync(data, AlignToCell(position));
         StartEdit(obj, isNew: true);
     }
+
+    public void HandleAdvanced(ProduceAdvanced advanced, bool add)
+    {
+        if (add)
+        {
+            ActiveAdvanceds.Add(advanced);
+        }
+        else
+        {
+            ActiveAdvanceds.Remove(advanced);
+        }
+    }
     
     public void StartEdit(BuildingObject gridObject, bool isNew = false)
     {
@@ -126,8 +138,6 @@ public class EditManager : ManagerBase
     
     private void HandlePostInstall()
     {
-        if (CurrentEditObject is ProduceAdvanced adv) ActiveAdvanceds.Add(adv);
-        
         var nextCell = _gridLayout.WorldToCell(CurrentEditObject.transform.position) + Vector3Int.down;
         var buildingData = CurrentEditObject.BuildingData;
         CurrentEditObject = null;

@@ -101,7 +101,7 @@ public class BuildingObject : InteractObject
         }
     }
 
-    protected async Task<bool> CreateBuilding()
+    protected virtual async Task<bool> CreateBuilding()
     {
         // Firebase. 건물 설치 요청
         var firebaseManager = App.GetManager<FirebaseManager>();
