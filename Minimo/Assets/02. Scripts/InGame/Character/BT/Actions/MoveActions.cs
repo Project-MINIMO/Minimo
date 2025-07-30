@@ -9,10 +9,10 @@ public class MoveAction : ActionNode
     private const string BottomLeft = "Walk_BL";
     
     private readonly PathManager _pathManager;
+    private const float Speed = 0.3f;
     private Vector3 _targetPosition;
     private Vector3 _prevPosition;
     private int _currentIndex;
-    private float _speed;
     private bool _shouldReset = true;
     
     public MoveAction(Blackboard blackboard) : base(blackboard)
@@ -33,15 +33,18 @@ public class MoveAction : ActionNode
             _currentIndex = 0;
             _targetPosition = _pathManager.GetTileWorldPosition(Blackboard.Path[_currentIndex]);
             _prevPosition = Blackboard.Agent.transform.position;
-            _speed = Blackboard.Path.Count > 3 ? 0.6f : 0.3f;
-            Blackboard.Animator.speed = Mathf.Approximately(_speed, 0.3f) ? 1 : 2;
+            Blackboard.Animator.speed = Blackboard.Speed;
             Blackboard.Animator.SetBool(_isWalk, true);
         }
 
         if (Blackboard.AnimatorIsPlaying("LayToStand")) return NodeStatus.Running;
         if (Blackboard.AnimatorIsPlaying("Boast01")) return NodeStatus.Running;
         if (Blackboard.TargetBuilding != null 
-            && Blackboard.TargetBuilding.AssignedMinimo != null) return NodeStatus.Failure;
+            && Blackboard.TargetBuilding.AssignedMinimo != null)
+        {
+            Exit();
+            return NodeStatus.Failure;
+        }
         
         if (_currentIndex < Blackboard.Path.Count)
         {
@@ -52,7 +55,7 @@ public class MoveAction : ActionNode
                 Blackboard.Agent.transform.position = Vector3.MoveTowards(
                     Blackboard.Agent.transform.position, 
                     _targetPosition, 
-                    _speed * Time.deltaTime);
+                    Blackboard.Speed * Speed * Time.deltaTime);
 
                 if (_prevPosition == Blackboard.Agent.transform.position)
                 {
@@ -81,6 +84,7 @@ public class MoveAction : ActionNode
     private void Exit()
     {
         _shouldReset = true;
+        Blackboard.Speed = 1;
         Blackboard.Animator.speed = 1;
         Blackboard.Animator.SetBool(_isWalk, false);
         Blackboard.TargetBuilding = null;
@@ -126,10 +130,10 @@ public class MoveForwardAction : ActionNode
     private const string TopLeft = "Walk_TL";
     private const string BottomRight = "Walk_BR";
     private const string BottomLeft = "Walk_BL";
-    
+
+    private const float Speed = 0.3f;
     private Vector3 _targetPosition;
     private Vector3 _prevPosition;
-    private float _speed;
     private bool _shouldReset = true;
     
     public MoveForwardAction(Blackboard blackboard) : base(blackboard) { }
@@ -146,8 +150,7 @@ public class MoveForwardAction : ActionNode
             _shouldReset = false;
             _targetPosition = Blackboard.TargetPosition;
             _prevPosition = Blackboard.Agent.transform.position;
-            _speed = 0.6f;
-            Blackboard.Animator.speed = 2;
+            Blackboard.Animator.speed = Blackboard.Speed;
             Blackboard.Animator.SetBool(_isWalk, true);
             
             SetAnimationDirection();
@@ -158,7 +161,7 @@ public class MoveForwardAction : ActionNode
             Blackboard.Agent.transform.position = Vector3.MoveTowards(
                 Blackboard.Agent.transform.position, 
                 _targetPosition, 
-                _speed * Time.deltaTime);
+                Blackboard.Speed * Speed * Time.deltaTime);
 
             if (_prevPosition == Blackboard.Agent.transform.position)
             {
@@ -177,6 +180,7 @@ public class MoveForwardAction : ActionNode
     private void Exit()
     {
         _shouldReset = true;
+        Blackboard.Speed = 1;
         Blackboard.Animator.speed = 1;
         Blackboard.Animator.SetBool(_isWalk, false);
     }

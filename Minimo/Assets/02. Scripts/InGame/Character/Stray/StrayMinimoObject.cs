@@ -132,12 +132,16 @@ public class StrayMinimoObject : InteractObject
 
     public override void OnClickUp()
     {
-        var amount = _holdCurreny - _lostCurrentAmount >= 0 ? _lostCurrentAmount : _holdCurreny;
-        _holdCurreny -= amount;
-        AccountInfo.Instance.Gold.AddCount(amount);
+        var getCurrency = _holdCurreny - _lostCurrentAmount >= 0 ? _lostCurrentAmount : _holdCurreny;
+        _holdCurreny -= getCurrency;
+        AccountInfo.Instance.Gold.AddCount(getCurrency);
         if (_holdCurreny <= 0)
         {
-            _holdItem.Item1?.AddCount(_holdItem.Item2);
+            var (item, amount) = _holdItem;
+            if (item != null)
+            {
+                AccountInfo.Instance.AddItem(item.ID, amount);
+            }
             Despawn();
         }
     }

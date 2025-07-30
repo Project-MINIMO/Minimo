@@ -55,15 +55,6 @@ public class PathManager : ManagerBase
         return Vector3Int.zero;
     }
     
-    private Vector3Int GetRandomTile(Vector3Int center, int size)
-    {
-        var half = size / 2;
-        var randomX = Random.Range(center.x - half, center.x + half + 1);
-        var randomY = Random.Range(center.y - half, center.y + half + 1);
-        
-        return new Vector3Int(randomX, randomY, center.z);
-    }
-    
     private bool IsWalkable(Vector3Int position) => _installChecker.CheckCanInstall(position);
 
     #region A* Algorithm

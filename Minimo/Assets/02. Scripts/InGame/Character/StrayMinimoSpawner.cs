@@ -43,9 +43,8 @@ public class StrayMinimoSpawner : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(1);
-            SpawnMinimo();
             yield return new WaitForSeconds(_spawnInterval);
+            SpawnMinimo();
         }
     }
 

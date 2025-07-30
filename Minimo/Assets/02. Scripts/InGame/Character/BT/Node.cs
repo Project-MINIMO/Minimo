@@ -18,6 +18,7 @@ public class Blackboard
     public readonly Animator Animator;
     public List<Vector3Int> Path;
     
+    public int Speed = 1;
     public Vector3 TargetPosition;
     public ProduceAdvanced TargetBuilding;
 
