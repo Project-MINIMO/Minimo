@@ -67,8 +67,11 @@ public class LevelPanel : UIBase
             
             var duration2 = newFill / FillSpeed;
             _sequence.Append(_fillImg.DOFillAmount(newFill, duration2).SetEase(Ease.Linear));
-            _sequence.Join(_levelTMP.DOScale(1.5f, 0.1f).SetEase(Ease.OutCubic));
-            _sequence.Append(_levelTMP.DOScale(1f, 0.1f).SetEase(Ease.InCubic));
+            _sequence.Join(_levelTMP.DOScale(1.5f, 0.1f).SetEase(Ease.OutCubic)
+                .OnComplete(() =>
+                {
+                    _levelTMP.DOScale(1f, 0.1f).SetEase(Ease.InCubic);
+                }));
         }
         else
         {
