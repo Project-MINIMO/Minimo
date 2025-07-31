@@ -52,7 +52,7 @@ public class MinimoSpawner : MonoBehaviour
     
     private void SpawnMinimo(Minimo data)
     {
-        var spawnPos = _mapBounds.GetRandomOutPoint();
+        var spawnPos = _mapBounds.GetRandomOutsideMapPoint();
         var minimoObject = Instantiate(_minimoPrefab, spawnPos, Quaternion.identity, transform);
 
         var instance = minimoObject.GetComponent<MinimoObject>();

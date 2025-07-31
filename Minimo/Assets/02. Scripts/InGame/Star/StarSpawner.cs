@@ -1,8 +1,8 @@
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class StarSpawner : MonoBehaviour
 {
+    [SerializeField] private CameraBoundsUpdater _mapBounds;
     [SerializeField] private GameObject _starObj;
 
     private int _prevLevel;
@@ -22,7 +22,7 @@ public class StarSpawner : MonoBehaviour
         for (var i = 0; i < level - _prevLevel; i++)
         {
             Instantiate(_starObj, 
-                new Vector3(Random.Range(-6f, 6f), Random.Range(-2.5f, 2.5f), 0),
+                _mapBounds.GetRandomOutsideMapPoint(),
                 Quaternion.identity, 
                 transform);
         }
