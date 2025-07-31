@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.94, y: -0.79, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1000
-  m_Sprite: {fileID: 21300000, guid: 219273c96f38443d1bbd3bcc4b2e581c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9dd8a4fd9d5550b4c95957dfc1c609c2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -102,7 +102,7 @@ MonoBehaviour:
   scaleSpeed: 5
   minScale: 0.9
   maxScale: 1.1
-  standardScale: 0.07
+  standardScale: 0.3
   rotationSpeed: 50
 --- !u!114 &6921432134401474891
 MonoBehaviour:
@@ -118,6 +118,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _linePrefab: {fileID: 7215582968170186116, guid: baf54757c32141944bdd456da792a1b4, type: 3}
   _connectDistance: 2
+  _sprites:
+  - {fileID: 21300000, guid: 9dd8a4fd9d5550b4c95957dfc1c609c2, type: 3}
+  - {fileID: 21300000, guid: 0855a76fb05247b46a9f3889364132c8, type: 3}
+  - {fileID: 21300000, guid: 1b3e919d5dda1f84782461cdc1136481, type: 3}
+  - {fileID: 21300000, guid: bf0da0d6e444ad24aacfbaebe494a4d6, type: 3}
+  - {fileID: 21300000, guid: 8071c8bf552e6d84e834481a874e75f0, type: 3}
+  - {fileID: 21300000, guid: 401dfd80aa57e6d4e90067011c98b9b8, type: 3}
+  - {fileID: 21300000, guid: 74f4e5305a525f948bc12f0a3b6dbccd, type: 3}
 --- !u!58 &863889796840230033
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -152,4 +160,4 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 5
+  m_Radius: 1

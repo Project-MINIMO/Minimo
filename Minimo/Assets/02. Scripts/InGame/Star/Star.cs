@@ -6,6 +6,7 @@ public class Star : InteractObject
     [Header("Line Settings")]
     [SerializeField] private LineRenderer _linePrefab;
     [SerializeField] private float _connectDistance = 2f;
+    [SerializeField] private Sprite[] _sprites;
 
     private static List<Star> _allStars = new();
     private readonly Queue<LineRenderer> _pool = new();
@@ -15,6 +16,7 @@ public class Star : InteractObject
 
     private void Awake()
     {
+        GetComponent<SpriteRenderer>().sprite = _sprites[Random.Range(0, _sprites.Length)];
         _constellationPanel = App.GetManager<UIManager>().GetPanel<ConstellationPanel>();
         _allStars.Add(this);
     }
