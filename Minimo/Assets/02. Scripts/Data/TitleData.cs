@@ -36,6 +36,7 @@ public class ItemData
     public int Property;
     public int SellCost;
     public int BuyCost;
+    public int EXP;
     public string Name;
 }
 

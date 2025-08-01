@@ -17,6 +17,7 @@ public class Item : IQuestClearTarget, IQuestRewardTarget
     public readonly ItemProperty Property;
     public readonly int SellCost;
     public readonly int BuyCost;
+    public readonly int Exp;
     public readonly string Description;
     
     public Item(ItemData data, Sprite icon, TitleData title)
@@ -28,6 +29,7 @@ public class Item : IQuestClearTarget, IQuestRewardTarget
         Property = (ItemProperty)data.Property;
         SellCost = data.SellCost;
         BuyCost = data.BuyCost;
+        Exp = data.EXP;
         Name = title.GetString($"STR_ITEM_{data.Name.ToUpper()}_NAME");
         Description = title.GetString($"STR_ITEM_{data.Name.ToUpper()}_DESC");
         Icon = icon;
