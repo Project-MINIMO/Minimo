@@ -1,3 +1,5 @@
+using System;
+
 using UnityEngine;
 using DG.Tweening;
 
@@ -61,14 +63,18 @@ public class AcquireShakeAction : ActionNode
         {
             _shouldReset = false;
             
-            _duration = 2f;
+            _duration = 2.5f;
             _startTime = Time.time;
-            _spaceship.DOShakePosition(
-                duration: 1f,
-                strength: new Vector3(0.05f, 0f, 0f), // X축만 흔들림
-                vibrato: 10,
-                randomness: 90,
-                fadeOut: true);
+            
+            MoveCamera(() =>
+            {
+                _spaceship.DOShakePosition(
+                    duration: 1f,
+                    strength: new Vector3(0.05f, 0f, 0f), // X축만 흔들림
+                    vibrato: 10,
+                    randomness: 90,
+                    fadeOut: true);
+            });
         }
         
         if (Time.time - _startTime >= _duration)
@@ -78,6 +84,22 @@ public class AcquireShakeAction : ActionNode
         }
         
         return NodeStatus.Running;
+    }
+    
+    private void MoveCamera(Action onComplete = null)
+    {
+        var targetPos = new Vector3(0, 0, Camera.main.transform.position.z);
+
+        if (Camera.main.transform.position == targetPos)
+        {
+            onComplete?.Invoke();
+            return;
+        }
+
+        Camera.main.transform
+            .DOMove(targetPos, 0.5f)
+            .SetEase(Ease.OutCubic)
+            .OnComplete(() => onComplete?.Invoke());
     }
 }
 
