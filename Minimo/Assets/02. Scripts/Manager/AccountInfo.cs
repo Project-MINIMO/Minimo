@@ -9,7 +9,7 @@ public class AccountInfo : Singleton<AccountInfo>
     public Dictionary<int, Item> Items { get; private set; }
     public UserLevel Level { get; private set; }
     public UserGold Gold { get; private set; }
-    public int Cash = 100;
+    public int Cash { get; private set; } = 100;
     public int StorageCapacity { get; private set; } = 100;
     public int MinimoCapacity { get; private set; } = 5;
 
@@ -25,6 +25,31 @@ public class AccountInfo : Singleton<AccountInfo>
     {
         Level = new UserLevel(LevelIcon);
         Gold = new UserGold(GoldIcon);
+        
+        // Firebase에서 초기 SLP 값 로드
+        InitializeCashFromFirebase();
+    }
+    
+    private void InitializeCashFromFirebase()
+    {
+        var firebaseManager = App.GetManager<FirebaseManager>();
+        if (firebaseManager != null)
+        {
+            // 초기 SLP 값 설정
+            Cash = firebaseManager.GetCurrentSLP();
+            
+            // SLP 업데이트 이벤트 구독
+            firebaseManager.OnSLPUpdate += OnSLPUpdate;
+        }
+        else
+        {
+            Debug.LogWarning("FirebaseManager is not initialized. Using default cash value.");
+        }
+    }
+    
+    private void OnSLPUpdate(int newSLP)
+    {
+        Cash = newSLP;
     }
 
     public void AddItems(Dictionary<int, Item> items)
@@ -85,6 +110,26 @@ public class AccountInfo : Singleton<AccountInfo>
         OnMinimoCapacityChanged?.Invoke(MinimoCapacity);
     }
     
+    // SLP(Cash) 추가 메서드
+    public async void AddCash(int amount)
+    {
+        var firebaseManager = App.GetManager<FirebaseManager>();
+        if (firebaseManager != null)
+        {
+            bool success = await firebaseManager.UpdateSLP(amount, "add");
+            if (!success)
+            {
+                Debug.LogError("Failed to update SLP in Firebase");
+            }
+        }
+        else
+        {
+            // Firebase 매니저가 없는 경우 로컬에서만 업데이트
+            Cash += amount;
+            Cash = Mathf.Clamp(Cash, 0, int.MaxValue);
+        }
+    }
+    
     [ContextMenu("AddGold1000000")]
     public void AddGold1000000()
     {
@@ -95,5 +140,11 @@ public class AccountInfo : Singleton<AccountInfo>
     public void AddLevel1()
     {
         Level.AddCount(100);
+    }
+    
+    [ContextMenu("AddCash1000")]
+    public void AddCash1000()
+    {
+        AddCash(1000);
     }
 }
