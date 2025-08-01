@@ -9,6 +9,7 @@ public class OptionPanel : UIBase
     [Header("Buttons")]
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
+    [SerializeField] private Button _restartBtn;
     
     [SerializeField] private Toggle _soundOnTog;
     [SerializeField] private Toggle _soundOffTog;
@@ -47,6 +48,7 @@ public class OptionPanel : UIBase
         
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
+        _restartBtn.onClick.AddListener(Restart);
 
         /*
         _optionBases = GetComponentsInChildren<OptionBase>(true);
@@ -125,4 +127,16 @@ public class OptionPanel : UIBase
         App.GetData<SettingData>().SaveToLocal();
     }
     */
+
+    private async void Restart()
+    {
+        var firebaseManager = App.GetManager<FirebaseManager>();
+        await firebaseManager.DeleteUserAsync();
+        await firebaseManager.InitializeFirebase();
+        
+        // TODO : 퀘스트 관련 카운트 정보 초기화
+        
+        // Move to Title Scene
+        App.LoadScene(SceneName.Title);
+    }
 }
