@@ -16,6 +16,8 @@ public class StrayMinimoObject : InteractObject
     [SerializeField] private GameObject _plunderItemObj;
     [SerializeField] private Image _plunderItemImg;
     [SerializeField] private StrayCoinEffect _coinEffect;
+    [SerializeField] private GameObject _clickGaugeObj;
+    [SerializeField] private Image _clickGaugeImg;
     
     private StrayMinimoState _currentState = StrayMinimoState.Idle;
     
@@ -32,6 +34,7 @@ public class StrayMinimoObject : InteractObject
     
     private int _lifeRemaining;
     private int _holdCurreny;
+    private int _holdCurreny2;
     private int _lostCurrentAmount;
     private (Item, int) _holdItem;
     
@@ -80,13 +83,15 @@ public class StrayMinimoObject : InteractObject
         _lifeRemaining = _lifeTime;
         
         var holdCurreny = (_currency + AccountInfo.Instance.Level.Count * _currency * 0.1f) * _currencyRate;
-        _holdCurreny = Mathf.RoundToInt(holdCurreny);
+        _holdCurreny = _holdCurreny2 = Mathf.RoundToInt(holdCurreny);
 
         var lostCurrentAmount = _holdCurreny * _currencyLostRate;
         _lostCurrentAmount = Mathf.RoundToInt(lostCurrentAmount);
         
         _holdItem = (null, 0);
         _plunderItemObj.SetActive(false);
+        
+        _clickGaugeImg.fillAmount = 0;
         
         _lifeTimeRoutine = StartCoroutine(LifetimeRoutine());
     }
@@ -146,6 +151,7 @@ public class StrayMinimoObject : InteractObject
     {
         var getCurrency = _holdCurreny - _lostCurrentAmount > 0 ? _lostCurrentAmount : _holdCurreny;
         _holdCurreny -= getCurrency;
+        _clickGaugeImg.fillAmount = (float)(_holdCurreny2 - _holdCurreny) / _holdCurreny2;
         AccountInfo.Instance.Gold.AddCount(getCurrency);
         _coinEffect.ShowEffect(getCurrency);
         if (_holdCurreny <= 0)
