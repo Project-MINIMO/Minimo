@@ -103,12 +103,8 @@ public class PathManager : ManagerBase
 
             foreach (var neighborPos in GetNeighbors(currentNode.Position))
             {
-                if (closedSet.Contains(neighborPos) || !IsWalkable(neighborPos))
-                {
-                    continue;
-                }
-                
-                if (!IsWalkable(neighborPos)) continue;
+                if (closedSet.Contains(neighborPos)) continue;
+                if (neighborPos != target && !IsWalkable(neighborPos)) continue;
 
                 var tentativeGScore = currentNode.G + GetDistance(currentNode.Position, neighborPos);
 

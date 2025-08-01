@@ -44,7 +44,7 @@ public class VisitMinimoObject : MonoBehaviour
     {
         Target = advanced;
         
-        _lifeRemaining = 10;
+        _lifeRemaining = 60;
         _requiredItem = (item, 1);
         _requiredItemImg.sprite = item.Icon;
     }
