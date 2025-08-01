@@ -21,6 +21,7 @@ public class MinimoSlot : InventorySlot<Minimo>
 
     private void OnEnable()
     {
+        if (Item == null) return;
         if (Item.AcquisitionDate == DateTime.MinValue) gameObject.SetActive(false);
     }
 }

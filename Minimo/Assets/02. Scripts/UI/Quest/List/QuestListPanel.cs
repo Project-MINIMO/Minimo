@@ -38,13 +38,16 @@ public abstract class QuestListPanel<T> : UIBase where T : QuestSlot
         {
             slot.OnSlotSelected += OnSlotSelected;
         }
+    }
 
+    private void Start()
+    {
         foreach (var quest in QuestManager.ActiveQuests)
         {
             AssignSlot(quest);
         }
     }
-    
+
     public override void Show(bool isNew)
     {
         base.Show(isNew);

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ObjectInput : MonoBehaviour
 {
@@ -58,6 +59,7 @@ public class ObjectInput : MonoBehaviour
 
     private void HandleClickUp()
     {
+        if (_currentObject == null) return;
         if (_editManager.IsTileEditing.Value) return;
         
         if (_editManager.IsBuildingEditing.Value)
@@ -106,6 +108,8 @@ public class ObjectInput : MonoBehaviour
 
     private InteractObject GetRaycastObject()
     {
+        if (EventSystem.current.IsPointerOverGameObject()) return null;
+        
         var worldPosition = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
         var hit = Physics2D.OverlapPoint(worldPosition, _layerMask);
         if (hit != null && hit.TryGetComponent<InteractObject>(out var component))
