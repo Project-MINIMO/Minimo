@@ -9,10 +9,9 @@ public class AccountInfo : Singleton<AccountInfo>
     public Dictionary<int, Item> Items { get; private set; }
     public UserLevel Level { get; private set; }
     public UserGold Gold { get; private set; }
-    public int Cash;
+    public int Cash = 100;
     public int StorageCapacity { get; private set; } = 100;
     public int MinimoCapacity { get; private set; } = 5;
-    public int Star;
 
     private GetItemPanel _itemPanel;
     public event Action<int> OnStorageCapacityChanged;

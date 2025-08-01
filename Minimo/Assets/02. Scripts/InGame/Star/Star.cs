@@ -1,11 +1,20 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class Star : InteractObject
 {
     [SerializeField] private Sprite[] _sprites;
-
+    
     private StarSpawner _spawner;
     private ConstellationPanel _constellationPanel;
+    private bool _isSpawned;
+    
+    private const float ScaleSpeed = 5f;
+    private const float MinScale = 0.9f;
+    private const float MaxScale = 1.1f;
+    private const float StandardScale = 0.3f;
+    private const float RotationSpeed = 30;
+    private float _timeOffset = -1;
 
     public void Initialize(StarSpawner spawner, ConstellationPanel constellationPanel)
     {
@@ -13,6 +22,23 @@ public class Star : InteractObject
         _constellationPanel = constellationPanel;
         
         GetComponent<SpriteRenderer>().sprite = _sprites[Random.Range(0, _sprites.Length)];
+        transform.DOScale(new Vector3(0.3f, 0.3f, 0.3f), 0.3f).SetEase(Ease.InOutElastic)
+            .OnComplete(() =>
+            {
+                _timeOffset = Random.Range(0f, 100f);
+                transform
+                    .DORotate(new Vector3(0, 0, 360f), 1f / (RotationSpeed / 360f), RotateMode.FastBeyond360)
+                    .SetEase(Ease.Linear)
+                    .SetLoops(-1, LoopType.Restart);
+            });
+    }
+
+    private void Update()
+    {
+        if (_timeOffset < 0) return;
+        
+        var scale = StandardScale * Mathf.Lerp(MinScale, MaxScale, (Mathf.Sin(Time.time * ScaleSpeed + _timeOffset) + 1f) / 2f);
+        transform.localScale = new Vector3(scale, scale, scale);
     }
 
     public override void OnDrag()

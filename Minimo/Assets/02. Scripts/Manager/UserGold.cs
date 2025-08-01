@@ -3,7 +3,7 @@ using UnityEngine;
 public class UserGold : IQuestRewardTarget
 {
     public Sprite Icon { get; }
-    public int Count { get; private set; }
+    public int Count { get; private set; } = 500;
 
     public UserGold(Sprite icon)
     {
