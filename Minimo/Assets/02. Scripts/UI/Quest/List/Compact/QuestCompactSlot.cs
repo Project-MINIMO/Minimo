@@ -10,8 +10,8 @@ public class QuestCompactSlot : QuestSlot
     [SerializeField] private GameObject _defaultBackground;
     [SerializeField] private GameObject _completeBackground;
     [SerializeField] private GameObject[] _iconObjs;
-
-    private Quest _currentQuest;
+    
+    private Quest _activeQuest;
     
     protected override void Awake()
     {
@@ -27,10 +27,10 @@ public class QuestCompactSlot : QuestSlot
 
     private void Update()
     {
-        if (_currentQuest == null) return;
-        if (_currentQuest.Condition != QuestCondition.Normal) return;
+        if (_activeQuest == null) return;
+        if (_activeQuest.Condition != QuestCondition.Normal) return;
         
-        foreach (var clear in _currentQuest.Clear)
+        foreach (var clear in _activeQuest.Clear)
         {
             if (!clear.IsCompleted) return;
         }
@@ -40,15 +40,16 @@ public class QuestCompactSlot : QuestSlot
         
         transform.SetAsFirstSibling();
 
-        _currentQuest = null;
+        _activeQuest = null;
     }
     
     public override void Initialize(Quest data)
     {
         base.Initialize(data);
         
+        _activeQuest = data;
+        
         _iconObjs[GetIndex(data.Type)].SetActive(true);
-        _currentQuest = data;
         _defaultBackground.SetActive(true);
         _completeBackground.SetActive(false);
     }

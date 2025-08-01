@@ -37,7 +37,7 @@ public class QuestConsSlot : QuestSlot
 
     private void SetLockDescription()
     {
-        _lockDescriptionTMP.text = QuestData.OpenLevel <= AccountInfo.Instance.Level.Count
+        _lockDescriptionTMP.text = CurrentQuest.OpenLevel <= AccountInfo.Instance.Level.Count
             ? _preQuestLockDescription
             : string.Format(_levelLockDescription, AccountInfo.Instance.Level.Count);
     }

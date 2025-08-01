@@ -44,6 +44,7 @@ public abstract class QuestListPanel<T> : UIBase where T : QuestSlot
     {
         foreach (var quest in QuestManager.ActiveQuests)
         {
+            if (Slots.Any(x => x.CurrentQuest == quest)) continue;
             AssignSlot(quest);
         }
     }
