@@ -4,8 +4,6 @@ using UnityEngine.UI;
 
 public class EditPanel : UIBase
 {
-    [SerializeField] private Button _buildingBtn;
-    [SerializeField] private Button _closeBtn;
     [SerializeField] private EditCircleHandler _editHandler;
     
     private EditManager _editManager;
@@ -14,10 +12,6 @@ public class EditPanel : UIBase
     {
         base.Initialize(manager);
 
-        var buildingPanel = manager.GetPanel<BuildingPanel>();
-        _buildingBtn.onClick.AddListener(buildingPanel.OpenPanel);
-        _closeBtn.onClick.AddListener(ClosePanel);
-        
         _editManager = App.GetManager<EditManager>();
         
         _editManager.IsBuildingEditing
@@ -26,11 +20,11 @@ public class EditPanel : UIBase
                 if (isEditing)
                 {
                     OpenPanel();
-                    _editHandler.gameObject.SetActive(true);
                     _editHandler.Attach(_editManager.CurrentEditObject);
                 }
                 else
                 {
+                    ClosePanel();
                     _editHandler.Detach();
                 }
             })
