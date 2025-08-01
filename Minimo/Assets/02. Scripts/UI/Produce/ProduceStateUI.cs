@@ -37,7 +37,7 @@ public class ProduceStateUI : MonoBehaviour
             {
                 _stateBack.SetActive(!isEditing);
             }).AddTo(gameObject);
-        gameObject.SetActive(!editManager.IsBuildingEditing.Value);
+        _stateBack.SetActive(!editManager.IsBuildingEditing.Value);
     }
 
     private void UpdateStateUI(ProduceState state)

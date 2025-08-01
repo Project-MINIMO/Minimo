@@ -49,10 +49,10 @@ public class CameraBoundsUpdater : MonoBehaviour
         var mapTop = mapMax.y;
 
         var colliderBounds = _collider.bounds;
-        var colliderLeft = colliderBounds.min.x;
-        var colliderRight = colliderBounds.max.x;
-        var colliderBottom = colliderBounds.min.y;
-        var colliderTop = colliderBounds.max.y;
+        var colliderLeft = colliderBounds.min.x + 1;
+        var colliderRight = colliderBounds.max.x - 1;
+        var colliderBottom = colliderBounds.min.y + 1;
+        var colliderTop = colliderBounds.max.y - 1;
 
         float xZoneMin, xZoneMax;
         if (origin.x < mapLeft)
@@ -106,8 +106,8 @@ public class CameraBoundsUpdater : MonoBehaviour
     public Vector3 GetRandomOutsideMapPoint()
     {
         var colliderBounds = _collider.bounds;
-        var mapMin = _tilemap.transform.TransformPoint(_localBounds.min);
-        var mapMax = _tilemap.transform.TransformPoint(_localBounds.max);
+        var mapMin = _tilemap.transform.TransformPoint(_localBounds.min) + Vector3.one;
+        var mapMax = _tilemap.transform.TransformPoint(_localBounds.max) - Vector3.one;
 
         var regions = new System.Collections.Generic.List<(float xMin, float xMax, float yMin, float yMax)>();
 
