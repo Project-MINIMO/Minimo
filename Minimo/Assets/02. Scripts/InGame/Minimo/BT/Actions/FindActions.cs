@@ -254,7 +254,7 @@ public class FindSpaceshipPositionAction : ActionNode
     {
         var path = _pathManager.GetPath(
             Blackboard.Agent.transform.position, 
-            new Vector3(1, 1, 1)
+            new Vector3(1, 1.3f, 0)
         );
 
         if (path is { Count: > 0 })
@@ -264,7 +264,7 @@ public class FindSpaceshipPositionAction : ActionNode
         }
         else
         {
-            var targetPos = _pathManager.GetTileWorldPosition(new Vector3(1, 1, 1));
+            var targetPos = _pathManager.GetTileWorldPosition(new Vector3(1, 1.3f, 0));
             Blackboard.Path = new()
             {
                 targetPos.Item2

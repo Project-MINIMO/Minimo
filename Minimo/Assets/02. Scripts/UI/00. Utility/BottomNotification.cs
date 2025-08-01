@@ -35,7 +35,7 @@ public class BottomNotification : MonoBehaviour
             [NotifyType.MinimoCapacityLack] = "미니모 거주지를 늘려주세요.",
             
             [NotifyType.SlotLack] = titleData.GetString("STR_NOTIFY_PRODUCE_SLOTLACK"),
-            [NotifyType.MissMinimo] = titleData.GetString("STR_NOTIFY_PRODUCE_MISSMINIMO"),
+            [NotifyType.MissMinimo] = "배치할 수 있는 미니모가 없습니다.",
             [NotifyType.MissRecipe] = titleData.GetString("STR_NOTIFY_PRODUCE_MISSRECIPE"),
             
             [NotifyType.GoldLack] = "골드가 부족합니다.",

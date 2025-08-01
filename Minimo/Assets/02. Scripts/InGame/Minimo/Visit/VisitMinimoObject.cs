@@ -4,24 +4,30 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class VisitMinimoObject : InteractObject
+public class VisitMinimoObject : MonoBehaviour
 {
     public VisitMinimoFSM FSM { get; private set; }
     public ProduceAdvanced Target { get; private set; }
     
     [SerializeField] private GameObject _requiredItemObj;
     [SerializeField] private Image _requiredItemImg;
+    [SerializeField] private Button _requiredItemBtn;
     
     private VisitMinimoState _currentState = VisitMinimoState.Idle;
     
-    private readonly Vector3 _startScale = new(0.2f, 0.2f, 0.2f);
-    private readonly Vector3 _endScale = new(0.17f, 0.17f, 0.17f);
+    private VisitMinimoSpawner _spawner;
     
     private int _lifeRemaining;
     private (Item, int) _requiredItem;
     
     private Coroutine _lifeTimeRoutine;
     private Coroutine _clickAnimationRoutine;
+
+    public void Initialize(VisitMinimoSpawner spawner)
+    {
+        _spawner = spawner;
+        _requiredItemBtn.onClick.AddListener(GiveItem);
+    }
     
     private void Start()
     {
@@ -38,14 +44,27 @@ public class VisitMinimoObject : InteractObject
     {
         Target = advanced;
         
-        ApplyState(VisitMinimoState.Idle);
-        _lifeRemaining = 30;
-
+        _lifeRemaining = 60;
         _requiredItem = (item, 1);
-        _requiredItemObj.SetActive(true);
         _requiredItemImg.sprite = item.Icon;
-        
-        _lifeTimeRoutine = StartCoroutine(LifetimeRoutine());
+    }
+
+    public void Land()
+    {
+        gameObject.SetActive(true);
+        transform.DOMoveY(1.3f, 2)
+            .OnComplete(() =>
+            {
+                ApplyState(VisitMinimoState.Idle);
+                _requiredItemObj.SetActive(true);
+                _lifeTimeRoutine = StartCoroutine(LifetimeRoutine());
+            });
+    }
+
+    public void Depart()
+    {
+        transform.DOMoveY(2.3f, 2)
+            .OnComplete(() => gameObject.SetActive(false));
     }
     
     private IEnumerator LifetimeRoutine()
@@ -80,6 +99,7 @@ public class VisitMinimoObject : InteractObject
     public void Hide()
     {
         ApplyState(VisitMinimoState.None);
+        _spawner.CallSpaceship(this);
     }
 
     private void ApplyState(VisitMinimoState target)
@@ -89,39 +109,13 @@ public class VisitMinimoObject : InteractObject
         _currentState = target;
         FSM.ChangeState(target);
     }
-  
-    public override void OnLongPress() { }
 
-    public override void OnClickUp()
+    private void GiveItem()
     {
         if (_requiredItem.Item1.Count >= _requiredItem.Item2)
         {
             _requiredItem.Item1.AddCount(-_requiredItem.Item2);
             Despawn();
         }
-    }
-    
-    public override void OnClickDown()
-    {
-        if (_clickAnimationRoutine != null)
-        {
-            StopCoroutine(_clickAnimationRoutine);
-            _clickAnimationRoutine = null;
-        }
-        
-        _clickAnimationRoutine = StartCoroutine(ClickAnimation());
-    }
-
-    private IEnumerator ClickAnimation()
-    {
-        if (_currentState == VisitMinimoState.Hide) yield break;
-        
-        transform.DOKill();
-        transform.DOScale(_endScale, 0.3f);
-        yield return new WaitForSeconds(0.3f);
-        
-        if (_currentState == VisitMinimoState.Hide) yield break;
-        
-        transform.DOScale(_startScale, 0.3f);
     }
 }

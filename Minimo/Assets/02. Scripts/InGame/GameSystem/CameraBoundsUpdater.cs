@@ -128,6 +128,15 @@ public class CameraBoundsUpdater : MonoBehaviour
         var y = Random.Range(selected.yMin, selected.yMax);
         return new Vector3(x, y, 0);
     }
+
+    public (float, float) GetOutsideMapWidth()
+    {
+        var colliderBounds = _collider.bounds;
+        var mapMin = _tilemap.transform.TransformPoint(colliderBounds.min);
+        var mapMax = _tilemap.transform.TransformPoint(colliderBounds.max);
+
+        return (mapMin.x, mapMax.x);
+    }
   
     public Vector3[] GetCorners()
     {
