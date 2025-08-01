@@ -36,6 +36,7 @@ public class FirebaseManager : ManagerBase
     public event Action<FirebaseUser> OnUserSignedIn;
     public event Action OnUserSignedOut;
     public event Action<string> OnError;
+    public event Action<int> OnSDCUpdate;
 
     public FirebaseUser CurrentUser => _user;
     public bool IsSignedIn => _user != null;
@@ -111,6 +112,12 @@ public class FirebaseManager : ManagerBase
             });
             _currentUserData = await FetchUserData(_user?.UserId);
         }
+        if (_currentUserData == null)
+        {
+            Debug.LogError("사용자 데이터가 없습니다.");
+            return;
+        }
+        OnSDCUpdate?.Invoke(_currentUserData.currencies.SDC);
     }
 
 #region Util Method
@@ -379,6 +386,50 @@ public class FirebaseManager : ManagerBase
         };
         var (success, _) = await TryGet(() => callable.CallAsync(data));
         return success;
+    }
+
+    // SDC 통화 업데이트
+    public async Task<bool> UpdateSDC(int amount, string operation = "add")
+    {
+        if (_user == null) return false;
+        
+        var callable = _functions.GetHttpsCallable("updateCurrency");
+        var data = new Dictionary<string, object>
+        {
+            { "currencyType", "SDC" },
+            { "amount", amount },
+            { "operation", operation }
+        };
+        
+        var (success, result) = await TryGet(() => callable.CallAsync(data));
+        if (success && result.Data is Dictionary<object, object> response)
+        {
+            // 성공 시 로컬 UserData도 업데이트
+            if (_currentUserData != null)
+            {
+                switch (operation)
+                {
+                    case "add":
+                        _currentUserData.currencies.SDC += amount;
+                        break;
+                    case "subtract":
+                        _currentUserData.currencies.SDC -= amount;
+                        break;
+                    case "set":
+                        _currentUserData.currencies.SDC = amount;
+                        break;
+                }
+                _currentUserData.currencies.SDC = Mathf.Clamp(_currentUserData.currencies.SDC, 0, int.MaxValue);
+                OnSDCUpdate?.Invoke(_currentUserData.currencies.SDC);
+            }
+        }
+        return success;
+    }
+
+    // SDC 통화 조회
+    public int GetCurrentSDC()
+    {
+        return _currentUserData?.currencies.SDC ?? 0;
     }
 
 #region Private
