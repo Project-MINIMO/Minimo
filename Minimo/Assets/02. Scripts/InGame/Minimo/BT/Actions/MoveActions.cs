@@ -139,9 +139,15 @@ public class MoveForwardAction : ActionNode
     private Vector3 _prevPosition;
     private bool _shouldReset = true;
 
+    private StrayMinimoObject _minimo;
+
     public MoveForwardAction(Blackboard blackboard, int triggerName) : base(blackboard)
     {
         _triggerName = triggerName;
+        if (blackboard.Agent.TryGetComponent<StrayMinimoObject>(out var stray))
+        {
+            _minimo = stray;
+        }
     }
 
     public override void Reset()
@@ -160,6 +166,11 @@ public class MoveForwardAction : ActionNode
             Blackboard.Animator.SetBool(_triggerName, true);
             
             SetAnimationDirection();
+        }
+
+        if (_minimo != null)
+        {
+            if (_minimo.IsClicked) return NodeStatus.Running;
         }
         
         if ((_targetPosition - Blackboard.Agent.transform.position).sqrMagnitude > 0f)

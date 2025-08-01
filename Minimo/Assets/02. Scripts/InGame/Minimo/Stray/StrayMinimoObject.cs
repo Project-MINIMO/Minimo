@@ -10,6 +10,7 @@ public class StrayMinimoObject : InteractObject
 {
     public StrayMinimoFSM FSM { get; private set; }
     public bool IsGolden { get; private set; }
+    public bool IsClicked { get; private set; }
     
     [SerializeField] private Sprite _normalSprite;
     [SerializeField] private Sprite _goldenSprite;
@@ -80,6 +81,7 @@ public class StrayMinimoObject : InteractObject
     public void Spawn(Vector3 position)
     {
         transform.position = position;
+        IsClicked = false;
         ApplyState(StrayMinimoState.Idle);
         _lifeRemaining = _lifeTime;
         
@@ -124,6 +126,7 @@ public class StrayMinimoObject : InteractObject
             _lifeTimeRoutine = null;
         }
         
+        IsClicked = false;
         ApplyState(StrayMinimoState.Hide);
     }
 
@@ -190,9 +193,13 @@ public class StrayMinimoObject : InteractObject
     {
         if (_currentState == StrayMinimoState.Hide) yield break;
         
+        IsClicked = true;
+        
         transform.DOKill();
         transform.DOScale(_endScale, 0.3f);
         yield return new WaitForSeconds(0.3f);
+
+        IsClicked = false;
         
         if (_currentState == StrayMinimoState.Hide) yield break;
         
