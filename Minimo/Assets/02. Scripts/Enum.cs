@@ -60,6 +60,13 @@ public enum StrayMinimoState
     None,
 }
 
+public enum VisitMinimoState
+{
+    Idle,
+    Hide,
+    None
+}
+
 public enum ResourceType
 {
     Resource,

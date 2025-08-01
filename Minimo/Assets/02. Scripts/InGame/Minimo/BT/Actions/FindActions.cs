@@ -95,9 +95,6 @@ public class FindWorkPositionAction : ActionNode
 }
 #endregion
 
-
-
-
 #region Stray
 public class FindStrayPositionAction  : ActionNode
 {
@@ -195,4 +192,89 @@ public class FindNearestCornerPositionAction : ActionNode
         return NodeStatus.Success;
     }
 }
+#endregion
+
+#region MyRegion
+public class FindVisitTargetPositionAction : ActionNode
+{
+    private ProduceAdvanced Building => _owner.Target;
+    private readonly VisitMinimoObject _owner;
+    private readonly PathManager _pathManager;
+
+    public FindVisitTargetPositionAction(Blackboard blackboard) : base(blackboard)
+    {
+        _pathManager = App.GetManager<PathManager>();
+        _owner = blackboard.Agent.GetComponent<VisitMinimoObject>();
+    }
+
+    public override NodeStatus Tick()
+    {
+        var groundTiles = Building.PositionData.GroundTilePositions;
+        var leftmost = groundTiles.OrderBy(p => p.x)
+            .ThenByDescending(p => p.y)
+            .First();
+        var targetOffset = new Vector3Int(leftmost.x - 1, leftmost.y - 1, 0);
+        
+        var path = _pathManager.GetPath(
+            Blackboard.Agent.transform.position, 
+            Building.transform.position,
+            targetOffset
+        );
+
+        if (path is { Count: > 0 })
+        {
+            Blackboard.Path = path;
+            Blackboard.Speed = 2;
+        }
+        else
+        {
+            var targetPos = _pathManager.GetTileWorldPosition(Building.transform.position, targetOffset);
+            Blackboard.Path = new()
+            {
+                targetPos.Item2
+            };
+            Blackboard.Agent.transform.position = targetPos.Item1;
+
+        }
+        
+        return NodeStatus.Success;
+    }
+}
+
+public class FindSpaceshipPositionAction : ActionNode
+{
+    private readonly PathManager _pathManager;
+
+    public FindSpaceshipPositionAction(Blackboard blackboard) : base(blackboard)
+    {
+        _pathManager = App.GetManager<PathManager>();
+    }
+
+    public override NodeStatus Tick()
+    {
+        var path = _pathManager.GetPath(
+            Blackboard.Agent.transform.position, 
+            new Vector3(1, 1, 1)
+        );
+
+        if (path is { Count: > 0 })
+        {
+            Blackboard.Path = path;
+            Blackboard.Speed = 2;
+        }
+        else
+        {
+            var targetPos = _pathManager.GetTileWorldPosition(new Vector3(1, 1, 1));
+            Blackboard.Path = new()
+            {
+                targetPos.Item2
+            };
+            Blackboard.Agent.transform.position = targetPos.Item1;
+        }
+        
+        return NodeStatus.Success;
+    }
+}
+
+
 #endregion

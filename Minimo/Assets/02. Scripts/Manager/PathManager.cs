@@ -13,9 +13,13 @@ public class PathManager : ManagerBase
         return _checkTilemap.GetCellCenterWorld(tilePosition);
     }
 
-    public (Vector3, Vector3Int) GetTileWorldPosition(Vector3 targetPosition, Vector3Int offset)
+    public (Vector3, Vector3Int) GetTileWorldPosition(Vector3 targetPosition, Vector3Int offset = default)
     {
-        var targetPos = targetPosition + GetTileWorldPosition(offset);
+        var targetPos = targetPosition;
+        if (offset != Vector3Int.zero)
+        {
+            targetPos = targetPosition + GetTileWorldPosition(offset);
+        }
         var targetCell = _checkTilemap.WorldToCell(targetPos);
         return (targetPos, targetCell);
     }
@@ -28,10 +32,14 @@ public class PathManager : ManagerBase
         return FindPath(currentCell, targetCell);
     }
 
-    public List<Vector3Int> GetPath(Vector3 currentPosition, Vector3 targetPosition, Vector3Int offset)
+    public List<Vector3Int> GetPath(Vector3 currentPosition, Vector3 targetPosition, Vector3Int offset = default)
     {
         var currentCell = _checkTilemap.WorldToCell(currentPosition);
-        var targetPos = targetPosition + GetTileWorldPosition(offset);
+        var targetPos = targetPosition;
+        if (offset != Vector3Int.zero)
+        {
+            targetPos = targetPosition + GetTileWorldPosition(offset);
+        }
         var targetCell = _checkTilemap.WorldToCell(targetPos);
         return FindPath(currentCell, targetCell);
     }
