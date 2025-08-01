@@ -24,8 +24,8 @@ public class StrayMinimoObject : InteractObject
     
     private EditManager _editManager;
 
-    private readonly Vector3 _startScale = new(0.23f, 0.23f, 0.23f);
-    private readonly Vector3 _endScale = new(0.2f, 0.2f, 0.2f);
+    private readonly Vector3 _startScale = new(0.2f, 0.2f, 0.2f);
+    private readonly Vector3 _endScale = new(0.17f, 0.17f, 0.17f);
     
     private int _lifeTime;
     private int _afterPlunderLifeTime;

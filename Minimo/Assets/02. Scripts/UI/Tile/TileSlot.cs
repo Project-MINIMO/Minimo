@@ -14,7 +14,7 @@ public class TileSlot : InventorySlot<CustomTile>
     private void OnEnable()
     {
         SetState();
-        if (Item != null && Item.Tile.name == "Water05")
+        if (Item != null && Item.ID is 14 or 16 or 17)
         {
             gameObject.SetActive(false);
         }
