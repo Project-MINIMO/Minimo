@@ -43,10 +43,25 @@ public class CameraInput : MonoBehaviour
 
     private void Move()
     {
+#if UNITY_EDITOR || UNITY_STANDALONE
         var delta = new Vector3(-Input.GetAxis("Mouse X") * _dragSpeed, -Input.GetAxis("Mouse Y") * _dragSpeed, 0);
         _mainCamera.transform.Translate(delta * Time.deltaTime, Space.World);
-        
         ClampCameraPosition();
+#else
+        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
+        {
+            var touch = Input.GetTouch(0);
+            var delta = touch.deltaPosition;
+
+            // 터치 전후의 스크린 위치를 통해 카메라 기준으로 월드 이동 거리 계산
+            Vector3 before = _mainCamera.ScreenToWorldPoint(touch.position - delta);
+            Vector3 after  = _mainCamera.ScreenToWorldPoint(touch.position);
+            Vector3 worldDelta = before - after;
+
+            _mainCamera.transform.position += worldDelta;
+            ClampCameraPosition();
+        }
+#endif
     }
 
     private void Zoom()
