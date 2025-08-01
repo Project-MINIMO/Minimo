@@ -28,6 +28,7 @@ public class PlunderAction : ActionNode
             _duration = 2;
             _startTime = Time.time;
             Blackboard.Animator.SetBool(_isPlunder, true);
+            _owner.TryPlunder();
         }
 
         if (Blackboard.TargetBuilding.CurrentState != ProduceState.Complete) return NodeStatus.Failure;
