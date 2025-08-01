@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 public class UserGold : IQuestRewardTarget
 {
     public Sprite Icon { get; }
-    public int Count { get; private set; } = 0;
+    public int Count { get; private set; }
 
     private FirebaseManager _firebaseManager;
 
@@ -23,6 +23,8 @@ public class UserGold : IQuestRewardTarget
         {
             Debug.LogWarning("FirebaseManager is not initialized. Using local count only.");
         }
+        
+        AddCount(500);
     }
     
     private void OnSDCUpdate(int newCount)

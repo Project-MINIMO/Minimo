@@ -17,9 +17,8 @@ public class MinimoAcquireState : State<MinimoObject>
         var acquireSequence = new SequenceNode
         (
             blackboard,
-            new IsEqualIndex(blackboard, 0),
-            new MoveForwardAction(blackboard, _isSwim),
             new AcquireFadeOutAction(blackboard),
+            new AcquireShakeAction(blackboard),
             new AcquireFadeInAction(blackboard)
         );
         
