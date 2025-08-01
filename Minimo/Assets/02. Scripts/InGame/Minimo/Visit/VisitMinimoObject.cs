@@ -112,9 +112,13 @@ public class VisitMinimoObject : MonoBehaviour
 
     private void GiveItem()
     {
-        if (_requiredItem.Item1.Count >= _requiredItem.Item2)
+        var item = _requiredItem.Item1;
+        var amount = _requiredItem.Item2;
+        if (item.Count >= amount)
         {
-            _requiredItem.Item1.AddCount(-_requiredItem.Item2);
+            _requiredItem.Item1.AddCount(-amount);
+            AccountInfo.Instance.Level.AddCount(item.Exp * amount);
+            AccountInfo.Instance.Gold.AddCount(item.SellCost * amount);
             Despawn();
         }
     }

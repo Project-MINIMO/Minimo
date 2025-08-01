@@ -16,6 +16,7 @@ public class AccountInfo : Singleton<AccountInfo>
     private GetItemPanel _itemPanel;
     public event Action<int> OnStorageCapacityChanged;
     public event Action<int> OnMinimoCapacityChanged;
+    public event Action<int> OnCashChanged; 
     public int CurrentItemCounts => Items.Values.Where(item => item.Level > 0).Sum(item => item.Count);
     
     [SerializeField] private Sprite LevelIcon;
@@ -28,6 +29,7 @@ public class AccountInfo : Singleton<AccountInfo>
         
         // Firebase에서 초기 SLP 값 로드
         InitializeCashFromFirebase();
+        AddCash(200);
     }
     
     private void InitializeCashFromFirebase()
@@ -50,6 +52,7 @@ public class AccountInfo : Singleton<AccountInfo>
     private void OnSLPUpdate(int newSLP)
     {
         Cash = newSLP;
+        OnCashChanged?.Invoke(Cash);
     }
 
     public void AddItems(Dictionary<int, Item> items)
@@ -127,6 +130,7 @@ public class AccountInfo : Singleton<AccountInfo>
             // Firebase 매니저가 없는 경우 로컬에서만 업데이트
             Cash += amount;
             Cash = Mathf.Clamp(Cash, 0, int.MaxValue);
+            OnCashChanged?.Invoke(Cash);
         }
     }
     

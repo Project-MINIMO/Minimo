@@ -6,7 +6,7 @@ public class StrayMinimoIdleState : State<StrayMinimoObject>
     private readonly int _isWalk = Animator.StringToHash("IsWalk");
     
     private readonly BehaviorTree _idleTree;
-    private readonly Vector3 _scale = new(0.23f, 0.23f, 0.23f);
+    private readonly Vector3 _scale = new(0.2f, 0.2f, 0.2f);
 
     public StrayMinimoIdleState(StrayMinimoObject owner) : base(owner)
     {

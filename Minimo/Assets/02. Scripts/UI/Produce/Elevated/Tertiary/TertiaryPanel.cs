@@ -3,8 +3,6 @@ using UnityEngine.UI;
 
 public class TertiaryPanel : ElevatedPanel
 {
-    protected override bool IsUseGuide => true;
-    
     [SerializeField] private Button _prevBtn;
     [SerializeField] private Button _nextBtn;
 

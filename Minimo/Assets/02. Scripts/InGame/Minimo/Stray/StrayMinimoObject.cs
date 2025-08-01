@@ -10,6 +10,7 @@ public class StrayMinimoObject : InteractObject
 {
     public StrayMinimoFSM FSM { get; private set; }
     public bool IsGolden { get; private set; }
+    public bool IsClicked { get; private set; }
     
     [SerializeField] private Sprite _normalSprite;
     [SerializeField] private Sprite _goldenSprite;
@@ -24,8 +25,8 @@ public class StrayMinimoObject : InteractObject
     
     private EditManager _editManager;
 
-    private readonly Vector3 _startScale = new(0.23f, 0.23f, 0.23f);
-    private readonly Vector3 _endScale = new(0.2f, 0.2f, 0.2f);
+    private readonly Vector3 _startScale = new(0.2f, 0.2f, 0.2f);
+    private readonly Vector3 _endScale = new(0.17f, 0.17f, 0.17f);
     
     private int _lifeTime;
     private int _afterPlunderLifeTime;
@@ -80,6 +81,7 @@ public class StrayMinimoObject : InteractObject
     public void Spawn(Vector3 position)
     {
         transform.position = position;
+        IsClicked = false;
         ApplyState(StrayMinimoState.Idle);
         _lifeRemaining = _lifeTime;
         
@@ -124,6 +126,7 @@ public class StrayMinimoObject : InteractObject
             _lifeTimeRoutine = null;
         }
         
+        IsClicked = false;
         ApplyState(StrayMinimoState.Hide);
     }
 
@@ -190,9 +193,13 @@ public class StrayMinimoObject : InteractObject
     {
         if (_currentState == StrayMinimoState.Hide) yield break;
         
+        IsClicked = true;
+        
         transform.DOKill();
         transform.DOScale(_endScale, 0.3f);
         yield return new WaitForSeconds(0.3f);
+
+        IsClicked = false;
         
         if (_currentState == StrayMinimoState.Hide) yield break;
         

@@ -1,10 +1,13 @@
+using System;
 using UnityEngine;
 using System.Threading.Tasks;
 
 public class UserGold : IQuestRewardTarget
 {
+    public event Action<int> OnGoldChanged;
+    
     public Sprite Icon { get; }
-    public int Count { get; private set; } = 0;
+    public int Count { get; private set; }
 
     private FirebaseManager _firebaseManager;
 
@@ -23,11 +26,14 @@ public class UserGold : IQuestRewardTarget
         {
             Debug.LogWarning("FirebaseManager is not initialized. Using local count only.");
         }
+        
+        AddCount(500);
     }
     
     private void OnSDCUpdate(int newCount)
     {
         Count = newCount;
+        OnGoldChanged?.Invoke(Count);
     }
     
     public async void AddCount(int amount)
@@ -46,6 +52,7 @@ public class UserGold : IQuestRewardTarget
             // Firebase 매니저가 없는 경우 로컬에서만 업데이트
             Count += amount;
             Count = Mathf.Clamp(Count, 0, int.MaxValue);
+            OnGoldChanged?.Invoke(Count);
         }
     }
 

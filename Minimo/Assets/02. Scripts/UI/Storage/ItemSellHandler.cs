@@ -56,6 +56,7 @@ public class ItemSellHandler : TransactionHandler
     {
         AccountInfo.Instance.RemoveItem(_item, Quantity);
         AccountInfo.Instance.Gold.AddCount(Price);
+        AccountInfo.Instance.Level.AddCount(_item.Exp * Quantity);
         
         base.Transaction();
     }

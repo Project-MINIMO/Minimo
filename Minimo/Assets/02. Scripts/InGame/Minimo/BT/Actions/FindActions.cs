@@ -64,14 +64,13 @@ public class FindWorkPositionAction : ActionNode
     {
         var groundTiles = Building.PositionData.GroundTilePositions;
         var leftmost = groundTiles.OrderBy(p => p.x)
-            .ThenByDescending(p => p.y)
+            .ThenBy(p => p.y)
             .First();
-        var targetOffset = new Vector3Int(leftmost.x - 1, leftmost.y - 1, 0);
         
         var path = _pathManager.GetPath(
             Blackboard.Agent.transform.position, 
             Building.transform.position,
-            targetOffset
+            (Vector3Int)leftmost
         );
 
         if (path is { Count: > 0 })
@@ -81,7 +80,7 @@ public class FindWorkPositionAction : ActionNode
         }
         else
         {
-            var targetPos = _pathManager.GetTileWorldPosition(Building.transform.position, targetOffset);
+            var targetPos = _pathManager.GetTileWorldPosition(Building.transform.position, (Vector3Int)leftmost);
             Blackboard.Path = new()
             {
                 targetPos.Item2
@@ -194,7 +193,7 @@ public class FindNearestCornerPositionAction : ActionNode
 }
 #endregion
 
-#region MyRegion
+#region Visit
 public class FindVisitTargetPositionAction : ActionNode
 {
     private ProduceAdvanced Building => _owner.Target;
@@ -213,12 +212,11 @@ public class FindVisitTargetPositionAction : ActionNode
         var leftmost = groundTiles.OrderBy(p => p.x)
             .ThenByDescending(p => p.y)
             .First();
-        var targetOffset = new Vector3Int(leftmost.x - 1, leftmost.y - 1, 0);
         
         var path = _pathManager.GetPath(
             Blackboard.Agent.transform.position, 
             Building.transform.position,
-            targetOffset
+            (Vector3Int)leftmost
         );
 
         if (path is { Count: > 0 })
@@ -228,7 +226,7 @@ public class FindVisitTargetPositionAction : ActionNode
         }
         else
         {
-            var targetPos = _pathManager.GetTileWorldPosition(Building.transform.position, targetOffset);
+            var targetPos = _pathManager.GetTileWorldPosition(Building.transform.position, (Vector3Int)leftmost);
             Blackboard.Path = new()
             {
                 targetPos.Item2
@@ -275,6 +273,4 @@ public class FindSpaceshipPositionAction : ActionNode
         return NodeStatus.Success;
     }
 }
-
-
 #endregion
