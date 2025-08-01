@@ -56,7 +56,7 @@ public class FirebaseManager : ManagerBase
         }
     }
 
-    private async void InitializeFirebase()
+    public async Task InitializeFirebase()
     {
         _functions = FirebaseFunctions.GetInstance("asia-northeast3");
         _db = FirebaseFirestore.DefaultInstance;
@@ -266,10 +266,20 @@ public class FirebaseManager : ManagerBase
         return Try(() => _user.ReauthenticateAsync(credential));
     }
 
-    public Task<bool> DeleteUserAsync()
+    public async Task<bool> DeleteUserAsync()
     {
-        if (_user == null) return Task.FromResult(false);
-        return Try(() => _user.DeleteAsync());
+        if (_user == null) return await Task.FromResult(false);
+        var success = await Try(() => _user.DeleteAsync());
+        if (!success)
+        {
+            Debug.LogError("사용자 삭제 실패");
+            return await Task.FromResult(false);
+        }
+        _user = null;
+        OnUserSignedOut?.Invoke();
+        Debug.Log("사용자 삭제 성공");
+        _isInitialized = false;
+        return await Task.FromResult(true);
     }
 #endregion
 
