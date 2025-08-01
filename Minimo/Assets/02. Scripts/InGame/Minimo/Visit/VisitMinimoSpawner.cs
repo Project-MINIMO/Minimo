@@ -23,7 +23,7 @@ public class VisitMinimoSpawner : MonoBehaviour
 
     private void Awake()
     {
-        _spawnInterval = 180;
+        _spawnInterval = 30;
 
         _editManager = App.GetManager<EditManager>();
         _minimoPool = GetComponentsInChildren<VisitMinimoObject>(true).ToList();

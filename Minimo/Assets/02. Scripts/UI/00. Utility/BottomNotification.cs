@@ -40,6 +40,7 @@ public class BottomNotification : MonoBehaviour
             
             [NotifyType.GoldLack] = "골드가 부족합니다.",
             
+            [NotifyType.CannotReplaceTile] = "해당 타일은 수정할 수 없습니다.",
             [NotifyType.CannotEraseTile] = titleData.GetString("STR_TILEMANAGE_TAB3_DESC2"),
             [NotifyType.CannotInstallWaterTile] = "건물이 설치된 타일입니다.",
             [NotifyType.DeselectTile] = titleData.GetString("STR_SELECTSLOTEMPTY_DESC"),

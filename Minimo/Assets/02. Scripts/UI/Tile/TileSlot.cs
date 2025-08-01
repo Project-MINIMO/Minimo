@@ -14,6 +14,10 @@ public class TileSlot : InventorySlot<CustomTile>
     private void OnEnable()
     {
         SetState();
+        if (Item != null && Item.Tile.name == "Water05")
+        {
+            gameObject.SetActive(false);
+        }
     }
         
     public override void Initialize(CustomTile item)
