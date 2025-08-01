@@ -138,7 +138,7 @@ public class TilePanel : UIBase
         if (cellPos == _lastPaintedCell) return;
         _lastPaintedCell = cellPos;
 
-        if (_tilemap.GetTile(cellPos).name == "Water05")
+        if (_tilemap.GetTile(cellPos)?.name == "Water05")
         {
             App.Notification(NotifyType.CannotReplaceTile);
             return;
