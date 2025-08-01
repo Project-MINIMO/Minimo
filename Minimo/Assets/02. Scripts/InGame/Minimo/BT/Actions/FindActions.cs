@@ -163,7 +163,7 @@ public class FindCompletePositionAction : ActionNode
             .First();
 
         Blackboard.TargetBuilding = nearest;
-        Blackboard.TargetPosition = nearest.transform.position;
+        Blackboard.TargetPosition = nearest.transform.position + Vector3.up;
         Blackboard.Speed = 4;
         
         return NodeStatus.Success;

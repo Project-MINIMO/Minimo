@@ -18,6 +18,7 @@ public class StrayMinimoObject : InteractObject
     [SerializeField] private StrayCoinEffect _coinEffect;
     [SerializeField] private GameObject _clickGaugeObj;
     [SerializeField] private Image _clickGaugeImg;
+    [SerializeField] private GameObject _shineObj;
     
     private StrayMinimoState _currentState = StrayMinimoState.Idle;
     
@@ -93,6 +94,8 @@ public class StrayMinimoObject : InteractObject
         
         _clickGaugeImg.fillAmount = 0;
         
+        _shineObj.SetActive(false);
+                
         _lifeTimeRoutine = StartCoroutine(LifetimeRoutine());
     }
     
@@ -124,12 +127,18 @@ public class StrayMinimoObject : InteractObject
         ApplyState(StrayMinimoState.Hide);
     }
 
+    public void TryPlunder()
+    {
+        _shineObj.SetActive(true);
+    }
+
     public void SuccessPlunder(Item item, int amount)
     {
         _lifeRemaining = _afterPlunderLifeTime;
         _holdItem = (item, amount);
         _plunderItemObj.SetActive(true);
         _plunderItemImg.sprite = item.Icon;
+        _shineObj.SetActive(false);
     }
 
     private void ApplyState(StrayMinimoState target)
