@@ -2,11 +2,14 @@ using System.Collections;
 
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MinimoAcquireHadler : InteractObject
 {
     [SerializeField] private StrayCoinEffect _coinEffect;
     [SerializeField] private GameObject _happyEffect;
+    [SerializeField] private GameObject _gaugeObj;
+    [SerializeField] private Image _gaugeFillImg;
     
     private readonly Vector3 _startScale = new(0.2f, 0.2f, 0.2f);
     private readonly Vector3 _endScale = new(0.17f, 0.17f, 0.17f);
@@ -16,11 +19,12 @@ public class MinimoAcquireHadler : InteractObject
     private Coroutine _clickAnimationRoutine;
     
     private int _requiredCurreny;
+    private int _requiredCurreny2;
     private int _lostCurrentAmount;
     
     private void Awake()
     {
-        _requiredCurreny = 100 + AccountInfo.Instance.Level.Count * 20;
+        _requiredCurreny = _requiredCurreny2 = 100 + AccountInfo.Instance.Level.Count * 20;
         var lostCurrentAmount = _requiredCurreny / 3f;
         _lostCurrentAmount = Mathf.RoundToInt(lostCurrentAmount);
 
@@ -42,11 +46,14 @@ public class MinimoAcquireHadler : InteractObject
                     return;
                 }
                 _requiredCurreny -= getCurrency;
+                _gaugeFillImg.fillAmount = (float)(_requiredCurreny2 - _requiredCurreny) / _requiredCurreny2;
                 AccountInfo.Instance.Gold.AddCount(-getCurrency);
                 _coinEffect.ShowEffect(-getCurrency);
                 if (_requiredCurreny <= 0)
                 {
                     _minimoObject.ApplyState(MinimoState.Happy);
+                    _coinEffect.gameObject.SetActive(false);
+                    _gaugeObj.SetActive(false);
                     _happyEffect.SetActive(true);
                 }
                 break;
