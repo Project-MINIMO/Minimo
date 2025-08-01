@@ -94,7 +94,7 @@ public class ProduceSkipHandler : MonoBehaviour
             { "반올림된 최종 비용", _modifiedPrice.ToString() },
         });
 
-        AccountInfo.Instance.Cash -= _modifiedPrice;
+        AccountInfo.Instance.AddCash(-_modifiedPrice);
         _produceManager.Skip();
     }
 

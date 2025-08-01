@@ -30,7 +30,7 @@ public class ChargeCashBack : MonoBehaviour
 
     private void OnClickChargeYes()
     {
-        AccountInfo.Instance.Cash += 100;
+        AccountInfo.Instance.AddCash(100);
         _closeAction.Invoke();
     }
 }
