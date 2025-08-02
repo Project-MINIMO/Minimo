@@ -6,7 +6,7 @@ using UnityEngine;
 public class MinimoSpawner : MonoBehaviour
 {
     [SerializeField] private CameraBoundsUpdater _mapBounds;
-    [SerializeField] private GameObject _minimoPrefab;
+    [SerializeField] private GameObject[] _minimoPrefabs;
     
     private List<Minimo> _minimoDatas;
     private readonly List<MinimoObject> _activeMinimos = new(); 
@@ -53,7 +53,8 @@ public class MinimoSpawner : MonoBehaviour
     private void SpawnMinimo(Minimo data)
     {
         var spawnPos = _mapBounds.GetRandomOutsideMapPoint();
-        var minimoObject = Instantiate(_minimoPrefab, spawnPos, Quaternion.identity, transform);
+        var randomPrefab = _minimoPrefabs[Random.Range(0, _minimoPrefabs.Length)];
+        var minimoObject = Instantiate(randomPrefab, spawnPos, Quaternion.identity, transform);
 
         var instance = minimoObject.GetComponent<MinimoObject>();
         instance.Initialize(data);
