@@ -12,8 +12,6 @@ public class StrayMinimoObject : InteractObject
     public bool IsGolden { get; private set; }
     public bool IsClicked { get; private set; }
     
-    [SerializeField] private Sprite _normalSprite;
-    [SerializeField] private Sprite _goldenSprite;
     [SerializeField] private GameObject _plunderItemObj;
     [SerializeField] private Image _plunderItemImg;
     [SerializeField] private StrayCoinEffect _coinEffect;
@@ -46,8 +44,11 @@ public class StrayMinimoObject : InteractObject
     public void Initialize(bool isGorden, Dictionary<string, int> common)
     {
         IsGolden = isGorden;
-        
-        GetComponentInChildren<SpriteRenderer>().sprite = isGorden ? _goldenSprite : _normalSprite;
+
+        if (isGorden)
+        {
+            GetComponentInChildren<Animator>().SetTrigger("Golden");
+        }
 
         _lifeTime = common["MiaLifeTime"];
         _afterPlunderLifeTime = common[isGorden ? "GoldMiaLootLifeTime" : "MiaLootLifeTime"];

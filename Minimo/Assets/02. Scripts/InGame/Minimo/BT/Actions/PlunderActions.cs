@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class PlunderAction : ActionNode
 {
-    private readonly int _isPlunder = Animator.StringToHash("IsPlunder");
-
     private readonly StrayMinimoObject _owner;
     private float _duration;
     private float _startTime;
@@ -27,7 +25,6 @@ public class PlunderAction : ActionNode
             
             _duration = 2;
             _startTime = Time.time;
-            Blackboard.Animator.SetBool(_isPlunder, true);
             _owner.TryPlunder();
         }
 
@@ -36,7 +33,6 @@ public class PlunderAction : ActionNode
         if (Time.time - _startTime >= _duration)
         {
             _shouldReset = true;
-            Blackboard.Animator.SetBool(_isPlunder, false);
             var (item, amount) = Blackboard.TargetBuilding.PlunderedResult();
             _owner.SuccessPlunder(item, amount);
             Blackboard.TargetBuilding = null;

@@ -3,6 +3,7 @@ using UnityEngine;
 public class StrayMinimoPlunderState : State<StrayMinimoObject>
 {
     private readonly int _isWalk = Animator.StringToHash("IsWalk");
+    private readonly int _isPlunder = Animator.StringToHash("IsPlunder");
     
     private readonly BehaviorTree _plunderTree;
 
@@ -26,6 +27,7 @@ public class StrayMinimoPlunderState : State<StrayMinimoObject>
     public override void Enter()
     {
         _plunderTree.Reset();
+        Animator.SetBool(_isPlunder, true);
     }
 
     public override void Execute()
@@ -41,5 +43,6 @@ public class StrayMinimoPlunderState : State<StrayMinimoObject>
     {
         Animator.speed = 1;
         Animator.SetBool(_isWalk, false);
+        Animator.SetBool(_isPlunder, false);
     }
 }
