@@ -25,6 +25,8 @@ public class CameraInput : MonoBehaviour
     
     private void Update()
     {
+        if (_input.InputTarget != InputTargetType.Camera) return;
+        
         if (_input.CurrentState == InputState.Drag)
         {
             Move();

@@ -3,6 +3,8 @@ using DG.Tweening;
 
 public class Star : InteractObject
 {
+    public override bool IsUseDrag => true;
+    
     [SerializeField] private Sprite[] _sprites;
     
     private StarSpawner _spawner;

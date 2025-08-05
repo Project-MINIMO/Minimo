@@ -93,6 +93,13 @@ public enum InputState
     Zoom
 }
 
+public enum InputTargetType
+{
+    None,
+    UI,
+    Object,
+    Camera
+}
 
 public enum ItemProperty
 {
