@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class VisitMinimoObject : MonoBehaviour
 {
     public VisitMinimoFSM FSM { get; private set; }
-    public ProduceAdvanced Target { get; private set; }
+    public ProduceObject Target { get; private set; }
     
     [SerializeField] private GameObject _requiredItemObj;
     [SerializeField] private Image _requiredItemImg;
@@ -40,9 +40,9 @@ public class VisitMinimoObject : MonoBehaviour
         FSM.Update();
     }
 
-    public void Spawn(Item item, ProduceAdvanced advanced)
+    public void Spawn(Item item, ProduceObject target)
     {
-        Target = advanced;
+        Target = target;
         
         _lifeRemaining = 60;
         _requiredItem = (item, 1);

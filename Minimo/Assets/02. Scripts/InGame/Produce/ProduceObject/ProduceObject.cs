@@ -195,4 +195,20 @@ public abstract class ProduceObject : BuildingObject
         SetNextActiveTask();
     }
     #endregion
+    
+    public virtual (Item, int) PlunderedResult()
+    {
+        var completeTask = AllTasks.FirstOrDefault(x => x.CurrentState == CompletedState.Instance);
+        if (completeTask == null) return (null, 0);
+        
+        completeTask.ChangeState(EndState.Instance);
+        AllTasks.Remove(completeTask);
+        GetCurrentProduceState();
+        
+        var itemID = completeTask.Data.ResultItems[0].ID;
+        var item = AccountInfo.Instance.Items[itemID];
+        
+        
+        return (item, completeTask.Data.ResultItems[0].Amount);
+    }
 }

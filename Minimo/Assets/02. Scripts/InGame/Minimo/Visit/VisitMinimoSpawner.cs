@@ -46,15 +46,15 @@ public class VisitMinimoSpawner : MonoBehaviour
 
     private void SpawnMinimo()
     {
-        var randomAdvanced = GetRandomAdvanced();
-        if (randomAdvanced == null) return;
-        var randomItem = GetRandomItem(randomAdvanced);
+        var randomProduce = GetRandomAdvanced();
+        if (randomProduce == null) return;
+        var randomItem = GetRandomItem(randomProduce);
         
         var visitMinimo = _minimoPool[0];
         
         DespawnCurrentMinimo();
 
-        visitMinimo.Spawn(randomItem, randomAdvanced);
+        visitMinimo.Spawn(randomItem, randomProduce);
         _currentMinimo = visitMinimo;
         _spawnedMinimo = visitMinimo;
         
@@ -66,14 +66,14 @@ public class VisitMinimoSpawner : MonoBehaviour
         _minimoPool.Remove(_currentMinimo);
     }
 
-    private ProduceAdvanced GetRandomAdvanced()
+    private ProduceObject GetRandomAdvanced()
     {
-        return _editManager.ActiveAdvanceds.Count == 0 
+        return _editManager.ActiveProduces.Count == 0 
             ? null 
-            : _editManager.ActiveAdvanceds[Random.Range(0, _editManager.ActiveAdvanceds.Count)];
+            : _editManager.ActiveProduces[Random.Range(0, _editManager.ActiveProduces.Count)];
     }
 
-    private Item GetRandomItem(ProduceAdvanced advanced)
+    private Item GetRandomItem(ProduceObject advanced)
     {
         var randomTask = advanced.ProduceData[Random.Range(0, advanced.ProduceData.Count)];
         return AccountInfo.Instance.Items[randomTask.ResultItems[0].ID];

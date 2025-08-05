@@ -10,7 +10,7 @@ public class EditManager : ManagerBase
     public ReactiveProperty<bool> IsTileEditing { get; } = new(false);
     public ReactiveProperty<Vector3> CurrentCellPosition { get; } = new();
     public BuildingObject CurrentEditObject { get; private set; }
-    public ReactiveCollection<ProduceAdvanced> ActiveAdvanceds { get; } = new();
+    public ReactiveCollection<ProduceObject> ActiveProduces { get; } = new();
     
     [SerializeField] private GridLayout _gridLayout;
     [SerializeField] private Transform _buildingParent;
@@ -61,7 +61,7 @@ public class EditManager : ManagerBase
             produce.transform.position = cellPosition;
             produce.IsPlaced = true;
             _tileStateModifier.ModifyTileState(produce, TileState.Installed);
-            if (produce is ProduceAdvanced advanced) ActiveAdvanceds.Add(advanced);
+            ActiveProduces.Add(produce);
         }
     }
 
@@ -71,18 +71,6 @@ public class EditManager : ManagerBase
         StartEdit(obj, isNew: true);
     }
 
-    public void HandleAdvanced(ProduceAdvanced advanced, bool add)
-    {
-        if (add)
-        {
-            ActiveAdvanceds.Add(advanced);
-        }
-        else
-        {
-            ActiveAdvanceds.Remove(advanced);
-        }
-    }
-    
     public void StartEdit(BuildingObject gridObject, bool isNew = false)
     {
         if (CurrentEditObject && CurrentEditObject != gridObject)
@@ -127,6 +115,7 @@ public class EditManager : ManagerBase
             
         if (isNew)
         {
+            ActiveProduces.Add(CurrentEditObject as ProduceObject);
             HandlePostInstall();
         }
         else
@@ -159,6 +148,7 @@ public class EditManager : ManagerBase
         var result = CurrentEditObject.Destroy();
         if (result)
         {
+            ActiveProduces.Remove(CurrentEditObject as ProduceObject);
             CurrentEditObject = null;
             IsBuildingEditing.Value = false;
         }

@@ -30,10 +30,10 @@ public class MinimoAssignedPanel : UIBase
         _placePanel = manager.GetPanel<PlaceByBuildingPanel>();
 
         var editManager = App.GetManager<EditManager>();
-        editManager.ActiveAdvanceds.ObserveAdd()
+        editManager.ActiveProduces.ObserveAdd()
             .Subscribe(addEvent => AssignSlot(addEvent.Value))
             .AddTo(this);
-        editManager.ActiveAdvanceds.ObserveRemove()
+        editManager.ActiveProduces.ObserveRemove()
             .Subscribe(removeEvent => ReleaseSlot(removeEvent.Value))
             .AddTo(this);
         
@@ -52,8 +52,10 @@ public class MinimoAssignedPanel : UIBase
         _closeBtn.onClick.AddListener(ClosePanel);
     }
     
-    private void AssignSlot(ProduceAdvanced building)
+    private void AssignSlot(ProduceObject building)
     {
+        if (building is not ProduceAdvanced advanced) return;
+        
         MinimoAssignedSlot slot;
         
         if (_slotPool.Count > 0)
@@ -67,7 +69,7 @@ public class MinimoAssignedPanel : UIBase
         }
    
         slot.gameObject.SetActive(true);
-        slot.Initialize(building);
+        slot.Initialize(advanced);
         _activeSlots.Add(slot);
         
         var sorted = _activeSlots
@@ -82,8 +84,10 @@ public class MinimoAssignedPanel : UIBase
         LayoutRebuilder.ForceRebuildLayoutImmediate(_content);
     }
     
-    private void ReleaseSlot(ProduceAdvanced building)
+    private void ReleaseSlot(ProduceObject building)
     {
+        if (building is not ProduceAdvanced) return;
+        
         var slot = _activeSlots.FirstOrDefault(x => x.Item == building);
         if (slot == null) return;
         slot.gameObject.SetActive(false);

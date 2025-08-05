@@ -155,7 +155,7 @@ public class StrayMinimoObject : InteractObject
    
     private bool IsAnyCompleteAdvances()
     {
-        return _editManager.ActiveAdvanceds.Any(x => x.CurrentState == ProduceState.Complete);
+        return _editManager.ActiveProduces.Any(x => x.CurrentState == ProduceState.Complete);
     }
 
     public override void OnLongPress() { }

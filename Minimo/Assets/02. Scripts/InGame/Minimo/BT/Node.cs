@@ -21,7 +21,7 @@ public class Blackboard
     public int RandomActionIndex;
     public int Speed = 1;
     public Vector3 TargetPosition;
-    public ProduceAdvanced TargetBuilding;
+    public ProduceObject TargetBuilding;
 
     public Blackboard(GameObject agent)
     {

@@ -150,7 +150,7 @@ public class FindCompletePositionAction : ActionNode
 
     public override NodeStatus Tick()
     {
-        var emptyAdvances = _editManager.ActiveAdvanceds
+        var emptyAdvances = _editManager.ActiveProduces
             .Where(building => building.CurrentState == ProduceState.Complete)
             .ToList();
         
@@ -196,7 +196,7 @@ public class FindNearestCornerPositionAction : ActionNode
 #region Visit
 public class FindVisitTargetPositionAction : ActionNode
 {
-    private ProduceAdvanced Building => _owner.Target;
+    private ProduceObject Building => _owner.Target;
     private readonly VisitMinimoObject _owner;
     private readonly PathManager _pathManager;
 

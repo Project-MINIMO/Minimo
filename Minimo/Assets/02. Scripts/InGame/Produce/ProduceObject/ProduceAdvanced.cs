@@ -126,13 +126,6 @@ public abstract class ProduceAdvanced : ProduceObject
         task.ApplyTimeReduction(_globalTimeReduction);
         return task;
     }
-    
-    protected override async Task<bool> CreateBuilding()
-    {
-        var result = await base.CreateBuilding();
-        if (result) EditManager.HandleAdvanced(this, true);
-        return result;
-    }
 
     public override bool Destroy()
     {
@@ -141,20 +134,8 @@ public abstract class ProduceAdvanced : ProduceObject
             App.Notification(NotifyType.DeleteBuildingFailMinimo);
             return false;
         }
-        
-        EditManager.HandleAdvanced(this, false);
-        return base.Destroy();
-    }
 
-    public (Item, int) PlunderedResult()
-    {
-        var completeTask = AllTasks.FirstOrDefault(x => x.CurrentState == CompletedState.Instance);
-        if (completeTask == null) return (null, 0);
-        var itemID = completeTask.Data.ResultItems[0].ID;
-        var item = AccountInfo.Instance.Items[itemID];
-        AllTasks.Remove(completeTask);
-        GetCurrentProduceState();
-        return (item, completeTask.Data.ResultItems[0].Amount);
+        return base.Destroy();
     }
     
     #region Apply Minimo Abilities
