@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
@@ -8,15 +9,24 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
     public override bool IsDefaultPanel => true;
     
     [SerializeField] private QuestCompactSlot _slotPrefab;
-    [SerializeField] private Transform _contentParent;   
+    [SerializeField] private Transform _contentParent;
+    
+    [SerializeField] private RectTransform _contentRect;
+    [SerializeField] private Button _openBtn;
+    [SerializeField] private Button _closeBtn;
     
     private RectTransform _rect;
-    
-    private readonly Vector2 _showPosition = new(-2, 0);
-    private readonly Vector2 _hidePosition = new(-370, 0);
-    
+
+    private const int ShowPosition = 130;
+    private const int HidePosition = -100;
+
+    private const int OpenPosition = 0;
+    private const int ClosePosition = -555;
+
     private readonly Queue<QuestCompactSlot> _slotPool = new();
     private readonly Dictionary<Quest, QuestCompactSlot> _activeMap = new();
+    
+    private bool _isOpened = true;
     
     public override void Initialize(UIManager manager)
     {
@@ -32,6 +42,10 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
             _slotPool.Enqueue(slot);
         }
         
+        _openBtn.onClick.AddListener(Toggle);
+        _closeBtn.onClick.AddListener(Toggle);
+        Close();
+        
         _rect = GetComponent<RectTransform>();
     }
     
@@ -39,14 +53,14 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
     {
         base.Show(isNew);
         
-        _rect.DOAnchorPos(_showPosition, 0.3f).SetEase(Ease.OutCubic);
+        _rect.DOAnchorPosX(ShowPosition, 0.3f).SetEase(Ease.OutCubic);
     }
 
     public override void Hide(bool isNew)
     {
         base.Hide(isNew);
         
-        _rect.DOAnchorPos(_hidePosition, 0.3f).SetEase(Ease.InCubic);
+        _rect.DOAnchorPosX(HidePosition, 0.3f).SetEase(Ease.InCubic);
     }
    
     protected override void AssignSlot(Quest quest)
@@ -97,5 +111,37 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         }
         
         QuestManager.SubmitQuest(quest);
+    }
+    
+    private void Toggle()
+    {
+        if (_isOpened)
+        {
+            Close();
+        }
+        else
+        {
+            Open();
+        }
+        
+        _closeBtn.gameObject.SetActive(_isOpened);
+    }
+
+    private void Open()
+    {
+        if (_isOpened) return;
+        
+        _isOpened = true;
+        _contentRect.DOKill();
+        _contentRect.DOAnchorPosX(OpenPosition, 0.3f).SetEase(Ease.Linear);
+    }
+
+    private void Close()
+    {
+        if (!_isOpened) return;
+        
+        _isOpened = false;
+        _contentRect.DOKill();
+        _contentRect.DOAnchorPosX(ClosePosition, 0.3f).SetEase(Ease.Linear);
     }
 }
