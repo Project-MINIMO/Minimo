@@ -18,6 +18,8 @@ public class ProduceManager : ManagerBase
     
     private readonly List<ProduceTertiary> _tertiaryBuildings = new();
     public IReadOnlyList<ProduceTertiary> TertiaryBuildings => _tertiaryBuildings;
+
+    [SerializeField] private TileHighlighter _highlighter;
     
     private Dictionary<BuildingType, UIBase> _panelMap;
     private PlantService _plantService;
@@ -55,6 +57,7 @@ public class ProduceManager : ManagerBase
         
         CurrentObject = obj;
         MoveCamera(obj, _panelMap[obj.BuildingData.Type].OpenPanel);
+        _highlighter.SetHighlight(obj);
     }
 
     public void Deselect()
@@ -63,6 +66,7 @@ public class ProduceManager : ManagerBase
         
         _panelMap[CurrentObject.BuildingData.Type].ClosePanel();
         CurrentObject = null;
+        _highlighter.ClearHighlight();
     }
 
     private void MoveCamera(ProduceObject obj, Action onComplete = null)
