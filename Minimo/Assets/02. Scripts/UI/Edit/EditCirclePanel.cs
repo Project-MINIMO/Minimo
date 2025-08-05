@@ -14,6 +14,7 @@ public class EditCircleHandler : MonoBehaviour
 
     private EditManager _editManager;
     private Transform _startParent;
+    private Vector3 _attachScale = new(0.65f, 0.65f);
 
     private void Awake()
     {
@@ -32,7 +33,7 @@ public class EditCircleHandler : MonoBehaviour
         var canvas = buildingObject.GetComponentInChildren<Canvas>();
         transform.SetParent(canvas.transform);
         _rect.localPosition = Vector3.zero;
-        _rect.localScale = Vector3.one;
+        _rect.localScale = _attachScale;
         gameObject.SetActive(true);
     }
 
