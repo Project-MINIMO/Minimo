@@ -10,6 +10,9 @@ public class ItemInfoUpdater : MonoBehaviour
     [SerializeField] private TextMeshProUGUI? _itemCountTMP;
     [SerializeField] private Image? _iconImg;
 
+    [SerializeField] private bool _isUseX;
+    private const string ItemCountString = "X {0}";
+    
     public void ClearItem()
     {
         _itemNameTMP?.SetText(string.Empty);
@@ -39,7 +42,7 @@ public class ItemInfoUpdater : MonoBehaviour
 
     public void UpdateItem(Sprite sprite, string amount)
     {
-        _itemCountTMP?.SetText(amount);
+        _itemCountTMP?.SetText(_isUseX ? string.Format(ItemCountString, amount) : amount);
 
         if (_iconImg == null) return;
         _iconImg.sprite = sprite;
