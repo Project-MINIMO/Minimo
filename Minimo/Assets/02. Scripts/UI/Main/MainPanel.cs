@@ -31,12 +31,14 @@ public class MainPanel : UIBase
         _closeYPosition = _mainRect.anchoredPosition.y;
         _btnPositions = new Vector2[_btnRects.Length];
 
+        /*
         for (var i = 0; i < _btnRects.Length; i++)
         {
             _btnPositions[i] = _btnRects[i].anchoredPosition;
             _btnRects[i].DOAnchorPos(Vector2.zero, 0).SetEase(Ease.Linear);
             _btnRects[i].gameObject.SetActive(false);
         }
+        */
         
         _mainBtn.onClick.AddListener(Toggle);
         _closeBtn.onClick.AddListener(() => Close(_duration));
@@ -46,14 +48,14 @@ public class MainPanel : UIBase
     {
         _panelRect.DOAnchorPos(Vector2.zero, _duration).SetEase(Ease.OutCubic);
 
-        Close(0);
+        //Close(0);
     }
 
     public override void Hide(bool isNew)
     {
         _panelRect.DOAnchorPos(_hidePosition, _duration).SetEase(Ease.InCubic);
         
-        Close(0);
+        //Close(0);
     }
 
     private void Toggle()
