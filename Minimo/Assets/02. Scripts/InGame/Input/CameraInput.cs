@@ -13,26 +13,30 @@ public class CameraInput : MonoBehaviour
     [Header("Map Bounds")]
     [SerializeField] private BoxCollider2D _boundsCollider;
     
-    private InputManager _input;
+    private InputManager _inputManager;
+    private UIManager _uiManager;
     private Camera _mainCamera;
     
     private void Start()
     {
-        _input = App.GetManager<InputManager>();
-
+        _inputManager = App.GetManager<InputManager>();
+        _uiManager = App.GetManager<UIManager>();
+        
         _mainCamera = Camera.main;
     }
     
     private void Update()
     {
-        if (_input.InputTarget != InputTargetType.Camera) return;
+        if (_inputManager.InputTarget != InputTargetType.Camera) return;
         
-        if (_input.CurrentState == InputState.Drag)
+        if (_inputManager.CurrentState == InputState.Drag)
         {
+            if (_uiManager.TopPanel.IsUseInput) return;
+            
             Move();
         }
         
-        else if (_input.CurrentState == InputState.Zoom)
+        else if (_inputManager.CurrentState == InputState.Zoom)
         {
             Zoom();
         }

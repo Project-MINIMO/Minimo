@@ -15,6 +15,8 @@ public class UIManager : ManagerBase
     public bool IsOnlyDefaultPanelsInStack =>
         _uiStack.Count > 0 &&
         _uiStack.All(panel => panel.IsDefaultPanel);
+
+    public UIBase TopPanel => _uiStack.Peek();
     
     private Dictionary<Type, UIBase> _uiDictionary;
     private Stack<UIBase> _uiStack;

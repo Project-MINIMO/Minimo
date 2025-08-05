@@ -9,6 +9,8 @@ using TMPro;
 
 public class TilePanel : UIBase
 {
+    public override bool IsUseInput => _currentBrush != null;
+    
     [SerializeField] private TextMeshProUGUI _titleTMP;
 
     [SerializeField] private Button _openBtn;
@@ -25,6 +27,7 @@ public class TilePanel : UIBase
     [SerializeField] private InventorySlideHandler _slideHandler;
     
     private EditManager _editManager;
+    private InputManager _inputManager;
     
     private Tilemap _tilemap;
     private Tilemap _glowMap;
@@ -45,6 +48,8 @@ public class TilePanel : UIBase
         base.Initialize(manager);
 
         _editManager = App.GetManager<EditManager>();
+        _inputManager = App.GetManager<InputManager>();
+        
         _tilemap = GameObject.FindWithTag("VillageTilemap").GetComponent<Tilemap>();
         _glowMap = GameObject.FindWithTag("GlowTilemap").GetComponent<Tilemap>();
         _installMap = GameObject.FindWithTag("InstallTilemap").GetComponent<Tilemap>();
@@ -82,6 +87,31 @@ public class TilePanel : UIBase
         _titleTMP.text = App.GetData<TitleData>().GetString("STR_TILEEDIT_NAME");
     }
     
+    private void Update()
+    {
+        if (!gameObject.activeInHierarchy) return;
+        if (_inputManager.InputTarget != InputTargetType.Camera) return;
+
+        if (_inputManager.CurrentState is InputState.ClickDown or InputState.Drag)
+        {
+            var screenPos = GetCurrentScreenPosition();
+            var worldPos = Camera.main.ScreenToWorldPoint(screenPos);
+            worldPos.z = 0;
+            var cellPos = _tilemap.WorldToCell(worldPos);
+            
+            TryPaint(cellPos);
+        }
+    }
+    
+    private Vector3 GetCurrentScreenPosition()
+    {
+#if UNITY_EDITOR
+        return Input.mousePosition;
+#else
+        return Input.touchCount > 0 ? Input.GetTouch(0).position : Vector3.zero;
+#endif
+    }
+    
     public override async void OpenPanel()
     {
         base.OpenPanel();
@@ -100,34 +130,13 @@ public class TilePanel : UIBase
     public override void ClosePanel()
     {
         base.ClosePanel();
-        
+
+        Cancel();
         _editManager.SetTileEditing(false);
     }
     
-    private void Update()
+    private void TryPaint(Vector3Int cellPos)
     {
-        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
-        {
-            _isPainting = true;
-            TryPaint();
-        }
-        else if (Input.GetMouseButtonUp(0) && _isPainting)
-        {
-            _isPainting = false;
-            _lastPaintedCell = new Vector3Int(int.MinValue, int.MinValue, int.MinValue);
-        }
-        else if (Input.GetMouseButton(0) && _isPainting)
-        {
-            TryPaint();
-        }
-    }
-    
-    private void TryPaint()
-    {
-        var worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        worldPos.z = 0;
-        var cellPos = _tilemap.WorldToCell(worldPos);
-        
         if (cellPos == _lastPaintedCell) return;
         _lastPaintedCell = cellPos;
 

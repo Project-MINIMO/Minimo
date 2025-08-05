@@ -14,7 +14,7 @@ public class EditCircleHandler : MonoBehaviour
 
     private EditManager _editManager;
     private Transform _startParent;
-    private Vector3 _attachScale = new(0.65f, 0.65f);
+    private readonly Vector3 _attachScale = new(0.65f, 0.65f);
 
     private void Awake()
     {
