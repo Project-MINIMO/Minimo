@@ -106,22 +106,22 @@ public class CameraBoundsUpdater : MonoBehaviour
     public Vector3 GetRandomOutsideMapPoint()
     {
         var colliderBounds = _collider.bounds;
-        var mapMin = _tilemap.transform.TransformPoint(_localBounds.min) + Vector3.one * 2;
-        var mapMax = _tilemap.transform.TransformPoint(_localBounds.max) - Vector3.one * 2;
+        var mapMin = _tilemap.transform.TransformPoint(_localBounds.min);
+        var mapMax = _tilemap.transform.TransformPoint(_localBounds.max);
 
         var regions = new System.Collections.Generic.List<(float xMin, float xMax, float yMin, float yMax)>();
 
         if (colliderBounds.min.x < mapMin.x)
-            regions.Add((colliderBounds.min.x, mapMin.x, colliderBounds.min.y, colliderBounds.max.y));
+            regions.Add((colliderBounds.min.x + 2, mapMin.x, colliderBounds.min.y + 2, colliderBounds.max.y - 2));
 
         if (colliderBounds.max.x > mapMax.x)
-            regions.Add((mapMax.x, colliderBounds.max.x, colliderBounds.min.y, colliderBounds.max.y));
+            regions.Add((mapMax.x, colliderBounds.max.x - 2, colliderBounds.min.y + 2, colliderBounds.max.y - 2));
 
         if (colliderBounds.min.y < mapMin.y)
-            regions.Add((mapMin.x, mapMax.x, colliderBounds.min.y, mapMin.y));
+            regions.Add((mapMin.x, mapMax.x, colliderBounds.min.y + 2, mapMin.y));
 
         if (colliderBounds.max.y > mapMax.y)
-            regions.Add((mapMin.x, mapMax.x, mapMax.y, colliderBounds.max.y));
+            regions.Add((mapMin.x, mapMax.x, mapMax.y, colliderBounds.max.y - 2));
 
         var selected = regions[Random.Range(0, regions.Count)];
         var x = Random.Range(selected.xMin, selected.xMax);

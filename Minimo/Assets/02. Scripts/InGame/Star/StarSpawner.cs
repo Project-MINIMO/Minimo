@@ -97,8 +97,13 @@ public class StarSpawner : MonoBehaviour
                 {
                     var line = _linePool.Count > 0 ? _linePool.Dequeue() : Instantiate(_linePrefab, _lineParent);
                     line.gameObject.SetActive(true);
+                    
                     line.SetPosition(0, draggedStar.transform.position);
                     line.SetPosition(1, other.transform.position);
+                    
+                    line.startColor = draggedStar.ActiveColor;
+                    line.endColor = other.ActiveColor;
+                    
                     _activeLines[pair] = line;
                 }
             }

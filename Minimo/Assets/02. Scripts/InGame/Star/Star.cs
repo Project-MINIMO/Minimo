@@ -4,8 +4,9 @@ using DG.Tweening;
 public class Star : InteractObject
 {
     public override bool IsUseDrag => true;
-    
+    public Color ActiveColor { get; private set; }
     [SerializeField] private Sprite[] _sprites;
+    [SerializeField] private Color[] _colors;
     
     private StarSpawner _spawner;
     private ConstellationPanel _constellationPanel;
@@ -23,7 +24,9 @@ public class Star : InteractObject
         _spawner = spawner;
         _constellationPanel = constellationPanel;
         
-        GetComponent<SpriteRenderer>().sprite = _sprites[Random.Range(0, _sprites.Length)];
+        var randomIndex = Random.Range(0, _sprites.Length);
+        GetComponent<SpriteRenderer>().sprite = _sprites[randomIndex];
+        ActiveColor = _colors[randomIndex];
         transform.DOScale(new Vector3(0.3f, 0.3f, 0.3f), 0.3f).SetEase(Ease.InOutElastic)
             .OnComplete(() =>
             {
