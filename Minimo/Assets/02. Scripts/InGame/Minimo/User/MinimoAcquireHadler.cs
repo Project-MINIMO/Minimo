@@ -62,6 +62,7 @@ public class MinimoAcquireHadler : InteractObject
                 if (AccountInfo.Instance.MinimoCapacity <= _minimoManager.ActiveMinimos.Count)
                 {
                     App.Notification(NotifyType.MinimoCapacityLack);
+                    App.GetManager<UIManager>().GetPanel<PopUpPanel>().OpenPanel(PopUpType.MinimoExpand);
                     return;
                 }
                 _minimoObject.ApplyState(MinimoState.Acquire);

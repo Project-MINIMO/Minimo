@@ -7,6 +7,7 @@ public class MoveAction : ActionNode
     private const string TopLeft = "Walk_TL";
     private const string BottomRight = "Walk_BR";
     private const string BottomLeft = "Walk_BL";
+    private const string Default = "Default";
     
     private readonly PathManager _pathManager;
     private const float Speed = 0.3f;
@@ -111,11 +112,13 @@ public class MoveAction : ActionNode
             (0, > 0) => // 수직 ↑
                 Blackboard.AnimatorIsPlaying(BottomLeft) 
                 || Blackboard.AnimatorIsPlaying(TopLeft) 
+                || Blackboard.AnimatorIsPlaying(Default)
                     ? TopLeft : TopRight,
 
             (0, < 0) => // 수직 ↓
                 Blackboard.AnimatorIsPlaying(BottomLeft) 
                 || Blackboard.AnimatorIsPlaying(TopLeft)
+                || Blackboard.AnimatorIsPlaying(Default)
                     ? BottomLeft : BottomRight,
 
             (0, 0) => TopRight,
@@ -132,6 +135,7 @@ public class MoveForwardAction : ActionNode
     private const string TopLeft = "Walk_TL";
     private const string BottomRight = "Walk_BR";
     private const string BottomLeft = "Walk_BL";
+    private const string Default = "Default";
 
     private readonly int _triggerName;
     private const float Speed = 0.3f;
@@ -220,11 +224,13 @@ public class MoveForwardAction : ActionNode
             (0, > 0) => // 수직 ↑
                 Blackboard.AnimatorIsPlaying(BottomLeft) 
                 || Blackboard.AnimatorIsPlaying(TopLeft) 
+                || Blackboard.AnimatorIsPlaying(Default)
                     ? TopLeft : TopRight,
 
             (0, < 0) => // 수직 ↓
                 Blackboard.AnimatorIsPlaying(BottomLeft) 
                 || Blackboard.AnimatorIsPlaying(TopLeft)
+                || Blackboard.AnimatorIsPlaying(Default)
                     ? BottomLeft : BottomRight,
 
             (0, 0) => TopRight,
