@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 
 public class PlantCtrl : MonoBehaviour
@@ -23,17 +22,14 @@ public class PlantCtrl : MonoBehaviour
     private void InitHandlers()
     {
         var options = _produceManager.CurrentObject.ProduceData;
-        var sortingOptions = options.OrderBy(x => x.ResultItems[0].Amount)
-            .ThenBy(x => x.ResultItems[0].ID)
-            .ToList();
         var i = 0;
         
-        for (; i < sortingOptions.Count; i++) 
+        for (; i < options.Count; i++) 
         {
-            var option = sortingOptions[i];
-            _plantHandlers[i].SetOption(option);
-            
             _plantHandlers[i].gameObject.SetActive(true);
+            
+            var option = options[i];
+            _plantHandlers[i].SetOption(option);
         }
 
         for (; i < _plantHandlers.Length; i++) 

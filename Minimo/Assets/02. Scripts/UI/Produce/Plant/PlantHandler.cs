@@ -21,6 +21,9 @@ public class PlantHandler : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _nameTMP;
     [SerializeField] private TextMeshProUGUI _timeTMP;
     [SerializeField] private TextMeshProUGUI _amountTMP;
+
+    [SerializeField] private GameObject _lockObj;
+    [SerializeField] private TextMeshProUGUI _lockTMP;
     
     private LayerMask _targetLayerMask;
     
@@ -33,9 +36,14 @@ public class PlantHandler : MonoBehaviour
     private ProduceManager _produceManager;
     
     private HashSet<ProduceObject> _plantedThisDrag;
+
+    private bool _isLocked;
+    private string _lockString;
     
     private void Awake()
     {
+        _lockString = App.GetData<TitleData>().GetString("STR_BUILDING_UI_LOCK");
+        
         _targetLayerMask = LayerMask.GetMask("InteractObject");
         _produceManager = App.GetManager<ProduceManager>();
         
@@ -63,10 +71,15 @@ public class PlantHandler : MonoBehaviour
     {
         _currentOption = option;
 
-        var result = option.ResultItems[0];
-        _infoUpdater.UpdateItem(result.ID, result.Amount);
+        _isLocked = AccountInfo.Instance.Level.Count < option.UnlockLevel;
+        _lockObj.SetActive(_isLocked);
+        _lockTMP.text = string.Format(_lockString, _currentOption.UnlockLevel);
 
+        var result = option.ResultItems[0];
         var item = AccountInfo.Instance.Items[result.ID];
+        
+        _infoUpdater.UpdateItem(result.ID, item.Count);
+        
         _nameTMP.text = $"{item.Name} X {result.Amount}";
         _timeTMP.text = FormatTime(option.Time);
         _amountTMP.text = $"보유량 : {item.Count}";
@@ -98,6 +111,8 @@ public class PlantHandler : MonoBehaviour
     
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (_isLocked) return;
+        
         _image.raycastTarget = false;
         
         _amountObj.SetActive(false);
@@ -107,7 +122,9 @@ public class PlantHandler : MonoBehaviour
     }
 
     public void OnDrag(PointerEventData eventData)
-    {
+    {        
+        if (_isLocked) return;
+
         _rect.anchoredPosition += eventData.delta / _canvas.scaleFactor;
 
         if (_plantType == PlantType.Object)
@@ -132,6 +149,8 @@ public class PlantHandler : MonoBehaviour
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (_isLocked) return;
+        
         _image.raycastTarget = true;
         _rect.anchoredPosition = _startPosition;
         

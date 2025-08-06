@@ -95,12 +95,13 @@ public class QuestClearData
 [Serializable]
 public class RawProduceData
 {
-    public int    ID;       
+    public int ID;       
     public string Building; 
     public string MaterialItems;
-    public string ResultItems; 
-    public int    Time;      
-    public int    EXP;
+    public string ResultItems;
+    public int UnlockLevel;
+    public int Time;      
+    public int EXP;
 }
 
 [Serializable]
@@ -110,6 +111,7 @@ public class ProduceData
     public string Building;
     public ProduceMaterial[] MaterialItems;
     public ProduceResult[] ResultItems;
+    public int UnlockLevel;
     public int Time;
     public int EXP;
 }
