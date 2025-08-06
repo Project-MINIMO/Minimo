@@ -5,30 +5,35 @@ public class IndicatorHandler : MonoBehaviour
 {
     [SerializeField] private Image _icon;
 
+    private Camera _camera;
+    private RectTransform _canvasRect;
     private Transform _target;
     private RectTransform _rect;
 
     private void Awake()
     {
         _rect = GetComponent<RectTransform>();
+        _camera = Camera.main;
     }
 
-    public void Initialize(Transform target)
+    public void Initialize(Transform target, RectTransform canvasRect)
     {
         gameObject.SetActive(true);
         _target = target;
+        _canvasRect = canvasRect;
         _icon.sprite = target.GetComponentInChildren<SpriteRenderer>().sprite;
     }
 
-    public void UpdateIndicator(Camera cam, RectTransform canvasRect)
+    private void Update()
     {
         if (_target == null) return;
+        if (!gameObject.activeSelf) return;
 
-        var screenPos = cam.WorldToScreenPoint(_target.position);
+        var screenPos = _camera.WorldToScreenPoint(_target.position);
 
         var isVisible = screenPos.z > 0 &&
-                         screenPos.x >= 0 && screenPos.x <= Screen.width &&
-                         screenPos.y >= 0 && screenPos.y <= Screen.height;
+                        screenPos.x >= 0 && screenPos.x <= Screen.width &&
+                        screenPos.y >= 0 && screenPos.y <= Screen.height;
 
         gameObject.SetActive(!isVisible);
 
@@ -41,7 +46,7 @@ public class IndicatorHandler : MonoBehaviour
             clampedPos.y = Mathf.Clamp(clampedPos.y, margin, Screen.height - margin);
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvasRect,
+                _canvasRect,
                 clampedPos,
                 null,
                 out var anchoredPos
@@ -64,6 +69,8 @@ public class IndicatorHandler : MonoBehaviour
                 _rect.localRotation = Quaternion.Euler(0, 0, 90); 
             else
                 _rect.localRotation = Quaternion.identity;    
+            
+            _icon.rectTransform.rotation = Quaternion.identity;
         }
     }
 }

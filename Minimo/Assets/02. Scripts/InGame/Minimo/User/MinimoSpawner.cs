@@ -14,11 +14,14 @@ public class MinimoSpawner : MonoBehaviour
     private const int MaxMinimoCount = 10;
 
     private int _prevLevel;
+    
+    private IndicatorPanel _indicatorPanel;
 
     private void Awake()
     {
         _minimoDatas = App.GetData<TitleData>().UserMinimo.Values.ToList();
         AccountInfo.Instance.Level.OnLevelUp += OnLevelUp;
+        _indicatorPanel = App.GetManager<UIManager>().GetPanel<IndicatorPanel>();
     }
 
     private void Start()
@@ -61,6 +64,7 @@ public class MinimoSpawner : MonoBehaviour
         _activeMinimos.Add(instance);
         
         instance.OnAcquired += HandleMinimoAcquired;
+        _indicatorPanel.CreateIndicator(minimoObject.transform);
     }
  
     private void HandleMinimoAcquired(MinimoObject instance)
