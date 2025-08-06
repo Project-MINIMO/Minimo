@@ -74,6 +74,7 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         else
         {
             slot = Instantiate(_slotPrefab, _contentParent);
+            slot.OnSlotSelected += OnSlotSelected;
         }
 
         slot.gameObject.SetActive(true);

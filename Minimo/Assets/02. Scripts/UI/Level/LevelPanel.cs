@@ -10,7 +10,7 @@ public class LevelPanel : UIBase
     [SerializeField] private Image _fillImg;
     [SerializeField] private TextMeshProUGUI _levelTMP;
 
-    private const string LevelString = "{0} X";
+    private const string LevelString = "{0}";
     private const float FillSpeed = 0.15f;
     
     private UIManager _uiManager;

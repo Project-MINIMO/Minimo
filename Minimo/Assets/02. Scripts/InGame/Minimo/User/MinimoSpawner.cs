@@ -31,6 +31,8 @@ public class MinimoSpawner : MonoBehaviour
 
     private void OnLevelUp(int level)
     {
+        if (_minimoDatas.Count <= 0) return;
+        
         for (var i = 0; i < level - _prevLevel; i++)
         {
             var data = _minimoDatas[Random.Range(0, _minimoDatas.Count)];
