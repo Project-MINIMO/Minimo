@@ -74,6 +74,11 @@ public class RemainTimeUpdater : MonoBehaviour
     private string FormatTime(float time)
     {
         var timeSpan = TimeSpan.FromSeconds(time);
-        return $"{timeSpan.Hours:D2}:{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
+        var minutes = (int)timeSpan.TotalMinutes;
+        var seconds = timeSpan.Seconds;
+
+        return minutes > 0 
+            ? $"{minutes}분 {seconds:D2}초 남음" 
+            : $"{seconds}초 남음";
     }
 }
