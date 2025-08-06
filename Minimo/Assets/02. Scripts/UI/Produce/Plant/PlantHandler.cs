@@ -1,11 +1,14 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
-
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class PlantHandler : MonoBehaviour
+    , IPointerDownHandler, IPointerUpHandler
+    , IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private enum PlantType { Object, UI }
     
@@ -13,6 +16,11 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     
     [SerializeField] private ItemInfoUpdater _infoUpdater;
     [SerializeField] private GameObject _amountObj;
+    
+    [SerializeField] private GameObject _infoObj;
+    [SerializeField] private TextMeshProUGUI _nameTMP;
+    [SerializeField] private TextMeshProUGUI _timeTMP;
+    [SerializeField] private TextMeshProUGUI _amountTMP;
     
     private LayerMask _targetLayerMask;
     
@@ -45,7 +53,9 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         _image.raycastTarget = true;
         _rect.anchoredPosition = _startPosition;
         
-        _amountObj.gameObject.SetActive(true);
+        _infoObj.SetActive(false);
+        
+        _amountObj.SetActive(true);
         _plantedThisDrag.Clear();
     }
 
@@ -55,13 +65,44 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         var result = option.ResultItems[0];
         _infoUpdater.UpdateItem(result.ID, result.Amount);
+
+        var item = AccountInfo.Instance.Items[result.ID];
+        _nameTMP.text = $"{item.Name} X {result.Amount}";
+        _timeTMP.text = FormatTime(option.Time);
+        _amountTMP.text = $"보유량 : {item.Count}";
+    }
+    
+    private string FormatTime(float time)
+    {
+        var timeSpan = TimeSpan.FromSeconds(time);
+        var minutes = (int)timeSpan.TotalMinutes;
+        var seconds = timeSpan.Seconds;
+
+        return minutes > 0 
+            ? $"{minutes}분 {seconds:D2}초" 
+            : $"{seconds}초";
+    }
+    
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        _infoObj.SetActive(true);
+        _infoObj.transform.SetParent(transform.parent);
+        _infoObj.transform.SetAsLastSibling();
+    }
+    
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        _infoObj.SetActive(false);
+        _infoObj.transform.SetParent(transform);
     }
     
     public void OnBeginDrag(PointerEventData eventData)
     {
         _image.raycastTarget = false;
         
-        _amountObj.gameObject.SetActive(false);
+        _amountObj.SetActive(false);
+        _infoObj.SetActive(false);
+        _infoObj.transform.SetParent(transform);
         _plantedThisDrag.Clear();
     }
 
@@ -107,7 +148,7 @@ public class PlantHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             }
         }
         
-        _amountObj.gameObject.SetActive(true);
+        _amountObj.SetActive(true);
         _plantedThisDrag.Clear();
     }
 }
