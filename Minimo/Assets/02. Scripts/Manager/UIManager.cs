@@ -32,7 +32,9 @@ public class UIManager : ManagerBase
 
         _uiDictionary = uiPanels.ToDictionary(p => p.GetType(), p => p);
 
-        _blurImg.GetComponent<TranslucentImage>().source = Camera.main.GetComponent<TranslucentImageSource>();
+        var translucentSource = Camera.main.GetComponent<TranslucentImageSource>();
+        _blurImg.GetComponent<TranslucentImage>().source = translucentSource;
+        _produceBlurImg.GetComponent<TranslucentImage>().source = translucentSource;
     }
 
     private void Start()

@@ -4,6 +4,8 @@ using TMPro;
 
 public class SecondaryPanel : UIBase
 {
+    [SerializeField] private TextMeshProUGUI _titleTMP;
+    
     [SerializeField] private Button _closeBtn;
     [SerializeField] private Button _placeMinimoBtn;
     
@@ -42,6 +44,8 @@ public class SecondaryPanel : UIBase
 
     public override void OpenPanel()
     {
+        _titleTMP.SetText(_produceManager.CurrentObject.BuildingData.Name);
+        
         SetPosition();
         _minimoInfoObj.SetActive(false);
 
