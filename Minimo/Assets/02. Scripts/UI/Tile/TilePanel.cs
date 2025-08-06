@@ -37,7 +37,6 @@ public class TilePanel : UIBase
     private List<TileChange> _pendingTileChanges = new();
     
     private Vector3Int _lastPaintedCell = new(int.MinValue, int.MinValue, int.MinValue);
-    private bool _isPainting;
     
     private PaintBrush _paintBrush;
     private EraseBrush _eraseBrush;
@@ -121,7 +120,6 @@ public class TilePanel : UIBase
         _toggleGroup.Show(true);
         _selectedObj.SetActive(false);
         
-        _isPainting = false;
         _lastPaintedCell = new Vector3Int(int.MinValue, int.MinValue, int.MinValue);
         
         _editManager.SetTileEditing(true);
@@ -194,17 +192,25 @@ public class TilePanel : UIBase
 
     private void Cancel()
     {
+        var returnCost = 0;
+        
         foreach (var tile in _backupTiles)
         {
             var cell = tile.Key;
+            var currentTile = _tilemap.GetTile(cell);
             var (origTile, origGlow) = tile.Value;
             _tilemap.SetTile(cell, origTile);
             _glowMap.SetTile(cell, origGlow);
 
-            if (_currentBrush is PaintBrush)
+            if (origTile != currentTile)
             {
-                AccountInfo.Instance.Gold.AddCount(_currentBrush.SelectedTile.Cost);
+                returnCost += _currentBrush.SelectedTile.Cost;
             }
+        }
+
+        if (returnCost != 0)
+        {
+            AccountInfo.Instance.Gold.AddCount(returnCost);
         }
 
         _currentBrush = null;

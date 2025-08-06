@@ -19,6 +19,7 @@ public enum NotifyType
     MaterialLack,
     
     GoldLack,
+    ItemLack,
     
     CannotReplaceTile,
     CannotEraseTile,

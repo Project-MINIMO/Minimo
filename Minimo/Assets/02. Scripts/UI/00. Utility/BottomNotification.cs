@@ -39,6 +39,7 @@ public class BottomNotification : MonoBehaviour
             [NotifyType.MissRecipe] = titleData.GetString("STR_NOTIFY_PRODUCE_MISSRECIPE"),
             
             [NotifyType.GoldLack] = "골드가 부족합니다.",
+            [NotifyType.ItemLack] = "해당 아이템이 부족합니다.",
             
             [NotifyType.CannotReplaceTile] = "해당 타일은 수정할 수 없습니다.",
             [NotifyType.CannotEraseTile] = titleData.GetString("STR_TILEMANAGE_TAB3_DESC2"),

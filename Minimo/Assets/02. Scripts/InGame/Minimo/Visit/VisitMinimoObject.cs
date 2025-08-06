@@ -121,5 +121,9 @@ public class VisitMinimoObject : MonoBehaviour
             AccountInfo.Instance.Gold.AddCount(item.SellCost * amount);
             Despawn();
         }
+        else
+        {
+            App.Notification(NotifyType.ItemLack);
+        }
     }
 }
