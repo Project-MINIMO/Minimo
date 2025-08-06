@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 public class HarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    [SerializeField] private GameObject _hint;
     [SerializeField] private RectTransform _rect;
     [SerializeField] private Image _image;
     
@@ -33,6 +34,8 @@ public class HarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     {
         _image.raycastTarget = false;
         _harvestedThisDrag.Clear();
+        
+        _hint.SetActive(false);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -56,6 +59,8 @@ public class HarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         _image.raycastTarget = true;
         _rect.anchoredPosition = _startPosition;
         _harvestedThisDrag.Clear();
+        
+        _hint.SetActive(true);
     }
 }
 

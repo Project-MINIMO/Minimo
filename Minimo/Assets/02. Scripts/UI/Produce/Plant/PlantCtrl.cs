@@ -2,12 +2,21 @@ using UnityEngine;
 
 public class PlantCtrl : MonoBehaviour
 {
+    [SerializeField] private GameObject _hint;
+    
     private PlantHandler[] _plantHandlers;
     private ProduceManager _produceManager;
 
     private void Awake()
     {
         _plantHandlers = GetComponentsInChildren<PlantHandler>(true);
+        foreach (var handler in _plantHandlers)
+        {
+            handler.OnDragChanged += isDrag =>
+            {
+                _hint.SetActive(!isDrag);
+            };
+        }
         _produceManager = App.GetManager<ProduceManager>();
     }
 

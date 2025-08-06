@@ -11,6 +11,8 @@ public class PlantHandler : MonoBehaviour
     , IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private enum PlantType { Object, UI }
+
+    public event Action<bool> OnDragChanged;
     
     [SerializeField] private PlantType _plantType;
     
@@ -119,6 +121,8 @@ public class PlantHandler : MonoBehaviour
         _infoObj.SetActive(false);
         _infoObj.transform.SetParent(transform);
         _plantedThisDrag.Clear();
+        
+        OnDragChanged?.Invoke(true);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -169,5 +173,7 @@ public class PlantHandler : MonoBehaviour
         
         _amountObj.SetActive(true);
         _plantedThisDrag.Clear();
+        
+        OnDragChanged?.Invoke(false);
     }
 }
