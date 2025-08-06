@@ -86,7 +86,7 @@ public class PlantHandler : MonoBehaviour
     public void OnPointerDown(PointerEventData eventData)
     {
         _infoObj.SetActive(true);
-        _infoObj.transform.SetParent(transform.parent);
+        _infoObj.transform.SetParent(transform.parent.parent);
         _infoObj.transform.SetAsLastSibling();
     }
     

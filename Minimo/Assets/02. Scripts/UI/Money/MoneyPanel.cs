@@ -14,12 +14,12 @@ public class MoneyPanel : MonoBehaviour
         OnGoldChanged(AccountInfo.Instance.Cash);
     }
     
-    private void OnGoldChanged(int value)
+    private void OnGoldChanged(long value)
     {
         _goldTMP.SetText(value.ToString());
     }
     
-    private void OnCashChanged(int value)
+    private void OnCashChanged(long value)
     {
         _cashTMP.SetText(value.ToString());
     }

@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 
 public class UserGold : IQuestRewardTarget
 {
-    public event Action<int> OnGoldChanged;
+    public event Action<long> OnGoldChanged;
     
     public Sprite Icon { get; }
-    public int Count { get; private set; }
+    public long Count { get; private set; }
 
     private FirebaseManager _firebaseManager;
 
@@ -51,7 +51,7 @@ public class UserGold : IQuestRewardTarget
         {
             // Firebase 매니저가 없는 경우 로컬에서만 업데이트
             Count += amount;
-            Count = Mathf.Clamp(Count, 0, int.MaxValue);
+            Count = (long)Mathf.Clamp(Count, 0, long.MaxValue);
             OnGoldChanged?.Invoke(Count);
         }
     }

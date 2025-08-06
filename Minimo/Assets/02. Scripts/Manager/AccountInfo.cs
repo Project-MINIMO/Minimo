@@ -9,14 +9,14 @@ public class AccountInfo : Singleton<AccountInfo>
     public Dictionary<int, Item> Items { get; private set; }
     public UserLevel Level { get; private set; }
     public UserGold Gold { get; private set; }
-    public int Cash { get; private set; } = 100;
+    public long Cash { get; private set; } = 100;
     public int StorageCapacity { get; private set; } = 100;
     public int MinimoCapacity { get; private set; } = 5;
 
     private GetItemPanel _itemPanel;
     public event Action<int> OnStorageCapacityChanged;
     public event Action<int> OnMinimoCapacityChanged;
-    public event Action<int> OnCashChanged; 
+    public event Action<long> OnCashChanged; 
     public int CurrentItemCounts => Items.Values.Where(item => item.Level > 0).Sum(item => item.Count);
     
     [SerializeField] private Sprite LevelIcon;
@@ -129,7 +129,7 @@ public class AccountInfo : Singleton<AccountInfo>
         {
             // Firebase 매니저가 없는 경우 로컬에서만 업데이트
             Cash += amount;
-            Cash = Mathf.Clamp(Cash, 0, int.MaxValue);
+            Cash = (long)Mathf.Clamp(Cash, 0, long.MaxValue);
             OnCashChanged?.Invoke(Cash);
         }
     }

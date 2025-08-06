@@ -61,6 +61,14 @@ public class ProduceTask
 
         OnStateChanged?.Invoke(newState);
     }
+
+    public void ChangeStateWithoutNotify(ITaskState newState)
+    {
+        CurrentState = newState;
+        CurrentState.OnEnter(this);
+
+        OnStateChanged?.Invoke(newState);
+    }
     
     private float RecalculateModifiedTime()
     {

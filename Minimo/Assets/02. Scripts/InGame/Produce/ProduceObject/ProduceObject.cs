@@ -196,12 +196,12 @@ public abstract class ProduceObject : BuildingObject
     }
     #endregion
     
-    public virtual (Item, int) PlunderedResult()
+    public (Item, int) PlunderedResult()
     {
         var completeTask = AllTasks.FirstOrDefault(x => x.CurrentState == CompletedState.Instance);
         if (completeTask == null) return (null, 0);
         
-        completeTask.ChangeState(EndState.Instance);
+        completeTask.ChangeStateWithoutNotify(EndState.Instance);
         AllTasks.Remove(completeTask);
         GetCurrentProduceState();
         
