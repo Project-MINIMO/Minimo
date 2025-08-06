@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7715399434712895644}
   - component: {fileID: 2071570026664291374}
   - component: {fileID: 1143977566791693583}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Back_RequiredItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 1860301983267078501}
   - component: {fileID: 4103749394858459633}
   - component: {fileID: 7959276420473650937}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,7 +234,7 @@ GameObject:
   - component: {fileID: 2349522797918710824}
   - component: {fileID: 1142207294738014712}
   - component: {fileID: 7435086471192463905}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Img_RequiredItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -308,8 +308,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3611692693751181185}
   - component: {fileID: 7313495890276615376}
-  - component: {fileID: 89777056729530273}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: VisitMinimo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -348,41 +347,6 @@ MonoBehaviour:
   _requiredItemObj: {fileID: 449424581806278553}
   _requiredItemImg: {fileID: 7435086471192463905}
   _requiredItemBtn: {fileID: 1143977566791693583}
---- !u!58 &89777056729530273
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6770512339090311191}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1.5}
-  serializedVersion: 2
-  m_Radius: 2
 --- !u!1 &8688037915856850721
 GameObject:
   m_ObjectHideFlags: 0
@@ -394,7 +358,7 @@ GameObject:
   - component: {fileID: 6776844573176018407}
   - component: {fileID: 155767166546874058}
   - component: {fileID: 1909666633571397269}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
