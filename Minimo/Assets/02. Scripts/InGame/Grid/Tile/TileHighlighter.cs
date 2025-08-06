@@ -34,7 +34,7 @@ public class TileHighlighter : MonoBehaviour
         _highlightTilemap.DOKill(); 
     }
     
-    private void Blink(float minAlpha = 0.3f, float maxAlpha = 1f, float duration = 0.5f)
+    private void Blink(float minAlpha = 0.3f, float maxAlpha = 0.7f, float duration = 0.5f)
     {
         _highlightTilemap.DOKill(); 
         

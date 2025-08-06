@@ -40,13 +40,17 @@ public class StarSpawner : MonoBehaviour
     private readonly Queue<LineRenderer> _linePool = new();
     
     private ConstellationPanel _constellationPanel;
+    private IndicatorPanel _indicatorPanel;
 
     private int _prevLevel;
 
     private void Awake()
     {
         AccountInfo.Instance.Level.OnLevelUp += OnLevelUp;
-        _constellationPanel = App.GetManager<UIManager>().GetPanel<ConstellationPanel>();
+
+        var uiManager = App.GetManager<UIManager>();
+        _constellationPanel = uiManager.GetPanel<ConstellationPanel>();
+        _indicatorPanel = uiManager.GetPanel<IndicatorPanel>();
     }
 
     private void Start()
@@ -64,6 +68,7 @@ public class StarSpawner : MonoBehaviour
                 transform);
             newStar.Initialize(this, _constellationPanel);
             _stars.Add(newStar);
+            _indicatorPanel.CreateIndicator(newStar.transform);
         }
 
         _prevLevel = level;
