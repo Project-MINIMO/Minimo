@@ -3,6 +3,8 @@ using UnityEngine.Tilemaps;
 
 public class CustomTile 
 {
+    public bool CanInstall => AccountInfo.Instance.Gold.Count >= Cost;
+    
     public readonly int ID;
     public readonly TileType Type;
     public readonly TileBase Tile;
@@ -21,8 +23,6 @@ public class CustomTile
         UnlockLevel = data.UnlockLevel;
         Cost = data.Cost;
     }
-
-    public bool CanInstall() => AccountInfo.Instance.Gold.Count >= Cost;
     
     private Sprite GetPreviewSprite(TileBase tileBase)
     {

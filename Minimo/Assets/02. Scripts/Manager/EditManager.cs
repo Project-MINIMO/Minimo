@@ -105,6 +105,15 @@ public class EditManager : ManagerBase
         if (!_installChecker.CheckCanInstall(CurrentEditObject)) return;
 
         var isNew = !CurrentEditObject.IsPlaced;
+        if (isNew)
+        {
+            if (!CurrentEditObject.BuildingData.CanInstall)
+            {
+                App.Notification(NotifyType.GoldLack);
+                return;
+            }
+        }
+        
         if (!await CurrentEditObject.Install())
         {
             Debug.LogError("Installation failed");
@@ -115,6 +124,7 @@ public class EditManager : ManagerBase
             
         if (isNew)
         {
+            CurrentEditObject.BuildingData.Install();
             ActiveProduces.Add(CurrentEditObject as ProduceObject);
             HandlePostInstall();
         }
@@ -148,6 +158,7 @@ public class EditManager : ManagerBase
         var result = CurrentEditObject.Destroy();
         if (result)
         {
+            CurrentEditObject.BuildingData.Uninstall();
             ActiveProduces.Remove(CurrentEditObject as ProduceObject);
             CurrentEditObject = null;
             IsBuildingEditing.Value = false;

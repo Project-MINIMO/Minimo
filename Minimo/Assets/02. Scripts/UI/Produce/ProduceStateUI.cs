@@ -1,5 +1,7 @@
+using System;
 using System.Linq;
-
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
@@ -12,7 +14,7 @@ public class ProduceStateUI : MonoBehaviour
     [SerializeField] private Image _completeImg;
     
     private ProduceObject _produceObject;
-    
+
     private void Start()
     {
         _produceObject = GetComponentInParent<ProduceObject>();
@@ -21,6 +23,7 @@ public class ProduceStateUI : MonoBehaviour
             Debug.LogWarning("ProduceObject not found in parent.");
             return;
         }
+        
         if (_produceObject.BuildingData.Type == 0) return;
         
         _produceObject.OnProduceStateChanged += UpdateStateUI;

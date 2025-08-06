@@ -15,6 +15,7 @@ public class BuildingObject : InteractObject
     
     protected EditManager EditManager;
     protected SpriteRenderer SpriteRenderer;
+    private ProduceCostEffectCtrl _costEffectCtrl;
 
     protected virtual void Awake()
     {
@@ -25,6 +26,8 @@ public class BuildingObject : InteractObject
         EditManager.IsTileEditing
             .Subscribe(isEditing => SetTransparency(isEditing ? 0.5f : 1)).AddTo(gameObject);
         SetTransparency(EditManager.IsBuildingEditing.Value ? 0.5f : 1);
+        
+        _costEffectCtrl = GetComponentInChildren<ProduceCostEffectCtrl>();
     }
     
     public virtual async Task Initialize(Building data)
@@ -114,10 +117,11 @@ public class BuildingObject : InteractObject
             return false;
         }
 
-        this.BuildingId = buildingId;
+        BuildingId = buildingId;
 
         IsPlaced = true;
         PreviousPosition = transform.position;
+        _costEffectCtrl.Install(BuildingData.Cost);
         return true;
     }
     

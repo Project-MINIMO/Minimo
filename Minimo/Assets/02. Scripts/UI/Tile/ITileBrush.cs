@@ -53,7 +53,7 @@ public class PaintBrush : ITileBrush
             return TileBrushResult.Failed;
         }
         
-        if (!SelectedTile.CanInstall())
+        if (!SelectedTile.CanInstall)
         {
             App.Notification(NotifyType.GoldLack);
             return TileBrushResult.Failed;

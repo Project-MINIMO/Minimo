@@ -46,6 +46,12 @@ public class BuildingPanel : UIBase
     
     private void OnItemSelected(InventorySlot<Building> slot)
     {
+        if (!slot.Item.CanInstall)
+        {
+            App.Notification(NotifyType.GoldLack);
+            return;
+        }
+        
         var cameraCenterPosition = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, Camera.main.nearClipPlane));
         cameraCenterPosition.z = 0;
 

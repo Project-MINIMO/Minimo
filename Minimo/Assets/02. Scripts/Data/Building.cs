@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Building : IQuestClearTarget
 {
+    public bool CanInstall => AccountInfo.Instance.Gold.Count >= Cost;
+    
     public string Name { get; }
     public int Count { get; private set; }
     public Sprite Icon { get; }
@@ -35,5 +37,21 @@ public class Building : IQuestClearTarget
     {
         Count += amount;
         Count = Mathf.Clamp(Count, 0, int.MaxValue);
+    }
+
+    public void Install()
+    {
+        if (!CanInstall)
+        {
+            App.Notification(NotifyType.GoldLack);
+            return;
+        }
+        
+        AccountInfo.Instance.Gold.AddCount(-Cost);
+    }
+
+    public void Uninstall()
+    {
+        AccountInfo.Instance.Gold.AddCount(Cost);
     }
 }

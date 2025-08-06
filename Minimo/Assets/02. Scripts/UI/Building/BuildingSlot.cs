@@ -8,6 +8,7 @@ public class BuildingSlot : InventorySlot<Building>
     
     [SerializeField] private Image _buildingImg;
     [SerializeField] private TextMeshProUGUI _buildingNameTMP;
+    [SerializeField] private TextMeshProUGUI _costTMP;
     [SerializeField] private GameObject _lockBack;
     [SerializeField] private TextMeshProUGUI _lockTMP;
     
@@ -23,6 +24,7 @@ public class BuildingSlot : InventorySlot<Building>
         Item = item;
         _buildingImg.sprite = item.Icon;
         _buildingNameTMP.SetText(item.Name);
+        _costTMP.SetText(item.Cost.ToString());
 
         _lockTMP.SetText(App.GetData<TitleData>().GetFormatString("STR_BUILDING_UI_LOCK", item.UnlockLevel.ToString()));
     }
