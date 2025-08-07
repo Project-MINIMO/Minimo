@@ -32,6 +32,7 @@ public class QuizSubmissionView : QuestSubmissionView
 
         ClearItem();
         _toggleGroup.Show(true);
+        SubmitBtn.interactable = false;
     }
 
     protected override void Submit()
@@ -46,11 +47,13 @@ public class QuizSubmissionView : QuestSubmissionView
     {
         _selectedItem = slot.Item;
         SubmissionSlots[0].Initialize(slot.Item.Icon);
+        SubmitBtn.interactable = true;
     }
 
     private void ClearItem()
     {
         _selectedItem = null;
         SubmissionSlots[0].ClearItem();
+        SubmitBtn.interactable = false;
     }
 }
