@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class PrimaryPanel : UIBase
 {
+    protected override bool IsUseGuide => true;
+    
     [SerializeField] private Button _closeBtn;
     
     [SerializeField] private GameObject[] _stateCtrls;

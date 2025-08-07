@@ -25,7 +25,7 @@ public class UIGuide : MonoBehaviour
         _prevBtn.onClick.AddListener(Prev);
         _nextBtn.onClick.AddListener(Next);
         _closeBtn.onClick.AddListener(Close);
-        _closeEntireBtn.onClick.AddListener(Close);
+        _closeEntireBtn.onClick.AddListener(Entire);
     }
 
     private void OnEnable()
@@ -42,7 +42,7 @@ public class UIGuide : MonoBehaviour
         if (_waitingToEnableCloseEntire)
         {
             _closeEntireElapsed += Time.deltaTime;
-            if (_closeEntireElapsed >= 2f)
+            if (_closeEntireElapsed >= 1f)
             {
                 _closeEntireBtn.enabled = true;
                 _waitingToEnableCloseEntire = false;
@@ -84,5 +84,20 @@ public class UIGuide : MonoBehaviour
     private void Close()
     {
         gameObject.SetActive(false);
+    }
+
+    private void Entire()
+    {
+        if (_currentIndex + 1 == _totalPages)
+        {
+            Close();
+        }
+        else
+        {
+            _closeEntireBtn.enabled = false;
+            _closeEntireElapsed = 0f;
+            _waitingToEnableCloseEntire = true;
+            ShowPage(_currentIndex + 1);
+        }
     }
 }
