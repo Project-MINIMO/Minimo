@@ -31,7 +31,7 @@ public class StrayMinimoRunState : State<StrayMinimoObject>
     public override void Execute()
     {
         var result = _runTree.Tick();
-        if (result is NodeStatus.Success or NodeStatus.Failure)
+        if (result is NodeStatus.Success)
         {
             Owner.Despawn();
         }

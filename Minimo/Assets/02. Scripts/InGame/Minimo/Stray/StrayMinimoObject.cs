@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
@@ -13,12 +13,15 @@ public class StrayMinimoObject : InteractObject
     
     [SerializeField] private GameObject _plunderItemObj;
     [SerializeField] private Image _plunderItemImg;
+    [SerializeField] private GameObject _sadObj;
+    [SerializeField] private GameObject _questionMarkObj;
+    
     [SerializeField] private StrayCoinEffect _coinEffect;
     [SerializeField] private GameObject _clickGaugeObj;
     [SerializeField] private Image _clickGaugeImg;
     [SerializeField] private GameObject _shineObj;
     
-    private StrayMinimoState _currentState = StrayMinimoState.None;
+    public StrayMinimoState CurrentState { get; private set; } = StrayMinimoState.None;
 
     private readonly Vector3 _startScale = new(0.2f, 0.2f, 0.2f);
     private readonly Vector3 _endScale = new(0.17f, 0.17f, 0.17f);
@@ -33,6 +36,7 @@ public class StrayMinimoObject : InteractObject
     private (Item, int) _holdItem;
     
     private Coroutine _clickAnimationRoutine;
+    private EditManager _editManager;
     
     public void Initialize(bool isGorden, Dictionary<string, int> common)
     {
@@ -49,6 +53,8 @@ public class StrayMinimoObject : InteractObject
 
     private void Start()
     {
+        _editManager = App.GetManager<EditManager>();
+        
         FSM = new StrayMinimoFSM(this);
         ApplyState(StrayMinimoState.Hide);
     }
@@ -62,7 +68,6 @@ public class StrayMinimoObject : InteractObject
     {
         IsClicked = false;
         transform.position = position;
-        transform.localScale = _startScale;
         
         ApplyState(StrayMinimoState.Plunder);
         
@@ -71,10 +76,13 @@ public class StrayMinimoObject : InteractObject
         _currentCurrency = Mathf.RoundToInt(currentCurrency);
         
         _holdItem = (null, 0);
-        _plunderItemObj.SetActive(false);
-        _clickGaugeImg.fillAmount = 0;
         
+        _sadObj.SetActive(false);
+        _questionMarkObj.SetActive(false);
+        _plunderItemObj.SetActive(false);
         _shineObj.SetActive(false);
+        
+        _clickGaugeImg.fillAmount = 0;
     }
     
     public void Despawn()
@@ -103,11 +111,34 @@ public class StrayMinimoObject : InteractObject
         ApplyState(StrayMinimoState.Run);
     }
 
+    public void FailPlunder()
+    {
+        StartCoroutine(FailPlunderAnimation());
+    }
+
+    private IEnumerator FailPlunderAnimation()
+    {
+        ApplyState(StrayMinimoState.Idle);
+        _questionMarkObj.SetActive(true);
+        yield return new WaitForSeconds(1);
+        _questionMarkObj.SetActive(false);
+        
+        if (IsAnyCompleteAdvances())
+        {
+            ApplyState(StrayMinimoState.Plunder);
+        }
+        else
+        {
+            _sadObj.SetActive(true);
+            ApplyState(StrayMinimoState.Run);
+        }
+    }
+
     private void ApplyState(StrayMinimoState target)
     {
-        if (target == _currentState) return;
+        if (target == CurrentState) return;
 
-        _currentState = target;
+        CurrentState = target;
         FSM.ChangeState(target);
     }
   
@@ -116,10 +147,11 @@ public class StrayMinimoObject : InteractObject
     public override void OnClickUp()
     {
         _currentLife--;
-        _clickGaugeImg.fillAmount = (float)_currentLife / TotalLife;
+        _clickGaugeImg.fillAmount = (float)(TotalLife - _currentLife) / TotalLife;
 
         if (_currentLife <= 3)
         {
+            _sadObj.SetActive(true);
             ApplyState(StrayMinimoState.Run);
         }
         else if (_currentLife <= 0)
@@ -151,7 +183,7 @@ public class StrayMinimoObject : InteractObject
 
     private IEnumerator ClickAnimation()
     {
-        if (_currentState == StrayMinimoState.Hide) yield break;
+        if (CurrentState == StrayMinimoState.Hide) yield break;
         
         IsClicked = true;
         
@@ -170,8 +202,13 @@ public class StrayMinimoObject : InteractObject
 
         IsClicked = false;
         
-        if (_currentState == StrayMinimoState.Hide) yield break;
+        if (CurrentState == StrayMinimoState.Hide) yield break;
         
         transform.DOScale(_startScale, 0.1f);
+    }
+    
+    private bool IsAnyCompleteAdvances()
+    {
+        return _editManager.ActiveProduces.Any(x => x.CurrentState == ProduceState.Complete);
     }
 }

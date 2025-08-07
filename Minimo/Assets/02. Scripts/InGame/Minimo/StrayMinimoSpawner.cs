@@ -17,6 +17,7 @@ public class StrayMinimoSpawner : MonoBehaviour
     private List<StrayMinimoObject> _minimoPool;
     private StrayMinimoObject _currentMinimo;
     private IndicatorPanel _indicatorPanel;
+    private PopUpPanel _popUpPanel;
     
     private EditManager _editManager;
     private float _goldenSpawnRate;
@@ -24,7 +25,9 @@ public class StrayMinimoSpawner : MonoBehaviour
     private void Awake()
     {
         _editManager = App.GetManager<EditManager>();
-        _indicatorPanel = App.GetManager<UIManager>().GetPanel<IndicatorPanel>();
+        var uiManager = App.GetManager<UIManager>();
+        _indicatorPanel = uiManager.GetPanel<IndicatorPanel>();
+        _popUpPanel = uiManager.GetPanel<PopUpPanel>();
         
         var common = App.GetData<TitleData>().Common;
         _spawnInterval = common["MiaSpawnInterval"];
@@ -53,7 +56,11 @@ public class StrayMinimoSpawner : MonoBehaviour
         {
             yield return new WaitForSeconds(_spawnInterval); 
 
-            if (_currentMinimo != null) continue;
+            if (_currentMinimo != null)
+            {
+                if (_currentMinimo.CurrentState != StrayMinimoState.Hide) continue;
+                else _currentMinimo = null;
+            }
             if (!IsAnyCompleteAdvances()) continue;
             if (Random.Range(0f, 1f) > _spawnProbability) continue;
 
@@ -63,7 +70,6 @@ public class StrayMinimoSpawner : MonoBehaviour
 
     private void SpawnMinimo()
     {
-        Debug.Log("spawned");
         var spawnPos = GetRandomSpawnPosition();
 
         var isGolden = Random.Range(0f, 1f) < _goldenSpawnRate;
@@ -75,6 +81,7 @@ public class StrayMinimoSpawner : MonoBehaviour
 
         strayMinimo.Spawn(spawnPos);
         _indicatorPanel.CreateIndicator(strayMinimo.transform);
+        _popUpPanel.OpenPanel(PopUpType.StrayWarning);
     }
     
     private Vector3 GetRandomSpawnPosition()

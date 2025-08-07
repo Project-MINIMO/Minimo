@@ -18,10 +18,11 @@ public class IndicatorHandler : MonoBehaviour
 
     public void Initialize(Transform target, RectTransform canvasRect)
     {
-        gameObject.SetActive(true);
         _target = target;
         _canvasRect = canvasRect;
         _icon.sprite = target.GetComponentInChildren<SpriteRenderer>().sprite;
+        CalculatePosition();
+        gameObject.SetActive(true);
     }
 
     private void Update()
@@ -29,6 +30,11 @@ public class IndicatorHandler : MonoBehaviour
         if (_target == null) return;
         if (!gameObject.activeSelf) return;
 
+        CalculatePosition();
+    }
+
+    private void CalculatePosition()
+    {
         var screenPos = _camera.WorldToScreenPoint(_target.position);
 
         var isVisible = screenPos.z > 0 &&

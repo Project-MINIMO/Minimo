@@ -31,9 +31,9 @@ public class StrayMinimoPlunderState : State<StrayMinimoObject>
     public override void Execute()
     {
         var result = _plunderTree.Tick();
-        if (result is NodeStatus.Success)
+        if (result is NodeStatus.Failure)
         {
-            Owner.Despawn();
+            Owner.FailPlunder();
         }
     }
 

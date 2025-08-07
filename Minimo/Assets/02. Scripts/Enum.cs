@@ -56,6 +56,7 @@ public enum MinimoState
 
 public enum StrayMinimoState
 {
+    Idle,
     Plunder,
     Run,
     Hide,
@@ -138,8 +139,12 @@ public enum PopUpType
     MinimoUnassign,
     MinimoShift,
     MinimoAcquire,
+    
     StorageExpand,
     StorageExpandResult,
+    
     MinimoExpand,
     MinimoExpandResult,
+    
+    StrayWarning
 }

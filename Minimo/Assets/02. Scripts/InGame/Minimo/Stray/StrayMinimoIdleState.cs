@@ -1,29 +1,20 @@
+using UnityEngine;
+
 public class StrayMinimoIdleState : State<StrayMinimoObject>
 {
-    private readonly BehaviorTree _idleTree;
+    private readonly int Idle = Animator.StringToHash("Idle");
 
-    public StrayMinimoIdleState(StrayMinimoObject owner) : base(owner)
-    {
-        var blackboard = new Blackboard(owner.gameObject);
-        
-        var idleSequence = new SequenceNode
-        (
-            blackboard,
-            new FindStrayPositionAction(blackboard)
-        );
-        
-        _idleTree = new BehaviorTree(idleSequence);
-    }
+    public StrayMinimoIdleState(StrayMinimoObject owner) : base(owner) { }
 
     public override void Enter()
     {
-        _idleTree.Reset();
+        Animator.SetBool(Idle, true);
     }
 
-    public override void Execute()
+    public override void Execute() { }
+
+    public override void Exit()
     {
-        _idleTree.Tick();
+        Animator.SetBool(Idle, false);
     }
-
-    public override void Exit() { }
 }

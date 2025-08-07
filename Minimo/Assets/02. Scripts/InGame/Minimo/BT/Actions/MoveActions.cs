@@ -170,7 +170,15 @@ public class MoveForwardAction : ActionNode
             SetAnimationDirection();
         }
 
-        if (_strayMinimo != null && _strayMinimo.IsClicked) return NodeStatus.Running;
+        if (_strayMinimo != null)
+        {
+            if (_strayMinimo.IsClicked) return NodeStatus.Running;
+            else if (Blackboard.TargetBuilding?.CurrentState != ProduceState.Complete)
+            {
+                Exit();
+                return NodeStatus.Failure;
+            }
+        }
         if (_userMinimo != null && _userMinimo.IsClicked)
         {
             Exit();
