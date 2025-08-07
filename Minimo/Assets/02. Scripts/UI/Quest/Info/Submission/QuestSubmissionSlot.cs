@@ -33,6 +33,7 @@ public class QuestSubmissionSlot : MonoBehaviour
     
     public void Initialize(Sprite icon)
     {
+        _itemImg.gameObject.SetActive(true);
         _itemImg.sprite = icon;
         _guideBtn.gameObject.SetActive(false);
         _amountTMP.gameObject.SetActive(false);

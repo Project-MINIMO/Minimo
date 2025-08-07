@@ -127,6 +127,7 @@ public class StrayMinimoObject : InteractObject
     {
         ApplyState(StrayMinimoState.Idle);
         _questionMarkObj.SetActive(true);
+        _shineObj.SetActive(false);
         yield return new WaitForSeconds(1);
         _questionMarkObj.SetActive(false);
         

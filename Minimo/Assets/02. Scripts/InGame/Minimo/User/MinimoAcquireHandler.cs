@@ -96,6 +96,9 @@ public class MinimoAcquireHandler : InteractObject
         
         _minimoObject.ApplyState(MinimoState.Acquire);
         _minimoManager.ActiveMinimos.Add(_minimoObject.Data);
+
+        GetComponent<Collider2D>().enabled = false;
+        enabled = false;
     }
     
     private IEnumerator WaitForPopUpClosed()
