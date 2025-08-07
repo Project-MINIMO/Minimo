@@ -44,6 +44,14 @@ public class PopUpPanel : UIBase
         _currentWindow.Show(building, minimo);
     }
 
+    public void OpenPanel(PopUpType type, MinimoAcquireHandler handler)
+    {
+        OpenPanel();
+        
+        _currentWindow = _popUpMap[type];
+        _currentWindow.Show(handler);
+    }
+
     public override void ClosePanel()
     {
         _currentWindow?.Hide();

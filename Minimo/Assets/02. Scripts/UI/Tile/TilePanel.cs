@@ -42,6 +42,8 @@ public class TilePanel : UIBase
     private EraseBrush _eraseBrush;
     private ITileBrush _currentBrush;
 
+    private CameraBoundsUpdater _mapBounds;
+
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
@@ -52,6 +54,7 @@ public class TilePanel : UIBase
         _tilemap = GameObject.FindWithTag("VillageTilemap").GetComponent<Tilemap>();
         _glowMap = GameObject.FindWithTag("GlowTilemap").GetComponent<Tilemap>();
         _installMap = GameObject.FindWithTag("InstallTilemap").GetComponent<Tilemap>();
+        _mapBounds = GameObject.FindWithTag("MapBounds").GetComponent<CameraBoundsUpdater>();
         
         _paintBrush = new PaintBrush(_tilemap, _glowMap, _installMap);
         _eraseBrush = new EraseBrush(_tilemap, _glowMap, _installMap);
@@ -184,6 +187,8 @@ public class TilePanel : UIBase
             await firebaseManager.BatchUpdateTiles(_pendingTileChanges);
             _pendingTileChanges.Clear();
         }
+
+        _mapBounds.CalculateBounds();
         
         _currentBrush = null;
         _slideHandler.Open();

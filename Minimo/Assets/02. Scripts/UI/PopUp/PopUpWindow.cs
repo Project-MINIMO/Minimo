@@ -21,6 +21,7 @@ public abstract class PopUpWindow : MonoBehaviour
     }
     
     public virtual void Show(ProduceAdvanced building, Minimo minimo) { }
+    public virtual void Show(MinimoAcquireHandler handler) { }
 
     public virtual void Hide()
     {

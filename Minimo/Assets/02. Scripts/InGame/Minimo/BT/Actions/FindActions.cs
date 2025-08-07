@@ -3,26 +3,6 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 #region User
-public class FindSwimPositionAction : ActionNode
-{
-    private readonly CameraBoundsUpdater _mapBounds;
-
-    public FindSwimPositionAction(Blackboard blackboard) : base(blackboard)
-    {
-        _mapBounds = GameObject.FindWithTag("MapBounds").GetComponent<CameraBoundsUpdater>();
-    }
-
-    public override NodeStatus Tick()
-    {
-        var agentPos = Blackboard.Agent.transform.position;
-        var nearest = _mapBounds.GetRandomPoint(agentPos, 5);
-
-        Blackboard.TargetPosition = nearest;
-        
-        return NodeStatus.Success;
-    }
-}
-
 public class FindRestPositionAction : ActionNode
 {
     private readonly PathManager _pathManager;

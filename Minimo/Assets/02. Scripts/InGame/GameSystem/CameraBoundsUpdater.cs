@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class CameraBoundsUpdater : MonoBehaviour
@@ -8,26 +10,17 @@ public class CameraBoundsUpdater : MonoBehaviour
     [SerializeField] private Vector3 _margin = Vector2.one * 0f;
 
     private BoxCollider2D _collider;
-    private EditManager _editManager;
     
     private Bounds _localBounds;
 
     private void Awake()
     {
         _collider = GetComponent<BoxCollider2D>();
-        _editManager = App.GetManager<EditManager>();
         
         CalculateBounds();
     }
 
-    private void LateUpdate()
-    {
-        if (!_editManager.IsTileEditing.Value) return;
-        
-        CalculateBounds();
-    }
-
-    private void CalculateBounds()
+    public void CalculateBounds()
     {
         _tilemap.CompressBounds();
         
@@ -131,11 +124,11 @@ public class CameraBoundsUpdater : MonoBehaviour
 
     public (float, float) GetOutsideMapWidth()
     {
-        var colliderBounds = _collider.bounds;
-        var mapMin = _tilemap.transform.TransformPoint(colliderBounds.min);
-        var mapMax = _tilemap.transform.TransformPoint(colliderBounds.max);
+        var bounds = _collider.bounds;
+        var min = bounds.min;
+        var max = bounds.max;
 
-        return (mapMin.x, mapMax.x);
+        return (min.x, max.x);
     }
   
     public Vector3[] GetCorners()
@@ -151,5 +144,43 @@ public class CameraBoundsUpdater : MonoBehaviour
             new (max.x, max.y),
             new (min.x, max.y)
         };
+    }
+
+    public Vector3 GetCornerEndPoint(int randomNum)
+    {
+        var corner = GetCorners()[randomNum];
+        var direction = randomNum switch
+        {
+            0 => new Vector3(2f, 1f, 0f),
+            1 => new Vector3(-1f, 2f, 0f),
+            2 => new Vector3(-2f, -1f, 0f),
+            3 => new Vector3(1f, -2f, 0f),
+            _ => new Vector3(2f, 1f, 0f)
+        };
+        
+        var maxDistance = GetMaxDistanceWithinBounds(corner, direction);
+        return corner + direction * maxDistance;
+    }
+    
+    private float GetMaxDistanceWithinBounds(Vector3 origin, Vector3 direction)
+    {
+        var bounds = _collider.bounds;
+        var maxDistance = float.MaxValue;
+        
+        if (direction.x != 0)
+        {
+            var boundX = direction.x > 0 ? bounds.max.x : bounds.min.x;
+            var distX = (boundX - origin.x) / direction.x;
+            maxDistance = Mathf.Min(maxDistance, distX);
+        }
+        
+        if (direction.y != 0)
+        {
+            var boundY = direction.y > 0 ? bounds.max.y : bounds.min.y;
+            var distY = (boundY - origin.y) / direction.y;
+            maxDistance = Mathf.Min(maxDistance, distY);
+        }
+
+        return maxDistance;
     }
 }

@@ -136,14 +136,15 @@ public class MoveForwardAction : ActionNode
     private Vector3 _prevPosition;
     private bool _shouldReset = true;
 
-    private StrayMinimoObject _minimo;
+    private readonly StrayMinimoObject _strayMinimo;
+    private readonly StrayMinimoObject _userMinimo;
 
     public MoveForwardAction(Blackboard blackboard, int triggerName) : base(blackboard)
     {
         _triggerName = triggerName;
         if (blackboard.Agent.TryGetComponent<StrayMinimoObject>(out var stray))
         {
-            _minimo = stray;
+            _strayMinimo = stray;
         }
     }
 
@@ -165,9 +166,11 @@ public class MoveForwardAction : ActionNode
             SetAnimationDirection();
         }
 
-        if (_minimo != null)
+        if (_strayMinimo != null && _strayMinimo.IsClicked) return NodeStatus.Running;
+        if (_userMinimo != null && _userMinimo.IsClicked)
         {
-            if (_minimo.IsClicked) return NodeStatus.Running;
+            Exit();
+            return NodeStatus.Failure;
         }
         
         if ((_targetPosition - Blackboard.Agent.transform.position).sqrMagnitude > 0f)

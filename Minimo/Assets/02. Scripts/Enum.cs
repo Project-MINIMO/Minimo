@@ -137,6 +137,7 @@ public enum PopUpType
     MinimoAssign,
     MinimoUnassign,
     MinimoShift,
+    MinimoAcquire,
     StorageExpand,
     StorageExpandResult,
     MinimoExpand,

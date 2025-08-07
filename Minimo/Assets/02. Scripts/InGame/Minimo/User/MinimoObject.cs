@@ -6,6 +6,7 @@ public class MinimoObject : MonoBehaviour
 {
     public Minimo Data { get; private set; }
     public MinimoState CurrentState { get; private set; } = MinimoState.None;
+    public bool IsClicked;
     
     public event Action<MinimoObject> OnAcquired;
 

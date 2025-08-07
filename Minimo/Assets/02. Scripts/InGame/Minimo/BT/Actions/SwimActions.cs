@@ -1,14 +1,31 @@
 using UnityEngine;
 
+public class IsClicked : ConditionNode
+{
+    private readonly MinimoObject _owner;
+
+    public IsClicked(Blackboard blackboard) : base(blackboard)
+    {
+        _owner = blackboard.Agent.GetComponent<MinimoObject>();
+    }
+    
+    public override NodeStatus Tick()
+    {
+        return _owner.IsClicked ? NodeStatus.Success : NodeStatus.Failure;
+    }
+}
+
 public class SwimIdleAction : ActionNode
 {
     private readonly int _isSwimIdle = Animator.StringToHash("IsSwimIdle");
+    private readonly MinimoObject _owner;
     
-    private float _duration;
-    private float _startTime;
     private bool _shouldReset = true;
 
-    public SwimIdleAction(Blackboard blackboard) : base(blackboard) { }
+    public SwimIdleAction(Blackboard blackboard) : base(blackboard)
+    {
+        _owner = blackboard.Agent.GetComponent<MinimoObject>();
+    }
 
     public override void Reset()
     {
@@ -21,18 +38,16 @@ public class SwimIdleAction : ActionNode
         {
             _shouldReset = false;
             
-            _duration = Random.Range(5f, 15f);
-            _startTime = Time.time;
             Blackboard.Animator.SetBool(_isSwimIdle, true);
         }
-        
-        if (Time.time - _startTime >= _duration)
+
+        if (!_owner.IsClicked)
         {
             _shouldReset = true;
             Blackboard.Animator.SetBool(_isSwimIdle, false);
             return NodeStatus.Success;
         }
-        
+
         return NodeStatus.Running;
     }
 }
