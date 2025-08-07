@@ -9,18 +9,18 @@ public class NormalSubmissionView : QuestSubmissionView
         var i = 0;
         for (; i < quest.Clear.Length; i++)
         {
-            _infoUpdaters[i].gameObject.SetActive(true);
+            SubmissionSlots[i].gameObject.SetActive(true);
             
             var clear = quest.Clear[i];
-            var icon = clear.Target.Icon;
-            var progress = $"{clear.CurrentProgress} / {clear.Amount}";
-            _infoUpdaters[i].UpdateItem(icon, progress);
+            SubmissionSlots[i].Initialize(clear.Type, clear.Target, clear.CurrentProgress, clear.Amount);
         }
 
-        for (; i < _infoUpdaters.Length; i++)
+        for (; i < SubmissionSlots.Length; i++)
         {
-            _infoUpdaters[i].gameObject.SetActive(false);
+            SubmissionSlots[i].gameObject.SetActive(false);
         }
+
+        SubmitBtn.interactable = Quest.Clear.All(clear => clear.IsCompleted);
     }
 
     protected override void Submit()

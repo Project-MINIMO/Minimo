@@ -10,7 +10,11 @@ public class ChoiceSubmissionView : QuestSubmissionView
     {
         base.Initialize(questManager, submissionPanel, titleData);
         
-        _selectTogs = _infoUpdaters.Select(x => x.GetComponent<Toggle>()).ToArray();
+        _selectTogs = SubmissionSlots.Select(x => x.GetComponent<Toggle>()).ToArray();
+        foreach (var toggle in _selectTogs)
+        {
+            toggle.onValueChanged.AddListener(isOn => GetActiveToggle());
+        }
     }
     
     public override void Setup(Quest quest)
@@ -20,39 +24,47 @@ public class ChoiceSubmissionView : QuestSubmissionView
         var i = 0;
         for (; i < quest.Clear.Length; i++)
         {
-            _infoUpdaters[i].gameObject.SetActive(true);
+            SubmissionSlots[i].gameObject.SetActive(true);
             
             var clear = quest.Clear[i];
-            var icon = clear.Target.Icon;
-            var amount = clear.Amount;
-            _infoUpdaters[i].UpdateItem(icon, amount);
+            SubmissionSlots[i].Initialize(clear.Type, clear.Target, clear.CurrentProgress, clear.Amount);
         }
 
-        for (; i < _infoUpdaters.Length; i++)
+        for (; i < SubmissionSlots.Length; i++)
         {
-            _infoUpdaters[i].gameObject.SetActive(false);
+            SubmissionSlots[i].gameObject.SetActive(false);
         }
 
         foreach (var toggle in _selectTogs)
         {
             toggle.isOn = false;
         }
+        
+        SubmitBtn.interactable = false;
     }
 
     protected override void Submit()
+    {
+        var activeIndex = GetActiveToggle();
+        if (activeIndex == -1) return;
+        if (!Quest.Clear[activeIndex].IsCompleted) return;
+        
+        QuestManager.SubmitQuest(activeIndex);
+        base.Submit();
+    }
+
+    private int GetActiveToggle()
     {
         var activeIndex = -1;
         
         for (var i = 0; i < _selectTogs.Length; i++)
         {
             if (!_selectTogs[i].isOn) continue;
-            if (!Quest.Clear[i].IsCompleted) return;
             activeIndex = i;
         }
 
-        if (activeIndex == -1) return;
-        
-        QuestManager.SubmitQuest(activeIndex);
-        base.Submit();
+        SubmitBtn.interactable = activeIndex != -1;
+
+        return activeIndex;
     }
 }

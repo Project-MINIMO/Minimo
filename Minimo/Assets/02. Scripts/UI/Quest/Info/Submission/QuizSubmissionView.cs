@@ -45,12 +45,12 @@ public class QuizSubmissionView : QuestSubmissionView
     private void OnItemSelected(InventorySlot<Item> slot)
     {
         _selectedItem = slot.Item;
-        _infoUpdaters[0].UpdateItem(slot.Item);
+        SubmissionSlots[0].Initialize(slot.Item.Icon);
     }
 
     private void ClearItem()
     {
         _selectedItem = null;
-        _infoUpdaters[0].ClearItem();
+        SubmissionSlots[0].ClearItem();
     }
 }
