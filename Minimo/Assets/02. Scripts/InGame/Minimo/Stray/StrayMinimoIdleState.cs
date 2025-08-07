@@ -1,12 +1,6 @@
-using UnityEngine;
-using DG.Tweening;
-
 public class StrayMinimoIdleState : State<StrayMinimoObject>
 {
-    private readonly int _isWalk = Animator.StringToHash("IsWalk");
-    
     private readonly BehaviorTree _idleTree;
-    private readonly Vector3 _scale = new(0.2f, 0.2f, 0.2f);
 
     public StrayMinimoIdleState(StrayMinimoObject owner) : base(owner)
     {
@@ -15,8 +9,7 @@ public class StrayMinimoIdleState : State<StrayMinimoObject>
         var idleSequence = new SequenceNode
         (
             blackboard,
-            new FindStrayPositionAction(blackboard),
-            new MoveForwardAction(blackboard, _isWalk)
+            new FindStrayPositionAction(blackboard)
         );
         
         _idleTree = new BehaviorTree(idleSequence);
@@ -24,9 +17,6 @@ public class StrayMinimoIdleState : State<StrayMinimoObject>
 
     public override void Enter()
     {
-        Owner.transform.DOKill();
-        Owner.transform.DOScale(_scale, 0.2f);
-        
         _idleTree.Reset();
     }
 
@@ -35,12 +25,5 @@ public class StrayMinimoIdleState : State<StrayMinimoObject>
         _idleTree.Tick();
     }
 
-    public override void Exit()
-    {
-        Owner.transform.DOKill();
-        Owner.transform.localScale = _scale;
-        
-        Animator.speed = 1;
-        Animator.SetBool(_isWalk, false);
-    }
+    public override void Exit() { }
 }

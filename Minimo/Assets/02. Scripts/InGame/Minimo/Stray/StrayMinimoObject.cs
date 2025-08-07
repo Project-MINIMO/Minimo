@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,26 +18,20 @@ public class StrayMinimoObject : InteractObject
     [SerializeField] private Image _clickGaugeImg;
     [SerializeField] private GameObject _shineObj;
     
-    private StrayMinimoState _currentState = StrayMinimoState.Idle;
-    
-    private EditManager _editManager;
+    private StrayMinimoState _currentState = StrayMinimoState.None;
 
     private readonly Vector3 _startScale = new(0.2f, 0.2f, 0.2f);
     private readonly Vector3 _endScale = new(0.17f, 0.17f, 0.17f);
+
+    private const int TotalLife = 10;
+    private int _currentLife;
     
-    private int _lifeTime;
-    private int _afterPlunderLifeTime;
-    private int _currency;
+    private int _baseCurrency;
+    private int _currentCurrency;
     private float _currencyRate;
-    private float _currencyLostRate;
     
-    private int _lifeRemaining;
-    private int _holdCurreny;
-    private int _holdCurreny2;
-    private int _lostCurrentAmount;
     private (Item, int) _holdItem;
     
-    private Coroutine _lifeTimeRoutine;
     private Coroutine _clickAnimationRoutine;
     
     public void Initialize(bool isGorden, Dictionary<string, int> common)
@@ -49,19 +42,13 @@ public class StrayMinimoObject : InteractObject
         {
             GetComponentInChildren<Animator>().SetTrigger("Golden");
         }
-
-        _lifeTime = common["MiaLifeTime"];
-        _afterPlunderLifeTime = common[isGorden ? "GoldMiaLootLifeTime" : "MiaLootLifeTime"];
         
-        _currency = common["MiaCurrency"];
+        _baseCurrency = common["MiaCurrency"];
         _currencyRate = isGorden ? common["GoldMiaCurrency"] : 1;
-        _currencyLostRate = common["CurrencyLostRate"] / 100f;
     }
 
     private void Start()
     {
-        _editManager = App.GetManager<EditManager>();
-        
         FSM = new StrayMinimoFSM(this);
         ApplyState(StrayMinimoState.Hide);
     }
@@ -69,62 +56,33 @@ public class StrayMinimoObject : InteractObject
     private void Update()
     {
         FSM.Update();
-
-        if (_currentState == StrayMinimoState.Idle)
-        {
-            if (IsAnyCompleteAdvances())
-            {
-                ApplyState(StrayMinimoState.Plunder);
-            }
-        }
     }
 
     public void Spawn(Vector3 position)
     {
-        transform.position = position;
         IsClicked = false;
-        ApplyState(StrayMinimoState.Idle);
-        _lifeRemaining = _lifeTime;
+        transform.position = position;
+        transform.localScale = _startScale;
         
-        var holdCurreny = (_currency + AccountInfo.Instance.Level.Count * _currency * 0.1f) * _currencyRate;
-        _holdCurreny = _holdCurreny2 = Mathf.RoundToInt(holdCurreny);
-
-        var lostCurrentAmount = _holdCurreny * _currencyLostRate;
-        _lostCurrentAmount = Mathf.RoundToInt(lostCurrentAmount);
+        ApplyState(StrayMinimoState.Plunder);
+        
+        _currentLife = TotalLife;
+        var currentCurrency = (_baseCurrency + AccountInfo.Instance.Level.Count * _baseCurrency * 0.1f) * _currencyRate;
+        _currentCurrency = Mathf.RoundToInt(currentCurrency);
         
         _holdItem = (null, 0);
         _plunderItemObj.SetActive(false);
-        
         _clickGaugeImg.fillAmount = 0;
         
         _shineObj.SetActive(false);
-                
-        _lifeTimeRoutine = StartCoroutine(LifetimeRoutine());
     }
     
-    private IEnumerator LifetimeRoutine()
-    {
-        while (_lifeRemaining > 0f)
-        {
-            yield return new WaitForSeconds(1f);
-            _lifeRemaining -= 1;
-        }
-        
-        Despawn();
-    }
-
     public void Despawn()
     {
         if (_clickAnimationRoutine != null)
         {
             StopCoroutine(_clickAnimationRoutine);
             _clickAnimationRoutine = null;
-        }
-        
-        if (_lifeTimeRoutine != null)
-        {
-            StopCoroutine(_lifeTimeRoutine);
-            _lifeTimeRoutine = null;
         }
         
         IsClicked = false;
@@ -138,11 +96,11 @@ public class StrayMinimoObject : InteractObject
 
     public void SuccessPlunder(Item item, int amount)
     {
-        _lifeRemaining = _afterPlunderLifeTime;
         _holdItem = (item, amount);
         _plunderItemObj.SetActive(true);
         _plunderItemImg.sprite = item.Icon;
         _shineObj.SetActive(false);
+        ApplyState(StrayMinimoState.Run);
     }
 
     private void ApplyState(StrayMinimoState target)
@@ -152,22 +110,19 @@ public class StrayMinimoObject : InteractObject
         _currentState = target;
         FSM.ChangeState(target);
     }
-   
-    private bool IsAnyCompleteAdvances()
-    {
-        return _editManager.ActiveProduces.Any(x => x.CurrentState == ProduceState.Complete);
-    }
-
+  
     public override void OnLongPress() { }
 
     public override void OnClickUp()
     {
-        var getCurrency = _holdCurreny - _lostCurrentAmount > 0 ? _lostCurrentAmount : _holdCurreny;
-        _holdCurreny -= getCurrency;
-        _clickGaugeImg.fillAmount = (float)(_holdCurreny2 - _holdCurreny) / _holdCurreny2;
-        AccountInfo.Instance.Gold.AddCount(getCurrency);
-        _coinEffect.ShowEffect(getCurrency);
-        if (_holdCurreny <= 0)
+        _currentLife--;
+        _clickGaugeImg.fillAmount = (float)_currentLife / TotalLife;
+
+        if (_currentLife <= 3)
+        {
+            ApplyState(StrayMinimoState.Run);
+        }
+        else if (_currentLife <= 0)
         {
             var (item, amount) = _holdItem;
             if (item != null)
@@ -175,12 +130,16 @@ public class StrayMinimoObject : InteractObject
                 AccountInfo.Instance.AddItem(item.ID, amount);
             }
             
+            AccountInfo.Instance.Gold.AddCount(_currentCurrency);
+            _coinEffect.ShowEffect(_currentCurrency);
             Despawn();
         }
     }
     
     public override void OnClickDown()
     {
+        if (IsClicked) return;
+        
         if (_clickAnimationRoutine != null)
         {
             StopCoroutine(_clickAnimationRoutine);
@@ -197,6 +156,15 @@ public class StrayMinimoObject : InteractObject
         IsClicked = true;
         
         transform.DOKill();
+        transform.DOShakePosition(
+            duration: 0.3f,
+            strength: new Vector3(0.1f, 0.1f, 0f),
+            vibrato: 10,
+            randomness: 90,
+            snapping: false,
+            fadeOut: true
+        );
+        
         transform.DOScale(_endScale, 0.3f);
         yield return new WaitForSeconds(0.3f);
 
@@ -204,6 +172,6 @@ public class StrayMinimoObject : InteractObject
         
         if (_currentState == StrayMinimoState.Hide) yield break;
         
-        transform.DOScale(_startScale, 0.3f);
+        transform.DOScale(_startScale, 0.1f);
     }
 }
