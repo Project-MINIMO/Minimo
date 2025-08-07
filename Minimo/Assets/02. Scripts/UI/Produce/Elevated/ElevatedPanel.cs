@@ -8,6 +8,7 @@ public abstract class ElevatedPanel : UIBase
 {
     public override bool IsUseBlur => false;
     public override bool IsUseProduceBlur => true;
+    protected override bool IsUseGuide => true;
     
     [SerializeField] private Button _closeBtn;
     [SerializeField] private TextMeshProUGUI _titleTMP;
@@ -15,6 +16,7 @@ public abstract class ElevatedPanel : UIBase
     [SerializeField] private ItemInfoUpdater _resultInfo;
     [SerializeField] private GameObject _expandHandler;
     [SerializeField] private Button _placeMinimoBtn;
+    [SerializeField] private Button _infoBtn;
     
     [SerializeField] private UILongPressDetector _longPressDetector;
     [SerializeField] private GameObject _minimoInfoObj;
@@ -48,6 +50,7 @@ public abstract class ElevatedPanel : UIBase
         _closeBtn.onClick.AddListener(_produceManager.Deselect);
         _placeMinimoBtn.onClick.AddListener(() => 
             _placePanel.OpenPanel(_produceManager.CurrentObject as ProduceAdvanced));
+        _infoBtn.onClick.AddListener(ShowGuide);
     }
 
     public override void OpenPanel()

@@ -4,10 +4,13 @@ using TMPro;
 
 public class SecondaryPanel : UIBase
 {
+    protected override bool IsUseGuide => true;
+    
     [SerializeField] private TextMeshProUGUI _titleTMP;
     
     [SerializeField] private Button _closeBtn;
     [SerializeField] private Button _placeMinimoBtn;
+    [SerializeField] private Button _infoBtn;
     
     [SerializeField] private UILongPressDetector _longPressDetector;
     [SerializeField] private GameObject _minimoInfoObj;
@@ -40,6 +43,7 @@ public class SecondaryPanel : UIBase
         _closeBtn.onClick.AddListener(_produceManager.Deselect);
         _placeMinimoBtn.onClick.AddListener(() => 
             _placePanel.OpenPanel(_produceManager.CurrentObject as ProduceAdvanced));
+        _infoBtn.onClick.AddListener(ShowGuide);
     }
 
     public override void OpenPanel()

@@ -5,8 +5,6 @@ public class TertiaryPanel : ElevatedPanel
 {
     [SerializeField] private Button _prevBtn;
     [SerializeField] private Button _nextBtn;
-
-    [SerializeField] private Button _infoBtn;
     
     public override void Initialize(UIManager manager)
     {
@@ -14,6 +12,5 @@ public class TertiaryPanel : ElevatedPanel
 
         _prevBtn.onClick.AddListener(() => _produceManager.MoveToNextTertiary(-1));
         _nextBtn.onClick.AddListener(() => _produceManager.MoveToNextTertiary(1));
-        _infoBtn.onClick.AddListener(ShowGuide);
     }
 }
