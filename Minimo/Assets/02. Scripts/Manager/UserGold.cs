@@ -26,8 +26,6 @@ public class UserGold : IQuestRewardTarget
         {
             Debug.LogWarning("FirebaseManager is not initialized. Using local count only.");
         }
-        
-        AddCount(500);
     }
     
     private void OnSDCUpdate(int newCount)

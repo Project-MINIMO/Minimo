@@ -18,6 +18,12 @@ public class MoneyPanel : MonoBehaviour
         OnGoldChanged(AccountInfo.Instance.Gold.Count);
         OnCashChanged(AccountInfo.Instance.Cash);
     }
+
+    private void Start()
+    {
+        AccountInfo.Instance.Gold.AddCount(500);
+        AccountInfo.Instance.AddCash(200);
+    }
     
     private void OnGoldChanged(long value)
     {

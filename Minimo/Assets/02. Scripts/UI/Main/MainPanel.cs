@@ -5,7 +5,6 @@ using DG.Tweening;
 public class MainPanel : UIBase
 {
     public override bool IsDefaultPanel => true;
-    protected override bool IsUseGuide => true;
     
     [SerializeField] private RectTransform[] _btnRects;
     [SerializeField] private float _openYPosition = -294;

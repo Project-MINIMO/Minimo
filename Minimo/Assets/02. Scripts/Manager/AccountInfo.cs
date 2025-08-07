@@ -30,7 +30,6 @@ public class AccountInfo : Singleton<AccountInfo>
         
         // Firebase에서 초기 SLP 값 로드
         InitializeCashFromFirebase();
-        AddCash(200);
     }
     
     private void InitializeCashFromFirebase()

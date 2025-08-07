@@ -18,7 +18,8 @@ public class FocusPanel : UIBase
     public void FocusOn(Vector3 worldPosition, 
         float targetZoom = 3, 
         float duration = 0.3f, 
-        Action onComplete = null)
+        Action onComplete = null,
+        bool closeOnComplete = true)
     {
         OpenPanel();
         
@@ -28,7 +29,7 @@ public class FocusPanel : UIBase
         _mainCamera.DOOrthoSize(targetZoom, duration).SetEase(Ease.InOutSine)
             .OnComplete(() =>
             {
-                ClosePanel();
+                if (closeOnComplete) ClosePanel();
                 onComplete?.Invoke();
             });
     }
