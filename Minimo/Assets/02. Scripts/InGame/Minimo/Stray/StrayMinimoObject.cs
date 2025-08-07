@@ -51,7 +51,7 @@ public class StrayMinimoObject : InteractObject
         }
 
         _totalLife = isGorden ? 15 : 10;
-        _runLife = isGorden ? 5 : 3;
+        _runLife = isGorden ? 10 : 7;
         
         _baseCurrency = common["MiaCurrency"];
         _currencyRate = isGorden ? common["GoldMiaCurrency"] : 1;
