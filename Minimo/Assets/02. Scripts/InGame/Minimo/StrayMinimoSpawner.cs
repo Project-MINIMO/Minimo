@@ -9,7 +9,6 @@ public class StrayMinimoSpawner : MonoBehaviour
 {
     [SerializeField] private CameraBoundsUpdater _mapBounds; 
     
-    [SerializeField] private float _itemTargetAge = 10;
     [SerializeField] private float _spawnInterval = 5; 
     [SerializeField] private float _spawnProbability = 0.5f;
     [SerializeField] private float _respawnCooldown = 30;
@@ -21,6 +20,7 @@ public class StrayMinimoSpawner : MonoBehaviour
     
     private EditManager _editManager;
     private float _goldenSpawnRate;
+    private float _lastDeathTime = float.MinValue;
 
     private void Awake()
     {
@@ -30,7 +30,6 @@ public class StrayMinimoSpawner : MonoBehaviour
         _popUpPanel = uiManager.GetPanel<PopUpPanel>();
         
         var common = App.GetData<TitleData>().Common;
-        _spawnInterval = common["MiaSpawnInterval"];
         _goldenSpawnRate = common["GoldMiaSpawnRate"] / 100f;
         
         _minimoPool = GetComponentsInChildren<StrayMinimoObject>().ToList();
@@ -40,11 +39,13 @@ public class StrayMinimoSpawner : MonoBehaviour
         for (; i < _minimoPool.Count / 2; i++)
         {
             _minimoPool[i].Initialize(true, common);
+            _currentMinimo.OnDead += OnDead;
         }
         
         for (; i < _minimoPool.Count; i++)
         {
             _minimoPool[i].Initialize(false, common);
+            _currentMinimo.OnDead += OnDead;
         }
         
         StartCoroutine(SpawnLoop());
@@ -56,11 +57,8 @@ public class StrayMinimoSpawner : MonoBehaviour
         {
             yield return new WaitForSeconds(_spawnInterval); 
 
-            if (_currentMinimo != null)
-            {
-                if (_currentMinimo.CurrentState != StrayMinimoState.Hide) continue;
-                else _currentMinimo = null;
-            }
+            if (_currentMinimo != null) continue;
+            if (Time.time - _lastDeathTime < _respawnCooldown) continue;
             if (!IsAnyCompleteAdvances()) continue;
             if (Random.Range(0f, 1f) > _spawnProbability) continue;
 
@@ -79,7 +77,8 @@ public class StrayMinimoSpawner : MonoBehaviour
         _currentMinimo = strayMinimo;
         _minimoPool.Remove(strayMinimo);
 
-        strayMinimo.Spawn(spawnPos);
+        _currentMinimo.Spawn(spawnPos);
+        
         _indicatorPanel.CreateIndicator(strayMinimo.transform);
         _popUpPanel.OpenPanel(PopUpType.StrayWarning);
     }
@@ -93,5 +92,11 @@ public class StrayMinimoSpawner : MonoBehaviour
     private bool IsAnyCompleteAdvances()
     {
         return _editManager.ActiveProduces.Any(x => x.CurrentState == ProduceState.Complete);
+    }
+
+    private void OnDead(bool isFail)
+    {
+        _currentMinimo = null;
+        _lastDeathTime = Time.time;
     }
 }

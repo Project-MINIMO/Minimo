@@ -7,16 +7,17 @@ public class StrayMinimoRunState : State<StrayMinimoObject>
     private readonly int _isPlunder = Animator.StringToHash("IsPlunder");
     
     private readonly BehaviorTree _runTree;
+    private readonly Blackboard _blackboard;
 
     public StrayMinimoRunState(StrayMinimoObject owner) : base(owner)
     {
-        var blackboard = new Blackboard(owner.gameObject);
+        _blackboard = new Blackboard(owner.gameObject);
         
         var runSequence = new SequenceNode
         (
-            blackboard,
-            new FindNearestCornerPositionAction(blackboard),
-            new MoveForwardAction(blackboard, _isPlunder)
+            _blackboard,
+            new FindNearestCornerPositionAction(_blackboard),
+            new MoveForwardAction(_blackboard, _isPlunder)
         );
         
         _runTree = new BehaviorTree(runSequence);
@@ -24,6 +25,7 @@ public class StrayMinimoRunState : State<StrayMinimoObject>
 
     public override void Enter()
     {
+        _blackboard.Speed = AccountInfo.Instance.straySpeed.y;
         _runTree.Reset();
         Animator.SetBool(_isPlunder, true);
     }
