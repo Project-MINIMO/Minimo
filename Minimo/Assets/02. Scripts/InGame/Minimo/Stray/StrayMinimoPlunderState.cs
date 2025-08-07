@@ -16,9 +16,7 @@ public class StrayMinimoPlunderState : State<StrayMinimoObject>
             blackboard,
             new FindCompletePositionAction(blackboard),
             new MoveForwardAction(blackboard, _isWalk),
-            new PlunderAction(blackboard),
-            new FindNearestCornerPositionAction(blackboard),
-            new MoveForwardAction(blackboard, _isWalk)
+            new PlunderAction(blackboard)
         );
         
         _plunderTree = new BehaviorTree(plunderSequence);
@@ -33,7 +31,7 @@ public class StrayMinimoPlunderState : State<StrayMinimoObject>
     public override void Execute()
     {
         var result = _plunderTree.Tick();
-        if (result is NodeStatus.Success or NodeStatus.Failure)
+        if (result is NodeStatus.Success)
         {
             Owner.Despawn();
         }

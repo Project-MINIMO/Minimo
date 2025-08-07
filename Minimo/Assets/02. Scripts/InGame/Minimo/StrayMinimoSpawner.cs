@@ -3,21 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
-using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
 public class StrayMinimoSpawner : MonoBehaviour
 {
-    [SerializeField] private Tilemap _groundTilemap; 
+    [SerializeField] private CameraBoundsUpdater _mapBounds; 
+    
+    [SerializeField] private float _itemTargetAge = 10;
+    [SerializeField] private float _spawnInterval = 5; 
+    [SerializeField] private float _spawnProbability = 0.5f;
+    [SerializeField] private float _respawnCooldown = 30;
     
     private List<StrayMinimoObject> _minimoPool;
     private StrayMinimoObject _currentMinimo;
+    private IndicatorPanel _indicatorPanel;
     
-    private float _spawnInterval;
+    private EditManager _editManager;
     private float _goldenSpawnRate;
 
     private void Awake()
     {
+        _editManager = App.GetManager<EditManager>();
+        _indicatorPanel = App.GetManager<UIManager>().GetPanel<IndicatorPanel>();
+        
         var common = App.GetData<TitleData>().Common;
         _spawnInterval = common["MiaSpawnInterval"];
         _goldenSpawnRate = common["GoldMiaSpawnRate"] / 100f;
@@ -43,48 +51,40 @@ public class StrayMinimoSpawner : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(_spawnInterval);
+            yield return new WaitForSeconds(_spawnInterval); 
+
+            if (_currentMinimo != null) continue;
+            if (!IsAnyCompleteAdvances()) continue;
+            if (Random.Range(0f, 1f) > _spawnProbability) continue;
+
             SpawnMinimo();
         }
     }
 
     private void SpawnMinimo()
     {
+        Debug.Log("spawned");
         var spawnPos = GetRandomSpawnPosition();
-        
-        var isGolden = Random.Range(0, 1f) < _goldenSpawnRate;
-        var strayMinimo = _minimoPool.First(x => x.IsGolden == isGolden);
-        
-        DespawnCurrentMinimo();
+
+        var isGolden = Random.Range(0f, 1f) < _goldenSpawnRate;
+        var strayMinimo = _minimoPool.FirstOrDefault(x => x.IsGolden == isGolden);
+        if (strayMinimo == null) return;
+
+        _currentMinimo = strayMinimo;
+        _minimoPool.Remove(strayMinimo);
 
         strayMinimo.Spawn(spawnPos);
-        _currentMinimo = strayMinimo;
-        _minimoPool.Remove(_currentMinimo);
-    }
-
-    private void DespawnCurrentMinimo()
-    {
-        if (_currentMinimo != null)
-        {
-            _currentMinimo.Despawn();
-            _minimoPool.Add(_currentMinimo);
-            _currentMinimo = null;
-        }
+        _indicatorPanel.CreateIndicator(strayMinimo.transform);
     }
     
     private Vector3 GetRandomSpawnPosition()
     {
-        var bounds = _groundTilemap.cellBounds;
-        Vector3Int cell;
-
-        do
-        {
-            var x = Random.Range(bounds.xMin, bounds.xMax);
-            var y = Random.Range(bounds.yMin, bounds.yMax);
-            cell  = new Vector3Int(x, y, 0);
-        }
-        while (_groundTilemap.HasTile(cell));
-        
-        return _groundTilemap.GetCellCenterWorld(cell);
+        var corners = _mapBounds.GetCorners();
+        return corners[Random.Range(0, corners.Length)];
+    }
+    
+    private bool IsAnyCompleteAdvances()
+    {
+        return _editManager.ActiveProduces.Any(x => x.CurrentState == ProduceState.Complete);
     }
 }

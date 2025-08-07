@@ -5,7 +5,7 @@ public class ProduceTertiary : ProduceElevated
 {
     public override async Task Initialize(Building data)
     {
-        base.Initialize(data);
+        await base.Initialize(data);
         
         _produceManager.RegisterTertiary(this);
     }
