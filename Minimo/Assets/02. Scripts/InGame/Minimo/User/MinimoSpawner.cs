@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -5,17 +6,17 @@ using UnityEngine;
 
 public class MinimoSpawner : MonoBehaviour
 {
-    [SerializeField] private CameraBoundsUpdater _mapBounds;
     [SerializeField] private GameObject[] _minimoPrefabs;
+    [SerializeField] private float _spawnDelaySeconds = 5f;
     
     private List<Minimo> _minimoDatas;
-    private readonly List<MinimoObject> _activeMinimos = new(); 
-    private readonly Queue<Minimo> _pendingQueue = new(); 
-    private const int MaxMinimoCount = 10;
-
-    private int _prevLevel;
+    private readonly Queue<Minimo> _spawnQueue = new();
+    private readonly Dictionary<int, MinimoObject> _minimoInstances = new();
+    private MinimoObject _currentMinimo;
     
     private IndicatorPanel _indicatorPanel;
+    private Coroutine _spawnCoroutine;
+    private int _prevLevel;
 
     private void Awake()
     {
@@ -37,50 +38,76 @@ public class MinimoSpawner : MonoBehaviour
         {
             var data = _minimoDatas[Random.Range(0, _minimoDatas.Count)];
             _minimoDatas.Remove(data);
-            EnqueueOrSpawn(data);
+            _spawnQueue.Enqueue(data);
         }
         
         _prevLevel = level;
-    }
-
-    private void EnqueueOrSpawn(Minimo data)
-    {
-        if (_activeMinimos.Count < MaxMinimoCount)
+        
+        if (_spawnCoroutine == null && _currentMinimo == null)
         {
-            SpawnMinimo(data);
-        }
-        else
-        {
-            _pendingQueue.Enqueue(data);
+            _spawnCoroutine = StartCoroutine(SpawnMinimoRoutine());
         }
     }
     
+    private IEnumerator SpawnMinimoRoutine()
+    {
+        while (_spawnQueue.Count > 0)
+        {
+            var data = _spawnQueue.Dequeue();
+            SpawnMinimo(data);
+            
+            yield return new WaitUntil(() => _currentMinimo == null);
+            yield return new WaitForSeconds(_spawnDelaySeconds);
+        }
+
+        _spawnCoroutine = null;
+    }
+
     private void SpawnMinimo(Minimo data)
     {
-        var spawnPos = _mapBounds.GetRandomOutsideMapPoint();
-        var randomPrefab = _minimoPrefabs[Random.Range(0, _minimoPrefabs.Length)];
-        var minimoObject = Instantiate(randomPrefab, spawnPos, Quaternion.identity, transform);
-
-        var instance = minimoObject.GetComponent<MinimoObject>();
-        instance.Initialize(data);
-        _activeMinimos.Add(instance);
+        var randomNum = Random.Range(0, _minimoPrefabs.Length);
+        MinimoObject instance;
+        
+        if (_minimoInstances.TryGetValue(randomNum, out var cachedInstance))
+        {
+            instance = cachedInstance;
+            _minimoInstances.Remove(randomNum);
+        }
+        else
+        {
+            var randomPrefab = _minimoPrefabs[randomNum];
+            var minimoObject = Instantiate(randomPrefab, Vector3.one * 999, Quaternion.identity, transform);
+            instance = minimoObject.GetComponent<MinimoObject>();
+        }
+        
+        instance.Initialize(data, randomNum);
+        _currentMinimo = instance;
         
         instance.OnAcquired += HandleMinimoAcquired;
-        _indicatorPanel.CreateIndicator(minimoObject.transform);
+        instance.OnExpired += HandleMinimoExpired;
+        
+        _indicatorPanel.CreateIndicator(instance.transform);
     }
  
     private void HandleMinimoAcquired(MinimoObject instance)
     {
+        if (_currentMinimo != instance) return;
+        
         instance.OnAcquired -= HandleMinimoAcquired;
-        _activeMinimos.Remove(instance);
-        TrySpawnFromQueue();
+        instance.OnExpired -= HandleMinimoExpired;
+        
+        _currentMinimo = null;
     }
     
-    private void TrySpawnFromQueue()
+    private void HandleMinimoExpired(MinimoObject instance)
     {
-        if (_pendingQueue.Count == 0 || _activeMinimos.Count >= MaxMinimoCount) return;
+        if (_currentMinimo != instance) return;
 
-        var nextData = _pendingQueue.Dequeue();
-        SpawnMinimo(nextData);
+        instance.OnAcquired -= HandleMinimoAcquired;
+        instance.OnExpired -= HandleMinimoExpired;
+
+        _spawnQueue.Enqueue(_currentMinimo.Data);
+        _minimoInstances.Add(_currentMinimo.MinimoIndex, _currentMinimo);
+        _currentMinimo = null;
     }
 }

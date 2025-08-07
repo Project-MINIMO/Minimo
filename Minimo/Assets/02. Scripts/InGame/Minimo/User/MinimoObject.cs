@@ -7,25 +7,29 @@ public class MinimoObject : MonoBehaviour
     public Minimo Data { get; private set; }
     public MinimoState CurrentState { get; private set; } = MinimoState.None;
     public bool IsClicked;
+    public int MinimoIndex { get; private set; }
     
     public event Action<MinimoObject> OnAcquired;
+    public event Action<MinimoObject> OnExpired;
 
     private MinimoFSM _fsm;
     private ProduceAdvanced _assignedBuilding;
     
-    public void Initialize(Minimo minimo)
+    private void Awake()
+    {
+        _fsm = new MinimoFSM(this);
+    }
+    
+    public void Initialize(Minimo minimo, int index)
     {
         Data = minimo;
         minimo.SetAgent(this);
         Data.OnAssignmentChanged += OnAssignmentChanged;
-    }
-
-    private void Start()
-    {
-        _fsm = new MinimoFSM(this);
+        
+        MinimoIndex = index;
         ApplyState(MinimoState.Swim);
     }
-
+    
     private void Update()
     {
         _fsm.Update();
@@ -35,6 +39,13 @@ public class MinimoObject : MonoBehaviour
     {
         OnAcquired?.Invoke(this);
         EvaluateAndApplyState();
+    }
+
+    public void Expire()
+    {
+        OnExpired?.Invoke(this);
+        CurrentState = MinimoState.None;
+        _fsm.ChangeState(MinimoState.None);
     }
     
     private void OnAssignmentChanged(ProduceAdvanced building)

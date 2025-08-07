@@ -151,11 +151,11 @@ public class CameraBoundsUpdater : MonoBehaviour
         var corner = GetCorners()[randomNum];
         var direction = randomNum switch
         {
-            0 => new Vector3(2f, 1f, 0f),
-            1 => new Vector3(-1f, 2f, 0f),
-            2 => new Vector3(-2f, -1f, 0f),
-            3 => new Vector3(1f, -2f, 0f),
-            _ => new Vector3(2f, 1f, 0f)
+            0 => new Vector3(4f, 1f, 0f),
+            1 => new Vector3(-1f, 4f, 0f),
+            2 => new Vector3(-4f, -1f, 0f),
+            3 => new Vector3(1f, -4f, 0f),
+            _ => new Vector3(4f, 1f, 0f)
         };
         
         var maxDistance = GetMaxDistanceWithinBounds(corner, direction);

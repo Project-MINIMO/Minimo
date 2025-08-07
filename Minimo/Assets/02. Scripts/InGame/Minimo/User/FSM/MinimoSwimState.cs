@@ -47,7 +47,11 @@ public class MinimoSwimState : State<MinimoObject>
 
     public override void Execute()
     {
-        _swimTree.Tick();
+        var result = _swimTree.Tick();
+        if (result == NodeStatus.Success)
+        {
+            Owner.Expire();
+        }
     }
 
     public override void Exit()
@@ -57,3 +61,21 @@ public class MinimoSwimState : State<MinimoObject>
         Animator.SetBool(_isSwimIdle, false);
     }
 }
+
+public class MinimoNoneState : State<MinimoObject>
+{
+    public MinimoNoneState(MinimoObject owner) : base(owner) { }
+
+    public override void Enter()
+    {
+        Owner.gameObject.SetActive(false);
+    }
+
+    public override void Execute() { }
+
+    public override void Exit()
+    {
+        Owner.gameObject.SetActive(true);
+    }
+}
+
