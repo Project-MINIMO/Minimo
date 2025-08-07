@@ -8,6 +8,7 @@ public class TutorialManager : Singleton<TutorialManager>
 
     private int _currentStepIndex = -1;
     private TutorialStep _currentStep;
+    public static bool IsTutorialing = true;
 
     private void Start()
     {

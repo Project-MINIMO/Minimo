@@ -27,6 +27,7 @@ public class TutorialStep_01 : TutorialStep
     [SerializeField] private GameObject _blockTileObj;
     [SerializeField] private GameObject _blockTileObj2;
     [SerializeField] private ScrollRect _scrollRect;
+    [SerializeField] private TutorialStep_05 _tutorialStep_05;
 
     private bool _isConfirmed;
     
@@ -65,7 +66,7 @@ public class TutorialStep_01 : TutorialStep
 
     private IEnumerator ConversationSequence()
     {
-       
+        _tutorialStep_05.SpawnFarm();
         //chiefminimo dorotate로 세우기
         _chiefMinimoTextObj.SetActive(false);
         

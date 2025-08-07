@@ -24,7 +24,7 @@ public abstract class UIBase : MonoBehaviour
     {
         _manager.PushPanel(this);
 
-        if (IsUseGuide && _isFirstOpen)
+        if (IsUseGuide && _isFirstOpen && !TutorialManager.IsTutorialing)
         {
             ShowGuide();
             _isFirstOpen = false;

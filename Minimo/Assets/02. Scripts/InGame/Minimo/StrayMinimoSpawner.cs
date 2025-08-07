@@ -22,7 +22,7 @@ public class StrayMinimoSpawner : MonoBehaviour
     private float _goldenSpawnRate;
     private float _lastDeathTime = float.MinValue;
 
-    private void Awake()
+    private void Start()
     {
         _editManager = App.GetManager<EditManager>();
         var uiManager = App.GetManager<UIManager>();
@@ -57,6 +57,7 @@ public class StrayMinimoSpawner : MonoBehaviour
         {
             yield return new WaitForSeconds(_spawnInterval); 
 
+            if (TutorialManager.IsTutorialing) continue;
             if (_currentMinimo != null) continue;
             if (Time.time - _lastDeathTime < _respawnCooldown) continue;
             if (!IsAnyCompleteAdvances()) continue;
