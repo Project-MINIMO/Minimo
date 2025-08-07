@@ -228,20 +228,7 @@ public class MoveForwardAction : ActionNode
             (< 0, > 0) => TopLeft,
             (< 0, < 0) => BottomLeft,
             (< 0, 0) => BottomLeft,
-
-            (0, > 0) => // 수직 ↑
-                Blackboard.AnimatorIsPlaying(BottomLeft) 
-                || Blackboard.AnimatorIsPlaying(TopLeft) 
-                || Blackboard.AnimatorIsPlaying(Default)
-                    ? TopLeft : TopRight,
-
-            (0, < 0) => // 수직 ↓
-                Blackboard.AnimatorIsPlaying(BottomLeft) 
-                || Blackboard.AnimatorIsPlaying(TopLeft)
-                || Blackboard.AnimatorIsPlaying(Default)
-                    ? BottomLeft : BottomRight,
-
-            (0, 0) => TopRight,
+            
             _ => TopRight
         };
                 
