@@ -45,7 +45,7 @@ public class SwimIdleAction : ActionNode
         {
             _shouldReset = true;
             Blackboard.Animator.SetBool(_isSwimIdle, false);
-            return NodeStatus.Success;
+            return NodeStatus.Failure;
         }
 
         return NodeStatus.Running;

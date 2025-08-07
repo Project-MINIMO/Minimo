@@ -7,7 +7,7 @@ using UnityEngine;
 public class MinimoSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject[] _minimoPrefabs;
-    [SerializeField] private float _spawnDelaySeconds = 5f;
+    [SerializeField] private float _spawnDelaySeconds = 10f;
     
     private List<Minimo> _minimoDatas;
     private readonly Queue<Minimo> _spawnQueue = new();

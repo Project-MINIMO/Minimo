@@ -137,7 +137,7 @@ public class MoveForwardAction : ActionNode
     private bool _shouldReset = true;
 
     private readonly StrayMinimoObject _strayMinimo;
-    private readonly StrayMinimoObject _userMinimo;
+    private readonly MinimoObject _userMinimo;
 
     public MoveForwardAction(Blackboard blackboard, int triggerName) : base(blackboard)
     {
@@ -145,6 +145,10 @@ public class MoveForwardAction : ActionNode
         if (blackboard.Agent.TryGetComponent<StrayMinimoObject>(out var stray))
         {
             _strayMinimo = stray;
+        }
+        if (blackboard.Agent.TryGetComponent<MinimoObject>(out var user))
+        {
+            _userMinimo = user;
         }
     }
 
@@ -189,7 +193,7 @@ public class MoveForwardAction : ActionNode
             
             return NodeStatus.Running;
         }
-
+        
         Exit();
         return NodeStatus.Success;
     }

@@ -23,11 +23,7 @@ public class MinimoSwimState : State<MinimoObject>
                 new IsClicked(_blackboard),
                 new SwimIdleAction(_blackboard)
             ),
-            new SequenceNode
-            (
-                _blackboard,
-                new MoveForwardAction(_blackboard, _isSwim)
-            )
+            new MoveForwardAction(_blackboard, _isSwim)
         );
         
         _swimTree = new BehaviorTree(swimSequence);
