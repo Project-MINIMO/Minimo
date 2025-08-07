@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
-public class TutorialStep_01 : TutorialStep
+public class TutorialStep_02 : TutorialStep
 {
     [SerializeField] private GameObject _chiefMinimo;
     [SerializeField] private TutorialDialogue _dialogueBox;
@@ -28,12 +28,8 @@ public class TutorialStep_01 : TutorialStep
     [SerializeField] private GameObject _blockTileObj2;
     [SerializeField] private ScrollRect _scrollRect;
 
+    private int _prevGold;
     private bool _isConfirmed;
-    
-    private void Awake()
-    {
-        _chiefMinimoTextObj.SetActive(false);
-    }
     
     protected override void OnStart()
     {
@@ -43,7 +39,7 @@ public class TutorialStep_01 : TutorialStep
         }
         
         _tileBtnHighlightObj.SetActive(false);
-        _chiefMinimoTextObj.SetActive(true);
+        
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
         _chiefMinimoText.text = "......";
         _confirmBtn.onClick.AddListener(() => _isConfirmed = true);
@@ -51,8 +47,6 @@ public class TutorialStep_01 : TutorialStep
 
     private void OnClickedChief()
     {
-        _chiefMinimo.GetComponent<TutorialInteractable>().onClick -= OnClickedChief;
-        
         _focusPanel.FocusOn(_chiefMinimo.transform.position,
             targetZoom: 1,
             duration: 2,
@@ -65,7 +59,7 @@ public class TutorialStep_01 : TutorialStep
 
     private IEnumerator ConversationSequence()
     {
-       
+        _chiefMinimo.GetComponent<TutorialInteractable>().onClick -= OnClickedChief;
         //chiefminimo dorotate로 세우기
         _chiefMinimoTextObj.SetActive(false);
         
@@ -93,13 +87,14 @@ public class TutorialStep_01 : TutorialStep
         _chiefMinimoTextObj.SetActive(true);
         _tileBtnObj.SetActive(true);
         _tileBtnHighlightObj.SetActive(true);
+        _prevGold = (int)AccountInfo.Instance.Gold.Count;
         _closeBtn.enabled = false;
         _cancelBtn.enabled = false;
         _confirmBtn.enabled = false;
         _scrollRect.enabled = false;
 
         yield return new WaitUntil(() => _tilePanel.gameObject.activeInHierarchy);
-        _chiefMinimoTextObj.SetActive(false);
+        
         _tileBtnHighlightObj.SetActive(false);
         _tileHighlightObj.SetActive(true);
         
@@ -147,6 +142,11 @@ public class TutorialStep_01 : TutorialStep
 
     public override void Cleanup()
     {
+        foreach (var ui in _hideUIs)
+        {
+            ui.SetActive(true);
+        }
+        
         _closeBtn.enabled = true;
         _cancelBtn.enabled = true;
     }
