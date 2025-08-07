@@ -173,7 +173,7 @@ public class MoveForwardAction : ActionNode
         if (_strayMinimo != null)
         {
             if (_strayMinimo.IsClicked) return NodeStatus.Running;
-            else if (Blackboard.TargetBuilding?.CurrentState != ProduceState.Complete)
+            else if (Blackboard.TargetBuilding != null && Blackboard.TargetBuilding.CurrentState != ProduceState.Complete)
             {
                 Exit();
                 return NodeStatus.Failure;
