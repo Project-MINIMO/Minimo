@@ -12,6 +12,7 @@ public class AccountInfo : Singleton<AccountInfo>
     public long Cash { get; private set; } = 100;
     public int StorageCapacity { get; private set; } = 100;
     public int MinimoCapacity { get; private set; } = 5;
+    public Vector2Int straySpeed = new(5, 7);
 
     private GetItemPanel _itemPanel;
     public event Action<int> OnStorageCapacityChanged;

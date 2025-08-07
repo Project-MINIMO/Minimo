@@ -143,7 +143,7 @@ public class FindCompletePositionAction : ActionNode
 
         Blackboard.TargetBuilding = nearest;
         Blackboard.TargetPosition = nearest.transform.position + Vector3.up;
-        Blackboard.Speed = 4;
+        Blackboard.Speed = AccountInfo.Instance.straySpeed.x;
         
         return NodeStatus.Success;
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ public class StrayMinimoObject : InteractObject
     public StrayMinimoFSM FSM { get; private set; }
     public bool IsGolden { get; private set; }
     public bool IsClicked { get; private set; }
+
+    public Sprite IndicatorSprite;
     
     [SerializeField] private GameObject _plunderItemObj;
     [SerializeField] private Image _plunderItemImg;
@@ -21,12 +24,14 @@ public class StrayMinimoObject : InteractObject
     [SerializeField] private Image _clickGaugeImg;
     [SerializeField] private GameObject _shineObj;
     
-    public StrayMinimoState CurrentState { get; private set; } = StrayMinimoState.None;
+    private StrayMinimoState _currentState = StrayMinimoState.None;
+    public event Action<bool> OnDead;
 
     private readonly Vector3 _startScale = new(0.2f, 0.2f, 0.2f);
     private readonly Vector3 _endScale = new(0.17f, 0.17f, 0.17f);
 
-    private const int TotalLife = 10;
+    private int _totalLife;
+    private int _runLife;
     private int _currentLife;
     
     private int _baseCurrency;
@@ -46,6 +51,9 @@ public class StrayMinimoObject : InteractObject
         {
             GetComponentInChildren<Animator>().SetTrigger("Golden");
         }
+
+        _totalLife = isGorden ? 15 : 10;
+        _runLife = isGorden ? 5 : 3;
         
         _baseCurrency = common["MiaCurrency"];
         _currencyRate = isGorden ? common["GoldMiaCurrency"] : 1;
@@ -71,7 +79,7 @@ public class StrayMinimoObject : InteractObject
         
         ApplyState(StrayMinimoState.Plunder);
         
-        _currentLife = TotalLife;
+        _currentLife = _totalLife;
         var currentCurrency = (_baseCurrency + AccountInfo.Instance.Level.Count * _baseCurrency * 0.1f) * _currencyRate;
         _currentCurrency = Mathf.RoundToInt(currentCurrency);
         
@@ -94,6 +102,7 @@ public class StrayMinimoObject : InteractObject
         }
         
         IsClicked = false;
+        OnDead?.Invoke(_holdItem.Item1 == null);
         ApplyState(StrayMinimoState.Hide);
     }
 
@@ -136,9 +145,9 @@ public class StrayMinimoObject : InteractObject
 
     private void ApplyState(StrayMinimoState target)
     {
-        if (target == CurrentState) return;
+        if (target == _currentState) return;
 
-        CurrentState = target;
+        _currentState = target;
         FSM.ChangeState(target);
     }
   
@@ -147,9 +156,9 @@ public class StrayMinimoObject : InteractObject
     public override void OnClickUp()
     {
         _currentLife--;
-        _clickGaugeImg.fillAmount = (float)(TotalLife - _currentLife) / TotalLife;
+        _clickGaugeImg.fillAmount = (float)(_totalLife - _currentLife) / _totalLife;
 
-        if (_currentLife <= 3)
+        if (_currentLife <= _runLife)
         {
             _sadObj.SetActive(true);
             ApplyState(StrayMinimoState.Run);
@@ -164,6 +173,7 @@ public class StrayMinimoObject : InteractObject
             
             AccountInfo.Instance.Gold.AddCount(_currentCurrency);
             _coinEffect.ShowEffect(_currentCurrency);
+            _holdItem.Item1 = null;
             Despawn();
         }
     }
@@ -183,7 +193,7 @@ public class StrayMinimoObject : InteractObject
 
     private IEnumerator ClickAnimation()
     {
-        if (CurrentState == StrayMinimoState.Hide) yield break;
+        if (_currentState == StrayMinimoState.Hide) yield break;
         
         IsClicked = true;
         
@@ -202,7 +212,7 @@ public class StrayMinimoObject : InteractObject
 
         IsClicked = false;
         
-        if (CurrentState == StrayMinimoState.Hide) yield break;
+        if (_currentState == StrayMinimoState.Hide) yield break;
         
         transform.DOScale(_startScale, 0.1f);
     }
