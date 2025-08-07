@@ -9,8 +9,6 @@ public class MinimoObject : MonoBehaviour
     public bool IsClicked;
     public int MinimoIndex { get; private set; }
     
-    public Sprite IndicatorSprite { get; private set; }
-    
     public event Action<MinimoObject> OnAcquired;
     public event Action<MinimoObject> OnExpired;
 
@@ -20,7 +18,6 @@ public class MinimoObject : MonoBehaviour
     private void Awake()
     {
         _fsm = new MinimoFSM(this);
-        IndicatorSprite = GetComponent<SpriteRenderer>().sprite;
     }
     
     public void Initialize(Minimo minimo, int index)

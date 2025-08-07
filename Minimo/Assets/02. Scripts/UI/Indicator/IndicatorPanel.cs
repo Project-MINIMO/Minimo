@@ -9,6 +9,7 @@ public class IndicatorPanel : UIBase
     
     [SerializeField] private RectTransform _canvasRect;
     [SerializeField] private IndicatorHandler _indicatorPrefab;
+    [SerializeField] private StrayIndicatorHandler _strayIndicatorPrefab;
     [SerializeField] private Transform _indicatorParent;
     
     private readonly List<IndicatorHandler> _indicators = new();
@@ -27,11 +28,26 @@ public class IndicatorPanel : UIBase
 
     public void CreateIndicator(Transform target)
     {
-        var indicator = _indicators.FirstOrDefault(x => !x.gameObject.activeSelf);
+        var indicator = _indicators.FirstOrDefault(x => x.CanUse);
 
         if (indicator == null)
         {
             indicator = Instantiate(_indicatorPrefab, _indicatorParent);
+            _indicators.Add(indicator);
+        }
+        
+        indicator.Initialize(target, _canvasRect);
+    }
+
+    public void CreateStrayIndicator(Transform target)
+    {
+        var indicator = _indicators
+            .Where(x => x is StrayIndicatorHandler)
+            .FirstOrDefault(x => x.CanUse);
+        
+        if (indicator == null)
+        {
+            indicator = Instantiate(_strayIndicatorPrefab, _indicatorParent);
             _indicators.Add(indicator);
         }
         

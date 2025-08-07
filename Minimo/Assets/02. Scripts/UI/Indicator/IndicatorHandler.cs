@@ -3,11 +3,15 @@ using UnityEngine.UI;
 
 public class IndicatorHandler : MonoBehaviour
 {
+    public bool CanUse => Target == null;
+    
     [SerializeField] private Image _icon;
+    [SerializeField] private CanvasGroup _canvasGroup;
 
+    protected Transform Target;
+    
     private Camera _camera;
     private RectTransform _canvasRect;
-    private Transform _target;
     private RectTransform _rect;
 
     private void Awake()
@@ -18,7 +22,7 @@ public class IndicatorHandler : MonoBehaviour
 
     public void Initialize(Transform target, RectTransform canvasRect)
     {
-        _target = target;
+        Target = target;
         _canvasRect = canvasRect;
         _icon.sprite = target.GetComponentInChildren<SpriteRenderer>().sprite;
         CalculatePosition();
@@ -27,21 +31,21 @@ public class IndicatorHandler : MonoBehaviour
 
     private void Update()
     {
-        if (_target == null) return;
-        if (!gameObject.activeSelf) return;
+        if (Target == null) return;
 
         CalculatePosition();
+        CheckTarget();
     }
 
-    private void CalculatePosition()
+    protected virtual void CalculatePosition()
     {
-        var screenPos = _camera.WorldToScreenPoint(_target.position);
+        var screenPos = _camera.WorldToScreenPoint(Target.position);
 
         var isVisible = screenPos.z > 0 &&
                         screenPos.x >= 0 && screenPos.x <= Screen.width &&
                         screenPos.y >= 0 && screenPos.y <= Screen.height;
 
-        gameObject.SetActive(!isVisible);
+        _canvasGroup.alpha = isVisible ? 0 : 1;
 
         if (!isVisible)
         {
@@ -77,6 +81,15 @@ public class IndicatorHandler : MonoBehaviour
                 _rect.localRotation = Quaternion.identity;    
             
             _icon.rectTransform.rotation = Quaternion.identity;
+        }
+    }
+
+    protected virtual void CheckTarget()
+    {
+        if (_canvasGroup.alpha == 0)
+        {
+            Target = null;
+            gameObject.SetActive(false);
         }
     }
 }

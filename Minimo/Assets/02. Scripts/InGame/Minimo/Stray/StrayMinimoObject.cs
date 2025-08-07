@@ -11,8 +11,6 @@ public class StrayMinimoObject : InteractObject
     public StrayMinimoFSM FSM { get; private set; }
     public bool IsGolden { get; private set; }
     public bool IsClicked { get; private set; }
-
-    public Sprite IndicatorSprite;
     
     [SerializeField] private GameObject _plunderItemObj;
     [SerializeField] private Image _plunderItemImg;
@@ -90,7 +88,7 @@ public class StrayMinimoObject : InteractObject
         _plunderItemObj.SetActive(false);
         _shineObj.SetActive(false);
         
-        _clickGaugeImg.fillAmount = 0;
+        _clickGaugeImg.fillAmount = 1;
     }
     
     public void Despawn()
@@ -156,24 +154,25 @@ public class StrayMinimoObject : InteractObject
     public override void OnClickUp()
     {
         _currentLife--;
-        _clickGaugeImg.fillAmount = (float)(_totalLife - _currentLife) / _totalLife;
+        _clickGaugeImg.fillAmount = (float)_currentLife / _totalLife;
 
-        if (_currentLife <= _runLife)
+        if (_currentLife == _runLife)
         {
             _sadObj.SetActive(true);
             ApplyState(StrayMinimoState.Run);
-        }
-        else if (_currentLife <= 0)
-        {
+            
             var (item, amount) = _holdItem;
             if (item != null)
             {
                 AccountInfo.Instance.AddItem(item.ID, amount);
+                _plunderItemObj.SetActive(false);
+                _holdItem.Item1 = null;
             }
-            
+        }
+        else if (_currentLife <= 0)
+        {
             AccountInfo.Instance.Gold.AddCount(_currentCurrency);
             _coinEffect.ShowEffect(_currentCurrency);
-            _holdItem.Item1 = null;
             Despawn();
         }
     }

@@ -39,13 +39,13 @@ public class StrayMinimoSpawner : MonoBehaviour
         for (; i < _minimoPool.Count / 2; i++)
         {
             _minimoPool[i].Initialize(true, common);
-            _currentMinimo.OnDead += OnDead;
+            _minimoPool[i].OnDead += OnDead;
         }
         
         for (; i < _minimoPool.Count; i++)
         {
             _minimoPool[i].Initialize(false, common);
-            _currentMinimo.OnDead += OnDead;
+            _minimoPool[i].OnDead += OnDead;
         }
         
         StartCoroutine(SpawnLoop());
@@ -79,7 +79,7 @@ public class StrayMinimoSpawner : MonoBehaviour
 
         _currentMinimo.Spawn(spawnPos);
         
-        _indicatorPanel.CreateIndicator(strayMinimo.transform);
+        _indicatorPanel.CreateStrayIndicator(strayMinimo.transform);
         _popUpPanel.OpenPanel(PopUpType.StrayWarning);
     }
     

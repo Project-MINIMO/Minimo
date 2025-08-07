@@ -5,12 +5,14 @@ using UnityEngine.UI;
 
 public class PopUpPanel : UIBase
 {
-    public override bool IsUseBlur => true;
+    public override bool IsUseBlur => _isUseBlur;
     
     [SerializeField] private Button _closeBtn;
     
     private Dictionary<PopUpType, PopUpWindow> _popUpMap = new();
     private PopUpWindow _currentWindow;
+    
+    private bool _isUseBlur = true;
     
     public override void Initialize(UIManager manager)
     {
@@ -30,10 +32,17 @@ public class PopUpPanel : UIBase
 
     public void OpenPanel(PopUpType type)
     {
+        if (type == PopUpType.StrayWarning)
+        {
+            _isUseBlur = false;
+        }
+        
         OpenPanel();
         
         _currentWindow = _popUpMap[type];
         _currentWindow.Show();
+        
+        _isUseBlur = true;
     }
     
     public void OpenPanel(PopUpType type, ProduceAdvanced building, Minimo minimo)
