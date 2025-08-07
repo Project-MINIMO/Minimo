@@ -5,6 +5,7 @@ using TMPro;
 public class MinimoCenterPanel : UIBase
 {
     public override bool IsUseBlur => true;
+    protected override bool IsUseGuide => true;
             
     [SerializeField] private TextMeshProUGUI _titleTMP;
     [SerializeField] private TextMeshProUGUI _capacityTMP;
@@ -13,6 +14,7 @@ public class MinimoCenterPanel : UIBase
     [SerializeField] private Button _closeBtn;
     [SerializeField] private Button _assignBtn;
     [SerializeField] private Button _expandBtn;
+    [SerializeField] private Button _infoBtn;
 
     private MinimoManager _minimoManager;
     private MinimoProfilePanel _profilePanel;
@@ -31,6 +33,7 @@ public class MinimoCenterPanel : UIBase
         _closeBtn.onClick.AddListener(ClosePanel);
         _assignBtn.onClick.AddListener(assignedPanel.OpenPanel);
         _expandBtn.onClick.AddListener(() => popUpPanel.OpenPanel(PopUpType.MinimoExpand));
+        _infoBtn.onClick.AddListener(ShowGuide);
         
         _titleTMP.text = App.GetData<TitleData>().GetString("STR_MINIMOCENTER_NAME");
 
