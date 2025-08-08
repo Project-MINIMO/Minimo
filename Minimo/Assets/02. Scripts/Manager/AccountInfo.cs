@@ -19,8 +19,8 @@ public class AccountInfo : Singleton<AccountInfo>
     public event Action<int> OnMinimoCapacityChanged;
     public event Action<long> OnCashChanged; 
     public int CurrentItemCounts => Items.Values.Where(item => item.Level > 0).Sum(item => item.Count);
-    public bool Tutorial;
-    public bool Prolog;
+    public bool Tutorial = true;
+    public bool Prolog = true;
     
     [SerializeField] private Sprite LevelIcon;
     [SerializeField] private Sprite GoldIcon;

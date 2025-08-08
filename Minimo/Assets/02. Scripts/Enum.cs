@@ -8,6 +8,9 @@ public enum TaskState
 
 public enum NotifyType
 {
+    TutorialSkip,
+    PrologSkip,
+    
     StorageCapacityLack,
     MinimoCapacityLack,
     

@@ -31,6 +31,9 @@ public class BottomNotification : MonoBehaviour
         var titleData = App.GetData<TitleData>();
         _notifications = new Dictionary<NotifyType, string>()
         {
+            [NotifyType.TutorialSkip] = "튜토리얼을 스킵합니다.",
+            [NotifyType.PrologSkip] = "프롤로그를 스킵합니다.",
+            
             [NotifyType.StorageCapacityLack] = titleData.GetString("STR_PRODUCE_STORAGE"),
             [NotifyType.MinimoCapacityLack] = "미니모 거주지를 늘려주세요.",
             

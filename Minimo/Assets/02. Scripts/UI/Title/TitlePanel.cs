@@ -21,6 +21,9 @@ public class TitlePanel : MonoBehaviour
     
     private Coroutine[] _starCoroutines;
     
+    [SerializeField] private UILongPressDetector _tutorial;
+    [SerializeField] private UILongPressDetector _prolog;
+     
     private void Awake()
     {
         _startBtn.onClick.AddListener(OnClickStart);
@@ -34,6 +37,17 @@ public class TitlePanel : MonoBehaviour
         {
             _starCoroutines[i] = StartCoroutine(SpawnStarRoutine(i));
         }
+
+        _tutorial.OnLongPress += () =>
+        {
+            AccountInfo.Instance.Tutorial = false;
+            App.Notification(NotifyType.TutorialSkip);
+        };
+        _prolog.OnLongPress += () =>
+        {
+            AccountInfo.Instance.Prolog = false;
+            App.Notification(NotifyType.PrologSkip);
+        };
     }
 
     public void ShowTitle(bool isNew = false)
