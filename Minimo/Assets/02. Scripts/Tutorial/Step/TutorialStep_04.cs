@@ -48,6 +48,8 @@ public class TutorialStep_04 : TutorialStep
             "우리도 너의 로켓 수리를 도와줄게",
             "고마워 우선 밭에서 작물을 수확해줘");
         
+        _tutorialStep_06.MoveChief();
+        
         _focusPanel.FocusOn(Vector3.zero,
             targetZoom: 4,
             duration: 2,
@@ -61,6 +63,6 @@ public class TutorialStep_04 : TutorialStep
 
     public override void Cleanup()
     {
-        _tutorialStep_06.MoveChief();
+
     }
 }
