@@ -27,12 +27,12 @@ public class MinimoAssignedSlot : InventorySlot<ProduceAdvanced>
     {
         if (minimo == null)
         {
-            _emptyObj.SetActive(true);
+            if (_emptyObj != null) _emptyObj.SetActive(true);
             _minimoInfoUpdater.gameObject.SetActive(false);
         }
         else
         {
-            _emptyObj.SetActive(false);
+            if (_emptyObj != null) _emptyObj.SetActive(false);
             _minimoInfoUpdater.gameObject.SetActive(true);
             _minimoInfoUpdater.UpdateInfo(minimo);
         }

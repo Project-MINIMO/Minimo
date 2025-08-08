@@ -32,13 +32,15 @@ public abstract class TransactionHandler : MonoBehaviour
     
     private void UpdatePrice()
     {
-        _quantityTMP.SetText($"{Quantity}");
+        _quantityTMP.SetText(GetQuantityText());
         
         Price = CalculatePrice();
         _priceTMP.text = string.Format(TransactionString, Price);
         
         UpdateVisibility();
     }
+
+    protected virtual string GetQuantityText() => $"{Quantity}";
     
     protected abstract int CalculatePrice();
     
