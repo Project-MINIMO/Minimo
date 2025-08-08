@@ -29,6 +29,14 @@ public class DragArrowHint : MonoBehaviour
         StartArrowAnimation();
     }
 
+    public void OnDragChanged(bool isDragging)
+    {
+        if (isDragging)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
     private void StartArrowAnimation()
     {
         _rect.DOAnchorPos(_originalPos - _moveOffset, MoveDuration)
