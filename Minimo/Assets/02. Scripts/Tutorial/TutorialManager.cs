@@ -23,13 +23,19 @@ public class TutorialManager : Singleton<TutorialManager>
             {
                 ui.SetActive(false);
             }
-
-            _minimoSpawner.SpawnTutorialMinimo();
-            ProceedNextStep();
         }
         else
         {
             _mainGuide.SetActive(true);
+        }
+    }
+
+    private void Start()
+    {
+        if (AccountInfo.Instance.Tutorial)
+        {
+            _minimoSpawner.SpawnTutorialMinimo();
+            ProceedNextStep();
         }
     }
 
