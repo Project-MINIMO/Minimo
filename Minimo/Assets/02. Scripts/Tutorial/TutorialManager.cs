@@ -23,6 +23,10 @@ public class TutorialManager : Singleton<TutorialManager>
             _minimoSpawner.SpawnTutorialMinimo();
             ProceedNextStep();
         }
+        else
+        {
+            IsTutorialing = false;
+        }
     }
 
     public void ProceedNextStep()
