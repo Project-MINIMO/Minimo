@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Prolog_1 : PrologBase
+public class Prolog_0 : PrologBase
 {
     [SerializeField] private Image _background;
     [SerializeField] private Image _textBox;
