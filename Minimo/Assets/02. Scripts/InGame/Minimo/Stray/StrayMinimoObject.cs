@@ -21,6 +21,7 @@ public class StrayMinimoObject : InteractObject
     [SerializeField] private GameObject _clickGaugeObj;
     [SerializeField] private Image _clickGaugeImg;
     [SerializeField] private GameObject _shineObj;
+    [SerializeField] private RectTransform _warningObj;
     
     private StrayMinimoState _currentState = StrayMinimoState.None;
     public event Action<bool> OnDead;
@@ -40,6 +41,8 @@ public class StrayMinimoObject : InteractObject
     
     private Coroutine _clickAnimationRoutine;
     private EditManager _editManager;
+    
+    private readonly Vector3 _shrinkScale = new(0.8f, 0.8f);
     
     public void Initialize(bool isGorden, Dictionary<string, int> common)
     {
@@ -87,6 +90,8 @@ public class StrayMinimoObject : InteractObject
         _questionMarkObj.SetActive(false);
         _plunderItemObj.SetActive(false);
         _shineObj.SetActive(false);
+        _warningObj.gameObject.SetActive(true);
+        _warningObj.DOScale(_shrinkScale, 0.5f).SetEase(Ease.InCubic).SetLoops(-1 ,LoopType.Yoyo);;
         
         _clickGaugeImg.fillAmount = 1;
     }
@@ -101,6 +106,8 @@ public class StrayMinimoObject : InteractObject
         
         IsClicked = false;
         OnDead?.Invoke(_holdItem.Item1 == null);
+        _warningObj.gameObject.SetActive(false);
+        _warningObj.DOKill();
         ApplyState(StrayMinimoState.Hide);
     }
 
@@ -138,6 +145,8 @@ public class StrayMinimoObject : InteractObject
         else
         {
             _sadObj.SetActive(true);
+            _warningObj.gameObject.SetActive(false);
+            _warningObj.DOKill();
             ApplyState(StrayMinimoState.Run);
         }
     }
@@ -160,6 +169,8 @@ public class StrayMinimoObject : InteractObject
         if (_currentLife == _runLife)
         {
             _sadObj.SetActive(true);
+            _warningObj.gameObject.SetActive(false);
+            _warningObj.DOKill();
             ApplyState(StrayMinimoState.Run);
             
             var (item, amount) = _holdItem;
