@@ -227,6 +227,6 @@ public class EditManager : ManagerBase
         }
         
         _tileStateModifier.ModifyTileState(buildingObject, TileState.Installed);
-        ActiveProduces.Add(CurrentEditObject as ProduceObject);
+        ActiveProduces.Add(buildingObject as ProduceObject);
     }
 }
