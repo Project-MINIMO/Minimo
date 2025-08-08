@@ -12,9 +12,12 @@ public class Prolog_5 : PrologBase
     
     protected override IEnumerator ShowProlog()
     {
+        var soundManager = App.GetManager<SoundManager>();
+        soundManager.StopBGM();
         FadeIn(_background, 1f);
+        soundManager.PlaySFX("Siren");
         yield return new WaitForSeconds(1f);
-
+        
         _red.DOFade(0.02f, 0.5f).SetEase(Ease.Linear).SetLoops(6, LoopType.Yoyo)
             .OnComplete(() => _loopEnd = true);
 

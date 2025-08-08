@@ -632,8 +632,6 @@ GameObject:
   m_Component:
   - component: {fileID: 486652790}
   - component: {fileID: 486652789}
-  - component: {fileID: 486652792}
-  - component: {fileID: 486652791}
   - component: {fileID: 486652793}
   - component: {fileID: 486652794}
   m_Layer: 0
@@ -709,30 +707,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &486652791
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 486652787}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bb2f1d2d9b852047a298dec0b8c8389, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &486652792
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 486652787}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95e830c658b21374c8356365b10eb5dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &486652793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -777,18 +751,14 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!114 &486652794
-MonoBehaviour:
+--- !u!81 &486652794
+AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 486652787}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e589d1919dc53974fa53935f5535f47d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &501722580
 GameObject:
   m_ObjectHideFlags: 0
