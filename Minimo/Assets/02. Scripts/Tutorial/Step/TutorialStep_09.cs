@@ -14,7 +14,7 @@ public class TutorialStep_09 : TutorialStep
     protected override void OnStart()
     {
         _chiefMinimoTextObj.SetActive(true);
-        _chiefMinimoText.text = "미니모들에게 소원식을 만들어줄래?";
+        _chiefMinimoText.text = "이제 죽을 만들면 좋겠구만.";
         _visitMinimo = _spawner.SpawnTutoriMinimo();
 
         StartCoroutine(ProgressQuest());
@@ -24,7 +24,7 @@ public class TutorialStep_09 : TutorialStep
     {
         yield return new WaitUntil(() => _visitMinimo.CurrentState == VisitMinimoState.Hide);
         
-        _chiefMinimoText.text = "고마워";
+        _chiefMinimoText.text = "고맙네";
 
         yield return new WaitForSeconds(1);
 
