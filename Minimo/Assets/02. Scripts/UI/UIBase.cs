@@ -18,13 +18,21 @@ public abstract class UIBase : MonoBehaviour
     /// Initialize Panel.
     /// Called once on Awake.
     /// </summary>
-    public virtual void Initialize(UIManager manager) => _manager = manager;
+    public virtual void Initialize(UIManager manager)
+    {
+        _manager = manager;
+
+        if (IsUseGuide)
+        {
+            _guide.gameObject.SetActive(false);
+        }
+    }
 
     public virtual void OpenPanel()
     {
         _manager.PushPanel(this);
 
-        if (IsUseGuide && _isFirstOpen)
+        if (IsUseGuide && _isFirstOpen && !TutorialManager.IsTutorialing)
         {
             ShowGuide();
             _isFirstOpen = false;

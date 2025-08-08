@@ -75,50 +75,6 @@ public class FindWorkPositionAction : ActionNode
 #endregion
 
 #region Stray
-public class FindStrayPositionAction  : ActionNode
-{
-    private readonly Tilemap _groundTilemap;
-    
-    private const float MarginMin = 0.5f;
-    private const float MarginMax = 1f;  
-
-    public FindStrayPositionAction(Blackboard blackboard) : base(blackboard)
-    {
-        _groundTilemap = GameObject.FindWithTag("VillageTilemap").GetComponent<Tilemap>();
-    }
-
-    public override NodeStatus Tick()
-    {
-        var cb = _groundTilemap.cellBounds;
-        var min = _groundTilemap.GetCellCenterWorld(cb.min);
-        var max  = _groundTilemap.GetCellCenterWorld(new Vector3Int(cb.max.x - 1, cb.max.y - 1, cb.max.z));
-        var center = (min + max) * 0.5f;
-        var radiusX = (max.x - min.x) * 0.5f;
-        var radiusY = (max.y - min.y) * 0.5f;
-        
-        var pos2D = Blackboard.Agent.transform.position;
-        
-        var dx = (pos2D.x - center.x) / radiusX;
-        var dy = (pos2D.y - center.y) / radiusY;
-        var isInside = dx * dx + dy * dy <= 1f;
-        
-        var angle = Random.Range(0f, Mathf.PI * 2f);
-        var dir  = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
-
-        var boundaryPoint = center + new Vector3(dir.x * radiusX, dir.y * radiusY, 0);
-
-        var offset = Random.Range(MarginMin, MarginMax);
-        var target2D = isInside
-            ? boundaryPoint + dir * offset
-            : boundaryPoint - dir * offset;
-        
-        Blackboard.TargetPosition = new Vector3(target2D.x, target2D.y,
-            Blackboard.Agent.transform.position.z);
-
-        return NodeStatus.Success;
-    }
-}
-
 public class FindCompletePositionAction : ActionNode
 {
     private readonly EditManager _editManager;

@@ -39,6 +39,7 @@ public class VisitMinimoSpawner : MonoBehaviour
     {
         while (true)
         {
+            yield return new WaitUntil(() => !TutorialManager.IsTutorialing);
             yield return new WaitForSeconds(_spawnInterval);
             SpawnMinimo();
         }
@@ -46,7 +47,7 @@ public class VisitMinimoSpawner : MonoBehaviour
 
     private void SpawnMinimo()
     {
-        var randomProduce = GetRandomAdvanced();
+        var randomProduce = GetRandomProduce();
         if (randomProduce == null) return;
         var randomItem = GetRandomItem(randomProduce);
         
@@ -66,7 +67,27 @@ public class VisitMinimoSpawner : MonoBehaviour
         _minimoPool.Remove(_currentMinimo);
     }
 
-    private ProduceObject GetRandomAdvanced()
+    public VisitMinimoObject SpawnTutoriMinimo()
+    {
+        var visitMinimo = _minimoPool[0];
+        var item = AccountInfo.Instance.Items[6];
+        var produce = _editManager.ActiveProduces.First(x => x.BuildingData.ID == 1);
+        DespawnCurrentMinimo();
+
+        visitMinimo.Spawn(item, produce, 12000);
+        _currentMinimo = visitMinimo;
+        _spawnedMinimo = visitMinimo;
+        
+        if (!_isSpaceshipSpawning)
+        {
+            StartCoroutine(SpawnSpaceship());
+        }
+        
+        _minimoPool.Remove(_currentMinimo);
+        return _currentMinimo;
+    }
+
+    private ProduceObject GetRandomProduce()
     {
         return _editManager.ActiveProduces.Count == 0 
             ? null 

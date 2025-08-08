@@ -20,14 +20,19 @@ public class MinimoObject : MonoBehaviour
         _fsm = new MinimoFSM(this);
     }
     
-    public void Initialize(Minimo minimo, int index)
+    public void Initialize(Minimo minimo, int index, MinimoState state = MinimoState.Swim)
     {
         Data = minimo;
         minimo.SetAgent(this);
         Data.OnAssignmentChanged += OnAssignmentChanged;
         
         MinimoIndex = index;
-        ApplyState(MinimoState.Swim);
+        ApplyState(state);
+
+        if (state == MinimoState.Idle)
+        {
+            OnAcquired?.Invoke(this);
+        }
     }
     
     private void Update()

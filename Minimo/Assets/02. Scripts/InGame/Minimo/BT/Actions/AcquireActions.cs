@@ -46,10 +46,12 @@ public class AcquireShakeAction : ActionNode
     private float _duration;
     private float _startTime;
     private bool _shouldReset = true;
+    private readonly FocusPanel _focusPanel;
 
     public AcquireShakeAction(Blackboard blackboard) : base(blackboard)
     {
         _spaceship = GameObject.FindWithTag("Spaceship").transform;
+        _focusPanel = App.GetManager<UIManager>().GetPanel<FocusPanel>();
     }
 
     public override void Reset()
@@ -63,18 +65,19 @@ public class AcquireShakeAction : ActionNode
         {
             _shouldReset = false;
             
-            _duration = 2.5f;
+            _duration = 1.3f;
             _startTime = Time.time;
             
-            MoveCamera(() =>
-            {
-                _spaceship.DOShakePosition(
-                    duration: 1f,
-                    strength: new Vector3(0.05f, 0f, 0f), // X축만 흔들림
-                    vibrato: 10,
-                    randomness: 90,
-                    fadeOut: true);
-            });
+            _focusPanel.FocusOn(new Vector3(0, 0, Camera.main.transform.position.z),
+                3, 0.3f, () =>
+                {
+                    _spaceship.DOShakePosition(
+                        duration: 1f,
+                        strength: new Vector3(0.05f, 0f, 0f), // X축만 흔들림
+                        vibrato: 10,
+                        randomness: 90,
+                        fadeOut: true);
+                });
         }
         
         if (Time.time - _startTime >= _duration)
@@ -84,22 +87,6 @@ public class AcquireShakeAction : ActionNode
         }
         
         return NodeStatus.Running;
-    }
-    
-    private void MoveCamera(Action onComplete = null)
-    {
-        var targetPos = new Vector3(0, 0, Camera.main.transform.position.z);
-
-        if (Camera.main.transform.position == targetPos)
-        {
-            onComplete?.Invoke();
-            return;
-        }
-
-        Camera.main.transform
-            .DOMove(targetPos, 0.5f)
-            .SetEase(Ease.OutCubic)
-            .OnComplete(() => onComplete?.Invoke());
     }
 }
 

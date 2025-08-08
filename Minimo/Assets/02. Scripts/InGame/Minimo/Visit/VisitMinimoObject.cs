@@ -13,7 +13,7 @@ public class VisitMinimoObject : MonoBehaviour
     [SerializeField] private Image _requiredItemImg;
     [SerializeField] private Button _requiredItemBtn;
     
-    private VisitMinimoState _currentState = VisitMinimoState.Idle;
+    public VisitMinimoState CurrentState { get; private set; } = VisitMinimoState.Idle;
     
     private VisitMinimoSpawner _spawner;
     
@@ -40,11 +40,11 @@ public class VisitMinimoObject : MonoBehaviour
         FSM.Update();
     }
 
-    public void Spawn(Item item, ProduceObject target)
+    public void Spawn(Item item, ProduceObject target, int life = 60)
     {
         Target = target;
         
-        _lifeRemaining = 60;
+        _lifeRemaining = life;
         _requiredItem = (item, 1);
         _requiredItemImg.sprite = item.Icon;
     }
@@ -104,9 +104,9 @@ public class VisitMinimoObject : MonoBehaviour
 
     private void ApplyState(VisitMinimoState target)
     {
-        if (target == _currentState) return;
+        if (target == CurrentState) return;
 
-        _currentState = target;
+        CurrentState = target;
         FSM.ChangeState(target);
     }
 

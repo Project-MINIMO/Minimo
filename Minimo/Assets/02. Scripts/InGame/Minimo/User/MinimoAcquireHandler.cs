@@ -26,6 +26,17 @@ public class MinimoAcquireHandler : InteractObject
 
         _popUpPanel = App.GetManager<UIManager>().GetPanel<PopUpPanel>();
     }
+    
+    private void Start()
+    {
+        if (_minimoObject.CurrentState == MinimoState.Idle)
+        {
+            _minimoManager.ActiveMinimos.Add(_minimoObject.Data);
+            _coinObj.SetActive(false);
+            GetComponent<Collider2D>().enabled = false;
+            enabled = false;
+        }
+    }
 
     private void OnEnable()
     {

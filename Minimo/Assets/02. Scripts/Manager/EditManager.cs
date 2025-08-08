@@ -177,7 +177,7 @@ public class EditManager : ManagerBase
         }
     }
     
-    private Vector3 AlignToCell(Vector3 worldPos)
+    public Vector3 AlignToCell(Vector3 worldPos)
     {
         var cell = _gridLayout.WorldToCell(worldPos);
         return _gridLayout.CellToWorld(cell);
@@ -204,7 +204,7 @@ public class EditManager : ManagerBase
         };
     }
     
-    private async Task<ProduceObject> SpawnBuildingAsync(Building data, Vector3 position)
+    public async Task<ProduceObject> SpawnBuildingAsync(Building data, Vector3 position)
     {
         var gridObject = Instantiate(_objectPrefab, position, Quaternion.identity, _buildingParent);
         var compenet = AddComponentByBuildingType(gridObject, data.Type);
@@ -216,5 +216,17 @@ public class EditManager : ManagerBase
         }
         await compenet.Initialize(data);
         return compenet;
+    }
+    
+    public async UniTask Install(BuildingObject buildingObject)
+    {
+        if (!await buildingObject.Install())
+        {
+            Debug.LogError("Installation failed");
+            return;
+        }
+        
+        _tileStateModifier.ModifyTileState(buildingObject, TileState.Installed);
+        ActiveProduces.Add(CurrentEditObject as ProduceObject);
     }
 }

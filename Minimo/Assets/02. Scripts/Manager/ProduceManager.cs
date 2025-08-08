@@ -22,6 +22,7 @@ public class ProduceManager : ManagerBase
     [SerializeField] private TileHighlighter _highlighter;
     
     private Dictionary<BuildingType, UIBase> _panelMap;
+    private FocusPanel _focusPanel;
     private PlantService _plantService;
     private Camera _camera;
 
@@ -36,6 +37,8 @@ public class ProduceManager : ManagerBase
             { BuildingType.Tier3, uiManager.GetPanel<TertiaryPanel>() },
             { BuildingType.Tier4, uiManager.GetPanel<QuaternaryPanel>() }
         };
+        
+        _focusPanel = uiManager.GetPanel<FocusPanel>();
         
         _plantService = new PlantService(uiManager.GetPanel<UseCashPanel>());
         
@@ -90,11 +93,11 @@ public class ProduceManager : ManagerBase
             onComplete?.Invoke();
             return;
         }
-
-        _camera.transform
-            .DOMove(targetPos, 0.3f)
-            .SetEase(Ease.OutCubic)
-            .OnComplete(() => onComplete?.Invoke());
+        
+        _focusPanel.FocusOn(targetPos, 3, 0.3f, () =>
+        {
+            onComplete?.Invoke();
+        });
     }
     
     public void RequestPlant(
