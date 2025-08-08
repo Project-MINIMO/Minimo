@@ -10,8 +10,6 @@ public class TutorialStep_08 : TutorialStep
     [SerializeField] private GameObject _chiefMinimo;
     [SerializeField] private TutorialDialogue _dialogueBox;
     [SerializeField] private FocusPanel _focusPanel;
-    [SerializeField] private GameObject _chiefMinimoTextObj;
-    [SerializeField] private TextMeshProUGUI _chiefMinimoText;
     [SerializeField] private GameObject _buildingBtnObj;
     [SerializeField] private GameObject _buildingBtnHighlightObj;
     [SerializeField] private GameObject _buildingPanel;
@@ -25,9 +23,8 @@ public class TutorialStep_08 : TutorialStep
     
     protected override void OnStart()
     {
-        _chiefMinimoTextObj.SetActive(true);
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
-        _chiefMinimoText.text = "......";
+        _dialogueBox.ShowQuest();
     }
     
     private void OnClickedChief()
@@ -45,7 +42,7 @@ public class TutorialStep_08 : TutorialStep
     
     private IEnumerator ConversationSequence()
     {
-        _chiefMinimoTextObj.SetActive(false);
+        _dialogueBox.Hide();
         
         yield return _dialogueBox.Show(
             "고맙네. 이걸로 배고픈 미니모를 위해 백미를 만들어줄 수 있겠군.",
@@ -65,8 +62,7 @@ public class TutorialStep_08 : TutorialStep
     
     private IEnumerator ProgressQuest()
     {
-        _chiefMinimoText.text = "우선 백미제조기를 배치해주게.";
-        _chiefMinimoTextObj.SetActive(true);
+        _dialogueBox.Show("우선 백미제조기를 배치해주게.");
         _buildingBtnObj.SetActive(true);
         _buildingBtnHighlightObj.SetActive(true);
         _closeBtn.enabled = false;
@@ -74,7 +70,7 @@ public class TutorialStep_08 : TutorialStep
 
         yield return new WaitUntil(() => _buildingPanel.activeInHierarchy);
         
-        _chiefMinimoTextObj.SetActive(false);
+        _dialogueBox.Hide();
         _buildingBtnHighlightObj.SetActive(false);
         _buildingHighlightObj.SetActive(true);
         

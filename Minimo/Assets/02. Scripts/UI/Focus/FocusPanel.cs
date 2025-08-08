@@ -34,8 +34,9 @@ public class FocusPanel : UIBase
         _mainCamera.DOOrthoSize(targetZoom, duration).SetEase(Ease.InOutSine)
             .OnComplete(() =>
             {
-                if (closeOnComplete) ClosePanel();
                 onComplete?.Invoke();
+                if (!closeOnComplete) return;
+                ClosePanel();
             });
     }
     

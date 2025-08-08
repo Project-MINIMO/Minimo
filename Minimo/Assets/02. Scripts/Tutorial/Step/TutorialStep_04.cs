@@ -7,20 +7,12 @@ public class TutorialStep_04 : TutorialStep
     [SerializeField] private GameObject _chiefMinimo;
     [SerializeField] private TutorialDialogue _dialogueBox;
     [SerializeField] private FocusPanel _focusPanel;
-    [SerializeField] private GameObject _chiefMinimoTextObj;
-    [SerializeField] private TextMeshProUGUI _chiefMinimoText;
     [SerializeField] private TutorialStep_06 _tutorialStep_06;
-    
-    private void Awake()
-    {
-        _chiefMinimoTextObj.SetActive(false);
-    }
-    
+
     protected override void OnStart()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
-        _chiefMinimoTextObj.SetActive(true);
-        _chiefMinimoText.text = "......";
+        _dialogueBox.ShowQuest();
     }
     
     private void OnClickedChief()
@@ -39,7 +31,7 @@ public class TutorialStep_04 : TutorialStep
 
     private IEnumerator ConversationSequence()
     {
-        _chiefMinimoTextObj.SetActive(false);
+        _dialogueBox.Hide();
         
         yield return _dialogueBox.Show(
             "별이 사람들의 소원이라는 이야기를 들은 적이 있나?",

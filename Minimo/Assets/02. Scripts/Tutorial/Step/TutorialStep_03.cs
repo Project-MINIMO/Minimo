@@ -8,25 +8,17 @@ public class TutorialStep_03 : TutorialStep
     [SerializeField] private GameObject _passOutMinimo;
     [SerializeField] private TutorialDialogue _dialogueBox;
     [SerializeField] private FocusPanel _focusPanel;
-    [SerializeField] private GameObject _chiefMinimoTextObj;
-    [SerializeField] private TextMeshProUGUI _chiefMinimoText;
 
     [SerializeField] private PathManager _pathManager;
     private const float Speed = 0.3f;
     private Vector3 _targetPosition;
     private Vector3 _prevPosition;
     private int _currentIndex;
-    
-    private void Awake()
-    {
-        _chiefMinimoTextObj.SetActive(false);
-    }
-    
+
     protected override void OnStart()
     {
         _passOutMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
-        _chiefMinimoTextObj.SetActive(true);
-        _chiefMinimoText.text = "......";
+        _dialogueBox.ShowQuest();
     }
     
     private void OnClickedChief()
@@ -45,8 +37,7 @@ public class TutorialStep_03 : TutorialStep
 
     private IEnumerator ConversationSequence()
     {
-        //chiefminimo dorotate로 세우기
-        _chiefMinimoTextObj.SetActive(false);
+        _dialogueBox.Hide();
         
         yield return _dialogueBox.Show(
             "으으.. 어지러워",

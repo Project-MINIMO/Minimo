@@ -7,8 +7,6 @@ public class TutorialStep_06 : TutorialStep
     [SerializeField] private GameObject _chiefMinimo;
     [SerializeField] private TutorialDialogue _dialogueBox;
     [SerializeField] private FocusPanel _focusPanel;
-    [SerializeField] private GameObject _chiefMinimoTextObj;
-    [SerializeField] private TextMeshProUGUI _chiefMinimoText;
     
     [SerializeField] private PathManager _pathManager;
     private const float Speed = 0.3f;
@@ -19,11 +17,6 @@ public class TutorialStep_06 : TutorialStep
     private int _dialogueIndex = 0;
     private Coroutine _dialogueCoroutine;
     private Coroutine _moveCoroutine;
-    
-    private void Awake()
-    {
-        _chiefMinimoTextObj.SetActive(false);
-    }
 
     public void MoveChief()
     {
@@ -71,7 +64,6 @@ public class TutorialStep_06 : TutorialStep
     protected override void OnStart()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
-        _chiefMinimoTextObj.SetActive(true);
         StopCoroutine(_moveCoroutine);
         _dialogueCoroutine = StartCoroutine(ShowDialogueSequence());
     }
@@ -83,10 +75,10 @@ public class TutorialStep_06 : TutorialStep
             switch (_dialogueIndex)
             {
                 case 0:
-                    _chiefMinimoText.text = "어라?";
+                    _dialogueBox.Show("어라?");
                     break;
                 case 1:
-                    _chiefMinimoText.text = "어디갔지?";
+                    _dialogueBox.Show("어디갔지?");
                     break;
             }
 
@@ -108,7 +100,7 @@ public class TutorialStep_06 : TutorialStep
             _targetPosition = _pathManager.GetTileWorldPosition(path[_currentIndex]);
             _prevPosition = _chiefMinimo.transform.position;
             
-            _chiefMinimoText.text = "......";
+            _dialogueBox.Show("...");
             
             while (_currentIndex < path.Count)
             {
@@ -154,7 +146,7 @@ public class TutorialStep_06 : TutorialStep
     
     private IEnumerator ConversationSequence()
     {
-        _chiefMinimoTextObj.SetActive(false);
+        _dialogueBox.Hide();
         
         yield return _dialogueBox.Show(
             "방금 수확한 별곡이 사라졌네.",

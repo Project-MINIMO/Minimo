@@ -10,8 +10,6 @@ public class TutorialStep_01 : TutorialStep
     [SerializeField] private GameObject _chiefMinimo;
     [SerializeField] private TutorialDialogue _dialogueBox;
     [SerializeField] private FocusPanel _focusPanel;
-    [SerializeField] private GameObject _chiefMinimoTextObj;
-    [SerializeField] private TextMeshProUGUI _chiefMinimoText;
     [SerializeField] private GameObject _tileBtnObj;
     [SerializeField] private GameObject _tileBtnHighlightObj;
     [SerializeField] private GameObject _tileHighlightObj;
@@ -31,17 +29,11 @@ public class TutorialStep_01 : TutorialStep
 
     private bool _isConfirmed;
     
-    private void Awake()
-    {
-        _chiefMinimoTextObj.SetActive(false);
-    }
-    
     protected override void OnStart()
     {
         _tileBtnHighlightObj.SetActive(false);
-        _chiefMinimoTextObj.SetActive(true);
+        _dialogueBox.ShowQuest();
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
-        _chiefMinimoText.text = "......";
         _confirmBtn.onClick.AddListener(() => _isConfirmed = true);
     }
 
@@ -63,7 +55,7 @@ public class TutorialStep_01 : TutorialStep
     {
         _tutorialStep_05.SpawnFarm();
         //chiefminimo dorotate로 세우기
-        _chiefMinimoTextObj.SetActive(false);
+        _dialogueBox.Hide();
         
         yield return _dialogueBox.Show(
             "으으... 방금 무슨일이 일어난거지?",
@@ -84,8 +76,7 @@ public class TutorialStep_01 : TutorialStep
 
     private IEnumerator ProgressQuest()
     {
-        _chiefMinimoText.text = "타일을 설치해서 미니모가 무사한지 확인해주게";
-        _chiefMinimoTextObj.SetActive(true);
+        _dialogueBox.Show("타일을 설치해서 미니모가 무사한지 확인해주게");
         _tileBtnObj.SetActive(true);
         _tileBtnHighlightObj.SetActive(true);
         _closeBtn.enabled = false;
@@ -94,7 +85,7 @@ public class TutorialStep_01 : TutorialStep
         _scrollRect.enabled = false;
 
         yield return new WaitUntil(() => _tilePanel.gameObject.activeInHierarchy);
-        _chiefMinimoTextObj.SetActive(false);
+        _dialogueBox.Hide();
         _tileBtnHighlightObj.SetActive(false);
         _tileHighlightObj.SetActive(true);
         
