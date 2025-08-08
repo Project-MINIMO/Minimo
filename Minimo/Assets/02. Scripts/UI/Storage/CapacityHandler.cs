@@ -39,6 +39,7 @@ public abstract class CapacityHandler : TransactionHandler
     protected abstract int GetCurrentCapacity();
     protected abstract int GetBaseCapacity();
     
+    protected override string GetQuantityText() => $"{GetBaseCapacity()}/{Quantity}";
     protected override int CalculatePrice() => Mathf.Max(_expandCost * (Quantity - CurrentCapacity), 0);
     protected override int GetMaxQuantity() => 9999; //TODO : 레벨별로 다른 최대용량
     protected override int GetMinQuantity() => CurrentCapacity + 10;

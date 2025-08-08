@@ -18,7 +18,7 @@ public class HarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     
     private HashSet<ProducePrimary> _harvestedThisDrag;
 
-    private void Start()
+    private void Awake()
     {
         _targetLayerMask = LayerMask.GetMask("InteractObject");
         _produceManager = App.GetManager<ProduceManager>();
@@ -28,6 +28,15 @@ public class HarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         _startPosition = _rect.anchoredPosition;
         
         _harvestedThisDrag = new HashSet<ProducePrimary>();
+    }
+    
+    private void OnEnable()
+    {
+        _image.raycastTarget = true;
+        _rect.anchoredPosition = _startPosition;
+        _harvestedThisDrag?.Clear();
+        
+        _hint.SetActive(true);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -59,8 +68,6 @@ public class HarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         _image.raycastTarget = true;
         _rect.anchoredPosition = _startPosition;
         _harvestedThisDrag.Clear();
-        
-        _hint.SetActive(true);
     }
 }
 

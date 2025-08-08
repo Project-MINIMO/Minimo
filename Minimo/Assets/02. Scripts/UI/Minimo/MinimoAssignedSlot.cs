@@ -9,6 +9,7 @@ public class MinimoAssignedSlot : InventorySlot<ProduceAdvanced>
     [SerializeField] private Image _buildingImg;
     [SerializeField] private TextMeshProUGUI _buildingNameTMP;
     [SerializeField] private MinimoInfoUpdater _minimoInfoUpdater;
+    [SerializeField] private GameObject _emptyObj;
   
     public override void Initialize(ProduceAdvanced item)
     {
@@ -26,10 +27,12 @@ public class MinimoAssignedSlot : InventorySlot<ProduceAdvanced>
     {
         if (minimo == null)
         {
+            if (_emptyObj != null) _emptyObj.SetActive(true);
             _minimoInfoUpdater.gameObject.SetActive(false);
         }
         else
         {
+            if (_emptyObj != null) _emptyObj.SetActive(false);
             _minimoInfoUpdater.gameObject.SetActive(true);
             _minimoInfoUpdater.UpdateInfo(minimo);
         }

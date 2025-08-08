@@ -44,7 +44,7 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         
         _openBtn.onClick.AddListener(Toggle);
         _closeBtn.onClick.AddListener(Toggle);
-        Close();
+        Toggle();
         
         _rect = GetComponent<RectTransform>();
     }

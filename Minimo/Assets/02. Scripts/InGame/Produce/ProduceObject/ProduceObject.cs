@@ -151,7 +151,7 @@ public abstract class ProduceObject : BuildingObject
     
     public virtual ProduceTask CreateTask(ProduceData option)
     {
-        var task = new ProduceTask(option);
+        var task = new ProduceTask(option, transform);
         task.ApplyTimeRatio(TimeRatio);
         task.ApplyHarvestRatio(HarvestRatio); 
         task.ApplyExpRatio(ExpRatio);

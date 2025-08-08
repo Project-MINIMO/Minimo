@@ -16,12 +16,17 @@ public class FocusPanel : UIBase
     }
 
     public void FocusOn(Vector3 worldPosition, 
-        float targetZoom = 3, 
+        float targetZoom = -1, 
         float duration = 0.3f, 
         Action onComplete = null,
         bool closeOnComplete = true)
     {
         OpenPanel();
+
+        if (Mathf.Approximately(targetZoom, -1))
+        {
+            targetZoom = _mainCamera.orthographicSize;
+        } 
         
         var clampedPos = GetClampedCameraPosition(worldPosition, targetZoom);
         _mainCamera.transform.DOMove(clampedPos, duration).SetEase(Ease.InOutSine);

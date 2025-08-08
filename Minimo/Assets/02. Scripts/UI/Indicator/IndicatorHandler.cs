@@ -7,6 +7,7 @@ public class IndicatorHandler : MonoBehaviour
     
     [SerializeField] private Image _icon;
     [SerializeField] private CanvasGroup _canvasGroup;
+    [SerializeField] private Button _focusBtn;
 
     protected Transform Target;
     
@@ -14,10 +15,18 @@ public class IndicatorHandler : MonoBehaviour
     private RectTransform _canvasRect;
     private RectTransform _rect;
 
+    private FocusPanel _focusPanel;
+
     private void Awake()
     {
         _rect = GetComponent<RectTransform>();
         _camera = Camera.main;
+        _focusPanel = App.GetManager<UIManager>().GetPanel<FocusPanel>();
+        _focusBtn.onClick.AddListener(() =>
+        {
+            _canvasGroup.alpha = 0;
+            _focusPanel.FocusOn(Target.position);
+        });
     }
 
     public virtual void Initialize(Transform target, RectTransform canvasRect)
@@ -87,6 +96,11 @@ public class IndicatorHandler : MonoBehaviour
     protected virtual void CheckTarget()
     {
         if (_canvasGroup.alpha == 0)
+        {
+            Target = null;
+            gameObject.SetActive(false);
+        }
+        else if (!Target.gameObject.activeSelf)
         {
             Target = null;
             gameObject.SetActive(false);
