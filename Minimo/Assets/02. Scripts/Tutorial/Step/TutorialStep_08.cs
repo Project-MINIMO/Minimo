@@ -48,9 +48,10 @@ public class TutorialStep_08 : TutorialStep
         _chiefMinimoTextObj.SetActive(false);
         
         yield return _dialogueBox.Show(
-            "아까 전 충돌로 인해 건물이 부서지거나 떠내려갔어",
-            "마을을 다시 재건하는 것을 도와줘",
-            "다양한 소원공방(건물)을 배치해줘");
+            "고맙네. 이걸로 아픈 미니모를 위해 죽을 만들어줄 수 있겠군.",
+            "그런데 백미제조기가 충돌로 인해 부서진 모양이로구만...",
+            "백미제조기가 있어야 별곡으로부터 백미를 도정할 수 있다네.",
+            "우선 백미제조기를 배치해주게.");
         
         _focusPanel.FocusOn(Vector3.down,
             targetZoom: 4,
@@ -64,7 +65,7 @@ public class TutorialStep_08 : TutorialStep
     
     private IEnumerator ProgressQuest()
     {
-        _chiefMinimoText.text = "다양한 소원공방(건물)을 배치해줘";
+        _chiefMinimoText.text = "우선 백미제조기를 배치해주게.";
         _chiefMinimoTextObj.SetActive(true);
         _buildingBtnObj.SetActive(true);
         _buildingBtnHighlightObj.SetActive(true);

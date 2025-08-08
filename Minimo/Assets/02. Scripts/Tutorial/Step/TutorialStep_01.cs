@@ -66,12 +66,11 @@ public class TutorialStep_01 : TutorialStep
         _chiefMinimoTextObj.SetActive(false);
         
         yield return _dialogueBox.Show(
-            "방금 무슨일이 일어난거지?",
-            "당신은... (침묵)",
-            "일단 마을 미니모들을 구해줘야해",
-            "아직 제정신이 아니라서...",
-            "나 대신 마을 미니모들을 도와줄 수 있어?");
-        
+            "으으... 방금 무슨일이 일어난거지?",
+            "로켓이 날아왔고... 그리고... 행성이 부서졌잖아!",
+            "자네는......",
+            "......책임은 나중에 물을 테니 일단 다른 미니모들을 구해주게",
+            "내가 아직 제정신이 아니라서 자네의 도움이 필요하네.");
         
         _focusPanel.FocusOn(Vector3.down,
             targetZoom: 4,
@@ -85,7 +84,7 @@ public class TutorialStep_01 : TutorialStep
 
     private IEnumerator ProgressQuest()
     {
-        _chiefMinimoText.text = "저기 보이는 타일을 설치해서 미니모가 무사한지 확인해줘";
+        _chiefMinimoText.text = "타일을 설치해서 미니모가 무사한지 확인해줘";
         _chiefMinimoTextObj.SetActive(true);
         _tileBtnObj.SetActive(true);
         _tileBtnHighlightObj.SetActive(true);

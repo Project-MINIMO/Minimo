@@ -157,11 +157,11 @@ public class TutorialStep_06 : TutorialStep
         _chiefMinimoTextObj.SetActive(false);
         
         yield return _dialogueBox.Show(
-            "소원식(*음식)이 사라졌어",
-            "소원식을 훔쳐가는 해적 미니모가 존재해",
-            "소원식을 훔쳐갔나봐",
-            "일단 소원식을 만들어야해",
-            "밭에서 별곡을 심어줄래?");
+            "방금 수확한 별곡이 사라졌네.",
+            "대체 어디로 갔는지 모르겠군.",
+            "어쩌면 해적들이 훔쳐갔을 지도 모르네!",
+            "(입가에 곡물 가루같은 것이 묻어있다.)",
+            "수고스럽겠지만... 밭에 별곡을 더 심어줄 수 있겠나?");
         
         
         _focusPanel.FocusOn(Vector3.down,
