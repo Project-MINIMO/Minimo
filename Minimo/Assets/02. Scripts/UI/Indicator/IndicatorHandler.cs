@@ -91,5 +91,10 @@ public class IndicatorHandler : MonoBehaviour
             Target = null;
             gameObject.SetActive(false);
         }
+        else if (!Target.gameObject.activeSelf)
+        {
+            Target = null;
+            gameObject.SetActive(false);
+        }
     }
 }
