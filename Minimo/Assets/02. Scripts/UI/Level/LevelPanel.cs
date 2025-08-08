@@ -46,7 +46,7 @@ public class LevelPanel : UIBase
         _rect.DOAnchorPosY(100, 0.3f).SetEase(Ease.InCubic);
     }
     
-    private void FocusStar()
+    public void FocusStar()
     {
         var star = _starManager.Stars[_currentStarIndex];
         _currentStarIndex = (_currentStarIndex + 1) % _starManager.Stars.Count;

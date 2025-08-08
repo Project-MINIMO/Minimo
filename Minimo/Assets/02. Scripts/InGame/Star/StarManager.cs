@@ -35,6 +35,7 @@ public class StarManager : ManagerBase
     [SerializeField] private Transform _lineParent;
     [SerializeField] private float _connectDistance = 2f;
 
+    public bool IsConnected => _activeLines.Count > 0;
     public List<Star> Stars { get; } = new();
     private readonly Dictionary<StarPair, LineObject> _activeLines = new();
     private readonly Queue<LineObject> _linePool = new();
