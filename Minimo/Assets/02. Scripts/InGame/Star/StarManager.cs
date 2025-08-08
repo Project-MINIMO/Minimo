@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class StarSpawner : MonoBehaviour
+public class StarManager : ManagerBase
 {
     private readonly struct StarPair
     {
@@ -35,7 +35,7 @@ public class StarSpawner : MonoBehaviour
     [SerializeField] private Transform _lineParent;
     [SerializeField] private float _connectDistance = 2f;
 
-    private readonly List<Star> _stars = new();
+    public List<Star> Stars { get; } = new();
     private readonly Dictionary<StarPair, LineObject> _activeLines = new();
     private readonly Queue<LineObject> _linePool = new();
 
@@ -44,8 +44,10 @@ public class StarSpawner : MonoBehaviour
 
     private int _prevLevel;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        
         AccountInfo.Instance.Level.OnLevelUp += OnLevelUp;
 
         var uiManager = App.GetManager<UIManager>();
@@ -67,7 +69,7 @@ public class StarSpawner : MonoBehaviour
                 Quaternion.identity,
                 transform);
             newStar.Initialize(this, _constellationPanel);
-            _stars.Add(newStar);
+            Stars.Add(newStar);
             _indicatorPanel.CreateIndicator(newStar.transform);
         }
 
@@ -90,7 +92,7 @@ public class StarSpawner : MonoBehaviour
             _activeLines.Remove(pair);
         }
 
-        foreach (var other in _stars)
+        foreach (var other in Stars)
         {
             if (other == draggedStar) continue;
 

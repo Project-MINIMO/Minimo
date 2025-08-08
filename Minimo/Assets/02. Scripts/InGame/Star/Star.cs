@@ -8,7 +8,7 @@ public class Star : InteractObject
     [SerializeField] private Sprite[] _sprites;
     [SerializeField] private Color[] _colors;
     
-    private StarSpawner _spawner;
+    private StarManager _manager;
     private ConstellationPanel _constellationPanel;
     private bool _isSpawned;
     
@@ -19,9 +19,9 @@ public class Star : InteractObject
     private const float RotationSpeed = 30;
     private float _timeOffset = -1;
 
-    public void Initialize(StarSpawner spawner, ConstellationPanel constellationPanel)
+    public void Initialize(StarManager manager, ConstellationPanel constellationPanel)
     {
-        _spawner = spawner;
+        _manager = manager;
         _constellationPanel = constellationPanel;
         
         var randomIndex = Random.Range(0, _sprites.Length);
@@ -54,7 +54,7 @@ public class Star : InteractObject
         mouseWorldPos.z = transform.position.z;
         transform.position = mouseWorldPos;
         
-        _spawner.UpdateConnections(this, mouseWorldPos);
+        _manager.UpdateConnections(this, mouseWorldPos);
     }
     
     public override void OnDragEnd()

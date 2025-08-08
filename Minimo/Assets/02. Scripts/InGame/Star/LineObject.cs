@@ -6,7 +6,7 @@ public class LineObject : MonoBehaviour
     private LineRenderer _line;
     private BoxCollider _collider;
     private Star _a, _b;
-    private StarSpawner _spawner;
+    private StarManager _manager;
 
     private void Awake()
     {
@@ -25,11 +25,11 @@ public class LineObject : MonoBehaviour
         _collider = GetComponent<BoxCollider>();
     }
 
-    public void Initialize(Vector3 start, Vector3 end, Color startColor, Color endColor, Star a, Star b, StarSpawner spawner)
+    public void Initialize(Vector3 start, Vector3 end, Color startColor, Color endColor, Star a, Star b, StarManager manager)
     {
         _a = a;
         _b = b;
-        _spawner = spawner;
+        _manager = manager;
 
         // 중간점 추가 (세 개의 점)
         Vector3 middle = (start + end) * 0.5f;
@@ -88,7 +88,7 @@ public class LineObject : MonoBehaviour
     private void OnMouseDown()
     {
         Debug.Log("Line clicked!");
-        _spawner.RemoveLine(this);
+        _manager.RemoveLine(this);
     }
 
     public bool Contains(Star s) => _a == s || _b == s;

@@ -9,22 +9,30 @@ public class LevelPanel : UIBase
 
     [SerializeField] private Image _fillImg;
     [SerializeField] private TextMeshProUGUI _levelTMP;
+    [SerializeField] private Button _focusStarBtn;
 
     private const string LevelString = "{0}";
-    private const float FillSpeed = 0.15f;
+    private const float FillAnimDuration = 0.5f;
     
     private UIManager _uiManager;
     private RectTransform _rect;
     private int _prevLevel = 1;
     private Sequence _sequence;
+    
+    private StarManager _starManager;
+    private FocusPanel _focusPanel;
+    private int _currentStarIndex = 0;
 
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
         
         _uiManager = manager;
+        _focusPanel = manager.GetPanel<FocusPanel>();
+        _starManager = App.GetManager<StarManager>();
         
         _rect = GetComponent<RectTransform>();
+        _focusStarBtn.onClick.AddListener(FocusStar);
         AccountInfo.Instance.Level.OnExpChanged += OnExpChanged;
     }
     
@@ -36,6 +44,13 @@ public class LevelPanel : UIBase
     public override void Hide(bool isNew)
     {
         _rect.DOAnchorPosY(100, 0.3f).SetEase(Ease.InCubic);
+    }
+    
+    private void FocusStar()
+    {
+        var star = _starManager.Stars[_currentStarIndex];
+        _currentStarIndex = (_currentStarIndex + 1) % _starManager.Stars.Count;
+        _focusPanel.FocusOnWithoutOpen(star.transform.position);
     }
 
     private void OnExpChanged(int exp)
@@ -55,28 +70,31 @@ public class LevelPanel : UIBase
         
         if (newLevel > _prevLevel)
         {
-            var fillTo1 = 1f - currentFill;
-            var duration1 = fillTo1 / FillSpeed;
+            var dist1 = Mathf.Max(0f, 1f - currentFill);
+            var dist2 = Mathf.Max(0f, newFill);
+            var total = dist1 + dist2;
 
-            _sequence.Append(_fillImg.DOFillAmount(1f, duration1).SetEase(Ease.Linear));
-            _sequence.AppendCallback(() => 
-            { 
-                _levelTMP.text = string.Format(LevelString, newLevel); 
-                _fillImg.fillAmount = 0f; 
+            float dur1 = 0f, dur2 = 0f;
+            if (total > 0f)
+            {
+                dur1 = FillAnimDuration * (dist1 / total);
+                dur2 = FillAnimDuration * (dist2 / total);
+            }
+
+            _sequence.Append(_fillImg.DOFillAmount(1f, dur1).SetEase(Ease.Linear));
+            _sequence.AppendCallback(() =>
+            {
+                _levelTMP.text = string.Format(LevelString, newLevel);
+                _fillImg.fillAmount = 0f;
             });
-            
-            var duration2 = newFill / FillSpeed;
-            _sequence.Append(_fillImg.DOFillAmount(newFill, duration2).SetEase(Ease.Linear));
+
+            _sequence.Append(_fillImg.DOFillAmount(newFill, dur2).SetEase(Ease.Linear));
             _sequence.Join(_levelTMP.DOScale(1.5f, 0.1f).SetEase(Ease.OutCubic)
-                .OnComplete(() =>
-                {
-                    _levelTMP.DOScale(1f, 0.1f).SetEase(Ease.InCubic);
-                }));
+                .OnComplete(() => _levelTMP.DOScale(1f, 0.1f).SetEase(Ease.InCubic)));
         }
         else
         {
-            var duration = Mathf.Abs(newFill - currentFill) / FillSpeed;
-            _sequence.Append(_fillImg.DOFillAmount(newFill, duration).SetEase(Ease.Linear));
+            _sequence.Append(_fillImg.DOFillAmount(newFill, FillAnimDuration).SetEase(Ease.Linear));
         }
         
         _sequence.OnComplete(() =>

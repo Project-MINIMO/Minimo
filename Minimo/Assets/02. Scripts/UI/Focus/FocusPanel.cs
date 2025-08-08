@@ -39,6 +39,26 @@ public class FocusPanel : UIBase
             });
     }
     
+    public void FocusOnWithoutOpen(Vector3 worldPosition, 
+        float targetZoom = -1, 
+        float duration = 0.3f, 
+        Action onComplete = null)
+    {
+        if (Mathf.Approximately(targetZoom, -1))
+        {
+            targetZoom = _mainCamera.orthographicSize;
+        } 
+        
+        var clampedPos = GetClampedCameraPosition(worldPosition, targetZoom);
+        _mainCamera.transform.DOMove(clampedPos, duration).SetEase(Ease.InOutSine);
+        
+        _mainCamera.DOOrthoSize(targetZoom, duration).SetEase(Ease.InOutSine)
+            .OnComplete(() =>
+            {
+                onComplete?.Invoke();
+            });
+    }
+    
     private Vector3 GetClampedCameraPosition(Vector3 target, float targetZoom)
     {
         var cameraHalfHeight = targetZoom;

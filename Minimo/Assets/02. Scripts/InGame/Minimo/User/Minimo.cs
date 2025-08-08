@@ -21,7 +21,6 @@ public class Minimo
     
     public readonly string Name;
     public readonly string Description;
-
     
     public Minimo(UMData data, TitleData title)
     {
