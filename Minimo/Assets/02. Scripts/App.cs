@@ -89,6 +89,10 @@ public class App : Singleton<App>
             {
                 GetManager<SoundManager>().PlayBGM("Title");
             }
+            else if (sceneName == SceneName.Prolog)
+            {
+                GetManager<SoundManager>().PlayBGM("Prolog");
+            }
             else if (sceneName == SceneName.Game)
             {
                 GetManager<SoundManager>().PlayBGM("InGame");
