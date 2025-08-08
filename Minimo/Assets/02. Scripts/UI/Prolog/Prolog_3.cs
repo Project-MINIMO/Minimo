@@ -17,7 +17,7 @@ public class Prolog_3 : PrologBase
     protected override IEnumerator ShowProlog()
     {
         FadeIn(_background, 1f);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
 
         foreach (var page in _pages)
         {

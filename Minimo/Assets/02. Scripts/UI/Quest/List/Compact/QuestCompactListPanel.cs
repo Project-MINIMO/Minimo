@@ -26,7 +26,7 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
     private readonly Queue<QuestCompactSlot> _slotPool = new();
     private readonly Dictionary<Quest, QuestCompactSlot> _activeMap = new();
     
-    private bool _isOpened;
+    private bool _isOpened = true;
     
     public override void Initialize(UIManager manager)
     {
@@ -44,7 +44,7 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         
         _openBtn.onClick.AddListener(Toggle);
         _closeBtn.onClick.AddListener(Toggle);
-        Open();
+        Close();
         
         _rect = GetComponent<RectTransform>();
     }
@@ -125,6 +125,7 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
             Open();
         }
         
+        _openBtn.gameObject.SetActive(!_isOpened);
         _closeBtn.gameObject.SetActive(_isOpened);
     }
 
