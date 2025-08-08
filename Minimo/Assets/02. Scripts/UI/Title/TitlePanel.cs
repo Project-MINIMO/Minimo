@@ -61,7 +61,7 @@ public class TitlePanel : MonoBehaviour
 
         _startTextRect.DOKill();
         _startBtn.gameObject.SetActive(false);
-        App.LoadScene(SceneName.Prolog);
+        App.LoadScene(AccountInfo.Instance.Prolog ? SceneName.Prolog : SceneName.Game);
     }
 
     private IEnumerator StopStarRoutine()

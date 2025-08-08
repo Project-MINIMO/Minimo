@@ -8,6 +8,8 @@ public class PopUpPanel : UIBase
     public override bool IsUseBlur => _isUseBlur;
     
     [SerializeField] private Button _closeBtn;
+    [SerializeField] private Image _background;
+    [SerializeField] private GameObject _closeImg;
     
     private Dictionary<PopUpType, PopUpWindow> _popUpMap = new();
     private PopUpWindow _currentWindow;
@@ -32,17 +34,14 @@ public class PopUpPanel : UIBase
 
     public void OpenPanel(PopUpType type)
     {
-        if (type == PopUpType.StrayWarning)
-        {
-            _isUseBlur = false;
-        }
+        _isUseBlur = type != PopUpType.StrayWarning;
+        _background.color = type != PopUpType.StrayWarning ? Color.white : Color.clear;
+        _closeImg.SetActive(type != PopUpType.StrayWarning);
         
         OpenPanel();
         
         _currentWindow = _popUpMap[type];
         _currentWindow.Show();
-        
-        _isUseBlur = true;
     }
     
     public void OpenPanel(PopUpType type, ProduceAdvanced building, Minimo minimo)
