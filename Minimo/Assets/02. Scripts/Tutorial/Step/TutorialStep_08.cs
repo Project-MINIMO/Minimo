@@ -21,16 +21,21 @@ public class TutorialStep_08 : TutorialStep
     [SerializeField] private GameObject _editPanel;
     [SerializeField] private EditManager _editManager;
     
+    private Animator _animator;
+    
     protected override void OnStart()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
         _dialogueBox.ShowQuest();
+        _animator = _chiefMinimo.GetComponentInChildren<Animator>(true);
     }
     
     private void OnClickedChief()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick -= OnClickedChief;
-        _focusPanel.FocusOn(_chiefMinimo.transform.position,
+        _dialogueBox.Hide();
+        
+        _focusPanel.FocusOn(_chiefMinimo.transform.position + Vector3.up * 0.5f,
             targetZoom: 1,
             duration: 1.5f,
             onComplete: () =>
@@ -42,14 +47,13 @@ public class TutorialStep_08 : TutorialStep
     
     private IEnumerator ConversationSequence()
     {
-        _dialogueBox.Hide();
-        
+        _animator.SetBool("IsTalk", true);
         yield return _dialogueBox.Show(
             "고맙네. 이걸로 배고픈 미니모를 위해 백미를 만들어줄 수 있겠군.",
             "그런데 백미제조기가 충돌로 인해 부서진 모양이로구만...",
             "백미제조기가 있어야 별곡으로부터 백미를 도정할 수 있다네.",
             "우선 백미제조기를 배치해주게.");
-        
+        _animator.SetBool("IsTalk", false);
         _focusPanel.FocusOn(Vector3.down,
             targetZoom: 4,
             duration: 1.5f,

@@ -24,6 +24,7 @@ public class TutorialStep_03 : TutorialStep
     private void OnClickedChief()
     {
         _passOutMinimo.GetComponent<TutorialInteractable>().onClick -= OnClickedChief;
+        _dialogueBox.Hide();
         
         _focusPanel.FocusOn(_passOutMinimo.transform.position,
             targetZoom: 1,
@@ -37,8 +38,6 @@ public class TutorialStep_03 : TutorialStep
 
     private IEnumerator ConversationSequence()
     {
-        _dialogueBox.Hide();
-        
         yield return _dialogueBox.Show(
             "으으.. 어지러워",
             "어라.. 당신은 누구죠..?",

@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class TutorialStep_06 : TutorialStep
 {
+    private const string TopRight = "Walk_TR";
+    private const string TopLeft = "Walk_TL";
+    private const string BottomRight = "Walk_BR";
+    private const string BottomLeft = "Walk_BL";
+    private const string Default = "Default";
+    
     [SerializeField] private GameObject _chiefMinimo;
     [SerializeField] private TutorialDialogue _dialogueBox;
     [SerializeField] private FocusPanel _focusPanel;
@@ -17,7 +23,13 @@ public class TutorialStep_06 : TutorialStep
     private int _dialogueIndex = 0;
     private Coroutine _dialogueCoroutine;
     private Coroutine _moveCoroutine;
+    private Animator _animator;
 
+    private void Start()
+    {
+        _animator = _chiefMinimo.GetComponentInChildren<Animator>(true);
+    }
+    
     public void MoveChief()
     {
         _moveCoroutine = StartCoroutine(MoveChiefRoutine());
@@ -36,8 +48,12 @@ public class TutorialStep_06 : TutorialStep
         
         while (_currentIndex < path.Count)
         {
+            _animator.SetBool("IsWalk", true);
+            
             if ((_targetPosition - _chiefMinimo.transform.position).sqrMagnitude > 0f)
             {
+                SetAnimationDirection();
+                
                 _chiefMinimo.transform.position = Vector3.MoveTowards(
                     _chiefMinimo.transform.position,
                     _targetPosition,
@@ -59,12 +75,15 @@ public class TutorialStep_06 : TutorialStep
 
             yield return null;
         }
+        
+        _animator.SetBool("IsWalk", false);
     }
     
     protected override void OnStart()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
         StopCoroutine(_moveCoroutine);
+        _animator.SetBool("IsWalk", false);
         _dialogueCoroutine = StartCoroutine(ShowDialogueSequence());
     }
     
@@ -72,6 +91,8 @@ public class TutorialStep_06 : TutorialStep
     {
         while (true)
         {
+            _dialogueBox.Hide();
+            
             switch (_dialogueIndex)
             {
                 case 0:
@@ -100,12 +121,17 @@ public class TutorialStep_06 : TutorialStep
             _targetPosition = _pathManager.GetTileWorldPosition(path[_currentIndex]);
             _prevPosition = _chiefMinimo.transform.position;
             
-            _dialogueBox.Show("...");
+            _dialogueBox.Hide();
+            _dialogueBox.ShowQuest();
+            
+            _animator.SetBool("IsWalk", true);
             
             while (_currentIndex < path.Count)
             {
                 if ((_targetPosition - _chiefMinimo.transform.position).sqrMagnitude > 0f)
                 {
+                    SetAnimationDirection();
+                    
                     _chiefMinimo.transform.position = Vector3.MoveTowards(
                         _chiefMinimo.transform.position,
                         _targetPosition,
@@ -127,6 +153,8 @@ public class TutorialStep_06 : TutorialStep
 
                 yield return null;
             }
+            
+            _animator.SetBool("IsWalk", false);
         }
     }
     
@@ -134,7 +162,9 @@ public class TutorialStep_06 : TutorialStep
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick -= OnClickedChief;
         StopCoroutine(_dialogueCoroutine);
-        _focusPanel.FocusOn(_chiefMinimo.transform.position,
+        _dialogueBox.Hide();
+        _animator.SetBool("IsWalk", false);
+        _focusPanel.FocusOn(_chiefMinimo.transform.position + Vector3.up * 0.5f,
             targetZoom: 1,
             duration: 1.5f,
             onComplete: () =>
@@ -146,8 +176,6 @@ public class TutorialStep_06 : TutorialStep
     
     private IEnumerator ConversationSequence()
     {
-        _dialogueBox.Hide();
-        
         yield return _dialogueBox.Show(
             "방금 수확한 별곡이 사라졌네.",
             "대체 어디로 갔는지 모르겠군.",
@@ -166,5 +194,44 @@ public class TutorialStep_06 : TutorialStep
     public override void Cleanup()
     {
 
+    }
+    
+    private void SetAnimationDirection()
+    {
+        var deltaX = _targetPosition.x - _chiefMinimo.transform.position.x;
+        var deltaY = _targetPosition.y - _chiefMinimo.transform.position.y;
+
+        var trigger = (deltaX, deltaY) switch
+        {
+            (> 0, > 0) => TopRight,
+            (> 0, < 0) => BottomRight,
+            (> 0, 0) => BottomRight,
+
+            (< 0, > 0) => TopLeft,
+            (< 0, < 0) => BottomLeft,
+            (< 0, 0) => BottomLeft,
+
+            (0, > 0) => // 수직 ↑
+                AnimatorIsPlaying(BottomLeft) 
+                || AnimatorIsPlaying(TopLeft) 
+                || AnimatorIsPlaying(Default)
+                    ? TopLeft : TopRight,
+
+            (0, < 0) => // 수직 ↓
+                AnimatorIsPlaying(BottomLeft) 
+                || AnimatorIsPlaying(TopLeft)
+                || AnimatorIsPlaying(Default)
+                    ? BottomLeft : BottomRight,
+
+            (0, 0) => TopRight,
+            _ => TopRight
+        };
+                
+        _animator.SetTrigger(trigger);
+    }
+    
+    private bool AnimatorIsPlaying(string stateName)
+    {
+        return _animator.GetCurrentAnimatorStateInfo(0).IsName(stateName);
     }
 }
