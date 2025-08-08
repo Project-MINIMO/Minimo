@@ -67,7 +67,7 @@ public class MinimoSpawner : MonoBehaviour
         _spawnCoroutine = null;
     }
 
-    private void SpawnMinimo(Minimo data)
+    private MinimoObject SpawnMinimo(Minimo data)
     {
         var randomNum = Random.Range(0, _minimoPrefabs.Length);
         MinimoObject instance;
@@ -91,6 +91,7 @@ public class MinimoSpawner : MonoBehaviour
         instance.OnExpired += HandleMinimoExpired;
         
         _indicatorPanel.CreateIndicator(instance.transform);
+        return instance;
     }
     
     public void SpawnTutorialMinimo()
@@ -114,6 +115,13 @@ public class MinimoSpawner : MonoBehaviour
         }
         
         instance.Initialize(data, randomNum, MinimoState.Idle);
+    }
+
+    public MinimoObject SpawnTutorialSwinMinimo()
+    {
+        var data = _minimoDatas[Random.Range(0, _minimoDatas.Count)];
+        _minimoDatas.Remove(data);
+        return SpawnMinimo(data);
     }
  
     private void HandleMinimoAcquired(MinimoObject instance)
