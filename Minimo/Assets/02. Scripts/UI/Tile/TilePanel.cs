@@ -210,7 +210,7 @@ public class TilePanel : UIBase
             _tilemap.SetTile(cell, origTile);
             _glowMap.SetTile(cell, origGlow);
 
-            if (origTile != currentTile)
+            if (origTile != currentTile && _currentBrush != null)
             {
                 returnCost += _currentBrush.SelectedTile.Cost;
             }
