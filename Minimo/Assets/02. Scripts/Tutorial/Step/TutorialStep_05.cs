@@ -6,9 +6,9 @@ using UnityEngine;
 public class TutorialStep_05 : TutorialStep
 {
     [SerializeField] private EditManager _editManager;
-    [SerializeField] private GameObject _farmHighlight;
     [SerializeField] private GameObject _primaryPanel;
     [SerializeField] private RectTransform _handIcon;
+    [SerializeField] private SpriteRenderer _highlight;
     private Vector2 _startPos = new(5, 201);
     private Vector2 _endPos = new(40, -82);
     
@@ -39,11 +39,13 @@ public class TutorialStep_05 : TutorialStep
    
     private IEnumerator ProgressQuest()
     {
-        _farmHighlight.SetActive(true);
+        _highlight.gameObject.SetActive(true);
+        _highlight.DOFade(0.7f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
         
         yield return new WaitUntil(() => _primaryPanel.activeSelf);
-        
-        _farmHighlight.SetActive(false);
+
+        _highlight.DOKill();
+        _highlight.gameObject.SetActive(false);
         _handIcon.gameObject.SetActive(true);
         _handIcon
             .DOAnchorPos(_endPos, 1)

@@ -1,14 +1,14 @@
 using System;
 using UnityEngine;
 
-public class TutorialInteractable : MonoBehaviour
+public class TutorialInteractable : InteractObject
 {
     public event Action onClick;
-    
-    private void OnMouseDown()
-    {
-        if (!enabled || !gameObject.activeInHierarchy) return;
 
+    public override void OnLongPress() { }
+
+    public override void OnClickUp()
+    {
         onClick?.Invoke();
     }
 }

@@ -17,7 +17,6 @@ public class TutorialStep_01 : TutorialStep
     [SerializeField] private GameObject _tileBtnHighlightObj;
     [SerializeField] private GameObject _tileHighlightObj;
     [SerializeField] private TilePanel _tilePanel;
-    [SerializeField] private Tilemap _highlightTilemap;
     [SerializeField] private Tilemap _villageTilemap;
     [SerializeField] private GameObject _tileSelectObj;
     [SerializeField] private Button _closeBtn;
@@ -28,6 +27,8 @@ public class TutorialStep_01 : TutorialStep
     [SerializeField] private GameObject _blockTileObj2;
     [SerializeField] private ScrollRect _scrollRect;
     [SerializeField] private TutorialStep_05 _tutorialStep_05;
+    [SerializeField] private SpriteRenderer _highlight;
+    [SerializeField] private SpriteRenderer _highlight2;
 
     private bool _isConfirmed;
     
@@ -108,30 +109,23 @@ public class TutorialStep_01 : TutorialStep
         
         _scrollRect.enabled = true;
         _tileHighlightObj.SetActive(false);
-        _highlightTilemap.gameObject.SetActive(true); 
-        DOTween.To(
-                () => _highlightTilemap.color.a,
-                alpha =>
-                {
-                    var currentColor = _highlightTilemap.color;
-                    currentColor.a = alpha;
-                    _highlightTilemap.color = currentColor;
-                },
-                0.7f,
-                0.5f
-            )
-            .SetLoops(-1, LoopType.Yoyo)
-            .SetEase(Ease.InOutSine)
-            .SetId(_highlightTilemap);
+        _highlight.gameObject.SetActive(true);
+        _highlight.DOFade(0.7f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+        _highlight2.gameObject.SetActive(true);
+        _highlight2.DOFade(0.7f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+        
 
         _blockTileObj2.SetActive(true);
         var tilePos1 = new Vector3Int(-4, -5, 0);
         var tilePos2 = new Vector3Int(-5, -5, 0);
         yield return new WaitUntil(() => _villageTilemap.GetTile(tilePos1) != null);
         yield return new WaitUntil(() => _villageTilemap.GetTile(tilePos2) != null);
+
+        _highlight.DOKill();
+        _highlight2.DOKill();
+        _highlight.gameObject.SetActive(false);
+        _highlight2.gameObject.SetActive(false);
         
-        DOTween.Kill(_highlightTilemap);
-        _highlightTilemap.gameObject.SetActive(false);
         _blockTileObj2.SetActive(false);
         
         _blockTileObj.SetActive(true);

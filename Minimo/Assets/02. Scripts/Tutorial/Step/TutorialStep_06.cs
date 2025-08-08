@@ -18,13 +18,19 @@ public class TutorialStep_06 : TutorialStep
     
     private int _dialogueIndex = 0;
     private Coroutine _dialogueCoroutine;
+    private Coroutine _moveCoroutine;
     
     private void Awake()
     {
         _chiefMinimoTextObj.SetActive(false);
     }
 
-    public IEnumerator MoveChief()
+    public void MoveChief()
+    {
+        _moveCoroutine = StartCoroutine(MoveChiefRoutine());
+    }
+
+    private IEnumerator MoveChiefRoutine()
     {
         var path = _pathManager.GetPath(
             _chiefMinimo.transform.position,
@@ -66,6 +72,7 @@ public class TutorialStep_06 : TutorialStep
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
         _chiefMinimoTextObj.SetActive(true);
+        StopCoroutine(_moveCoroutine);
         _dialogueCoroutine = StartCoroutine(ShowDialogueSequence());
     }
     

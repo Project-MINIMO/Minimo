@@ -61,6 +61,6 @@ public class TutorialStep_04 : TutorialStep
 
     public override void Cleanup()
     {
-        StartCoroutine(_tutorialStep_06.MoveChief());
+        _tutorialStep_06.MoveChief();
     }
 }
