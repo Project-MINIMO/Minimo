@@ -9,6 +9,7 @@ public class TutorialInteractable : InteractObject
 
     public override void OnClickUp()
     {
+        Debug.Log("OnLongPress");
         onClick?.Invoke();
     }
 }

@@ -10,8 +10,6 @@ public class TutorialStep_01 : TutorialStep
     [SerializeField] private GameObject _chiefMinimo;
     [SerializeField] private TutorialDialogue _dialogueBox;
     [SerializeField] private FocusPanel _focusPanel;
-    [SerializeField] private GameObject _chiefMinimoTextObj;
-    [SerializeField] private TextMeshProUGUI _chiefMinimoText;
     [SerializeField] private GameObject _tileBtnObj;
     [SerializeField] private GameObject _tileBtnHighlightObj;
     [SerializeField] private GameObject _tileHighlightObj;
@@ -30,26 +28,24 @@ public class TutorialStep_01 : TutorialStep
     [SerializeField] private SpriteRenderer _highlight2;
 
     private bool _isConfirmed;
-    
-    private void Awake()
-    {
-        _chiefMinimoTextObj.SetActive(false);
-    }
+    private Animator _animator;
     
     protected override void OnStart()
     {
         _tileBtnHighlightObj.SetActive(false);
-        _chiefMinimoTextObj.SetActive(true);
+        _dialogueBox.ShowQuest();
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
-        _chiefMinimoText.text = "......";
         _confirmBtn.onClick.AddListener(() => _isConfirmed = true);
+        _animator = _chiefMinimo.GetComponentInChildren<Animator>(true);
+        _animator.SetBool("IsLay", true);
     }
 
     private void OnClickedChief()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick -= OnClickedChief;
+        _dialogueBox.Hide();
         
-        _focusPanel.FocusOn(_chiefMinimo.transform.position,
+        _focusPanel.FocusOn(_chiefMinimo.transform.position + Vector3.up * 0.5f,
             targetZoom: 1,
             duration: 1.5f,
             onComplete: () =>
@@ -62,16 +58,18 @@ public class TutorialStep_01 : TutorialStep
     private IEnumerator ConversationSequence()
     {
         _tutorialStep_05.SpawnFarm();
-        //chiefminimo dorotate로 세우기
-        _chiefMinimoTextObj.SetActive(false);
+        _animator.SetBool("IsLay", false);
         
+        yield return new WaitForSeconds(2.3f);
+        
+        _animator.SetBool("IsTalk", true);
         yield return _dialogueBox.Show(
             "으으... 방금 무슨일이 일어난거지?",
             "로켓이 날아왔고... 그리고... 행성이 부서졌잖아!",
             "자네는......",
             "......책임은 나중에 물을 테니 일단 다른 미니모들을 구해주게",
             "내가 아직 제정신이 아니라서 자네의 도움이 필요하네.");
-        
+        _animator.SetBool("IsTalk", false);
         _focusPanel.FocusOn(Vector3.down,
             targetZoom: 4,
             duration: 1.5f,
@@ -84,8 +82,7 @@ public class TutorialStep_01 : TutorialStep
 
     private IEnumerator ProgressQuest()
     {
-        _chiefMinimoText.text = "타일을 설치해서 미니모가 무사한지 확인해주게";
-        _chiefMinimoTextObj.SetActive(true);
+        _dialogueBox.Show("타일을 설치해서 미니모가 무사한지 확인해주게");
         _tileBtnObj.SetActive(true);
         _tileBtnHighlightObj.SetActive(true);
         _closeBtn.enabled = false;
@@ -94,7 +91,7 @@ public class TutorialStep_01 : TutorialStep
         _scrollRect.enabled = false;
 
         yield return new WaitUntil(() => _tilePanel.gameObject.activeInHierarchy);
-        _chiefMinimoTextObj.SetActive(false);
+        _dialogueBox.Hide();
         _tileBtnHighlightObj.SetActive(false);
         _tileHighlightObj.SetActive(true);
         
