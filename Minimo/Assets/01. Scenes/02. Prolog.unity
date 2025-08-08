@@ -310,9 +310,12 @@ MonoBehaviour:
   _textBox: {fileID: 434501442}
   _text: {fileID: 627999826}
   _strings:
-  - "\uB9D0\uB85C \uAEBC\uB0B4\uBA74 \uBCC4\uC774 \uC544\uB2C8\uB780\uB2E4. "
-  - "\uB9C8\uC74C\uC18D\uC5D0 \uB2F4\uC544\uC57C, \uBE44\uB85C\uC18C \uBCC4\uC774
-    \uB418\uC9C0."
+  - "\uD560\uC544\uBC84\uC9C0\uB294 \uC885\uC885 \uBCC4\uACFC \uC18C\uC6D0, \uADF8\uB9AC\uACE0
+    \uC694\uC815\uB4E4\uC5D0 \uAD00\uD55C \uC774\uC57C\uAE30\uB97C \uD574\uC8FC\uC168\uC5B4."
+  - "\uBC24\uD558\uB298\uC5D0 \uAC00\uC7A5 \uBC1D\uAC8C \uBE5B\uB098\uB294 \uD560\uC544\uBC84\uC9C0\uC758
+    \uC18C\uC6D0 \uBCC4\uC5D0 \uB300\uD574\uC11C\uB3C4."
+  - "\uC6B0\uB9AC\uB294 \uCE68\uB300\uC5D0 \uAC78\uD130 \uC549\uC544 \uD558\uC5FC\uC5C6\uC774
+    \uADF8 \uBCC4\uC744 \uBC14\uB77C\uBCF4\uACE4 \uD588\uC9C0."
   _charInterval: 0.05
   _textSkipObj: {fileID: 953133936}
 --- !u!1 &294094813
@@ -718,8 +721,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bb2f1d2d9b852047a298dec0b8c8389, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDefaultListener: 1
-  listenerId: 0
 --- !u!114 &486652792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -732,16 +733,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95e830c658b21374c8356365b10eb5dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_listeners:
-    initialListenerList: []
-    useDefaultListeners: 1
-  isEnvironmentAware: 0
-  isStaticObject: 0
-  m_positionOffsetData:
-    KeepMe: 0
-    positionOffset: {x: 0, y: 0, z: 0}
-  m_posOffsetData: {fileID: 0}
-  listenerMask: 1
 --- !u!114 &486652793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -798,19 +789,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e589d1919dc53974fa53935f5535f47d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerList: ae8d9d44
-  useOtherObject: 0
-  data:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 11400000, guid: 65956adca36b5014f9b0e3b08f4c91ba, type: 2}
-  decodeBank: 0
-  overrideLoadSetting: 0
-  loadAsynchronous: 0
-  saveDecodedBank: 0
-  unloadTriggerList: 958ca0ea
-  bankNameInternal: 
-  valueGuidInternal: 
 --- !u!1 &501722580
 GameObject:
   m_ObjectHideFlags: 0
@@ -1344,8 +1322,13 @@ MonoBehaviour:
   _textBox: {fileID: 1952552491}
   _text: {fileID: 612763272}
   _strings:
-  - "\uD560\uC544\uBC84\uC9C0\uC758 \uBCC4\uC740.. \uB298 \uADF8 \uC790\uB9AC\uC5D0
-    \uC788\uC5C8\uC5B4."
+  - "\uADF8 \uBCC4\uC740 \uB298 \uAC19\uC740 \uC790\uB9AC\uC5D0\uC11C \uBC1D\uAC8C
+    \uBE5B\uB098\uACE0 \uC788\uC5C8\uC5B4."
+  - "\uB9C8\uCE58 \uD560\uC544\uBC84\uC9C0\uAC00 \uB0A0 \uC9C0\uCF1C\uBD10 \uC8FC\uC2DC\uB294
+    \uAC83\uCC98\uB7FC......"
+  - "\uD560\uC544\uBC84\uC9C0\uC758 \uC18C\uC6D0\uC740 \uB300\uCCB4 \uBB50\uC600\uC744\uAE4C?"
+  - "\uBB34\uC2A8 \uC18C\uC6D0\uC774\uAE38\uB798 \uC800\uB807\uAC8C \uBC1D\uAC8C
+    \uBE5B\uB0A0 \uC218 \uC788\uB294 \uAC78\uAE4C?"
   _charInterval: 0.05
   _textSkipObj: {fileID: 23858230}
 --- !u!1 &651435732
@@ -1617,8 +1600,8 @@ MonoBehaviour:
   _textBox: {fileID: 541462609}
   _text: {fileID: 818861743}
   _strings:
-  - "\uBCC4\uC740 \uB204\uAD70\uAC00\uC758 \uAC04\uC808\uD55C \uB9C8\uC74C\uC774
-    \uB9FA\uD78C \uAC83\uC774\uB780\uB2E4."
+  - "\"\uBCC4\uC740 \uB204\uAD70\uAC00\uC758 \uAC04\uC808\uD55C \uC18C\uC6D0\uC774
+    \uBC24\uD558\uB298\uC5D0 \uB9FA\uD78C \uAC83\uC774\uB780\uB2E4.\""
   _charInterval: 0.05
   _textSkipObj: {fileID: 501722580}
 --- !u!1 &818861741
@@ -3212,7 +3195,12 @@ MonoBehaviour:
   _textBox: {fileID: 294094815}
   _text: {fileID: 1345248613}
   _strings:
-  - "\uB098\uB294 \uACB0\uAD6D, \uADF8 \uBCC4\uC5D0 \uAC00\uBCF4\uAE30\uB85C \uD588\uC5B4."
+  - "\uD560\uC544\uBC84\uC9C0\uC758 \uC18C\uC6D0\uBCC4\uC5D0 \uAC00\uBA74 \uC54C
+    \uC218 \uC788\uC744\uAE4C?"
+  - "\uADF8\uB7F0 \uB2E8\uC21C\uD55C \uD638\uAE30\uC2EC\uC774 \uB098\uB97C \uB85C\uCF13\uACF5\uD559\uC73C\uB85C
+    \uC774\uB04C\uC5C8\uACE0"
+  - "\uB098\uB294 \uACB0\uAD6D \uD560\uC544\uBC84\uC9C0\uC758 \uBCC4\uC5D0 \uC9C1\uC811
+    \uAC00\uBCF4\uAE30\uB85C \uD588\uC5B4."
   _charInterval: 0.05
   _pages:
   - {fileID: 1486505480}
@@ -3417,7 +3405,11 @@ MonoBehaviour:
   _textBox: {fileID: 707744526}
   _text: {fileID: 1125046110}
   _strings:
-  - "\uB3C4\uB2EC\uD560 \uC218 \uC5C6\uC5B4\uB3C4, \uB2FF\uACE0 \uC2F6\uC5C8\uC73C\uB2C8\uAE4C."
+  - "\uC124\uB839 \uB3C4\uB2EC\uD560 \uC218 \uC5C6\uB354\uB77C\uB3C4 \uAC00\uAE4C\uC774
+    \uB2FF\uACE0 \uC2F6\uC5C8\uAC70\uB4E0."
+  - "\uADF8\uB9AC\uACE0 \uC5B4\uB290\uB367 \uD560\uC544\uBC84\uC9C0\uC758 \uBCC4\uC5D0
+    \uB9E4\uC6B0 \uAC00\uAE4C\uC774 \uC811\uADFC\uD588\uC5B4."
+  - "\uC774\uC81C \uD558\uB8FB\uBC24\uB9CC \uC9C0\uB098\uBA74......"
   _charInterval: 0.05
   _textSkipObj: {fileID: 1093440545}
 --- !u!1 &1893661898
