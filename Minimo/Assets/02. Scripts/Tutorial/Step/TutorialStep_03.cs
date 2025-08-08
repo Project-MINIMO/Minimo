@@ -50,7 +50,7 @@ public class TutorialStep_03 : TutorialStep
         
         yield return _dialogueBox.Show(
             "으으.. 어지러워",
-            "어라.. 당신은 촌장님에게 들었던..",
+            "어라.. 당신은 누구죠..?",
             "아.. 일단은 좀 쉬어야겠어요..");
         
         _focusPanel.FocusOn(Vector3.zero,
