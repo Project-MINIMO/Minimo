@@ -29,7 +29,7 @@ public class TutorialStep_04 : TutorialStep
         
         _focusPanel.FocusOn(_chiefMinimo.transform.position,
             targetZoom: 1,
-            duration: 2,
+            duration: 1.5f,
             onComplete: () =>
             {
                 StartCoroutine(ConversationSequence());
@@ -52,7 +52,7 @@ public class TutorialStep_04 : TutorialStep
         
         _focusPanel.FocusOn(Vector3.zero,
             targetZoom: 4,
-            duration: 2,
+            duration: 1.5f,
             onComplete: () =>
             {
                 Cleanup();

@@ -144,7 +144,7 @@ public class TutorialStep_06 : TutorialStep
         StopCoroutine(_dialogueCoroutine);
         _focusPanel.FocusOn(_chiefMinimo.transform.position,
             targetZoom: 1,
-            duration: 2,
+            duration: 1.5f,
             onComplete: () =>
             {
                 StartCoroutine(ConversationSequence());
@@ -166,7 +166,7 @@ public class TutorialStep_06 : TutorialStep
         
         _focusPanel.FocusOn(Vector3.down,
             targetZoom: 4,
-            duration: 2,
+            duration: 1.5f,
             onComplete: CompleteStep,
             closeOnComplete: true);
     }
