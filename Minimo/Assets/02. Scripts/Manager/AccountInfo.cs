@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(-100)]
 public class AccountInfo : Singleton<AccountInfo>
 {
     public Dictionary<int, Item> Items { get; private set; }
@@ -25,8 +26,10 @@ public class AccountInfo : Singleton<AccountInfo>
     [SerializeField] private Sprite LevelIcon;
     [SerializeField] private Sprite GoldIcon;
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
+        
         Level = new UserLevel(LevelIcon);
         Gold = new UserGold(GoldIcon);
         

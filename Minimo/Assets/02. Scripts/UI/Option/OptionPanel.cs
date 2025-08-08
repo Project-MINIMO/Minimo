@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -130,13 +131,6 @@ public class OptionPanel : UIBase
 
     private async void Restart()
     {
-        var firebaseManager = App.GetManager<FirebaseManager>();
-        await firebaseManager.DeleteUserAsync();
-        await firebaseManager.InitializeFirebase();
-        
-        // TODO : 퀘스트 관련 카운트 정보 초기화
-        
-        // Move to Title Scene
-        App.LoadScene(SceneName.Title);
+        App.LoadScene(SceneName.Empty);
     }
 }
