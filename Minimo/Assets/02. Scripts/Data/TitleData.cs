@@ -198,6 +198,7 @@ public class TitleData : DataBase
         base.Awake();
 
         LoadData();
+        var accountInfo = AccountInfo.Instance;
         App.Loading.RunWithSpinnerAsync(LoadDataAsync()).Forget();
     }
 
@@ -285,9 +286,9 @@ public class TitleData : DataBase
             CustomTile.Add(customTileRaw[i].ID, new CustomTile(customTileRaw[i], customTiles[i]));
         }
         
-        LoadQuestData(questGroups);
         LoadProduceData();
         AccountInfo.Instance.AddItems(Item);
+        LoadQuestData(questGroups);
         App.LoadScene(SceneName.Title);
     }
    
