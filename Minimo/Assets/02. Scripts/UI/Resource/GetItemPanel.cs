@@ -9,7 +9,6 @@ public class GetItemPanel : MonoBehaviour
     [SerializeField] private Image[] _iconImgs;
     [SerializeField] private RectTransform _storageRect;
     [SerializeField] private float _spawnInterval = 0.8f;
-    [SerializeField] private RectTransform _iconParent;
     
     private readonly Queue<(int, Vector3)> _itemQueue = new(); 
     private readonly Queue<Image> _iconPool = new();
