@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlantCtrl : MonoBehaviour
 {
-    [SerializeField] private GameObject _hint;
+    [SerializeField] private DragArrowHint _hint;
     
     private PlantHandler[] _plantHandlers;
     private ProduceManager _produceManager;
@@ -14,7 +14,7 @@ public class PlantCtrl : MonoBehaviour
         {
             handler.OnDragChanged += isDrag =>
             {
-                _hint.SetActive(!isDrag);
+                _hint.OnDragChanged(isDrag);
             };
         }
         _produceManager = App.GetManager<ProduceManager>();
@@ -25,6 +25,7 @@ public class PlantCtrl : MonoBehaviour
         if (_produceManager == null) return;
         if (_produceManager.CurrentObject == null) return;
         
+        _hint.gameObject.SetActive(true);
         InitHandlers();
     }
 
