@@ -28,7 +28,7 @@ public class StrayWarningView : PopUpWindow
         _isCompleteExpand = false;
         _rect.localScale = Vector2.one;
         
-        _warningRect.DOScale(_shrinkScale, 0.3f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
+        _warningRect.DOScale(_shrinkScale, 0.2f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
     }
     
     public override void Hide()
