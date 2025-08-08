@@ -26,6 +26,10 @@ public class FixedScreenSizeCanvas : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (Camera.main == null)
+        {
+            return;
+        }
         var o = Camera.main.orthographicSize;
         if (Mathf.Approximately(o, _prevOrtho)) return;
         _prevOrtho = o;
