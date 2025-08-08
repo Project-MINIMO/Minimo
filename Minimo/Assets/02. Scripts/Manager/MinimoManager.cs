@@ -44,6 +44,9 @@ public class MinimoManager : ManagerBase
 
     public bool AssignNearestMinimo(ProduceAdvanced advanced)
     {
+        Debug.Log(ActiveMinimos.Count);
+        Debug.Log(ActiveMinimos[0].AcquisitionDate);
+        Debug.Log(ActiveMinimos[0].AssignedBuilding);
         var unassignedMinimos = ActiveMinimos
             .Where(x => x.AcquisitionDate != DateTime.MinValue)
             .Where(x => x.AssignedBuilding == null)

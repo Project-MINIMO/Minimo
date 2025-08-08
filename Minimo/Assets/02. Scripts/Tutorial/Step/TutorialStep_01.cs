@@ -12,7 +12,6 @@ public class TutorialStep_01 : TutorialStep
     [SerializeField] private FocusPanel _focusPanel;
     [SerializeField] private GameObject _chiefMinimoTextObj;
     [SerializeField] private TextMeshProUGUI _chiefMinimoText;
-    [SerializeField] private GameObject[] _hideUIs;
     [SerializeField] private GameObject _tileBtnObj;
     [SerializeField] private GameObject _tileBtnHighlightObj;
     [SerializeField] private GameObject _tileHighlightObj;
@@ -39,11 +38,6 @@ public class TutorialStep_01 : TutorialStep
     
     protected override void OnStart()
     {
-        foreach (var ui in _hideUIs)
-        {
-            ui.gameObject.SetActive(false);
-        }
-        
         _tileBtnHighlightObj.SetActive(false);
         _chiefMinimoTextObj.SetActive(true);
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;

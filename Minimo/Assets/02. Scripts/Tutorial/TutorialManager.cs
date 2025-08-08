@@ -1,17 +1,24 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TutorialManager : Singleton<TutorialManager>
 {
     [SerializeField] private List<TutorialStep> _steps;
-
+    [SerializeField] private GameObject[] _hideUIs;
+    [SerializeField] private MinimoSpawner _minimoSpawner;
+    
     private int _currentStepIndex = -1;
     private TutorialStep _currentStep;
     public static bool IsTutorialing = true;
 
     private void Start()
     {
+        foreach (var ui in _hideUIs)
+        {
+            ui.SetActive(false);
+        }
+
+        _minimoSpawner.SpawnTutorialMinimo();
         ProceedNextStep();
     }
 
@@ -24,7 +31,11 @@ public class TutorialManager : Singleton<TutorialManager>
 
         if (_currentStepIndex >= _steps.Count)
         {
-            Debug.Log("Tutorial Completed");
+            IsTutorialing = false;
+            foreach (var ui in _hideUIs)
+            {
+                ui.SetActive(true);
+            }
             return;
         }
 

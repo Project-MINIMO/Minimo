@@ -88,11 +88,12 @@ public class TutorialStep_08 : TutorialStep
         
         _cancelBtn.enabled = true;
         _deleteBtn.enabled = true;
+        _closeBtn.enabled = true;
         CompleteStep();
     }
   
     public override void Cleanup()
     {
-
+        AccountInfo.Instance.Level.AddCount(100);
     }
 }

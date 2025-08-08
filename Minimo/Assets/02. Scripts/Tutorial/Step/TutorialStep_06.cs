@@ -34,7 +34,7 @@ public class TutorialStep_06 : TutorialStep
     {
         var path = _pathManager.GetPath(
             _chiefMinimo.transform.position,
-            _pathManager.GetTileWorldPosition(new Vector3Int(0, -4, 0))
+            new Vector3(1.5f, -0.5f, 0)
         );
             
         _currentIndex = 0;
@@ -48,7 +48,7 @@ public class TutorialStep_06 : TutorialStep
                 _chiefMinimo.transform.position = Vector3.MoveTowards(
                     _chiefMinimo.transform.position,
                     _targetPosition,
-                    Speed * Time.deltaTime
+                    2 * Speed * Time.deltaTime
                 );
                     
                 if (_prevPosition == _chiefMinimo.transform.position)
@@ -101,9 +101,7 @@ public class TutorialStep_06 : TutorialStep
             
             var path = _pathManager.GetPath(
                 _chiefMinimo.transform.position,
-                _pathManager.GetTileWorldPosition(_dialogueIndex == 0 
-                    ? new Vector3Int(0, -4, 0) 
-                    : new Vector3Int(1, -5, 0))
+                _dialogueIndex == 0 ? new Vector3(1.5f, -0.5f, 0) : new Vector3(2.5f, -0.5f, 0)
             );
             
             _currentIndex = 0;

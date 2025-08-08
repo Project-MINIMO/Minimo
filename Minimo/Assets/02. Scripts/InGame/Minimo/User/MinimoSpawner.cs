@@ -16,7 +16,7 @@ public class MinimoSpawner : MonoBehaviour
     
     private IndicatorPanel _indicatorPanel;
     private Coroutine _spawnCoroutine;
-    private int _prevLevel;
+    private int _prevLevel = 4;
 
     private void Awake()
     {
@@ -40,8 +40,11 @@ public class MinimoSpawner : MonoBehaviour
             _minimoDatas.Remove(data);
             _spawnQueue.Enqueue(data);
         }
-        
-        _prevLevel = level;
+
+        if (level >= _prevLevel)
+        {
+            _prevLevel = level;
+        }
         
         if (_spawnCoroutine == null && _currentMinimo == null)
         {
@@ -87,6 +90,29 @@ public class MinimoSpawner : MonoBehaviour
         instance.OnExpired += HandleMinimoExpired;
         
         _indicatorPanel.CreateIndicator(instance.transform);
+    }
+    
+    public void SpawnTutorialMinimo()
+    {
+        var data = _minimoDatas[Random.Range(0, _minimoDatas.Count)];
+        _minimoDatas.Remove(data);
+        
+        var randomNum = Random.Range(0, _minimoPrefabs.Length);
+        MinimoObject instance;
+        
+        if (_minimoInstances.TryGetValue(randomNum, out var cachedInstance))
+        {
+            instance = cachedInstance;
+            _minimoInstances.Remove(randomNum);
+        }
+        else
+        {
+            var randomPrefab = _minimoPrefabs[randomNum];
+            var minimoObject = Instantiate(randomPrefab, new Vector3(-4, 0.75f, 0), Quaternion.identity, transform);
+            instance = minimoObject.GetComponent<MinimoObject>();
+        }
+        
+        instance.Initialize(data, randomNum, MinimoState.Idle);
     }
  
     private void HandleMinimoAcquired(MinimoObject instance)
