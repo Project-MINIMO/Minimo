@@ -14,7 +14,7 @@ public class TutorialStep_09 : TutorialStep
     protected override void OnStart()
     {
         _chiefMinimoTextObj.SetActive(true);
-        _chiefMinimoText.text = "이제 죽을 만들면 좋겠구만.";
+        _chiefMinimoText.text = "이제 백미로 도정하면 되네!";
         _visitMinimo = _spawner.SpawnTutoriMinimo();
 
         StartCoroutine(ProgressQuest());
