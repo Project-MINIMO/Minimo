@@ -10,13 +10,15 @@ using TMPro;
 public class TilePanel : UIBase
 {
     public override bool IsUseInput => _currentBrush != null;
+    protected override bool IsUseGuide => true;
     
     [SerializeField] private TextMeshProUGUI _titleTMP;
 
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn; 
     [SerializeField] private Button _confirmBtn;
-    [SerializeField] private Button _cancelBtn;  
+    [SerializeField] private Button _cancelBtn;
+    [SerializeField] private Button _infoBtn;
     
     [SerializeField] private Image _selectedTileImg;
     [SerializeField] private Sprite _eraseSprite;
@@ -63,6 +65,7 @@ public class TilePanel : UIBase
         _closeBtn.onClick.AddListener(ClosePanel);
         _confirmBtn.onClick.AddListener(Confirm);
         _cancelBtn.onClick.AddListener(Cancel);
+        _infoBtn.onClick.AddListener(ShowGuide);
         
         var slots = GetComponentsInChildren<TileSlot>(true);
         foreach (var slot in slots)

@@ -32,7 +32,7 @@ public class StrayMinimoSpawner : MonoBehaviour
         var common = App.GetData<TitleData>().Common;
         _goldenSpawnRate = common["GoldMiaSpawnRate"] / 100f;
         
-        _minimoPool = GetComponentsInChildren<StrayMinimoObject>().ToList();
+        _minimoPool = GetComponentsInChildren<StrayMinimoObject>(true).ToList();
 
         var i = 0;
         

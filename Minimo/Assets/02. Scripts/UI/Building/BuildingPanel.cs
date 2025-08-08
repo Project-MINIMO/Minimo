@@ -6,11 +6,13 @@ using TMPro;
 public class BuildingPanel : UIBase
 {
     public override bool IsUseBlur => true;
+    protected override bool IsUseGuide => true;
     
     [SerializeField] private TextMeshProUGUI _titleTMP;
 
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
+    [SerializeField] private Button _infoBtn;
     
     [SerializeField] private MenuToggleGroup _toggleGroup;
 
@@ -24,6 +26,7 @@ public class BuildingPanel : UIBase
         
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
+        _infoBtn.onClick.AddListener(ShowGuide);
 
         _titleTMP.text = App.GetData<TitleData>().GetString("STR_BUILDING_UI_NAME");
     }

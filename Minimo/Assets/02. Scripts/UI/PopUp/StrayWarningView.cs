@@ -4,10 +4,14 @@ using UnityEngine;
 public class StrayWarningView : PopUpWindow
 {
     public override PopUpType Type() => PopUpType.StrayWarning;
+
+    [SerializeField] private RectTransform _warningRect;
     
     private RectTransform _rect;
     private float _completeTime;
     private bool _isCompleteExpand;
+
+    private readonly Vector3 _shrinkScale = new(0.6f, 0.6f);
 
     protected override void Awake()
     {
@@ -23,6 +27,16 @@ public class StrayWarningView : PopUpWindow
         _completeTime = Time.time;
         _isCompleteExpand = false;
         _rect.localScale = Vector2.one;
+        
+        _warningRect.DOScale(_shrinkScale, 0.3f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
+    }
+    
+    public override void Hide()
+    {
+        _warningRect.DOKill();
+        _warningRect.localScale = Vector2.one;
+        
+        base.Hide();
     }
 
     private void Update()
