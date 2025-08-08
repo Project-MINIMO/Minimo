@@ -110,8 +110,9 @@ public class TutorialStep_01 : TutorialStep
         _scrollRect.enabled = true;
         _tileHighlightObj.SetActive(false);
         _highlight.gameObject.SetActive(true);
-        _highlight.DOFade(0.7f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
         _highlight2.gameObject.SetActive(true);
+        
+        _highlight.DOFade(0.7f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
         _highlight2.DOFade(0.7f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
         
 
