@@ -19,6 +19,7 @@ public class AccountInfo : Singleton<AccountInfo>
     public event Action<int> OnMinimoCapacityChanged;
     public event Action<long> OnCashChanged; 
     public int CurrentItemCounts => Items.Values.Where(item => item.Level > 0).Sum(item => item.Count);
+    public bool Tutorial;
     
     [SerializeField] private Sprite LevelIcon;
     [SerializeField] private Sprite GoldIcon;

@@ -12,7 +12,7 @@ public class BuildingInventory : Inventory<Building>
         _menuTogs[1].GetComponentInChildren<TextMeshProUGUI>().text = "작물";
         _menuTogs[2].GetComponentInChildren<TextMeshProUGUI>().text = "가공물";
         _menuTogs[3].GetComponentInChildren<TextMeshProUGUI>().text = "식품";
-        _menuTogs[3].GetComponentInChildren<TextMeshProUGUI>().text = "기물";
+        _menuTogs[4].GetComponentInChildren<TextMeshProUGUI>().text = "기물";
     }
 
     protected override List<Building> GetFilteredItems() => App.GetData<TitleData>().Building.Values.ToList();

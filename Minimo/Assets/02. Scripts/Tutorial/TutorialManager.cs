@@ -13,13 +13,16 @@ public class TutorialManager : Singleton<TutorialManager>
 
     private void Start()
     {
-        foreach (var ui in _hideUIs)
+        if (AccountInfo.Instance.Tutorial)
         {
-            ui.SetActive(false);
-        }
+            foreach (var ui in _hideUIs)
+            {
+                ui.SetActive(false);
+            }
 
-        _minimoSpawner.SpawnTutorialMinimo();
-        ProceedNextStep();
+            _minimoSpawner.SpawnTutorialMinimo();
+            ProceedNextStep();
+        }
     }
 
     public void ProceedNextStep()
