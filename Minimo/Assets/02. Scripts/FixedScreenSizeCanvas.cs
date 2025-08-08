@@ -10,7 +10,7 @@ public class FixedScreenSizeCanvas : MonoBehaviour
     private float _baseOrtho;
     private float _prevOrtho;
 
-    private const float UpwardMovePerZoom = 0f;
+    private const float UpwardMovePerZoom = -0.5f;
     private const float ScaleCompensation = 0.5f;
 
     private void Awake()

@@ -28,6 +28,7 @@ public class TutorialStep_01 : TutorialStep
     [SerializeField] private SpriteRenderer _highlight2;
 
     private bool _isConfirmed;
+    private Animator _animator;
     
     protected override void OnStart()
     {
@@ -35,13 +36,15 @@ public class TutorialStep_01 : TutorialStep
         _dialogueBox.ShowQuest();
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
         _confirmBtn.onClick.AddListener(() => _isConfirmed = true);
+        _animator = _chiefMinimo.GetComponentInChildren<Animator>(true);
+        _animator.SetBool("IsLay", true);
     }
 
     private void OnClickedChief()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick -= OnClickedChief;
         
-        _focusPanel.FocusOn(_chiefMinimo.transform.position,
+        _focusPanel.FocusOn(_chiefMinimo.transform.position + Vector3.up * 0.5f,
             targetZoom: 1,
             duration: 1.5f,
             onComplete: () =>
@@ -54,8 +57,10 @@ public class TutorialStep_01 : TutorialStep
     private IEnumerator ConversationSequence()
     {
         _tutorialStep_05.SpawnFarm();
-        //chiefminimo dorotate로 세우기
+        _animator.SetBool("IsLay", false);
         _dialogueBox.Hide();
+        
+        yield return new WaitForSeconds(3f);
         
         yield return _dialogueBox.Show(
             "으으... 방금 무슨일이 일어난거지?",
