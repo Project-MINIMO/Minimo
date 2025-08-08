@@ -46,10 +46,11 @@ public class TutorialStep_06 : TutorialStep
         _targetPosition = _pathManager.GetTileWorldPosition(path[_currentIndex]);
         _prevPosition = _chiefMinimo.transform.position;
         
+        _animator.SetBool("IsWalk", true);
+        _animator.speed = 3;
+        
         while (_currentIndex < path.Count)
         {
-            _animator.SetBool("IsWalk", true);
-            
             if ((_targetPosition - _chiefMinimo.transform.position).sqrMagnitude > 0f)
             {
                 SetAnimationDirection();
@@ -57,7 +58,7 @@ public class TutorialStep_06 : TutorialStep
                 _chiefMinimo.transform.position = Vector3.MoveTowards(
                     _chiefMinimo.transform.position,
                     _targetPosition,
-                    2 * Speed * Time.deltaTime
+                    3 * Speed * Time.deltaTime
                 );
                     
                 if (_prevPosition == _chiefMinimo.transform.position)
@@ -77,6 +78,7 @@ public class TutorialStep_06 : TutorialStep
         }
         
         _animator.SetBool("IsWalk", false);
+        _animator.speed = 1;
     }
     
     protected override void OnStart()
@@ -84,6 +86,7 @@ public class TutorialStep_06 : TutorialStep
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
         StopCoroutine(_moveCoroutine);
         _animator.SetBool("IsWalk", false);
+        _animator.speed = 1;
         _dialogueCoroutine = StartCoroutine(ShowDialogueSequence());
     }
     
