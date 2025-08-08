@@ -386,6 +386,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1247558950}
+  - component: {fileID: 1247558951}
   m_Layer: 0
   m_Name: SFX
   m_TagString: Untagged
@@ -408,6 +409,102 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1724322312}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1247558951
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247558949}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -4200408590975268962, guid: 14fb2df9e30898748bf19b7e9df7123d, type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 0.05
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1537045410
 GameObject:
   m_ObjectHideFlags: 0
@@ -1183,7 +1280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   straySpeed: {x: 5, y: 7}
-  Tutorial: 1
+  Tutorial: 0
   Prolog: 1
   LevelIcon: {fileID: 21300000, guid: 6e3474cb96cc53647bcf32db9a54c193, type: 3}
   GoldIcon: {fileID: 21300000, guid: 64b399b386b67a74fa89b1d2764ca06f, type: 3}
@@ -1374,9 +1471,13 @@ MonoBehaviour:
   _bgmClips:
   - Name: Title
     Clip: {fileID: 8300000, guid: 036cd9093a36c0141a1ef267d974aa85, type: 3}
+  - Name: Prolog
+    Clip: {fileID: 8300000, guid: eea8a6f4ef85f9f4898a6d57af00fbe8, type: 3}
   - Name: InGame
     Clip: {fileID: 8300000, guid: 4d17a337037b34c4d8dfb1fcae6afc77, type: 3}
-  _sfxClips: []
+  _sfxClips:
+  - Name: Siren
+    Clip: {fileID: 8300000, guid: 17be2dc2a5978584eacb20f5ae536e54, type: 3}
   _bgmPlayer: {fileID: 1072097328}
   _sfxPlayer: {fileID: 1247558949}
   _mixer: {fileID: 24100000, guid: 14fb2df9e30898748bf19b7e9df7123d, type: 2}
