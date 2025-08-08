@@ -12,6 +12,7 @@ public class ProduceStateUI : MonoBehaviour
     [SerializeField] private GameObject _idleObj;
     [SerializeField] private GameObject _completeObj;
     [SerializeField] private Image _completeImg;
+    [SerializeField] private Button _completeBtn;
     
     private ProduceObject _produceObject;
 
@@ -41,6 +42,8 @@ public class ProduceStateUI : MonoBehaviour
                 _stateBack.SetActive(!isEditing);
             }).AddTo(gameObject);
         _stateBack.SetActive(!editManager.IsBuildingEditing.Value);
+        
+        _completeBtn.onClick.AddListener(_produceObject.StartHarvest);
     }
 
     private void UpdateStateUI(ProduceState state)

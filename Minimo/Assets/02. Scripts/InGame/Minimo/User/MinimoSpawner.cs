@@ -27,6 +27,7 @@ public class MinimoSpawner : MonoBehaviour
 
     private void Start()
     {
+        _prevLevel = TutorialManager.IsTutorialing ? 4 : 0;
         OnLevelUp(AccountInfo.Instance.Level.Count);
     }
 
