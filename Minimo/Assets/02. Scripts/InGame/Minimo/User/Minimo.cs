@@ -11,7 +11,7 @@ public class Minimo
     public int Level { get; private set; }
     public ProduceAdvanced AssignedBuilding { get; private set; }
     public MinimoObject Agent { get; private set; }
-    public DateTime AcquisitionDate { get; private set; } = DateTime.MaxValue;
+    public DateTime AcquisitionDate { get; private set; } = DateTime.MinValue;
     
     public event Action<Minimo, int> OnLevelChanged;
     public event Action<ProduceAdvanced> OnAssignmentChanged;
