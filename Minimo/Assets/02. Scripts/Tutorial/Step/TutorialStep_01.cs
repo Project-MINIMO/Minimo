@@ -84,7 +84,7 @@ public class TutorialStep_01 : TutorialStep
 
     private IEnumerator ProgressQuest()
     {
-        _chiefMinimoText.text = "타일을 설치해서 미니모가 무사한지 확인해줘";
+        _chiefMinimoText.text = "타일을 설치해서 미니모가 무사한지 확인해주게";
         _chiefMinimoTextObj.SetActive(true);
         _tileBtnObj.SetActive(true);
         _tileBtnHighlightObj.SetActive(true);
