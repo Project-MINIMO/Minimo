@@ -11,6 +11,9 @@ public class BuildingSlot : InventorySlot<Building>
     [SerializeField] private TextMeshProUGUI _costTMP;
     [SerializeField] private GameObject _lockBack;
     [SerializeField] private TextMeshProUGUI _lockTMP;
+    [SerializeField] private GameObject _redDotObj;
+    
+    private bool _isLocked = true;
     
     private void OnEnable()
     {
@@ -33,6 +36,9 @@ public class BuildingSlot : InventorySlot<Building>
     {
         if (Item == null) return;
         
-        _lockBack.SetActive(CanShow());
+        var canShow = CanShow();
+        _lockBack.SetActive(canShow);
+        _redDotObj.SetActive(_isLocked != canShow);
+        _isLocked = canShow;
     }
 }
