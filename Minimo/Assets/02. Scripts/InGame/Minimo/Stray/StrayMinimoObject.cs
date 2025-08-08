@@ -177,7 +177,7 @@ public class StrayMinimoObject : InteractObject
             var (item, amount) = _holdItem;
             if (item != null)
             {
-                AccountInfo.Instance.AddItem(item.ID, amount);
+                AccountInfo.Instance.AddItem(item.ID, amount, transform);
                 _plunderItemObj.SetActive(false);
                 _holdItem.Item1 = null;
             }

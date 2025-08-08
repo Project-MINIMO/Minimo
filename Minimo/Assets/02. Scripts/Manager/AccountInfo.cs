@@ -73,7 +73,7 @@ public class AccountInfo : Singleton<AccountInfo>
         return cankeep;
     }
 
-    public void AddItem(int id, int amount)
+    public void AddItem(int id, int amount, Transform trans)
     {
         Items[id].AddCount(amount);
 
@@ -81,7 +81,7 @@ public class AccountInfo : Singleton<AccountInfo>
         {
             _itemPanel = App.GetManager<UIManager>().GetItem;
         }
-        _itemPanel.EnqueueItem(id);
+        _itemPanel.EnqueueItem(id, trans);
         OnStorageCapacityChanged?.Invoke(StorageCapacity);
     }
 

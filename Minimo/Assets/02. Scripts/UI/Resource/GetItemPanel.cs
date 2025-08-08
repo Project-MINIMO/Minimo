@@ -9,8 +9,9 @@ public class GetItemPanel : MonoBehaviour
     [SerializeField] private Image[] _iconImgs;
     [SerializeField] private RectTransform _storageRect;
     [SerializeField] private float _spawnInterval = 0.8f;
+    [SerializeField] private RectTransform _iconParent;
     
-    private readonly Queue<int> _itemQueue = new(); 
+    private readonly Queue<(int, Vector3)> _itemQueue = new(); 
     private readonly Queue<Image> _iconPool = new();
     
     private float _nextSpawnTime;
@@ -21,7 +22,7 @@ public class GetItemPanel : MonoBehaviour
     private void Awake()
     {
         _startPositionMap = new Dictionary<Image, Vector2>(_iconImgs.Length);
-
+        
         foreach (var img in _iconImgs)
         {
             img.gameObject.SetActive(false);
@@ -43,11 +44,7 @@ public class GetItemPanel : MonoBehaviour
         }
     }
     
-    public void EnqueueItem(int id) => _itemQueue.Enqueue(id);
-    public void EnqueueItems(IEnumerable<int> ids)
-    {
-        foreach (var id in ids) _itemQueue.Enqueue(id);
-    }
+    public void EnqueueItem(int id, Transform trans) => _itemQueue.Enqueue((id, trans.position));
     
     private void SpawnNext()
     {
@@ -59,9 +56,14 @@ public class GetItemPanel : MonoBehaviour
 
         var itemId = _itemQueue.Dequeue();
         var img = _iconPool.Dequeue();
-        SetItemIcon(itemId, img);
+        SetItemIcon(itemId.Item1, img);
         
         var rect = img.rectTransform;
+
+        var screenPos = Camera.main.WorldToScreenPoint(itemId.Item2);
+        if (screenPos.z < 0f) { screenPos.z = 0f; } 
+        rect.position = screenPos;
+        
         var sequence = DOTween.Sequence();
         sequence
             .Append(rect.DOScale(1f, 0.5f).SetEase(Ease.OutElastic))
