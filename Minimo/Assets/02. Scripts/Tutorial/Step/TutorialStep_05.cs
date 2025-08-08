@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
@@ -15,7 +16,12 @@ public class TutorialStep_05 : TutorialStep
     
     public async void SpawnFarm()
     {
-        if (_editManager.ActiveProduces.Count > 0) return;
+        if (_editManager.ActiveProduces.Count > 0)
+        {
+            _farmObject = _editManager.ActiveProduces.FirstOrDefault(x => x.BuildingData.ID == 0);
+            _farmObject?.CreateTask(_farmObject.ProduceData[0]);
+            return;
+        }
         
         var farm = App.GetData<TitleData>().Building[0];
         _farmObject = await _editManager.SpawnBuildingAsync(farm, _editManager.AlignToCell(new Vector3(2.5f, -0.5f, 0)));

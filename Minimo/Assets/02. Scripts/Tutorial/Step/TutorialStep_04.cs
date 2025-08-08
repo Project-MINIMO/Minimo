@@ -9,6 +9,7 @@ public class TutorialStep_04 : TutorialStep
     [SerializeField] private FocusPanel _focusPanel;
     [SerializeField] private GameObject _chiefMinimoTextObj;
     [SerializeField] private TextMeshProUGUI _chiefMinimoText;
+    [SerializeField] private TutorialStep_06 _tutorialStep_06;
     
     private void Awake()
     {
@@ -60,6 +61,6 @@ public class TutorialStep_04 : TutorialStep
 
     public override void Cleanup()
     {
-
+        StartCoroutine(_tutorialStep_06.MoveChief());
     }
 }
