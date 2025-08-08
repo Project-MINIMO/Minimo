@@ -10,7 +10,7 @@ public abstract class UIBase : MonoBehaviour
     public virtual bool IsUseInput => false;
 
     protected virtual bool IsUseGuide => false;
-    private bool _isFirstOpen = true;
+    protected bool IsFirstOpen = true;
     
     private UIManager _manager;
 
@@ -32,10 +32,10 @@ public abstract class UIBase : MonoBehaviour
     {
         _manager.PushPanel(this);
 
-        if (IsUseGuide && _isFirstOpen && !TutorialManager.IsTutorialing)
+        if (IsUseGuide && IsFirstOpen && !TutorialManager.IsTutorialing)
         {
             ShowGuide();
-            _isFirstOpen = false;
+            IsFirstOpen = false;
         }
     }
 

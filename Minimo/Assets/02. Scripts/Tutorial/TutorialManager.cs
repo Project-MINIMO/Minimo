@@ -6,15 +6,19 @@ public class TutorialManager : Singleton<TutorialManager>
     [SerializeField] private List<TutorialStep> _steps;
     [SerializeField] private GameObject[] _hideUIs;
     [SerializeField] private MinimoSpawner _minimoSpawner;
+    [SerializeField] private GameObject _mainGuide;
     
     private int _currentStepIndex = -1;
     private TutorialStep _currentStep;
-    public static bool IsTutorialing = true;
+    public static bool IsTutorialing = false;
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
+        
         if (AccountInfo.Instance.Tutorial)
         {
+            IsTutorialing = true;
             foreach (var ui in _hideUIs)
             {
                 ui.SetActive(false);
@@ -25,7 +29,7 @@ public class TutorialManager : Singleton<TutorialManager>
         }
         else
         {
-            IsTutorialing = false;
+            _mainGuide.SetActive(true);
         }
     }
 
@@ -43,6 +47,7 @@ public class TutorialManager : Singleton<TutorialManager>
             {
                 ui.SetActive(true);
             }
+            _mainGuide.SetActive(true);
             return;
         }
 
