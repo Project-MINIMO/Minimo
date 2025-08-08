@@ -14,7 +14,10 @@ public class PlantCtrl : MonoBehaviour
         {
             handler.OnDragChanged += isDrag =>
             {
-                _hint.OnDragChanged(isDrag);
+                if (_hint != null)
+                {
+                    _hint.OnDragChanged(isDrag);
+                }
             };
         }
         _produceManager = App.GetManager<ProduceManager>();
@@ -25,7 +28,11 @@ public class PlantCtrl : MonoBehaviour
         if (_produceManager == null) return;
         if (_produceManager.CurrentObject == null) return;
         
-        _hint.gameObject.SetActive(true);
+        if (_hint != null)
+        {
+            _hint.gameObject.SetActive(true);
+        }
+        
         InitHandlers();
     }
 
