@@ -80,7 +80,7 @@ public class PlantHandler : MonoBehaviour
         var result = option.ResultItems[0];
         var item = AccountInfo.Instance.Items[result.ID];
         
-        _infoUpdater.UpdateItem(result.ID, item.Count);
+        _infoUpdater.UpdateItem(item.Icon, $"X {result.Amount}");
         
         _nameTMP.text = $"{item.Name} X {result.Amount}";
         _timeTMP.text = FormatTime(option.Time);

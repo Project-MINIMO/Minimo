@@ -20,7 +20,7 @@ public class IndicatorHandler : MonoBehaviour
         _camera = Camera.main;
     }
 
-    public void Initialize(Transform target, RectTransform canvasRect)
+    public virtual void Initialize(Transform target, RectTransform canvasRect)
     {
         Target = target;
         _canvasRect = canvasRect;
