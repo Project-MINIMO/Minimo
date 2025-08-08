@@ -17,5 +17,6 @@ public abstract class TutorialStep : MonoBehaviour
     protected void CompleteStep()
     {
         _manager.ProceedNextStep();
+        AccountInfo.Instance.Gold.AddCount(100);
     }
 }
