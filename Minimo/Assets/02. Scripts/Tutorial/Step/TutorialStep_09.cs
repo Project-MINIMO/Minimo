@@ -12,7 +12,7 @@ public class TutorialStep_09 : TutorialStep
     
     protected override void OnStart()
     {
-        _dialogueBox.Show("이제 백미로 도정하면 되네!");
+        _dialogueBox.Show("이제 백미로 도정해서 배고픈 미니모에게 갖다주게!");
         _visitMinimo = _spawner.SpawnTutoriMinimo();
 
         StartCoroutine(ProgressQuest());
@@ -22,9 +22,9 @@ public class TutorialStep_09 : TutorialStep
     {
         yield return new WaitUntil(() => _visitMinimo.CurrentState == VisitMinimoState.Hide);
         
-        _dialogueBox.Show("고맙네");
+        _dialogueBox.Show("잘했네! 당분간 굶어 죽을 일은 없겠구만.");
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(3);
 
         _dialogueBox.Hide();
         CompleteStep();

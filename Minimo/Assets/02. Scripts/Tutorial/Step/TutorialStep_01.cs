@@ -64,11 +64,11 @@ public class TutorialStep_01 : TutorialStep
         
         _animator.SetBool("IsTalk", true);
         yield return _dialogueBox.Show(
-            "으으... 방금 무슨일이 일어난거지?",
+            "으으...방금 무슨일이 일어난거지?",
             "로켓이 날아왔고... 그리고... 행성이 부서졌잖아!",
             "자네는......",
-            "......책임은 나중에 물을 테니 일단 다른 미니모들을 구해주게",
-            "내가 아직 제정신이 아니라서 자네의 도움이 필요하네.");
+            "......책임은 나중에 물을 테니 다른 미니모들을 구해주게",
+            "자네의 도움이 필요하네.");
         _animator.SetBool("IsTalk", false);
         _focusPanel.FocusOn(Vector3.down,
             targetZoom: 4,

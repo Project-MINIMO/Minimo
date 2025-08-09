@@ -38,8 +38,8 @@ public class TutorialStep_10 : TutorialStep
     {
         _animator.SetBool("IsTalk", true);
         yield return _dialogueBox.Show(
-            "반죽 제조기도 배치해주게.",
-            "만약 배치할 곳이 부족하다면 타일을 이용하여 마을을 넓혀주게.");
+            "이제 반죽 제조기도 배치해주게.",
+            "그리고 음식을 만들 반죽을 만들어주게나.");
         _animator.SetBool("IsTalk", false);
         _dialogueBox.Hide();
         _focusPanel.FocusOn(Vector3.down,

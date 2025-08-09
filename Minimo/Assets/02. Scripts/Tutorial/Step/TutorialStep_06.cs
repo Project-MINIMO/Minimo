@@ -180,11 +180,12 @@ public class TutorialStep_06 : TutorialStep
     private IEnumerator ConversationSequence()
     {
         yield return _dialogueBox.Show(
-            "방금 수확한 별곡이 사라졌네.",
+            "방금 수확한 별곡이 사라졌다네.",
             "대체 어디로 갔는지 모르겠군.",
             "어쩌면 해적들이 훔쳐갔을 지도 모르네!",
             "(입가에 곡물 가루같은 것이 묻어있다.)",
-            "수고스럽겠지만... 밭에 별곡을 더 심어줄 수 있겠나?");
+            "수고스럽겠지만... 밭에 별곡을 더 심어줄 수 있겠나?",
+            "별곡들을 수확해서 나에게 갖다주게.");
         
         
         _focusPanel.FocusOn(Vector3.down,
