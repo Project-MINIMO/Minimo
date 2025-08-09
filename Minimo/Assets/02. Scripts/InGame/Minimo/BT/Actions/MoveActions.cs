@@ -16,6 +16,8 @@ public class MoveAction : ActionNode
     private int _currentIndex;
     private bool _shouldReset = true;
     
+    private int _lastXSign = 1;
+    
     public MoveAction(Blackboard blackboard) : base(blackboard)
     {
         _pathManager = App.GetManager<PathManager>();
@@ -30,6 +32,7 @@ public class MoveAction : ActionNode
     {
         if (_shouldReset)
         {
+            _lastXSign = 1;
             _shouldReset = false;
             _currentIndex = 0;
             _targetPosition = _pathManager.GetTileWorldPosition(Blackboard.Path[_currentIndex]);
@@ -92,6 +95,9 @@ public class MoveAction : ActionNode
         var deltaX = _targetPosition.x - Blackboard.Agent.transform.position.x;
         var deltaY = _targetPosition.y - Blackboard.Agent.transform.position.y;
 
+        if (deltaX > 0f) _lastXSign = 1;
+        else if (deltaX < 0f) _lastXSign = -1;
+        
         var trigger = (deltaX, deltaY) switch
         {
             (> 0, > 0) => TopRight,
@@ -102,18 +108,9 @@ public class MoveAction : ActionNode
             (< 0, < 0) => BottomLeft,
             (< 0, 0) => BottomLeft,
 
-            (0, > 0) => // 수직 ↑
-                Blackboard.AnimatorIsPlaying(BottomLeft) 
-                || Blackboard.AnimatorIsPlaying(TopLeft) 
-                || Blackboard.AnimatorIsPlaying(Default)
-                    ? TopLeft : TopRight,
-
-            (0, < 0) => // 수직 ↓
-                Blackboard.AnimatorIsPlaying(BottomLeft) 
-                || Blackboard.AnimatorIsPlaying(TopLeft)
-                || Blackboard.AnimatorIsPlaying(Default)
-                    ? BottomLeft : BottomRight,
-
+            (0, > 0) => _lastXSign > 0 ? TopRight  : TopLeft,    // ↑
+            (0, < 0) => _lastXSign > 0 ? BottomRight : BottomLeft, // ↓
+            
             (0, 0) => TopRight,
             _ => TopRight
         };
@@ -138,6 +135,8 @@ public class MoveForwardAction : ActionNode
 
     private readonly StrayMinimoObject _strayMinimo;
     private readonly MinimoObject _userMinimo;
+    
+    private int _lastXSign = 1;
 
     public MoveForwardAction(Blackboard blackboard, int triggerName) : base(blackboard)
     {
@@ -161,6 +160,7 @@ public class MoveForwardAction : ActionNode
     {
         if (_shouldReset)
         {
+            _lastXSign = 1;
             _shouldReset = false;
             _targetPosition = Blackboard.TargetPosition;
             _prevPosition = Blackboard.Agent.transform.position;
@@ -219,6 +219,9 @@ public class MoveForwardAction : ActionNode
         var deltaX = _targetPosition.x - Blackboard.Agent.transform.position.x;
         var deltaY = _targetPosition.y - Blackboard.Agent.transform.position.y;
 
+        if (deltaX > 0f) _lastXSign = 1;
+        else if (deltaX < 0f) _lastXSign = -1;
+        
         var trigger = (deltaX, deltaY) switch
         {
             (> 0, > 0) => TopRight,
@@ -228,6 +231,9 @@ public class MoveForwardAction : ActionNode
             (< 0, > 0) => TopLeft,
             (< 0, < 0) => BottomLeft,
             (< 0, 0) => BottomLeft,
+            
+            (0, > 0) => _lastXSign > 0 ? TopRight  : TopLeft,    // ↑
+            (0, < 0) => _lastXSign > 0 ? BottomRight : BottomLeft, // ↓
             
             _ => TopRight
         };
