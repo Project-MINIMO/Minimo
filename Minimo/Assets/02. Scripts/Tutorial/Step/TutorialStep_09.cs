@@ -27,12 +27,11 @@ public class TutorialStep_09 : TutorialStep
         yield return new WaitForSeconds(1);
 
         _dialogueBox.Hide();
-        AccountInfo.Instance.Level.AddCount(200);
         CompleteStep();
     }
   
     public override void Cleanup()
     {
-
+        AccountInfo.Instance.Level.AddCount(100);
     }
 }

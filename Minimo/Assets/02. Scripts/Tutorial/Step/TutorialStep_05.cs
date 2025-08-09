@@ -64,6 +64,6 @@ public class TutorialStep_05 : TutorialStep
 
     public override void Cleanup()
     {
-
+        AccountInfo.Instance.Level.AddCount(100);
     }
 }
