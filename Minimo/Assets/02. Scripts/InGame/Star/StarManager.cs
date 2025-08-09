@@ -45,19 +45,13 @@ public class StarManager : ManagerBase
 
     private int _prevLevel;
 
-    protected override void Awake()
+    private void Start()
     {
-        base.Awake();
-        
-        AccountInfo.Instance.Level.OnLevelUp += OnLevelUp;
-
         var uiManager = App.GetManager<UIManager>();
         _constellationPanel = uiManager.GetPanel<ConstellationPanel>();
         _indicatorPanel = uiManager.GetPanel<IndicatorPanel>();
-    }
 
-    private void Start()
-    {
+        AccountInfo.Instance.Level.OnLevelUp += OnLevelUp;
         OnLevelUp(AccountInfo.Instance.Level.Count);
     }
 
