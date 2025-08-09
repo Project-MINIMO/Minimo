@@ -34,7 +34,7 @@ public class TutorialStep_07 : TutorialStep
         _highlight.gameObject.SetActive(false);
         _highlight2.gameObject.SetActive(false);
         
-        yield return new WaitUntil(() => _wheatItem.Count >= 2);
+        yield return new WaitUntil(() => _wheatItem.Count >= 3);
         
         CompleteStep();
     }

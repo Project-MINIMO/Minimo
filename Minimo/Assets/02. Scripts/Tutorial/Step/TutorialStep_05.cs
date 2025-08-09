@@ -13,23 +13,28 @@ public class TutorialStep_05 : TutorialStep
     private Vector2 _endPos = new(40, -82);
     
     private ProduceObject _farmObject;
+    private ProduceObject _farmObject2;
     
     public async void SpawnFarm()
     {
         if (_editManager.ActiveProduces.Count > 0)
         {
-            _farmObject = _editManager.ActiveProduces.FirstOrDefault(x => x.BuildingData.ID == 0);
-            _farmObject?.CreateTask(_farmObject.ProduceData[0]);
+            var farmObjects = _editManager.ActiveProduces.Where(x => x.BuildingData.ID == 0).ToList();
+            _farmObject = farmObjects[0];
+            _farmObject2 = farmObjects[1];
+            _farmObject.CreateTask(_farmObject.ProduceData[0]);
+            _farmObject2.CreateTask(_farmObject.ProduceData[0]);
             return;
         }
         
         var farm = App.GetData<TitleData>().Building[0];
         _farmObject = await _editManager.SpawnBuildingAsync(farm, _editManager.AlignToCell(new Vector3(2.5f, -0.5f, 0)));
-        var farmObject2 = await _editManager.SpawnBuildingAsync(farm, _editManager.AlignToCell(new Vector3(3f, -0.75f, 0)));
+        _farmObject2 = await _editManager.SpawnBuildingAsync(farm, _editManager.AlignToCell(new Vector3(3f, -0.75f, 0)));
         await _editManager.Install(_farmObject);
-        await _editManager.Install(farmObject2);
+        await _editManager.Install(_farmObject2);
         
         _farmObject.CreateTask(_farmObject.ProduceData[0]);
+        _farmObject2.CreateTask(_farmObject.ProduceData[0]);
     }
     
     protected override void OnStart()
@@ -57,7 +62,11 @@ public class TutorialStep_05 : TutorialStep
         _handIcon.DOKill();
         _handIcon.gameObject.SetActive(false);
         
-        yield return new WaitUntil(() => _farmObject.CurrentState == ProduceState.Idle);
+        yield return new WaitUntil(() => _farmObject.CurrentState == ProduceState.Idle
+                                            || _farmObject2.CurrentState == ProduceState.Idle);
+        
+        _farmObject.StartHarvest();
+        _farmObject2.StartHarvest();
         
         CompleteStep();
     }

@@ -24,6 +24,8 @@ public class TutorialStep_06 : TutorialStep
     private Coroutine _dialogueCoroutine;
     private Coroutine _moveCoroutine;
     private Animator _animator;
+    
+    private int _lastXSign = 1;
 
     private void Start()
     {
@@ -41,7 +43,7 @@ public class TutorialStep_06 : TutorialStep
             _chiefMinimo.transform.position,
             new Vector3(1.5f, -0.5f, 0)
         );
-            
+        
         _currentIndex = 0;
         _targetPosition = _pathManager.GetTileWorldPosition(path[_currentIndex]);
         _prevPosition = _chiefMinimo.transform.position;
@@ -205,6 +207,9 @@ public class TutorialStep_06 : TutorialStep
         var deltaX = _targetPosition.x - _chiefMinimo.transform.position.x;
         var deltaY = _targetPosition.y - _chiefMinimo.transform.position.y;
 
+        if (deltaX > 0f) _lastXSign = 1;
+        else if (deltaX < 0f) _lastXSign = -1;
+        
         var trigger = (deltaX, deltaY) switch
         {
             (> 0, > 0) => TopRight,
@@ -215,17 +220,8 @@ public class TutorialStep_06 : TutorialStep
             (< 0, < 0) => BottomLeft,
             (< 0, 0) => BottomLeft,
 
-            (0, > 0) => // 수직 ↑
-                AnimatorIsPlaying(BottomLeft) 
-                || AnimatorIsPlaying(TopLeft) 
-                || AnimatorIsPlaying(Default)
-                    ? TopLeft : TopRight,
-
-            (0, < 0) => // 수직 ↓
-                AnimatorIsPlaying(BottomLeft) 
-                || AnimatorIsPlaying(TopLeft)
-                || AnimatorIsPlaying(Default)
-                    ? BottomLeft : BottomRight,
+            (0, > 0) => _lastXSign > 0 ? TopRight  : TopLeft,    // ↑
+            (0, < 0) => _lastXSign > 0 ? BottomRight : BottomLeft, // ↓
 
             (0, 0) => TopRight,
             _ => TopRight

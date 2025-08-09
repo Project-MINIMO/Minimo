@@ -50,7 +50,7 @@ public class LevelPanel : UIBase
     {
         var star = _starManager.Stars[_currentStarIndex];
         _currentStarIndex = (_currentStarIndex + 1) % _starManager.Stars.Count;
-        _focusPanel.FocusOnWithoutOpen(star.transform.position, 3);
+        _focusPanel.FocusOnWithoutOpen(star.transform.position, 3, 0.7f);
     }
 
     private void OnExpChanged(int exp)
