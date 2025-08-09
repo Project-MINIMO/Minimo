@@ -1,30 +1,31 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TutorialStep_09 : TutorialStep
 {
     [SerializeField] private GameObject _chiefMinimo;
-    [SerializeField] private VisitMinimoSpawner _spawner;
     [SerializeField] private TutorialDialogue _dialogueBox;
+    [SerializeField] private Button _hungryBtn;
 
-    private VisitMinimoObject _visitMinimo;
+    private bool _isGiveItem;
+    private Item _requiredItem;
     
     protected override void OnStart()
     {
         _dialogueBox.Show("이제 백미로 도정해서 배고픈 미니모에게 갖다주게!");
-        _visitMinimo = _spawner.SpawnTutoriMinimo();
-
+        _hungryBtn.onClick.AddListener(GiveItem);
+        _requiredItem = AccountInfo.Instance.Items[6];
         StartCoroutine(ProgressQuest());
     }
 
     private IEnumerator ProgressQuest()
     {
-        yield return new WaitUntil(() => _visitMinimo.CurrentState == VisitMinimoState.Hide);
+        yield return new WaitUntil(() => _isGiveItem);
         
         _dialogueBox.Show("잘했네! 당분간 굶어 죽을 일은 없겠구만.");
 
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(5);
 
         _dialogueBox.Hide();
         CompleteStep();
@@ -33,5 +34,20 @@ public class TutorialStep_09 : TutorialStep
     public override void Cleanup()
     {
         AccountInfo.Instance.Level.AddCount(100);
+    }
+
+    private void GiveItem()
+    {
+        if (_requiredItem.Count >= 1)
+        {
+            _requiredItem.AddCount(-1);
+            AccountInfo.Instance.Level.AddCount(_requiredItem.Exp * 5);
+            AccountInfo.Instance.Gold.AddCount(_requiredItem.SellCost * 5);
+            _isGiveItem = true;
+        }
+        else
+        {
+            App.Notification(NotifyType.ItemLack);
+        }
     }
 }
