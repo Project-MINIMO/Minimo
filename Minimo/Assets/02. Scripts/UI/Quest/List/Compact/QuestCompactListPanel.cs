@@ -13,6 +13,7 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
     
     [SerializeField] private RectTransform _contentRect;
     [SerializeField] private Button _openBtn;
+    [SerializeField] private GameObject _redDot;
     [SerializeField] private Button _closeBtn;
     
     private RectTransform _rect;
@@ -47,6 +48,8 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         Toggle();
         
         _rect = GetComponent<RectTransform>();
+
+        SetOpenBtnActive();
     }
     
     public override void Show(bool isNew)
@@ -83,6 +86,8 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         slot.transform.SetAsLastSibling();
         
         _activeMap[quest] = slot;
+        _redDot.SetActive(true);
+        SetOpenBtnActive();
     }
 
     protected override void ReleaseSlot(Quest quest)
@@ -92,6 +97,8 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         slot.gameObject.SetActive(false);
         _activeMap.Remove(quest);
         _slotPool.Enqueue(slot);
+
+        SetOpenBtnActive();
     }
     
     protected override void OnSlotSelected(Quest quest)
@@ -136,6 +143,7 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         _isOpened = true;
         _contentRect.DOKill();
         _contentRect.DOAnchorPosX(OpenPosition, 0.1f).SetEase(Ease.Linear);
+        _redDot.SetActive(false);
     }
 
     private void Close()
@@ -145,5 +153,10 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         _isOpened = false;
         _contentRect.DOKill();
         _contentRect.DOAnchorPosX(ClosePosition, 0.1f).SetEase(Ease.Linear);
+    }
+
+    private void SetOpenBtnActive()
+    {
+        _openBtn.gameObject.SetActive(QuestManager.ActiveQuests.Count > 0);
     }
 }
