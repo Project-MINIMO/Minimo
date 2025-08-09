@@ -53,8 +53,8 @@ public class TutorialStep_13: TutorialStep
     {
         _animator.SetBool("IsTalk", true);
         yield return _dialogueBox.Show(
-            "다른 마을에서 온 미니모일세",
-            "서로 필요한 음식들을 교환하고있지",
+            "저 친구는 다른 마을에서 온 미니모일세",
+            "때때로 서로 필요한 음식들을 교환하고있지",
             "이런 상황이지만 그들이 필요한 물건을 만들어줄 수 있겠나?");
         _animator.SetBool("IsTalk", false);
         _dialogueBox.Hide();
@@ -72,9 +72,9 @@ public class TutorialStep_13: TutorialStep
     {
         yield return new WaitUntil(() => _visitMinimo.CurrentState == VisitMinimoState.Hide);
         
-        _dialogueBox.Show("고맙네");
+        _dialogueBox.Show("고맙네. 이제 우리를 도와 마을을 재건해주게.");
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(3);
 
         _dialogueBox.Hide();
         CompleteStep();

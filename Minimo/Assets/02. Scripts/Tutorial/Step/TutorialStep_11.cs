@@ -39,9 +39,10 @@ public class TutorialStep_11 : TutorialStep
     {
         _animator.SetBool("IsTalk", true);
         yield return _dialogueBox.Show(
-            "미니모들이 마을로 쉽게 찾을 수 있도록 소원별을 배치해주게.",
-            "사람들의 소원을 이뤄주거나, 마을을 성장하여 얻을 수 있네.",
-            "소원별이 서로 가까이 있으면 더욱 미니모에게 잘 전해질 수 있을걸세.");
+            "당장 일을 할 수 있는 미니모가 부족하구만..",
+            "미니모들이 마을로 쉽게 찾을 수 있도록 소원별을 배치해야하네.",
+            "소원별은 사람들의 소원을 이뤄주거나, 마을을 성장시켜 얻을 수 있네.",
+            "소원별이 서로 가까이 있으면 더욱 미니모에게 잘 보일 걸세.");
         _animator.SetBool("IsTalk", false);
         _dialogueBox.Hide();
         _focusPanel.ClosePanel();

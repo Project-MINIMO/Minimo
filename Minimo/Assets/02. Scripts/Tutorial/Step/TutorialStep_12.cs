@@ -38,8 +38,8 @@ public class TutorialStep_12: TutorialStep
     {
         _animator.SetBool("IsTalk", true);
         yield return _dialogueBox.Show(
-            "저기 미니모가 보이네!",
-            "어서 도와주게");
+            "저기 떠다니는 미니모가 보이네!",
+            "어서 마을로 데려오게!");
         _animator.SetBool("IsTalk", false);
         _dialogueBox.Hide();
         _focusPanel.FocusOn(_minimoObject.transform.position + Vector3.up * 0.5f,
