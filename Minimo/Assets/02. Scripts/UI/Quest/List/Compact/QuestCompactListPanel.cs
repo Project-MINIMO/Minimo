@@ -57,6 +57,7 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         base.Show(isNew);
         
         _rect.DOAnchorPosX(ShowPosition, 0.3f).SetEase(Ease.OutCubic);
+        SetOpenBtnActive();
     }
 
     public override void Hide(bool isNew)
@@ -68,6 +69,7 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
             Toggle();
         }
         _rect.DOAnchorPosX(HidePosition, 0.3f).SetEase(Ease.InCubic);
+        SetOpenBtnActive();
     }
    
     protected override void AssignSlot(Quest quest)
@@ -148,6 +150,7 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         _contentRect.DOKill();
         _contentRect.DOAnchorPosX(OpenPosition, 0.1f).SetEase(Ease.Linear);
         _redDot.SetActive(false);
+        SetOpenBtnActive();
     }
 
     private void Close()
@@ -157,10 +160,11 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         _isOpened = false;
         _contentRect.DOKill();
         _contentRect.DOAnchorPosX(ClosePosition, 0.1f).SetEase(Ease.Linear);
+        SetOpenBtnActive();
     }
 
     private void SetOpenBtnActive()
     {
-        _openBtn.gameObject.SetActive(QuestManager.ActiveQuests.Count > 0);
+        _openBtn.gameObject.SetActive(QuestManager.ActiveQuests.Count > 0 && !_isOpened);
     }
 }
