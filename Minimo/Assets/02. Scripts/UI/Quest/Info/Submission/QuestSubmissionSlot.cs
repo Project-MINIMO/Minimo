@@ -74,9 +74,9 @@ public class QuestSubmissionSlot : MonoBehaviour
         {
             return;
         }
-        
+
         var candidates = _editManager.ActiveProduces
-            .Where(building => string.Equals(building.BuildingData.Name, produce.Building, System.StringComparison.Ordinal))
+            .Where(building => building.BuildingData.Code == produce.Building)
             .ToList();
         
         if (candidates.Count == 0)
