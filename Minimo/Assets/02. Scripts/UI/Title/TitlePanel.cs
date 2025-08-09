@@ -24,6 +24,7 @@ public class TitlePanel : MonoBehaviour
     [SerializeField] private UILongPressDetector _tutorial;
     [SerializeField] private UILongPressDetector _prolog;
     [SerializeField] private UILongPressDetector _deleteUser;
+    [SerializeField] private GameObject _blockObj;
      
     private void Awake()
     {
@@ -44,32 +45,32 @@ public class TitlePanel : MonoBehaviour
 
         _tutorial.OnLongPress += () =>
         {
-            _startBtn.enabled = false;
+            _blockObj.SetActive(true);
             AccountInfo.Instance.Tutorial = false;
             App.Notification(NotifyType.TutorialSkip);
-            _startBtn.enabled = true;
+            _blockObj.SetActive(false);
         };
         _prolog.OnLongPress += () =>
         {
-            _startBtn.enabled = false;
+            _blockObj.SetActive(true);
             AccountInfo.Instance.Prolog = false;
             App.Notification(NotifyType.PrologSkip);
-            _startBtn.enabled = true;
+            _blockObj.SetActive(false);
         };
         _deleteUser.OnLongPress += () =>
         {
             DeleteUser();
-            App.Notification(NotifyType.PrologSkip);
+            App.Notification(NotifyType.DeleteUser);
         };
     }
     
     async void DeleteUser()
     {
-        _startBtn.enabled = false;
+        _blockObj.SetActive(true);
         var firebaseManager = App.GetManager<FirebaseManager>();
         await firebaseManager.DeleteUserAsync();
         await firebaseManager.InitializeFirebase();
-        _startBtn.enabled = true;
+        _blockObj.SetActive(false);
     }
 
     public void ShowTitle(bool isNew = false)
