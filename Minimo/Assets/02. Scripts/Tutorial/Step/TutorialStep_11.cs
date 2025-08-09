@@ -44,6 +44,7 @@ public class TutorialStep_11 : TutorialStep
             "소원별이 서로 가까이 있으면 더욱 미니모에게 잘 전해질 수 있을걸세.");
         _animator.SetBool("IsTalk", false);
         _dialogueBox.Hide();
+        _focusPanel.ClosePanel();
         StartCoroutine(ProgressQuest());
     }
     
