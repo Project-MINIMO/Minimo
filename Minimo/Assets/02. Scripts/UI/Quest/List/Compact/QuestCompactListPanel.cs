@@ -62,7 +62,11 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
     public override void Hide(bool isNew)
     {
         base.Hide(isNew);
-        
+
+        if (_isOpened)
+        {
+            Toggle();
+        }
         _rect.DOAnchorPosX(HidePosition, 0.3f).SetEase(Ease.InCubic);
     }
    

@@ -44,13 +44,17 @@ public class TitlePanel : MonoBehaviour
 
         _tutorial.OnLongPress += () =>
         {
+            _startBtn.enabled = false;
             AccountInfo.Instance.Tutorial = false;
             App.Notification(NotifyType.TutorialSkip);
+            _startBtn.enabled = true;
         };
         _prolog.OnLongPress += () =>
         {
+            _startBtn.enabled = false;
             AccountInfo.Instance.Prolog = false;
             App.Notification(NotifyType.PrologSkip);
+            _startBtn.enabled = true;
         };
         _deleteUser.OnLongPress += () =>
         {

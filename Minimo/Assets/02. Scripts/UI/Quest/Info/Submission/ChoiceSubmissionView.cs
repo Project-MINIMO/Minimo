@@ -27,7 +27,7 @@ public class ChoiceSubmissionView : QuestSubmissionView
             SubmissionSlots[i].gameObject.SetActive(true);
             
             var clear = quest.Clear[i];
-            SubmissionSlots[i].Initialize(clear.Type, clear.Target, clear.CurrentProgress, clear.Amount);
+            SubmissionSlots[i].Initialize(clear.Target, clear.CurrentProgress, clear.Amount);
         }
 
         for (; i < SubmissionSlots.Length; i++)
