@@ -23,6 +23,7 @@ public class TitlePanel : MonoBehaviour
     
     [SerializeField] private UILongPressDetector _tutorial;
     [SerializeField] private UILongPressDetector _prolog;
+    [SerializeField] private UILongPressDetector _deleteUser;
      
     private void Awake()
     {
@@ -51,6 +52,20 @@ public class TitlePanel : MonoBehaviour
             AccountInfo.Instance.Prolog = false;
             App.Notification(NotifyType.PrologSkip);
         };
+        _deleteUser.OnLongPress += () =>
+        {
+            DeleteUser();
+            App.Notification(NotifyType.PrologSkip);
+        };
+    }
+    
+    async void DeleteUser()
+    {
+        _startBtn.enabled = false;
+        var firebaseManager = App.GetManager<FirebaseManager>();
+        await firebaseManager.DeleteUserAsync();
+        await firebaseManager.InitializeFirebase();
+        _startBtn.enabled = true;
     }
 
     public void ShowTitle(bool isNew = false)

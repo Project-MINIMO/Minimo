@@ -10,6 +10,7 @@ public enum NotifyType
 {
     TutorialSkip,
     PrologSkip,
+    DeleteUser,
     
     StorageCapacityLack,
     MinimoCapacityLack,
