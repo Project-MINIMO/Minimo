@@ -26,6 +26,9 @@ public class TitlePanel : MonoBehaviour
      
     private void Awake()
     {
+        AccountInfo.Instance.Prolog = true;
+        AccountInfo.Instance.Tutorial = true;
+        
         _startBtn.onClick.AddListener(OnClickStart);
         var startPositionY = _startTextRect.anchoredPosition.y;
         _startTextRect.DOAnchorPosY(startPositionY + 10f, 1f)
