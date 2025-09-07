@@ -11,6 +11,7 @@ public class TutorialManager : Singleton<TutorialManager>
     private int _currentStepIndex = -1;
     private TutorialStep _currentStep;
     public static bool IsTutorialing = false;
+    public static bool IsUseInput = false;
 
     protected override void Awake()
     {

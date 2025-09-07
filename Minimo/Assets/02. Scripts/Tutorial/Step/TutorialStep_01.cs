@@ -32,6 +32,7 @@ public class TutorialStep_01 : TutorialStep
     
     protected override void OnStart()
     {
+        TutorialManager.IsUseInput = true;
         _tileBtnHighlightObj.SetActive(false);
         _dialogueBox.ShowQuest();
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
@@ -129,6 +130,7 @@ public class TutorialStep_01 : TutorialStep
         _confirmBtnObj.SetActive(false);
         
         CompleteStep();
+        TutorialManager.IsUseInput = false;
     }
 
     public override void Cleanup()

@@ -32,6 +32,7 @@ public class CameraInput : MonoBehaviour
         if (_inputManager.CurrentState == InputState.Drag)
         {
             if (_uiManager.TopPanel.IsUseInput) return;
+            if (TutorialManager.IsUseInput) return;
             
             Move();
         }
