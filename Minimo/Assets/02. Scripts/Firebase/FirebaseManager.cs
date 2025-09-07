@@ -6,6 +6,7 @@ using Firebase.Auth;
 using Firebase.Extensions;
 using Firebase.Firestore;
 using Firebase.Functions;
+using System.Linq;
 
 /// <summary>
 /// Firebase Authentication을 관리하는 매니저 클래스
@@ -35,6 +36,8 @@ public class FirebaseManager : ManagerBase
     public event Action<FirebaseUser> OnUserSignedIn;
     public event Action OnUserSignedOut;
     public event Action<string> OnError;
+    public event Action<int> OnSDCUpdate;
+    public event Action<int> OnSLPUpdate;
 
     public FirebaseUser CurrentUser => _user;
     public bool IsSignedIn => _user != null;
@@ -53,7 +56,7 @@ public class FirebaseManager : ManagerBase
         }
     }
 
-    private async void InitializeFirebase()
+    public async Task InitializeFirebase()
     {
         _functions = FirebaseFunctions.GetInstance("asia-northeast3");
         _db = FirebaseFirestore.DefaultInstance;
@@ -110,6 +113,14 @@ public class FirebaseManager : ManagerBase
             });
             _currentUserData = await FetchUserData(_user?.UserId);
         }
+        if (_currentUserData == null)
+        {
+            Debug.LogError("사용자 데이터가 없습니다.");
+            return;
+        }
+        // TODO : 임시
+        OnSDCUpdate?.Invoke(_currentUserData.currencies.SDC);
+        OnSLPUpdate?.Invoke(_currentUserData.currencies.SLP);
     }
 
 #region Util Method
@@ -255,10 +266,20 @@ public class FirebaseManager : ManagerBase
         return Try(() => _user.ReauthenticateAsync(credential));
     }
 
-    public Task<bool> DeleteUserAsync()
+    public async Task<bool> DeleteUserAsync()
     {
-        if (_user == null) return Task.FromResult(false);
-        return Try(() => _user.DeleteAsync());
+        if (_user == null) return await Task.FromResult(false);
+        var success = await Try(() => _user.DeleteAsync());
+        if (!success)
+        {
+            Debug.LogError("사용자 삭제 실패");
+            return await Task.FromResult(false);
+        }
+        _user = null;
+        OnUserSignedOut?.Invoke();
+        Debug.Log("사용자 삭제 성공");
+        _isInitialized = false;
+        return await Task.FromResult(true);
     }
 #endregion
 
@@ -336,6 +357,138 @@ public class FirebaseManager : ManagerBase
     }
 #endregion
 
+    public async Task<List<TileDTO>> LoadUserTiles()
+    {
+        var uid = FirebaseAuth.DefaultInstance.CurrentUser?.UserId;
+        if (string.IsNullOrEmpty(uid)) return new List<TileDTO>();
+        var snapshot = await FirebaseFirestore.DefaultInstance
+            .Collection("users").Document(uid)
+            .Collection("tiles").GetSnapshotAsync();
+        var tiles = new List<TileDTO>();
+        foreach (var doc in snapshot.Documents)
+        {
+            var data = doc.ToDictionary();
+            var idParts = doc.Id.Split('_');
+            var position = new Vector3Int(
+                int.Parse(idParts[0]),
+                int.Parse(idParts[1]),
+                int.Parse(idParts[2])
+            );
+            var dto = new TileDTO
+            {
+                TileId = Convert.ToInt32(data["tileId"]),
+                Position = position
+            };
+            tiles.Add(dto);
+        }
+        return tiles;
+    }
+
+    public async Task<bool> BatchUpdateTiles(List<TileChange> changes)
+    {
+        var callable = _functions.GetHttpsCallable("batchUpdateTiles");
+        var data = new Dictionary<string, object>
+        {
+            { "changes", changes.Select(c => new Dictionary<string, object>
+                {
+                    { "type", c.ChangeType.ToString() },
+                    { "tileId", c.TileId },
+                    { "position", new[] { c.Position.x, c.Position.y, c.Position.z } }
+                }).ToList()
+            }
+        };
+        var (success, _) = await TryGet(() => callable.CallAsync(data));
+        return success;
+    }
+
+    // SDC 통화 업데이트
+    public async Task<bool> UpdateSDC(int amount, string operation = "add")
+    {
+        if (_user == null) return false;
+        
+        var callable = _functions.GetHttpsCallable("updateCurrency");
+        var data = new Dictionary<string, object>
+        {
+            { "currencyType", "SDC" },
+            { "amount", amount },
+            { "operation", operation }
+        };
+        
+        var (success, result) = await TryGet(() => callable.CallAsync(data));
+        if (success && result.Data is Dictionary<object, object> response)
+        {
+            // 성공 시 로컬 UserData도 업데이트
+            if (_currentUserData != null)
+            {
+                switch (operation)
+                {
+                    case "add":
+                        _currentUserData.currencies.SDC += amount;
+                        break;
+                    case "subtract":
+                        _currentUserData.currencies.SDC -= amount;
+                        break;
+                    case "set":
+                        _currentUserData.currencies.SDC = amount;
+                        break;
+                }
+                _currentUserData.currencies.SDC = Mathf.Clamp(_currentUserData.currencies.SDC, 0, int.MaxValue);
+                OnSDCUpdate?.Invoke(_currentUserData.currencies.SDC);
+            }
+        }
+        return success;
+    }
+
+    // SDC 통화 조회
+    public int GetCurrentSDC()
+    {
+        return _currentUserData?.currencies.SDC ?? 0;
+    }
+
+    // SLP 통화 업데이트
+    public async Task<bool> UpdateSLP(int amount, string operation = "add")
+    {
+        if (_user == null) return false;
+        
+        var callable = _functions.GetHttpsCallable("updateCurrency");
+        var data = new Dictionary<string, object>
+        {
+            { "currencyType", "SLP" },
+            { "amount", amount },
+            { "operation", operation }
+        };
+        
+        var (success, result) = await TryGet(() => callable.CallAsync(data));
+        if (success && result.Data is Dictionary<object, object> response)
+        {
+            // 성공 시 로컬 UserData도 업데이트
+            if (_currentUserData != null)
+            {
+                switch (operation)
+                {
+                    case "add":
+                        _currentUserData.currencies.SLP += amount;
+                        break;
+                    case "subtract":
+                        _currentUserData.currencies.SLP -= amount;
+                        break;
+                    case "set":
+                        _currentUserData.currencies.SLP = amount;
+                        break;
+                }
+                _currentUserData.currencies.SLP = Mathf.Clamp(_currentUserData.currencies.SLP, 0, int.MaxValue);
+                OnSLPUpdate?.Invoke(_currentUserData.currencies.SLP);
+            }
+        }
+        return success;
+    }
+
+    // SLP 통화 조회
+    public int GetCurrentSLP()
+    {
+        return _currentUserData?.currencies.SLP ?? 0;
+    }
+
 #region Private
     private void AuthStateChanged(object sender, EventArgs args)
     {
@@ -383,4 +536,11 @@ public class FirebaseManager : ManagerBase
         return result;
     }
 #endregion
+}
+
+// TileDTO를 파일 상단에 명확히 선언
+public class TileDTO
+{
+    public int TileId;
+    public Vector3Int Position;
 }

@@ -8,7 +8,12 @@ public enum TaskState
 
 public enum NotifyType
 {
-    CapacityLack,
+    TutorialSkip,
+    PrologSkip,
+    DeleteUser,
+    
+    StorageCapacityLack,
+    MinimoCapacityLack,
     
     Success,
     SlotLack,
@@ -17,7 +22,16 @@ public enum NotifyType
     MissRecipe,
     MaterialLack,
     
-    GoldLack
+    GoldLack,
+    ItemLack,
+    
+    CannotReplaceTile,
+    CannotEraseTile,
+    CannotInstallWaterTile,
+    DeselectTile,
+    
+    DeleteBuildingFailProduce,
+    DeleteBuildingFailMinimo,
 }
 
 public enum QuestState
@@ -36,10 +50,28 @@ public enum UseCashType
 
 public enum MinimoState
 {
+    Swim,
+    Happy,
+    Acquire,
     Idle,
-    Walk,
     Work,
-    Drag
+    None,
+}
+
+public enum StrayMinimoState
+{
+    Idle,
+    Plunder,
+    Run,
+    Hide,
+    None,
+}
+
+public enum VisitMinimoState
+{
+    Idle,
+    Hide,
+    None
 }
 
 public enum ResourceType
@@ -67,6 +99,13 @@ public enum InputState
     Zoom
 }
 
+public enum InputTargetType
+{
+    None,
+    UI,
+    Object,
+    Camera
+}
 
 public enum ItemProperty
 {
@@ -102,5 +141,14 @@ public enum PopUpType
 {
     MinimoAssign,
     MinimoUnassign,
-    MinimoShift
+    MinimoShift,
+    MinimoAcquire,
+    
+    StorageExpand,
+    StorageExpandResult,
+    
+    MinimoExpand,
+    MinimoExpandResult,
+    
+    StrayWarning
 }

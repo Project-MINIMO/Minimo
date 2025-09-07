@@ -1,55 +1,52 @@
-using UniRx;
+using Cysharp.Threading.Tasks;
+
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EditCirclePanel : UIBase
+public class EditCircleHandler : MonoBehaviour
 {
     [SerializeField] private RectTransform _rect;
     
     [SerializeField] private Button _confirmBtn;
     [SerializeField] private Button _cancelBtn;
+    [SerializeField] private Button _rotateBtn;
+    [SerializeField] private Button _deleteBtn;
 
     private EditManager _editManager;
-    private Transform _target;
+    private Transform _startParent;
+    private readonly Vector3 _attachScale = new(0.65f, 0.65f);
 
-    public override void Initialize(UIManager manager)
+    private void Awake()
     {
-        base.Initialize(manager);
-
         _editManager = App.GetManager<EditManager>();
         
-        _editManager.IsEditing
-            .Subscribe((isEditing) =>
-            {
-                if (isEditing)
-                {
-                    OpenPanel();
-                }
-                else
-                {
-                    ClosePanel();
-                }
-            }).AddTo(gameObject);
-        
-        _editManager.CurrentCellPosition
-            .Subscribe(SetPosition).AddTo(gameObject);
-        
-        _confirmBtn.onClick.AddListener(_editManager.ConfirmEdit);
+        _confirmBtn.onClick.AddListener(ConfirmEdit);
         _cancelBtn.onClick.AddListener(_editManager.CancelEdit);
+        _rotateBtn.onClick.AddListener(_editManager.RotateObject);
+        _deleteBtn.onClick.AddListener(_editManager.DeleteObject);
+        
+        _startParent = transform.parent;
     }
     
-    private void SetPosition(Vector3 position)
+    public void Attach(BuildingObject buildingObject)
     {
-        var screenPos = Camera.main.WorldToScreenPoint(position);
-        _rect.position = screenPos;
+        var canvas = buildingObject.GetComponentInChildren<Canvas>();
+        transform.SetParent(canvas.transform);
+        _rect.localPosition = Vector3.zero;
+        _rect.localScale = _attachScale;
+        gameObject.SetActive(true);
     }
 
-    public void SetPosition()
+    public void Detach()
     {
-        if (!gameObject.activeSelf) return;
-        
-        var target = _editManager.CurrentEditObject;
-        var screenPos = Camera.main.WorldToScreenPoint(target.transform.position);
-        _rect.position = screenPos;
+        transform.SetParent(_startParent);
+        _rect.localPosition = Vector3.zero;
+        _rect.localScale = Vector3.one;
+        gameObject.SetActive(false);
+    }
+
+    private void ConfirmEdit()
+    {
+        App.Loading.RunWithSpinnerAsync(_editManager.ConfirmEdit()).Forget();
     }
 }

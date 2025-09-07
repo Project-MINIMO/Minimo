@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public abstract class PopUpWindow : MonoBehaviour
 {
@@ -23,6 +21,7 @@ public abstract class PopUpWindow : MonoBehaviour
     }
     
     public virtual void Show(ProduceAdvanced building, Minimo minimo) { }
+    public virtual void Show(MinimoAcquireHandler handler) { }
 
     public virtual void Hide()
     {

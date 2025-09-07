@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public abstract class Inventory<T> : MonoBehaviour
 {
+    [SerializeField] private InventorySlot<T> _slotPrefab; 
+    [SerializeField] private Transform _contentParent;   
+    
     [SerializeField] protected Toggle[] _menuTogs;
     [SerializeField] private ScrollRect _scrollRect;
 
@@ -27,24 +30,37 @@ public abstract class Inventory<T> : MonoBehaviour
     
     private void InitSlots()
     {
-        var existingButtons = _scrollRect.GetComponentsInChildren<InventorySlot<T>>(true);
+        var existingButtons = _scrollRect
+            .GetComponentsInChildren<InventorySlot<T>>(true)
+            .ToList();
 
         var filteredItems = GetFilteredItems();
 
         Slots = new List<InventorySlot<T>>(filteredItems.Count);
         
-        var i = 0;
+        var existingCount = existingButtons.Count;
+        var needCount = filteredItems.Count;
         
-        for (; i < filteredItems.Count; i++)
+        for (var i = 0; i < needCount; i++)
         {
-            var slot = existingButtons[i];
+            InventorySlot<T> slot;
+
+            if (i < existingCount)
+            {
+                slot = existingButtons[i];
+            }
+            else
+            {
+                slot = Instantiate(_slotPrefab, _contentParent);
+                slot.transform.SetSiblingIndex(i);
+            }
+
             slot.Initialize(filteredItems[i]);
             slot.gameObject.SetActive(true);
-            
             Slots.Add(slot);
         }
-
-        for (; i < existingButtons.Length; i++)
+        
+        for (var i = needCount; i < existingCount; i++)
         {
             existingButtons[i].gameObject.SetActive(false);
         }

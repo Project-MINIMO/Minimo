@@ -308,8 +308,8 @@
     "Japanese": -1
   },
   {
-    "ID": "STR_ITEM_CLOVERSEED_NAME",
-    "Korean": "클로버씨앗",
+    "ID": "STR_ITEM_MAYLILYSEED_NAME",
+    "Korean": "은방울꽃씨앗",
     "English": "CloverSeed",
     "Chinese": -1,
     "Japanese": -1
@@ -350,8 +350,8 @@
     "Japanese": -1
   },
   {
-    "ID": "STR_ITEM_CLOVER_NAME",
-    "Korean": "클로버",
+    "ID": "STR_ITEM_MAYLILY_NAME",
+    "Korean": "은방울꽃",
     "English": "Clover",
     "Chinese": -1,
     "Japanese": -1
@@ -1771,8 +1771,8 @@
     "Japanese": -1
   },
   {
-    "ID": "STR_ITEM_CLOVERSEED_DESC",
-    "Korean": "클로버씨앗 설명입니다.",
+    "ID": "STR_ITEM_MAYLILYSEED_DESC",
+    "Korean": "은방울꽃씨앗 설명입니다.",
     "English": -1,
     "Chinese": -1,
     "Japanese": -1
@@ -1813,8 +1813,8 @@
     "Japanese": -1
   },
   {
-    "ID": "STR_ITEM_CLOVER_DESC",
-    "Korean": "클로버 설명입니다.",
+    "ID": "STR_ITEM_MAYLILY_DESC",
+    "Korean": "은방울꽃 설명입니다.",
     "English": -1,
     "Chinese": -1,
     "Japanese": -1
@@ -3262,6 +3262,41 @@
     "Japanese": -1
   },
   {
+    "ID": "STR_TILE_GROUND01_NAME",
+    "Korean": "땅01",
+    "English": "Ground01",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_TILE_GROUND02_NAME",
+    "Korean": "땅02",
+    "English": "Ground02",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_TILE_GROUND03_NAME",
+    "Korean": "땅03",
+    "English": "Ground03",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_TILE_WATER01_NAME",
+    "Korean": "물01",
+    "English": "Water01",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_TILE_WATER02_NAME",
+    "Korean": "물02",
+    "English": "Water02",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
     "ID": "STR_USERMINIMO_TESTMO_NAME",
     "Korean": "테스트모 {0}번",
     "English": -1,
@@ -3451,22 +3486,22 @@
     "Japanese": ""
   },
   {
-    "ID": "STR_BUILDING_UI_PRODUCTION",
-    "Korean": "생산",
+    "ID": "STR_BUILDING_UI_CROP",
+    "Korean": "작물",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_BUILDING_UI_DECORATION",
-    "Korean": "꾸미기",
+    "ID": "STR_BUILDING_UI_INGREDIENT",
+    "Korean": "가공물",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_BUILDING_UI_UTILITY",
-    "Korean": "기능성",
+    "ID": "STR_BUILDING_UI_FOOD",
+    "Korean": "식품",
     "English": "",
     "Chinese": "",
     "Japanese": ""
@@ -3815,6 +3850,13 @@
     "Japanese": ""
   },
   {
+    "ID": "STR_EXPAND_COMPLETE_TITLE",
+    "Korean": "확장 성공!",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
     "ID": "STR_STORTAGE_UI_EXPAND_COMPLETE",
     "Korean": "창고 용량이 확장되었습니다!",
     "English": "",
@@ -3857,84 +3899,91 @@
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_RESIDENCEEXPAND_DESC",
+    "ID": "STR_MINIMOCENTER_MANAGEPORDBUILDING_NAME",
+    "Korean": "생산건물 배치",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_MINIMOCENTER_RESIDENCEEXPAND_DESC",
     "Korean": "미니모 거주공간을 확장하시겠습니까?",
     "English": -1,
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_EXPANDSUCCEED_DESC",
+    "ID": "STR_MINIMOCENTER_EXPANDSUCCEED_DESC",
     "Korean": "거주공간이 확장되었습니다!",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_FILTER_NAME",
+    "ID": "STR_MINIMOCENTER_FILTER_NAME",
     "Korean": "필터",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_FILTER_COMPONENT1_NAME",
+    "ID": "STR_MINIMOCENTER_FILTER_COMPONENT1_NAME",
     "Korean": "전체",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_FILTER_COMPONENT2_NAME",
+    "ID": "STR_MINIMOCENTER_FILTER_COMPONENT2_NAME",
     "Korean": "배치O",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_FILTER_COMPONENT3_NAME",
+    "ID": "STR_MINIMOCENTER_FILTER_COMPONENT3_NAME",
     "Korean": "배치X",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_FILTER_COMPONENT4_NAME",
+    "ID": "STR_MINIMOCENTER_FILTER_COMPONENT4_NAME",
     "Korean": "고유",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_FILTER_COMPONENT5_NAME",
+    "ID": "STR_MINIMOCENTER_FILTER_COMPONENT5_NAME",
     "Korean": "일반",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_ALIGN_NAME",
+    "ID": "STR_MINIMOCENTER_ALIGN_NAME",
     "Korean": "정렬",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_ALIGN_COMPONENT1_NAME",
+    "ID": "STR_MINIMOCENTER_ALIGN_COMPONENT1_NAME",
     "Korean": "기본",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_ALIGN_COMPONENT2_NAME",
+    "ID": "STR_MINIMOCENTER_ALIGN_COMPONENT2_NAME",
     "Korean": "성장",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_MC_ALIGN_COMPONENT3_NAME",
+    "ID": "STR_MINIMOCENTER_ALIGN_COMPONENT3_NAME",
     "Korean": "획득",
     "English": "",
     "Chinese": "",
@@ -3942,7 +3991,7 @@
   },
   {
     "ID": "STR_MINIMOPROFILE_NAME",
-    "Korean": "프로필",
+    "Korean": "미니모 프로필",
     "English": "",
     "Chinese": "",
     "Japanese": ""
@@ -3983,14 +4032,14 @@
     "Japanese": ""
   },
   {
-    "ID": "STR_POPUP_PRODUCEPLACE_NAME",
-    "Korean": "생산 배치",
+    "ID": "STR_MANAGEPORDBUILDING_NAME",
+    "Korean": "생산건물 배치 관리",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_POPUP_PRODUCEPLACE_DESC",
+    "ID": "STR_MANAGEPORDBUILDING_DESC",
     "Korean": "클릭 시 해당 건물에 미니모를 배치할 수 있습니다",
     "English": "",
     "Chinese": "",
@@ -4004,16 +4053,58 @@
     "Japanese": ""
   },
   {
-    "ID": "STR_POPUP_PLACEBUILDING_NAME",
-    "Korean": "건물 배치",
+    "ID": "STR_SELECTMINIMO_NAME",
+    "Korean": "미니모 선택",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
-    "ID": "STR_POPUP_PLACEBUILDING_DESC",
+    "ID": "STR_SELECTMINIMO_DESC",
     "Korean": "배치할 미니모를 선택하세요",
     "English": -1,
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_SELECTBUILDING_NAME",
+    "Korean": "배치 건물 선택",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_SELECTBUILDING_DESC",
+    "Korean": "미니모를 배치할 건물을 선택하세요",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_SELECTBUILDING_FILTER_NAME",
+    "Korean": "필터",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_SELECTBUILDING_FILTER_COMPONENT1_NAME",
+    "Korean": "전체",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_SELECTBUILDING_FILTER_COMPONENT2_NAME",
+    "Korean": "배치O",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_SELECTBUILDING_FILTER_COMPONENT3_NAME",
+    "Korean": "배치X",
+    "English": "",
     "Chinese": "",
     "Japanese": ""
   },
@@ -4046,6 +4137,62 @@
     "Japanese": ""
   },
   {
+    "ID": "STR_MINIMOPLACE_AUTOPLACE_NAME",
+    "Korean": "자율 배치",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_TILEEDIT_NAME",
+    "Korean": "타일 편집",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_TILEMANAGE_TAB1_NAME",
+    "Korean": "땅",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_TILEMANAGE_TAB2_NAME",
+    "Korean": "지형",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_TILEMANAGE_TAB3_NAME",
+    "Korean": "지우기",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_TILEMANAGE_TAB3_DESC1",
+    "Korean": "클릭 시 기존 타일이 해제됩니다",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_TILEMANAGE_TAB3_DESC2",
+    "Korean": "건물이 설치된 타일은 해제할 수 없습니다",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
+    "ID": "STR_SELECTSLOTEMPTY_DESC",
+    "Korean": "선택 슬롯이 비어있습니다\n타일이나 지우기를 선택해주세요",
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
+  },
+  {
     "ID": "STR_BUTTON_NO",
     "Korean": "아니오",
     "English": "No",
@@ -4069,9 +4216,9 @@
   {
     "ID": "STR_BUTTON_CANCEL",
     "Korean": "취소",
-    "English": "Cancel",
-    "Chinese": -1,
-    "Japanese": -1
+    "English": "",
+    "Chinese": "",
+    "Japanese": ""
   },
   {
     "ID": "STR_OPTION_GAMESETTING",
@@ -4606,1913 +4753,72 @@
     "Japanese": -1
   },
   {
-    "ID": "STR_QUEST_NAME_0002",
-    "Korean": "밭 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0003",
-    "Korean": "별곡 씨앗을 심어보자!",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0004",
-    "Korean": "별곡 수확하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0005",
-    "Korean": "백미 제조기 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0006",
-    "Korean": "백미 만들기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0007",
-    "Korean": "한식당 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0008",
-    "Korean": "따뜻한 죽 만들기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0009",
-    "Korean": "밭 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0010",
-    "Korean": "반죽 제조기 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0011",
-    "Korean": "반죽하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0012",
-    "Korean": "고춧가루 제조기 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0013",
-    "Korean": "밭 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
     "ID": "STR_QUEST_NAME_0014",
-    "Korean": "별맛콩 씨앗 심기",
+    "Korean": "죽을 만들어주게",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
     "ID": "STR_QUEST_NAME_0015",
-    "Korean": "별맛콩 수확하기",
+    "Korean": "속성 부여 재료",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
     "ID": "STR_QUEST_NAME_0016",
-    "Korean": "레스토랑 배치하기",
+    "Korean": "사랑의 조미료",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
     "ID": "STR_QUEST_NAME_0017",
-    "Korean": "수프 만들기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0018",
-    "Korean": "라면 만들기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0019",
-    "Korean": "채소 제조기 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0020",
-    "Korean": "고춧가루 만들기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0021",
-    "Korean": "별과일 씨앗 심기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0022",
-    "Korean": "별과일 수확하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0023",
-    "Korean": "채소 획득하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0024",
-    "Korean": "식용유 제조기 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0025",
-    "Korean": "식용유 만들기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0026",
-    "Korean": "밭 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0027",
-    "Korean": "밭 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0028",
-    "Korean": "밭 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0029",
-    "Korean": "밭 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0030",
-    "Korean": "밭 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0031",
-    "Korean": "밭 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0032",
-    "Korean": "밭 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0033",
-    "Korean": "밭 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0034",
-    "Korean": "화원 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0035",
-    "Korean": "화원 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0036",
-    "Korean": "화원 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0037",
-    "Korean": "화원 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0038",
-    "Korean": "화원 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0039",
-    "Korean": "화원 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0040",
-    "Korean": "베이커리 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0041",
-    "Korean": "크루아상 만들기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0042",
-    "Korean": "소금 제조기 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0043",
-    "Korean": "소금 만들기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0044",
-    "Korean": "두부 제조기 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0045",
-    "Korean": "두부 만들기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0046",
-    "Korean": "설탕 제조기 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0047",
-    "Korean": "설탕 만들기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0048",
-    "Korean": "맥아 제조기 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0049",
-    "Korean": "맥아 만들기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0050",
-    "Korean": "과즙 제조기 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0051",
-    "Korean": "과즙 만들기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0052",
-    "Korean": "사랑 제조기 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0053",
-    "Korean": "우정 제조기 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0054",
-    "Korean": "추억 제조기 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0055",
-    "Korean": "안정 제조기 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0056",
-    "Korean": "희망 제조기 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0057",
-    "Korean": "용기 제조기 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0058",
-    "Korean": "소원공방 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0059",
-    "Korean": "디저트샵 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0060",
-    "Korean": "달고나 만들기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0061",
-    "Korean": "양조장 배치하기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0062",
-    "Korean": "막걸리 만들기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0501",
-    "Korean": "별곡",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0502",
-    "Korean": "별맛콩",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0503",
-    "Korean": "별열매",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0504",
-    "Korean": "새하얀 밥",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0505",
-    "Korean": "시작의 몽글한 조각",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0506",
-    "Korean": "부드러운 순백의 조형",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0507",
-    "Korean": "고요히 삭은 단물의 정수",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0508",
-    "Korean": "바다의 눈물 결정",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0509",
-    "Korean": "하얀 달콤함의 결정체",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0510",
-    "Korean": "붉은 불꽃의 조각",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0511",
-    "Korean": "달콤한 자연의 물방울",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0512",
-    "Korean": "황금빛 액체",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0513",
-    "Korean": "푸른 생명의 선물",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0514",
-    "Korean": "따스한 회복의 죽",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0515",
-    "Korean": "뜨거운 유혹의 면",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0516",
-    "Korean": "바삭한 비의 향기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0517",
-    "Korean": "오색찬란한 밥상",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0518",
-    "Korean": "불의 향연 한상차림",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0519",
-    "Korean": "영혼을 감싼 수프",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0520",
-    "Korean": "싱그러운 초록의 조화",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0521",
-    "Korean": "황금 밀의 선율",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0522",
-    "Korean": "두 손 가득차는 선물",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0523",
-    "Korean": "뜨거운 육즙의 맹세",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0524",
-    "Korean": "부드러운 아침",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0525",
-    "Korean": "소금결의 굽힌 고리",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0526",
-    "Korean": "추억 가득한 빵",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0527",
-    "Korean": "운명을 품은 과자",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0528",
-    "Korean": "달콤한 계절의 층",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0529",
-    "Korean": "입 속의 작은 마법",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0530",
-    "Korean": "어린 시절의 추억 결정",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0531",
-    "Korean": "끈끈한 행운의 조각",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0532",
-    "Korean": "부드러운 열매의 유혹",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0533",
-    "Korean": "감정의 색을 품은 달콤한 조각",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0534",
-    "Korean": "하얀 달빛의 물",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0535",
-    "Korean": "시원한 거품 속의 해방",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0536",
-    "Korean": "붉은 감정의 물결",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0537",
-    "Korean": "불타는 고요한 물방울",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0538",
-    "Korean": "숙성된 기억의 향기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0539",
-    "Korean": "붉은 가시의 씨앗",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0540",
-    "Korean": "태양을 바라보는 씨앗",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0541",
-    "Korean": "바람을 부르는 씨앗",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0542",
-    "Korean": "안정을 가져다주는 씨앗",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0543",
-    "Korean": "희망의 씨앗",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0544",
-    "Korean": "용기의 씨앗",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0545",
-    "Korean": "사랑을 가져다 주는 꽃",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0546",
-    "Korean": "마주보는 꽃",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0547",
-    "Korean": "바람을 기억하는 꽃",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0548",
-    "Korean": "네잎의 소중한 희망",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0549",
-    "Korean": "비와 함께 피어난 꽃",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0550",
-    "Korean": "입맞춤의 꽃",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0551",
-    "Korean": "따뜻한 마음의 결정",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0552",
-    "Korean": "믿음의 흔적",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0553",
-    "Korean": "바래진시간의 먼지",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0554",
-    "Korean": "고요한 숨결의 조각",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0555",
-    "Korean": "빛나는 내일의 가루",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0556",
-    "Korean": "불타는 심장의 조각",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0557",
-    "Korean": "사랑의 따스한 회복의 죽",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0558",
-    "Korean": "사랑의 유혹의 면",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0559",
-    "Korean": "사랑의 바삭한 비의 향기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0560",
-    "Korean": "사랑의 오색찬란한 밥상",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0561",
-    "Korean": "사랑의 불의 향연 한상차림",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0562",
-    "Korean": "사랑의 영혼을 감싼 수프",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0563",
-    "Korean": "사랑의 초록의 조화",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0564",
-    "Korean": "사랑의 황금 밀",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0565",
-    "Korean": "두 손 가득차는 사랑",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0566",
-    "Korean": "사랑의 육즙의 맹세",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0567",
-    "Korean": "사랑스러운 아침",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0568",
-    "Korean": "사랑의 고리",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0569",
-    "Korean": "사랑을 감싼 빵",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0570",
-    "Korean": "사랑의 운명의 과자",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0571",
-    "Korean": "달콤한 사랑의 계절의 층",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0572",
-    "Korean": "입 속의 작은 사랑",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0573",
-    "Korean": "어린 시절의 사랑의 추억",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0574",
-    "Korean": "끈끈한 사랑",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0575",
-    "Korean": "사랑스러운 열매의 유혹",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0576",
-    "Korean": "감정의 색을 품을 사랑의 조각",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0577",
-    "Korean": "하얀 사랑의 물",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0578",
-    "Korean": "시원한 거품 속의 사랑",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0579",
-    "Korean": "붉은 사랑의 물결",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0580",
-    "Korean": "불타는 사랑의 물방울",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0581",
-    "Korean": "영원한 사랑의 향기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0582",
-    "Korean": "우정의 따스한 회복의 죽",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0583",
-    "Korean": "우정을 나누는 면",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0584",
-    "Korean": "우정의 바삭한 비의 향기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0585",
-    "Korean": "우정의 오색찬란한 밥상",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0586",
-    "Korean": "우정의 불의 향연 한상차림",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0587",
-    "Korean": "우정의 영혼을 감싼 수프",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0588",
-    "Korean": "우정의 초록의 조화",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0589",
-    "Korean": "우정의 황금 밀",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0590",
-    "Korean": "두 손 가득차는 우정",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0591",
-    "Korean": "우정의 육즙의 맹세",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0592",
-    "Korean": "친구와 우정을 나누는 모닝 빵",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0593",
-    "Korean": "우정의 고리",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0594",
-    "Korean": "우정을 감싼 빵",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0595",
-    "Korean": "우정의 운명의 과자",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0596",
-    "Korean": "달콤한 우정의 계절의 층",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0597",
-    "Korean": "입 속의 작은 우정",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0598",
-    "Korean": "어린 시절의 우정의 추억",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0599",
-    "Korean": "끈끈한 우정",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0600",
-    "Korean": "통통 튀는 우정의 즐거움",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0601",
-    "Korean": "감정의 색을 품을 우정의 조각",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0602",
-    "Korean": "하얀 우정의 물",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0603",
-    "Korean": "시원한 거품 속의 우정",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0604",
-    "Korean": "붉은 우정의 물결",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0605",
-    "Korean": "불타는 우정의 물방울",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0606",
-    "Korean": "영원한 우정의 향기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0607",
-    "Korean": "추억의 따스한 회복의 죽",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0608",
-    "Korean": "추억을 나누는 면",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0609",
-    "Korean": "추억의 바삭한 비의 향기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0610",
-    "Korean": "추억의 오색찬란한 밥상",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0611",
-    "Korean": "추억의 불의 향연 한상차림",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0612",
-    "Korean": "추억의 영혼을 감싼 수프",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0613",
-    "Korean": "추억의 초록의 조화",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0614",
-    "Korean": "추억의 황금 밀",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0615",
-    "Korean": "두 손 가득차는 추억",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0616",
-    "Korean": "추억의 육즙의 맹세",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0617",
-    "Korean": "옛 기억의 아침",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0618",
-    "Korean": "추억의고리",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0619",
-    "Korean": "추억을 감싼 빵",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0620",
-    "Korean": "추억의 운명의 과자",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0621",
-    "Korean": "달콤한 추억의 계절의 층",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0622",
-    "Korean": "입 속의 작은 추억",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0623",
-    "Korean": "어린 시절의 추억",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0624",
-    "Korean": "끈질긴 추억",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0625",
-    "Korean": "부드러운 추억의 즐거움",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0626",
-    "Korean": "감정의 색을 품을 추억의 조각",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0627",
-    "Korean": "하얀 추억의 물",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0628",
-    "Korean": "시원한 거품 속의 추억",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0629",
-    "Korean": "붉은 추억의 물결",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0630",
-    "Korean": "불타는 추억의 물방울",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0631",
-    "Korean": "영원한 추억의 향기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0632",
-    "Korean": "안정의 따스한 회복의 죽",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0633",
-    "Korean": "안정을 나누는 면",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0634",
-    "Korean": "안정의 바삭한 비의 향기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0635",
-    "Korean": "안정의 오색찬란한 밥상",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0636",
-    "Korean": "안정의 불의 향연 한상차림",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0637",
-    "Korean": "안정의 영혼을 감싼 수프",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0638",
-    "Korean": "안정의 초록의 조화",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0639",
-    "Korean": "안정의 황금 밀",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0640",
-    "Korean": "두 손 가득차는 안정",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0641",
-    "Korean": "안정의 육즙의 맹세",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0642",
-    "Korean": "안정을 나누는 아침",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0643",
-    "Korean": "안정의 고리",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0644",
-    "Korean": "안정을 감싼 빵",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0645",
-    "Korean": "안정의 운명의 과자",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0646",
-    "Korean": "달콤한 안정의 계절의 층",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0647",
-    "Korean": "입 속의 작은 안정",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0648",
-    "Korean": "어린 시절의 안정의 추억",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0649",
-    "Korean": "끈끈한 안정",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0650",
-    "Korean": "부드러운 안정의 즐거움",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0651",
-    "Korean": "감정의 색을 품을 안정의 조각",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0652",
-    "Korean": "하얀 안정의 물",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0653",
-    "Korean": "시원한 거품 속의 안정",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0654",
-    "Korean": "붉은 안정의 물결",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0655",
-    "Korean": "불타는 안정의 물방울",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0656",
-    "Korean": "영원한 안정의 향기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0657",
-    "Korean": "희망의 따스한 회복의 죽",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0658",
-    "Korean": "희망을 나누는 면",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0659",
-    "Korean": "희망의 바삭한 비의 향기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0660",
-    "Korean": "희망의 오색찬란한 밥상",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0661",
-    "Korean": "희망의 불의 향연 한상차림",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0662",
-    "Korean": "희망의 영혼을 감싼 수프",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0663",
-    "Korean": "희망의 초록의 조화",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0664",
-    "Korean": "희망의 황금 밀",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0665",
-    "Korean": "두 손 가득차는 희망",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0666",
-    "Korean": "희망의 육즙의 맹세",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0667",
-    "Korean": "희망을 주는 아침",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0668",
-    "Korean": "희망의 고리",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0669",
-    "Korean": "희망을 감싼 빵",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0670",
-    "Korean": "희망의 운명의 과자",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0671",
-    "Korean": "달콤한 희망의 계절의 층",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0672",
-    "Korean": "입 속의 작은 희망",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0673",
-    "Korean": "어린 시절의 희망의 추억",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0674",
-    "Korean": "끈끈한 희망",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0675",
-    "Korean": "부드러운 희망의 유혹",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0676",
-    "Korean": "감정의 색을 품을 희망의 조각",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0677",
-    "Korean": "하얀 희망의 물",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0678",
-    "Korean": "시원한 거품 속의 희망",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0679",
-    "Korean": "붉은 희망의 물결",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0680",
-    "Korean": "불타는 희망의 물방울",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0681",
-    "Korean": "영원한 희망의 향기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0682",
-    "Korean": "용기의 따스한 회복의 죽",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0683",
-    "Korean": "용기을 나누는 면",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0684",
-    "Korean": "용기의 바삭한 비의 향기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0685",
-    "Korean": "용기의 오색찬란한 밥상",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0686",
-    "Korean": "용기의 불의 향연 한상차림",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0687",
-    "Korean": "용기의 영혼을 감싼 수프",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0688",
-    "Korean": "용기의 초록의 조화",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0689",
-    "Korean": "용기의 황금 밀",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0690",
-    "Korean": "두 손 가득차는 용기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0691",
-    "Korean": "용기의 육즙의 맹세",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0692",
-    "Korean": "용기을 주는 아침",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0693",
-    "Korean": "용기의 고리",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0694",
-    "Korean": "용기을 감싼 빵",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0695",
-    "Korean": "용기의 운명의 과자",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0696",
-    "Korean": "달콤한 용기의 계절의 층",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0697",
-    "Korean": "입 속의 작은 용기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0698",
-    "Korean": "용기를 주는 추억",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0699",
-    "Korean": "끈끈한 용기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0700",
-    "Korean": "부드러운 용기의 유혹",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0701",
-    "Korean": "감정의 색을 품을 용기의 조각",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0702",
-    "Korean": "하얀 용기의 물",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0703",
-    "Korean": "시원한 거품 속의 용기",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0704",
-    "Korean": "붉은 용기의 물결",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0705",
-    "Korean": "불타는 용기의 물방울",
-    "English": "",
-    "Chinese": "",
-    "Japanese": ""
-  },
-  {
-    "ID": "STR_QUEST_NAME_0706",
-    "Korean": "영원한 용기의 향기",
+    "Korean": "어느 한 아이의 소원",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
     "ID": "STR_QUEST_CONS_AND_01",
-    "Korean": "어둠 속에 핀 작은 꿈",
-    "English": "A small Dream Bloomed in the Darkness",
+    "Korean": "작은 불빛 하나, 어둠 속에서",
+    "English": -1,
     "Chinese": -1,
     "Japanese": -1
   },
   {
     "ID": "STR_QUEST_CONS_AND_02",
-    "Korean": "세상이 등을 돌릴 때",
-    "English": "When The World Turns its Back",
+    "Korean": "세상이  차가워질 때",
+    "English": -1,
     "Chinese": -1,
     "Japanese": -1
   },
   {
     "ID": "STR_QUEST_CONS_AND_03",
-    "Korean": "넘어져도, 다시 걷는 법을 배웠다.",
-    "English": "Even After Falling, I Learned to Walk Again.",
+    "Korean": "넘어짐 속에 숨겨진 배움",
+    "English": -1,
     "Chinese": -1,
     "Japanese": -1
   },
   {
     "ID": "STR_QUEST_CONS_AND_04",
-    "Korean": "손을 내민 건 뜻밖의 사람이었다.",
-    "English": "The One Who Reached Out Was Someone Unexpected.",
+    "Korean": "예상 밖의 온기",
+    "English": -1,
     "Chinese": -1,
     "Japanese": -1
   },
   {
     "ID": "STR_QUEST_CONS_AND_05",
-    "Korean": "피어오른 희망의 불씨",
-    "English": "A Spark of Hope Ignited",
+    "Korean": "다시 피어난 마음의 불씨",
+    "English": -1,
     "Chinese": -1,
     "Japanese": -1
   },
   {
     "ID": "STR_QUEST_CONS_AND_06",
-    "Korean": "그날의 나에게 전하고 싶은 한 마디",
-    "English": "A word I Wish I Could Tell My Past Self",
+    "Korean": "과거의 나에게 건네는 위로",
+    "English": -1,
     "Chinese": -1,
     "Japanese": -1
   },
@@ -7434,43 +5740,71 @@
     "Japanese": -1
   },
   {
+    "ID": "STR_QUEST_NAME_0014_DESC",
+    "Korean": "한식당을 배치 후 죽을 만드세요.",
+    "English": -1,
+    "Chinese": -1,
+    "Japanese": -1
+  },
+  {
+    "ID": "STR_QUEST_NAME_0015_DESC",
+    "Korean": "화원을 배치 후 장미를 심어봐요.",
+    "English": -1,
+    "Chinese": -1,
+    "Japanese": -1
+  },
+  {
+    "ID": "STR_QUEST_NAME_0016_DESC",
+    "Korean": "사랑제조기를 배치 후 사랑가루를 제조해보세요.",
+    "English": -1,
+    "Chinese": -1,
+    "Japanese": -1
+  },
+  {
+    "ID": "STR_QUEST_NAME_0017_DESC",
+    "Korean": "좋아하는 아이가 아프지 않게 해주세요.",
+    "English": -1,
+    "Chinese": -1,
+    "Japanese": -1
+  },
+  {
     "ID": "STR_QUEST_CONS_AND_01_DESC",
-    "Korean": "",
+    "Korean": "어둠 속에 핀 작은 꿈",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
     "ID": "STR_QUEST_CONS_AND_02_DESC",
-    "Korean": "",
+    "Korean": "세상이 등을 돌릴 때",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
     "ID": "STR_QUEST_CONS_AND_03_DESC",
-    "Korean": "",
+    "Korean": "넘어져도, 다시 걷는 법을 배웠다.",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
     "ID": "STR_QUEST_CONS_AND_04_DESC",
-    "Korean": "",
+    "Korean": "손을 내민 건 뜻밖의 사람이었다.",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
     "ID": "STR_QUEST_CONS_AND_05_DESC",
-    "Korean": "",
+    "Korean": "피어오른 희망의 불씨",
     "English": "",
     "Chinese": "",
     "Japanese": ""
   },
   {
     "ID": "STR_QUEST_CONS_AND_06_DESC",
-    "Korean": "",
+    "Korean": "그날의 나에게 전하고 싶은 한 마디",
     "English": "",
     "Chinese": "",
     "Japanese": ""
@@ -7561,7 +5895,7 @@
   },
   {
     "ID": "STR_QUEST_CONS_NOVARIA_01_DESC",
-    "Korean": "n년간 취업 준비후 낙담",
+    "Korean": "수 년간 취업 준비후 낙담",
     "English": "",
     "Chinese": "",
     "Japanese": ""
@@ -7750,7 +6084,7 @@
   },
   {
     "ID": "STR_QUEST_CONS_SERENO_02_DESC",
-    "Korean": "친구에게 말하자, 여행 티켓을 줌",
+    "Korean": "친구에게 말하자, 여행 티켓을 준다.",
     "English": "",
     "Chinese": "",
     "Japanese": ""

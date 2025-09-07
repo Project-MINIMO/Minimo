@@ -12,17 +12,22 @@ public class BuildingObject : InteractObject
     public BuildingPositionData PositionData { get; private set; }
 
     public bool IsPlaced {get; set;}
-    private bool _isFlipped = false;
     
-    protected EditManager _editManager;
-    private SpriteRenderer _spriteRenderer;
+    protected EditManager EditManager;
+    protected SpriteRenderer SpriteRenderer;
+    private ProduceCostEffectCtrl _costEffectCtrl;
 
     protected virtual void Awake()
     {
-        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        _editManager = App.GetManager<EditManager>();
-        _editManager.IsEditing
-            .Subscribe((isEditing) => SetTransparency(isEditing ? 0.5f : 1)).AddTo((gameObject));
+        SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        EditManager = App.GetManager<EditManager>();
+        EditManager.IsBuildingEditing
+            .Subscribe(isEditing => SetTransparency(isEditing ? 0.5f : 1)).AddTo(gameObject);
+        EditManager.IsTileEditing
+            .Subscribe(isEditing => SetTransparency(isEditing ? 0.5f : 1)).AddTo(gameObject);
+        SetTransparency(EditManager.IsBuildingEditing.Value ? 0.5f : 1);
+        
+        _costEffectCtrl = GetComponentInChildren<ProduceCostEffectCtrl>();
     }
     
     public virtual async Task Initialize(Building data)
@@ -32,10 +37,12 @@ public class BuildingObject : InteractObject
         
         SetPolygonCollider(GetComponent<PolygonCollider2D>());
         GetComponent<PolygonCollider2D>().offset = PositionData.ColliderOffset;
-        _spriteRenderer.sprite = PositionData.Sprite;
-        _spriteRenderer.transform.localPosition = new Vector3(PositionData.Offset.x, PositionData.Offset.y, 0);
+        SpriteRenderer.sprite = PositionData.Sprite;
+        SpriteRenderer.transform.localPosition = new Vector3(PositionData.Offset.x, PositionData.Offset.y, 0);
             
         PreviousPosition = transform.position;
+        
+        BuildingData.AddCount(1);
     }
 
     private void SetPolygonCollider(PolygonCollider2D polyCollider)
@@ -60,16 +67,19 @@ public class BuildingObject : InteractObject
     #region InteractObject
     public override void OnLongPress()
     {
-        if (_editManager.IsEditing.Value) return;
+        if (EditManager.IsBuildingEditing.Value) return;
+        if (EditManager.IsTileEditing.Value) return;
         
-        _editManager.StartEdit(this);
+        EditManager.StartEdit(this);
     }
 
     public override void OnClickUp()
     {
-        if (_editManager.IsEditing.Value)
+        if (EditManager.IsTileEditing.Value) return;
+        
+        if (EditManager.IsBuildingEditing.Value)
         {
-            _editManager.StartEdit(this);
+            EditManager.StartEdit(this);
         }
     }
     #endregion
@@ -77,9 +87,9 @@ public class BuildingObject : InteractObject
     #region Edit Functions
     private void SetTransparency(float alpha)
     {
-        var color = _spriteRenderer.color;
+        var color = SpriteRenderer.color;
         color.a = alpha;
-        _spriteRenderer.color = color;
+        SpriteRenderer.color = color;
     }
 
     public async Task<bool> Install()
@@ -98,7 +108,7 @@ public class BuildingObject : InteractObject
     {
         // Firebase. 건물 설치 요청
         var firebaseManager = App.GetManager<FirebaseManager>();
-        var targetCell = _editManager.GetCellPosition(transform.position);
+        var targetCell = EditManager.GetCellPosition(transform.position);
 
         string? buildingId = await firebaseManager.InstallBuilding(BuildingData.ID, targetCell);
         if (buildingId == null)
@@ -107,11 +117,11 @@ public class BuildingObject : InteractObject
             return false;
         }
 
-        this.BuildingId = buildingId;
+        BuildingId = buildingId;
 
         IsPlaced = true;
         PreviousPosition = transform.position;
-        BuildingData.AddCount(1);
+        _costEffectCtrl.Install(BuildingData.Cost);
         return true;
     }
     
@@ -119,7 +129,7 @@ public class BuildingObject : InteractObject
     {
         // Firebase. 건물 위치 업데이트 요청
         var firebaseManager = App.GetManager<FirebaseManager>();
-        var targetCell = _editManager.GetCellPosition(transform.position);
+        var targetCell = EditManager.GetCellPosition(transform.position);
         var success = await firebaseManager.MoveBuilding(BuildingId, targetCell);
         if (!success)
         {
@@ -135,11 +145,11 @@ public class BuildingObject : InteractObject
     {
         if (IsPlaced)
         {
-            _editManager.MoveObject(PreviousPosition);
+            EditManager.MoveObject(PreviousPosition);
         }
         else
         {
-            Destroy(gameObject);
+            Destroy();
         }
 
         return IsPlaced;
@@ -147,8 +157,14 @@ public class BuildingObject : InteractObject
 
     public void Rotate()
     {
-        transform.Rotate(0, _isFlipped ? -180 : 180, 0);
-        _isFlipped = !_isFlipped;
+        SpriteRenderer.flipX = !SpriteRenderer.flipX;
+    }
+
+    public virtual bool Destroy()
+    {
+        BuildingData.AddCount(-1);
+        Destroy(gameObject);
+        return true;
     }
     #endregion
 }

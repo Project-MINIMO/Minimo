@@ -93,7 +93,8 @@ public class ProduceSkipHandler : MonoBehaviour
             { "재계산된 비용", (_globalTimeSkipCostRatio * _currentPrice).ToString() },
             { "반올림된 최종 비용", _modifiedPrice.ToString() },
         });
-       
+
+        AccountInfo.Instance.AddCash(-_modifiedPrice);
         _produceManager.Skip();
     }
 

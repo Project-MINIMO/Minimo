@@ -4,9 +4,12 @@ using TMPro;
 
 public class MinimoProfilePanel : UIBase
 {
+    public override bool IsUseBlur => true;
+    
     [SerializeField] private Button _closeBtn;
     
     [SerializeField] private TextMeshProUGUI _titleTMP;
+    [SerializeField] private MenuToggleGroup _toggleGroup;
     [SerializeField] private Toggle[] _menuTogs;
     [SerializeField] private GameObject[] _menuBacks;
     
@@ -15,12 +18,14 @@ public class MinimoProfilePanel : UIBase
     [SerializeField] private Button _prevBtn;
     [SerializeField] private Button _nextBtn;
     
+    [SerializeField] private Button _assignBtn;
     [SerializeField] private Button _levelUpBtn;
     [SerializeField] private Button _historyBtn;
     [SerializeField] private Button _filmBtn;
 
     private MinimoManager _minimoManager;
     private MinimoFilmPanel _filmPanel;
+    private PlaceByMinimoPanel _placePanel;
     private Minimo _currentMinimo;
     private string _historyString;
     
@@ -29,6 +34,7 @@ public class MinimoProfilePanel : UIBase
         base.Initialize(manager);
 
         _filmPanel = manager.GetPanel<MinimoFilmPanel>();
+        _placePanel = manager.GetPanel<PlaceByMinimoPanel>();
         
         var titleData = App.GetData<TitleData>();
         _titleTMP.SetText(titleData.GetString("STR_MINIMOPROFILE_NAME"));
@@ -50,6 +56,7 @@ public class MinimoProfilePanel : UIBase
         _prevBtn.onClick.AddListener(() => MoveToNextMinimo(-1));
         _nextBtn.onClick.AddListener(() => MoveToNextMinimo(1));
         
+        _assignBtn.onClick.AddListener(() => _placePanel.OpenPanel(_currentMinimo));
         _levelUpBtn.onClick.AddListener(() => _currentMinimo?.AddLevel(1));
         _filmBtn.onClick.AddListener(() => _filmPanel.OpenPanel(_currentMinimo));
         _closeBtn.onClick.AddListener(ClosePanel);
@@ -65,8 +72,6 @@ public class MinimoProfilePanel : UIBase
         
         minimo.OnLevelChanged += _infoUpdater.UpdateLevelInfo;
         minimo.OnAssignmentChanged += _infoUpdater.UpdateAssignedBuilding;
-        
-        _menuTogs[1].isOn = true;
     }
 
     public override void ClosePanel()
@@ -76,6 +81,13 @@ public class MinimoProfilePanel : UIBase
         if (_currentMinimo == null) return;
         _currentMinimo.OnLevelChanged -= _infoUpdater.UpdateLevelInfo;
         _currentMinimo.OnAssignmentChanged -= _infoUpdater.UpdateAssignedBuilding;
+    }
+    
+    public override void Show(bool isNew)
+    {
+        base.Show(isNew);
+        
+        _toggleGroup.Show(isNew, 1);
     }
 
     private string GetMenuString(int index, TitleData title) => index switch
@@ -88,9 +100,9 @@ public class MinimoProfilePanel : UIBase
 
     private void MoveToNextMinimo(int num)
     {
-        var index = _minimoManager.Minimos.IndexOf(_currentMinimo);
-        var nextIndex = (index + num + _minimoManager.Minimos.Count) % _minimoManager.Minimos.Count;
-        var nextObject = _minimoManager.Minimos[nextIndex];
+        var index = _minimoManager.ActiveMinimos.IndexOf(_currentMinimo);
+        var nextIndex = (index + num + _minimoManager.ActiveMinimos.Count) % _minimoManager.ActiveMinimos.Count;
+        var nextObject = _minimoManager.ActiveMinimos[nextIndex];
         
         ClosePanel();
         OpenPanel(nextObject);

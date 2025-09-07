@@ -1,26 +1,18 @@
-using System;
-
 public class MinimoCapacityHandler : CapacityHandler
 {
+    protected override int GetExpandCost(TitleData title) => title.Common["ResidenceExpandCost"];
+    protected override int GetCurrentCapacity() => AccountInfo.Instance.MinimoCapacity;
+    protected override int GetBaseCapacity() => _minimoManager.ActiveMinimos.Count;
+
+    private MinimoManager _minimoManager;
+    
     protected override void Awake()
     {
         base.Awake();
-        
-        var titleData = App.GetData<TitleData>();
-        ExpandCost = titleData.Common["ResidenceExpandCost"];
-        TransactionString = titleData.GetString("STR_STORAGE_EXPAND_COST");
+
+        _minimoManager = App.GetManager<MinimoManager>();
     }
     
-    public override void Initialize(Action transactionCallback)
-    {
-        CurrentCapacity = AccountInfo.Instance.MinimoCapacity;
-        BaseCapacity = 20;
-        
-        base.Initialize(transactionCallback);
-        
-        Initialize();
-    }
-
     protected override void SuccessTransaction()
     {
         AccountInfo.Instance.AddMinimoCapacity(Quantity - CurrentCapacity);

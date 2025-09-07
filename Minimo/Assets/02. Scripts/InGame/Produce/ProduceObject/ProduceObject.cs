@@ -116,7 +116,7 @@ public abstract class ProduceObject : BuildingObject
         GetCurrentProduceState();
     }
     
-    private ProduceState GetCurrentProduceState()
+    protected ProduceState GetCurrentProduceState()
     {
         if (AllTasks.Any(x => x.CurrentState is CompletedState))
         {
@@ -133,7 +133,9 @@ public abstract class ProduceObject : BuildingObject
     {
         base.OnClickUp();
 
-        if (!_editManager.IsEditing.Value)
+        if (EditManager.IsTileEditing.Value) return;
+        
+        if (!EditManager.IsBuildingEditing.Value)
         {
             _produceManager.Select(this);
         }
@@ -149,7 +151,7 @@ public abstract class ProduceObject : BuildingObject
     
     public virtual ProduceTask CreateTask(ProduceData option)
     {
-        var task = new ProduceTask(option);
+        var task = new ProduceTask(option, transform);
         task.ApplyTimeRatio(TimeRatio);
         task.ApplyHarvestRatio(HarvestRatio); 
         task.ApplyExpRatio(ExpRatio);
@@ -158,6 +160,17 @@ public abstract class ProduceObject : BuildingObject
         
         SetNextActiveTask();
         return task;
+    }
+
+    public override bool Destroy()
+    {
+        if (AllTasks.Count != 0)
+        {
+            App.Notification(NotifyType.DeleteBuildingFailProduce);
+            return false;
+        }
+        
+        return base.Destroy();
     }
     
     #region Produce
@@ -182,4 +195,20 @@ public abstract class ProduceObject : BuildingObject
         SetNextActiveTask();
     }
     #endregion
+    
+    public (Item, int) PlunderedResult()
+    {
+        var completeTask = AllTasks.FirstOrDefault(x => x.CurrentState == CompletedState.Instance);
+        if (completeTask == null) return (null, 0);
+        
+        completeTask.ChangeStateWithoutNotify(EndState.Instance);
+        AllTasks.Remove(completeTask);
+        GetCurrentProduceState();
+        
+        var itemID = completeTask.Data.ResultItems[0].ID;
+        var item = AccountInfo.Instance.Items[itemID];
+        
+        
+        return (item, completeTask.Data.ResultItems[0].Amount);
+    }
 }

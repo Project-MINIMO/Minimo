@@ -262,3 +262,103 @@ export const moveBuilding = onCall(
     }
   }
 );
+
+export const batchUpdateTiles = onCall(
+  { region: "asia-northeast3" },
+  async (request) => {
+    if (!request.auth) throw new HttpsError("unauthenticated", "로그인이 필요합니다.");
+    const uid = request.auth.uid;
+    const { changes } = request.data; // [{type, tileId, position}]
+    const firestore = admin.firestore();
+    const batch = firestore.batch();
+
+    for (const change of changes) {
+      const docId = `${change.position[0]}_${change.position[1]}_${change.position[2]}`;
+      const tileRef = firestore.collection("users").doc(uid).collection("tiles").doc(docId);
+      if (change.type === "Install") {
+        batch.set(tileRef, {
+          tileId: change.tileId,
+          installedAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+      } else if (change.type === "Remove") {
+        batch.delete(tileRef);
+      }
+    }
+    await batch.commit();
+    return { success: true };
+  }
+);
+
+// 통화 업데이트 함수
+export const updateCurrency = onCall(
+  { region: "asia-northeast3" },
+  async (request) => {
+    if (!request.auth) {
+      throw new HttpsError("unauthenticated", "로그인이 필요합니다.");
+    }
+
+    const uid = request.auth.uid;
+    const { currencyType, amount, operation } = request.data;
+
+    if (!currencyType || typeof amount !== "number" || !operation) {
+      throw new HttpsError("invalid-argument", "잘못된 파라미터입니다.");
+    }
+
+    const validCurrencies = ["SDC", "SLP", "WSD", "HDP"];
+    if (!validCurrencies.includes(currencyType)) {
+      throw new HttpsError("invalid-argument", "유효하지 않은 통화 타입입니다.");
+    }
+
+    const validOperations = ["add", "subtract", "set"];
+    if (!validOperations.includes(operation)) {
+      throw new HttpsError("invalid-argument", "유효하지 않은 연산입니다.");
+    }
+
+    const firestore = admin.firestore();
+    const userRef = firestore.collection("users").doc(uid);
+
+    try {
+      const userDoc = await userRef.get();
+      if (!userDoc.exists) {
+        throw new HttpsError("not-found", "사용자 문서가 존재하지 않습니다.");
+      }
+
+      const userData = userDoc.data() as UserData;
+      let newAmount = userData.currencies[currencyType as keyof typeof userData.currencies];
+
+      switch (operation) {
+      case "add":
+        newAmount += amount;
+        break;
+      case "subtract":
+        newAmount -= amount;
+        break;
+      case "set":
+        newAmount = amount;
+        break;
+      }
+
+      // 최소값 0으로 제한
+      newAmount = Math.max(0, newAmount);
+
+      // Firestore 업데이트
+      await userRef.update({
+        [`currencies.${currencyType}`]: newAmount,
+        lastLoginAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+
+      console.log(`Currency updated: ${currencyType} ${operation} ${amount} = ${newAmount} for user ${uid}`);
+
+      return {
+        success: true,
+        currencyType,
+        newAmount,
+        operation,
+      };
+    } catch (error) {
+      console.error("updateCurrency 실패", error);
+      if (error instanceof HttpsError) throw error;
+      throw new HttpsError("internal", "통화 업데이트 중 오류가 발생했습니다.");
+    }
+  }
+);

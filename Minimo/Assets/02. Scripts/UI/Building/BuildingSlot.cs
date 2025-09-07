@@ -8,8 +8,12 @@ public class BuildingSlot : InventorySlot<Building>
     
     [SerializeField] private Image _buildingImg;
     [SerializeField] private TextMeshProUGUI _buildingNameTMP;
+    [SerializeField] private TextMeshProUGUI _costTMP;
     [SerializeField] private GameObject _lockBack;
     [SerializeField] private TextMeshProUGUI _lockTMP;
+    [SerializeField] private GameObject _redDotObj;
+    
+    private bool _isLocked = true;
     
     private void OnEnable()
     {
@@ -23,6 +27,7 @@ public class BuildingSlot : InventorySlot<Building>
         Item = item;
         _buildingImg.sprite = item.Icon;
         _buildingNameTMP.SetText(item.Name);
+        _costTMP.SetText(item.Cost.ToString());
 
         _lockTMP.SetText(App.GetData<TitleData>().GetFormatString("STR_BUILDING_UI_LOCK", item.UnlockLevel.ToString()));
     }
@@ -31,6 +36,9 @@ public class BuildingSlot : InventorySlot<Building>
     {
         if (Item == null) return;
         
-        _lockBack.SetActive(CanShow());
+        var canShow = CanShow();
+        _lockBack.SetActive(canShow);
+        _redDotObj.SetActive(_isLocked != canShow);
+        _isLocked = canShow;
     }
 }

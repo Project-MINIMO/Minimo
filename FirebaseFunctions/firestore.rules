@@ -1,0 +1,34 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ✅ 본인의 users 문서만 읽기 허용, 쓰기는 금지
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
+    }
+
+    // ✅ 본인의 buildings 문서만 읽기 허용, 쓰기는 금지
+    match /users/{userId}/buildings/{buildingId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
+    }
+
+    // ✅ 본인의 tiles 문서 읽기만 허용, 쓰기는 금지
+    match /users/{userId}/tiles/{tileId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
+    }
+
+    // ✅ 테스트 문서
+    match /test/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // ❌ 그 외 모든 문서는 읽기/쓰기 모두 금지
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+} 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class UserLevel : IQuestClearTarget, IQuestRewardTarget
 {
     public event Action<int> OnLevelUp;
+    public event Action<int> OnExpChanged;
     
     public string Name { get; }
     public Sprite Icon { get; }
@@ -25,6 +26,7 @@ public class UserLevel : IQuestClearTarget, IQuestRewardTarget
         var prevCount = Count;
         _experience += amount;
         var newCount = Count;
+        OnExpChanged?.Invoke(_experience);
 
         if (prevCount != newCount)
         {

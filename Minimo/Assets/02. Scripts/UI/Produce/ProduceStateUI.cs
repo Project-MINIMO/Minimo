@@ -1,34 +1,76 @@
+using System;
+using System.Linq;
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UniRx;
 
 public class ProduceStateUI : MonoBehaviour
 {
-    [SerializeField] private GameObject[] _stateUIs;
+    [SerializeField] private GameObject _stateBack;
+    [SerializeField] private GameObject _idleObj;
+    [SerializeField] private GameObject _completeObj;
+    [SerializeField] private Image _completeImg;
+    [SerializeField] private Button _completeBtn;
     
+    private ProduceObject _produceObject;
+
     private void Start()
     {
-        App.GetManager<EditManager>().IsEditing
-            .Subscribe((isEditing) =>
-            {
-                gameObject.SetActive(!isEditing);
-            }).AddTo(gameObject);
-        
-        var obj = GetComponentInParent<ProduceObject>();
-        if (obj == null)
+        _produceObject = GetComponentInParent<ProduceObject>();
+        if (_produceObject == null)
         {
             Debug.LogWarning("ProduceObject not found in parent.");
             return;
         }
-        if (obj.BuildingData.Type == 0) return;
         
-        obj.OnProduceStateChanged += UpdateStateUI;
+        if (_produceObject.BuildingData.Type == 0) return;
+        
+        _produceObject.OnProduceStateChanged += UpdateStateUI;
+        UpdateStateUI(_produceObject.CurrentState);
+        
+        var editManager = App.GetManager<EditManager>();
+        editManager.IsBuildingEditing
+            .Subscribe(isEditing =>
+            {
+                _stateBack.SetActive(!isEditing);
+            }).AddTo(gameObject);
+        editManager.IsTileEditing
+            .Subscribe(isEditing =>
+            {
+                _stateBack.SetActive(!isEditing);
+            }).AddTo(gameObject);
+        _stateBack.SetActive(!editManager.IsBuildingEditing.Value);
+        
+        _completeBtn.onClick.AddListener(_produceObject.StartHarvest);
     }
 
     private void UpdateStateUI(ProduceState state)
     {
-        for (var i = 0; i < _stateUIs.Length; i++)
+        switch (state)
         {
-            _stateUIs[i].SetActive(i == (int)state);
+            case ProduceState.Idle:
+                _idleObj.SetActive(true);
+                _completeObj.SetActive(false);
+                break;
+            
+            case ProduceState.Produce:
+                _idleObj.SetActive(false);
+                _completeObj.SetActive(false);
+                break;
+            
+            case ProduceState.Complete:
+                _idleObj.SetActive(false);
+                _completeObj.SetActive(true);
+                var completeTask = _produceObject.AllTasks
+                    .FirstOrDefault(x => x.CurrentState is CompletedState);
+                if (completeTask != null)
+                {
+                    var item = AccountInfo.Instance.Items[completeTask.Data.ResultItems[0].ID];
+                    _completeImg.sprite = item.Icon;
+                }
+                break;
         }
     }
 }

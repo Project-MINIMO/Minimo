@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 
 using Random = System.Random;
@@ -15,6 +16,7 @@ public class ProduceTask
     public float RemainTime => Mathf.Max(0, ModifiedTime - ElapsedTime);
     public float ModifiedTime => _isModifiedDirty ? RecalculateModifiedTime() : _modifiedTime;
     public float ElapsedTime;
+    public Transform ProduceTransform;
     
     private readonly float _maxReducedTime;
     private readonly float _baseTime;
@@ -28,9 +30,10 @@ public class ProduceTask
     
     private bool _isModifiedDirty = true;
     
-    public ProduceTask(ProduceData produceOption)
+    public ProduceTask(ProduceData produceOption, Transform trans)
     {
         Data = produceOption;
+        ProduceTransform = trans;
         
         _baseTime = produceOption.Time;
         _reducedTime = produceOption.Time;
@@ -56,6 +59,14 @@ public class ProduceTask
     public void ChangeState(ITaskState newState)
     {
         CurrentState?.OnExit(this);
+        CurrentState = newState;
+        CurrentState.OnEnter(this);
+
+        OnStateChanged?.Invoke(newState);
+    }
+
+    public void ChangeStateWithoutNotify(ITaskState newState)
+    {
         CurrentState = newState;
         CurrentState.OnEnter(this);
 
@@ -161,7 +172,7 @@ public class CompletedState : ITaskState
     {
         var result = task.Data.ResultItems[0];
         var bonus = CalculateBonus(result.Amount, task.HarvestRatio);
-        AccountInfo.Instance.AddItem(result.ID, result.Amount + bonus);
+        AccountInfo.Instance.AddItem(result.ID, result.Amount + bonus, task.ProduceTransform);
         App.LogBox("yellow", "생산물 추가 수확 로그", new()
         {
             { "기존 수확량", result.Amount.ToString() },

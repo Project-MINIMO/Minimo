@@ -26,12 +26,16 @@ public class StorageInventory : ItemInventory
     #region Sort
     public void SortDefault()
     {
+        if (_activeSlots == null) return;
+        
         var sorted = _activeSlots.OrderBy(slot => slot.Item.ID).ToList();
 
         SortSlots(sorted);
     }
     public void SortByCount(bool desc)    
     {
+        if (_activeSlots == null) return;
+        
         var sorted = desc
             ? _activeSlots.OrderBy(slot => slot.Item.Count).ThenBy(slot => slot.Item.ID).ToList()
             : _activeSlots.OrderByDescending(slot => slot.Item.Count).ThenBy(slot => slot.Item.ID).ToList();
@@ -40,6 +44,8 @@ public class StorageInventory : ItemInventory
     }
     public void SortByPrice(bool desc)
     {
+        if (_activeSlots == null) return;
+        
         var sorted = desc
             ? _activeSlots.OrderBy(slot => slot.Item.SellCost).ThenBy(slot => slot.Item.ID).ToList()
             : _activeSlots.OrderByDescending(slot => slot.Item.SellCost).ThenBy(slot => slot.Item.ID).ToList();
@@ -60,6 +66,8 @@ public class StorageInventory : ItemInventory
     #region Filter
     public void FilterItem(bool[] activeArray)
     {
+        if (_activeSlots == null) return;
+        
         foreach (var slot in _activeSlots)
         {
             var isActive = activeArray[slot.Item.Level - 1];
@@ -69,6 +77,8 @@ public class StorageInventory : ItemInventory
     }
     public void FilterProps(bool[] activeArray)
     {
+        if (_activeSlots == null) return;
+        
         foreach (var slot in _activeSlots)
         {
             var isActive = activeArray[(int)slot.Item.Property - 1];

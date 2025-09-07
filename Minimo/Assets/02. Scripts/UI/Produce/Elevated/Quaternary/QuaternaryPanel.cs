@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class QuaternaryPanel : ElevatedPanel
 {
     [SerializeField] private Button[] _selectBtns;
-    [SerializeField] private Toggle[] _inventoryTogs;
+    [SerializeField] private MenuToggleGroup _toggleGroup;
+    [SerializeField] private Toggle[] _menuTogs;
     [SerializeField] private QuaternaryClearDialog _clearDialog;
     [SerializeField] private QuaternaryTransitioner _transitioner;
     
@@ -22,7 +23,10 @@ public class QuaternaryPanel : ElevatedPanel
             var index = i;
             _selectBtns[index].onClick.AddListener(() => OnClickSelectBtn(index));
         }
+    }
 
+    private void Start()
+    {
         var slots = GetComponentsInChildren<ItemSlot>(true);
         foreach (var slot in slots)
         {
@@ -50,6 +54,13 @@ public class QuaternaryPanel : ElevatedPanel
         
         base.ClosePanel();
     }
+    
+    public override void Show(bool isNew)
+    {
+        base.Show(isNew);
+        
+        _toggleGroup.Show(isNew);
+    }
 
     private void OnClickSelectBtn(int index)
     {
@@ -63,7 +74,7 @@ public class QuaternaryPanel : ElevatedPanel
         else
         {
             _transitioner.Open();
-            _inventoryTogs[index].isOn = true;
+            _menuTogs[index].isOn = true;
         }
     }
     

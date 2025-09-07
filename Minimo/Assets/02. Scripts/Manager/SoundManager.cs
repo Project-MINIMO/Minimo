@@ -74,7 +74,7 @@ public class SoundManager : ManagerBase
         FadeInBGM(5);
     }
 
-    public void StopBGM() => _bgmPlayer.Stop();
+    public void StopBGM() => FadeOutBGM(1);
     
     public void FadeBGM(float targetVolume, float duration)
     {
@@ -115,6 +115,7 @@ public class SoundManager : ManagerBase
         src.clip = clip;
         src.outputAudioMixerGroup = _mixer.FindMatchingGroups("SFX")[0];
         src.loop = false;
+        src.volume = 0.2f;
         src.Play();
 
         if (!src.loop)
@@ -156,9 +157,16 @@ public class SoundManager : ManagerBase
         {
             if (src.clip == clip)
             {
-                src.Stop();
-                src.clip = null;
-                _sfxPool.Enqueue(src);
+                src.DOKill();
+        
+                src.DOFade(0, 1)
+                    .SetEase(Ease.Linear)
+                    .OnComplete(() =>
+                    {
+                        src.Stop();
+                        src.clip = null;
+                        _sfxPool.Enqueue(src);
+                    });
             }
         }
     }
@@ -180,6 +188,11 @@ public class SoundManager : ManagerBase
     #endregion
 
     #region Mute Toggle
+
+    public void ToggleMute(bool mute)
+    {
+        _bgmPlayer.volume = mute ? 0f : 0.2f;
+    }
     public void ToggleMute(EVolumeType type)
     {
         _muted[type] = !_muted[type];

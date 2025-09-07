@@ -1,41 +1,65 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class SecondaryPanel : UIBase
 {
+    protected override bool IsUseGuide => true;
+    
+    [SerializeField] private TextMeshProUGUI _titleTMP;
+    
     [SerializeField] private Button _closeBtn;
-    [SerializeField] private Button _minimoBtn;
+    [SerializeField] private Button _placeMinimoBtn;
+    [SerializeField] private Button _infoBtn;
+    
+    [SerializeField] private UILongPressDetector _longPressDetector;
+    [SerializeField] private GameObject _minimoInfoObj;
+    [SerializeField] private TextMeshProUGUI _minimoInfoTMP;
+    [SerializeField] private GameObject _minimoImg;
     
     [SerializeField] private GameObject[] _stateCtrls;
     
     [SerializeField] private RectTransform _rect;
     
     private ProduceManager _produceManager;
-    private ProduceObject _produceObject;
-    private MinimoPlacePanel _placePanel;
+    private ProduceSecondary _produceObject;
+    private PlaceByBuildingPanel _placePanel;
 
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
 
         _produceManager = App.GetManager<ProduceManager>();
-        _placePanel = manager.GetPanel<MinimoPlacePanel>();
+        _placePanel = manager.GetPanel<PlaceByBuildingPanel>();
 
+        _longPressDetector.OnLongPress += () =>
+        {
+            if (_produceObject.AssignedMinimo == null) return;
+            _minimoInfoTMP.SetText(GetMinimoInfo());
+            _minimoInfoObj.SetActive(true);
+        };
+        _longPressDetector.OnClickUp += () => _minimoInfoObj.SetActive(false);
+        
         _closeBtn.onClick.AddListener(_produceManager.Deselect);
-        _minimoBtn.onClick.AddListener(() => 
+        _placeMinimoBtn.onClick.AddListener(() => 
             _placePanel.OpenPanel(_produceManager.CurrentObject as ProduceAdvanced));
+        _infoBtn.onClick.AddListener(ShowGuide);
     }
 
     public override void OpenPanel()
     {
-        base.OpenPanel();
+        _titleTMP.SetText(_produceManager.CurrentObject.BuildingData.Name);
         
         SetPosition();
+        _minimoInfoObj.SetActive(false);
 
-        _produceObject = _produceManager.CurrentObject;
+        _produceObject = _produceManager.CurrentObject as ProduceSecondary;
+        if (_produceObject == null) return;
         _produceObject.OnProduceStateChanged += ShowCtrls;
         
         ShowCtrls(_produceManager.CurrentObject.CurrentState);
+        
+        base.OpenPanel();
     }
 
     public override void ClosePanel()
@@ -52,6 +76,14 @@ public class SecondaryPanel : UIBase
         }
         
         base.ClosePanel();
+    }
+    
+    public override void Show(bool isNew)
+    {
+        base.Show(isNew);
+        
+        _minimoImg.SetActive(_produceObject.AssignedMinimo != null);
+        _minimoInfoObj.SetActive(false);
     }
 
     private void ShowCtrls(ProduceState state)
@@ -76,5 +108,18 @@ public class SecondaryPanel : UIBase
         var screenPos = Camera.main.WorldToScreenPoint(position);
         screenPos.y -= 100;
         _rect.position = screenPos;
+    }
+    
+    private string GetMinimoInfo()
+    {
+        var info = string.Empty;
+        var minimo = _produceObject.AssignedMinimo;
+        for (var i = 0; i < minimo.Abilities.Count; i++)
+        {
+            if (i > 0) info += "\n";
+            info += string.Format(minimo.AbilityDescriptions[i], minimo.Abilities[i].Value);
+        }
+
+        return info;
     }
 }

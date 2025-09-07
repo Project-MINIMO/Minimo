@@ -10,7 +10,8 @@ public enum SceneName
     Developer,
     Title,
     Prolog,
-    Game
+    Game,
+    Empty
 }
 
 // TODO (하람's 질문) : 현재 구현된 바로는 ManaverBase와 DataBase는 동일한 클래스인데 이름만 다른 것으로 보입니다. 데이터 클래스와 매니저 클래스를 이름이 아니라 클래스를 아예 구분하는 이유가 궁금합니다...!
@@ -23,13 +24,15 @@ public class App : Singleton<App>
     
     private static BottomNotification _notification;
     private static BlackScreen _blackScreen;
+    public static LoadingSpinner Loading;
 
     protected override void Awake()
     {
         base.Awake();
 
-        _notification = GetComponentInChildren<BottomNotification>();
-        _blackScreen = GetComponentInChildren<BlackScreen>();
+        _notification = GetComponentInChildren<BottomNotification>(true);
+        _blackScreen = GetComponentInChildren<BlackScreen>(true);
+        Loading = GetComponentInChildren<LoadingSpinner>(true);
         
         QualitySettings.vSyncCount = 1;
         Application.targetFrameRate = 120;
@@ -86,6 +89,10 @@ public class App : Singleton<App>
             if (sceneName == SceneName.Title)
             {
                 GetManager<SoundManager>().PlayBGM("Title");
+            }
+            else if (sceneName == SceneName.Prolog)
+            {
+                GetManager<SoundManager>().PlayBGM("Prolog");
             }
             else if (sceneName == SceneName.Game)
             {

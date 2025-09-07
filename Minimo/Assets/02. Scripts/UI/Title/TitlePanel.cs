@@ -21,8 +21,16 @@ public class TitlePanel : MonoBehaviour
     
     private Coroutine[] _starCoroutines;
     
+    [SerializeField] private UILongPressDetector _tutorial;
+    [SerializeField] private UILongPressDetector _prolog;
+    [SerializeField] private UILongPressDetector _deleteUser;
+    [SerializeField] private GameObject _blockObj;
+     
     private void Awake()
     {
+        AccountInfo.Instance.Prolog = true;
+        AccountInfo.Instance.Tutorial = true;
+        
         _startBtn.onClick.AddListener(OnClickStart);
         var startPositionY = _startTextRect.anchoredPosition.y;
         _startTextRect.DOAnchorPosY(startPositionY + 10f, 1f)
@@ -34,6 +42,35 @@ public class TitlePanel : MonoBehaviour
         {
             _starCoroutines[i] = StartCoroutine(SpawnStarRoutine(i));
         }
+
+        _tutorial.OnLongPress += () =>
+        {
+            _blockObj.SetActive(true);
+            AccountInfo.Instance.Tutorial = false;
+            App.Notification(NotifyType.TutorialSkip);
+            _blockObj.SetActive(false);
+        };
+        _prolog.OnLongPress += () =>
+        {
+            _blockObj.SetActive(true);
+            AccountInfo.Instance.Prolog = false;
+            App.Notification(NotifyType.PrologSkip);
+            _blockObj.SetActive(false);
+        };
+        _deleteUser.OnLongPress += () =>
+        {
+            DeleteUser();
+            App.Notification(NotifyType.DeleteUser);
+        };
+    }
+    
+    async void DeleteUser()
+    {
+        _blockObj.SetActive(true);
+        var firebaseManager = App.GetManager<FirebaseManager>();
+        await firebaseManager.DeleteUserAsync();
+        await firebaseManager.InitializeFirebase();
+        _blockObj.SetActive(false);
     }
 
     public void ShowTitle(bool isNew = false)
@@ -61,7 +98,7 @@ public class TitlePanel : MonoBehaviour
 
         _startTextRect.DOKill();
         _startBtn.gameObject.SetActive(false);
-        App.LoadScene(SceneName.Game);
+        App.LoadScene(AccountInfo.Instance.Prolog ? SceneName.Prolog : SceneName.Game);
     }
 
     private IEnumerator StopStarRoutine()
@@ -76,9 +113,9 @@ public class TitlePanel : MonoBehaviour
     {
         _rect.DOKill();
         _rect.anchoredPosition = new Vector2(Random.Range(_width.x, _width.y), _height);
-        _rect.localScale = Vector3.one;
+        _rect.localScale = new Vector3(0.5f, 0.5f, 1);
         var randomDiff = Random.Range(_diff.x, _diff.y);
-        var randomSpeeed = Random.Range(0.5f, 1);
+        var randomSpeeed = Random.Range(0.25f, 0.75f);
         
         var sequence = DOTween.Sequence();
         sequence.Append(_rect.DOAnchorPos(

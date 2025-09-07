@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class UseCashPanel : UIBase
 {
+    public override bool IsUseBlur => true;
+    
     [SerializeField] private UseCashMaterialBack _useMaterialBack;
     [SerializeField] private ChargeCashBack _chargeBack;
 

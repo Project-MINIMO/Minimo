@@ -1,6 +1,8 @@
 using UnityEngine;
 using UniRx;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 public abstract class ProduceAdvanced : ProduceObject
 {
@@ -106,9 +108,12 @@ public abstract class ProduceAdvanced : ProduceObject
         var result = base.CheckPlantCondition(option);
         if (result == NotifyType.Success)
         {
-            return AssignedMinimo == null
-                ? NotifyType.MissMinimo
-                : NotifyType.Success;
+            if (AssignedMinimo == null)
+            {
+                return _minimoManager.AssignNearestMinimo(this) 
+                    ? NotifyType.Success 
+                    : NotifyType.MissMinimo;
+            }
         }
         
         return result;
@@ -120,6 +125,17 @@ public abstract class ProduceAdvanced : ProduceObject
         
         task.ApplyTimeReduction(_globalTimeReduction);
         return task;
+    }
+
+    public override bool Destroy()
+    {
+        if (AssignedMinimo != null)
+        {
+            App.Notification(NotifyType.DeleteBuildingFailMinimo);
+            return false;
+        }
+
+        return base.Destroy();
     }
     
     #region Apply Minimo Abilities

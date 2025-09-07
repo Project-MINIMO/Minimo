@@ -5,14 +5,17 @@ using TMPro;
 public class StoragePanel : UIBase
 {
     public override bool IsUseBlur => true;
+    protected override bool IsUseGuide => true;
             
     [SerializeField] private TextMeshProUGUI _titleTMP;
     [SerializeField] private StorageInfoCtrl _infoCtrl;
-    [SerializeField] private ExpandCtrl _expandCtrl;
     [SerializeField] private TextMeshProUGUI _capacityTMP;
     
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
+    [SerializeField] private Button _expandBtn;
+    [SerializeField] private MenuToggleGroup _toggleGroup;
+    [SerializeField] private Button _infoBtn;
 
     public override void Initialize(UIManager manager)
     {
@@ -20,22 +23,31 @@ public class StoragePanel : UIBase
 
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
-        
-        _expandCtrl.Initialize(
-            "STR_STORAGE_UI_NAME", 
-            "STR_STORTAGE_UI_EXPAND_DESC", 
-            "STR_STORTAGE_UI_EXPAND_COMPLETE");
-        
-        var slots = GetComponentsInChildren<ItemSlot>(true);
-        foreach (var slot in slots)
-        {
-            slot.OnItemSelected += OnItemSelected;
-        }
+
+        var popUpPanel = manager.GetPanel<PopUpPanel>();
+        _expandBtn.onClick.AddListener(() => popUpPanel.OpenPanel(PopUpType.StorageExpand));
+        _infoBtn.onClick.AddListener(ShowGuide);
 
         _titleTMP.text = App.GetData<TitleData>().GetString("STR_STORAGE_UI_NAME");
 
         AccountInfo.Instance.OnStorageCapacityChanged += OnStorageCapacityChanged;
         OnStorageCapacityChanged(AccountInfo.Instance.StorageCapacity);
+    }
+    
+    private void Start()
+    {
+        var slots = GetComponentsInChildren<ItemSlot>(true);
+        foreach (var slot in slots)
+        {
+            slot.OnItemSelected += OnItemSelected;
+        }
+    }
+    
+    public override void Show(bool isNew)
+    {
+        base.Show(isNew);
+        
+        _toggleGroup.Show(isNew);
     }
 
     public override void OpenPanel()
@@ -43,7 +55,6 @@ public class StoragePanel : UIBase
         base.OpenPanel();
         
         _infoCtrl.gameObject.SetActive(false);
-        _expandCtrl.gameObject.SetActive(false);
     }
 
     private void OnItemSelected(InventorySlot<Item> slot)

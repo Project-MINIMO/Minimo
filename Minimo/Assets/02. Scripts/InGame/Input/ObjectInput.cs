@@ -9,20 +9,18 @@ public class ObjectInput : MonoBehaviour
 
     private InteractObject _currentObject;
     
-    private int _layerMask;
-
     private void Start()
     {
         _mainCamera = Camera.main;
         
         _input = App.GetManager<InputManager>();
         _editManager = App.GetManager<EditManager>();
-        
-        _layerMask = LayerMask.GetMask("InteractObject");
     }
 
     private void Update()
     {
+        if (_input.InputTarget != InputTargetType.Object) return;
+        
         switch (_input.CurrentState)
         {
             case InputState.ClickDown:
@@ -40,18 +38,28 @@ public class ObjectInput : MonoBehaviour
             case InputState.Drag:
                 HandleDrag();
                 break;
+            
+            case InputState.DragEnd:
+                HandleDragEnd();
+                break;
         }
     }
 
     private void HandleClickDown()
     {
-        var hit = GetRaycastObject();
+        var hit = _input.CurrentInteractObject;
+        if (hit == null) return;
+
         _currentObject = hit;
+        _currentObject.OnClickDown();
     }
 
     private void HandleClickUp()
     {
-        if (_editManager.IsEditing.Value)
+        if (_currentObject == null) return;
+        if (_editManager.IsTileEditing.Value) return;
+        
+        if (_editManager.IsBuildingEditing.Value)
         {
             if (_currentObject is not BuildingObject)
             {
@@ -82,18 +90,16 @@ public class ObjectInput : MonoBehaviour
     
     private void HandleDrag()
     {
-        _currentObject = null;
-    }
-
-    private InteractObject GetRaycastObject()
-    {
-        var worldPosition = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        var hit = Physics2D.OverlapPoint(worldPosition, _layerMask);
-        if (hit != null && hit.TryGetComponent<InteractObject>(out var component))
-        {
-            return component;
-        }
+        if (_currentObject == null) return;
         
-        return null;
+        _currentObject.OnDrag();
+    }
+    
+    private void HandleDragEnd()
+    {
+        if (_currentObject == null) return;
+        
+        _currentObject.OnDragEnd();
+        _currentObject = null;
     }
 }

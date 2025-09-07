@@ -4,16 +4,30 @@ using UnityEngine.UI;
 
 public class MenuToggleGroup : ToggleGroup
 {
-    protected override void OnEnable()
+    private Toggle _lastSelected;
+
+    public void Show(bool isNew, int index = 0)
     {
-        var toggle = GetFirstToggle();
-        if (toggle != null)
+        if (isNew)
         {
-            toggle.isOn = true;
+            var toggle = GetToggleFor(index);
+            if (toggle != null)
+            {
+                toggle.isOn = true;
+            }
+        }
+        else
+        {
+            _lastSelected.isOn = true;
         }
     }
+    
+    protected override void OnEnable()
+    {
+        
+    }
 
-    private Toggle GetFirstToggle()
+    private Toggle GetToggleFor(int index)
     {
         if (m_Toggles.Count <= 0)
         {
@@ -21,17 +35,13 @@ public class MenuToggleGroup : ToggleGroup
         }
         
         return m_Toggles
-            .OrderBy(t => t.transform.GetSiblingIndex())
-            .First();
+            .OrderBy(t => t.transform.GetSiblingIndex()).ToList()[index];
     }
     
     protected override void OnDisable()
     {
         base.OnDisable();
         
-        foreach (var toggle in m_Toggles)
-        {
-            toggle.isOn = false;
-        }
+        _lastSelected = m_Toggles.FirstOrDefault(x => x.isOn);
     }
 }

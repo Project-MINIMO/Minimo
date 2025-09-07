@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
 public class SortDropdown : TMP_Dropdown
@@ -7,6 +8,21 @@ public class SortDropdown : TMP_Dropdown
     private Image _labelImg;
     private Sprite _clearSprite;
     private Sprite _startSprite;
+    
+    public override void OnPointerClick(PointerEventData eventData)
+    {
+        DisplayDropdown();
+    }
+    
+    private void DisplayDropdown()
+    {
+        Show();
+        
+        var dropdownListRect = transform.GetChild(transform.childCount - 1).GetComponent<RectTransform>();
+        var contentRect = dropdownListRect.GetComponent<ScrollRect>().content;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contentRect);
+        dropdownListRect.sizeDelta = new Vector2(dropdownListRect.sizeDelta.x, contentRect.sizeDelta.y);
+    }
     
     protected override GameObject CreateDropdownList(GameObject template)
     {

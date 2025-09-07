@@ -80,7 +80,7 @@ public class UseCashMaterialBack : MonoBehaviour
         }
         else
         {
-            AccountInfo.Instance.Cash -= _price;
+            AccountInfo.Instance.AddCash(-_price);
             _confirmAction?.Invoke();
             _confirmAction = null;
             _price = 0;

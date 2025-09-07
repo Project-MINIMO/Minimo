@@ -1,62 +1,99 @@
-using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
 {
     public override bool IsDefaultPanel => true;
     
+    [SerializeField] private QuestCompactSlot _slotPrefab;
+    [SerializeField] private Transform _contentParent;
+    
+    [SerializeField] private RectTransform _contentRect;
+    [SerializeField] private Button _openBtn;
+    [SerializeField] private GameObject _redDot;
+    [SerializeField] private Button _closeBtn;
+    
     private RectTransform _rect;
-    
-    private readonly Vector2 _showPosition = new(-2, 0);
-    private readonly Vector2 _hidePosition = new(-370, 0);
-    
+
+    private const int ShowPosition = 130;
+    private const int HidePosition = -100;
+
+    private const int OpenPosition = 0;
+    private const int ClosePosition = -555;
+
     private readonly Queue<QuestCompactSlot> _slotPool = new();
     private readonly Dictionary<Quest, QuestCompactSlot> _activeMap = new();
+    
+    private bool _isOpened = true;
     
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
         
         var questListPanel = manager.GetPanel<QuestDetailListPanel>();
-        var longPressDetector = GetComponentInChildren<UILongPressDetector>();
-        longPressDetector.OnLongPress = questListPanel.OpenPanel;
+        var longPressDetector = GetComponentInChildren<UILongPressDetector>(true);
+        longPressDetector.OnLongPress += questListPanel.OpenPanel;
         
         foreach (var slot in Slots)
         {
-            slot.OnSlotOpened += OnSlotOpened;
             slot.gameObject.SetActive(false);
             _slotPool.Enqueue(slot);
         }
         
+        _openBtn.onClick.AddListener(Toggle);
+        _closeBtn.onClick.AddListener(Toggle);
+        Toggle();
+        
         _rect = GetComponent<RectTransform>();
+
+        SetOpenBtnActive();
     }
     
     public override void Show(bool isNew)
     {
         base.Show(isNew);
-
-        OnSlotOpened(null);
-        _rect.DOAnchorPos(_showPosition, 0.3f).SetEase(Ease.OutCubic);
+        
+        _rect.DOAnchorPosX(ShowPosition, 0.3f).SetEase(Ease.OutCubic);
+        SetOpenBtnActive();
     }
 
     public override void Hide(bool isNew)
     {
         base.Hide(isNew);
 
-        OnSlotOpened(null);
-        _rect.DOAnchorPos(_hidePosition, 0.3f).SetEase(Ease.InCubic);
+        if (_isOpened)
+        {
+            Toggle();
+        }
+        _rect.DOAnchorPosX(HidePosition, 0.3f).SetEase(Ease.InCubic);
+        SetOpenBtnActive();
     }
    
     protected override void AssignSlot(Quest quest)
     {
-        var slot = _slotPool.Dequeue();
+        QuestCompactSlot slot;
+
+        if (_slotPool.Count > 0)
+        {
+            slot = _slotPool.Dequeue();
+        }
+        else
+        {
+            slot = Instantiate(_slotPrefab, _contentParent);
+            slot.OnSlotSelected += OnSlotSelected;
+        }
 
         slot.gameObject.SetActive(true);
         slot.Initialize(quest);
+        
+        slot.transform.SetAsLastSibling();
+        
         _activeMap[quest] = slot;
+        _redDot.SetActive(true);
+        SetOpenBtnActive();
     }
 
     protected override void ReleaseSlot(Quest quest)
@@ -66,13 +103,68 @@ public class QuestCompactListPanel : QuestListPanel<QuestCompactSlot>
         slot.gameObject.SetActive(false);
         _activeMap.Remove(quest);
         _slotPool.Enqueue(slot);
+
+        SetOpenBtnActive();
     }
-  
-    private void OnSlotOpened(QuestCompactSlot openedSlot)
+    
+    protected override void OnSlotSelected(Quest quest)
     {
-        foreach (var slot in _activeMap.Values.Where(slot => openedSlot != slot))
+        if (quest.Condition != QuestCondition.Normal)
         {
-            slot.Close();
+            base.OnSlotSelected(quest);
+            return;
         }
+        
+        foreach (var clear in quest.Clear)
+        {
+            if (!clear.IsCompleted)
+            {
+                base.OnSlotSelected(quest);
+                return;
+            }
+        }
+        
+        QuestManager.SubmitQuest(quest);
+    }
+    
+    private void Toggle()
+    {
+        if (_isOpened)
+        {
+            Close();
+        }
+        else
+        {
+            Open();
+        }
+        
+        _openBtn.gameObject.SetActive(!_isOpened);
+        _closeBtn.gameObject.SetActive(_isOpened);
+    }
+
+    private void Open()
+    {
+        if (_isOpened) return;
+        
+        _isOpened = true;
+        _contentRect.DOKill();
+        _contentRect.DOAnchorPosX(OpenPosition, 0.1f).SetEase(Ease.Linear);
+        _redDot.SetActive(false);
+        SetOpenBtnActive();
+    }
+
+    private void Close()
+    {
+        if (!_isOpened) return;
+        
+        _isOpened = false;
+        _contentRect.DOKill();
+        _contentRect.DOAnchorPosX(ClosePosition, 0.1f).SetEase(Ease.Linear);
+        SetOpenBtnActive();
+    }
+
+    private void SetOpenBtnActive()
+    {
+        _openBtn.gameObject.SetActive(QuestManager.ActiveQuests.Count > 0 && !_isOpened);
     }
 }

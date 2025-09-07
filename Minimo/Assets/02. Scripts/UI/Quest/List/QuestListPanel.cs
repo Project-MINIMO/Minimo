@@ -6,19 +6,19 @@ using UniRx;
 public abstract class QuestListPanel<T> : UIBase where T : QuestSlot
 {
     protected List<T> Slots;
+    protected QuestManager QuestManager;
     
-    private QuestManager _questManager;
     private Dictionary<QuestType, UIBase> _panelMap;
     
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
         
-        _questManager = App.GetManager<QuestManager>();
-        _questManager.ActiveQuests.ObserveAdd()
+        QuestManager = App.GetManager<QuestManager>();
+        QuestManager.ActiveQuests.ObserveAdd()
             .Subscribe(addEvent => AssignSlot(addEvent.Value))
             .AddTo(this);
-        _questManager.ActiveQuests.ObserveRemove()
+        QuestManager.ActiveQuests.ObserveRemove()
             .Subscribe(removeEvent => ReleaseSlot(removeEvent.Value))
             .AddTo(this);
 
@@ -39,20 +39,29 @@ public abstract class QuestListPanel<T> : UIBase where T : QuestSlot
             slot.OnSlotSelected += OnSlotSelected;
         }
     }
-    
+
+    private void Start()
+    {
+        foreach (var quest in QuestManager.ActiveQuests)
+        {
+            if (Slots.Any(x => x.CurrentQuest == quest)) continue;
+            AssignSlot(quest);
+        }
+    }
+
     public override void Show(bool isNew)
     {
         base.Show(isNew);
         
-        _questManager.DeselectQuest();
+        QuestManager.DeselectQuest();
     }
     
     protected abstract void AssignSlot(Quest quest);
     protected abstract void ReleaseSlot(Quest quest);
     
-    private void OnSlotSelected(Quest quest)
+    protected virtual void OnSlotSelected(Quest quest)
     {
-        _questManager.SelectQuest(quest);
+        QuestManager.SelectQuest(quest);
         _panelMap[quest.Type].OpenPanel();
     }
 }

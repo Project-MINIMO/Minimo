@@ -9,7 +9,10 @@ using TMPro;
 public class MinimoAssignedPanel : UIBase
 {
     public override bool IsUseBlur => true;
-            
+    
+    [SerializeField] private MinimoAssignedSlot _slotPrefab;
+    [SerializeField] private RectTransform _contentParent;   
+    
     [SerializeField] private TextMeshProUGUI _titleTMP;
     [SerializeField] private TextMeshProUGUI _descriptionTMP;
     [SerializeField] private RectTransform _content;
@@ -18,16 +21,20 @@ public class MinimoAssignedPanel : UIBase
     
     private readonly Queue<MinimoAssignedSlot> _slotPool = new();
     private readonly List<MinimoAssignedSlot> _activeSlots = new();
-    private MinimoPlacePanel _placePanel;
+    private PlaceByBuildingPanel _placePanel;
     
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
 
-        _placePanel = manager.GetPanel<MinimoPlacePanel>();
+        _placePanel = manager.GetPanel<PlaceByBuildingPanel>();
 
-        App.GetManager<EditManager>().ActiveAdvanceds.ObserveAdd()
+        var editManager = App.GetManager<EditManager>();
+        editManager.ActiveProduces.ObserveAdd()
             .Subscribe(addEvent => AssignSlot(addEvent.Value))
+            .AddTo(this);
+        editManager.ActiveProduces.ObserveRemove()
+            .Subscribe(removeEvent => ReleaseSlot(removeEvent.Value))
             .AddTo(this);
         
         var slots = GetComponentsInChildren<MinimoAssignedSlot>(true).ToList();
@@ -38,28 +45,54 @@ public class MinimoAssignedPanel : UIBase
             _slotPool.Enqueue(slot);
         }
 
-        _titleTMP.text = App.GetData<TitleData>().GetString("STR_POPUP_PRODUCEPLACE_NAME");
-        _descriptionTMP.text = App.GetData<TitleData>().GetString("STR_POPUP_PRODUCEPLACE_DESC");
+        _titleTMP.text = App.GetData<TitleData>().GetString("STR_MANAGEPORDBUILDING_NAME");
+        _descriptionTMP.text = App.GetData<TitleData>().GetString("STR_MANAGEPORDBUILDING_DESC");
         
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
     }
     
-    private void AssignSlot(ProduceAdvanced building)
+    private void AssignSlot(ProduceObject building)
     {
-        var activeSlot = _slotPool.Dequeue();
-
-        activeSlot.gameObject.SetActive(true);
-        activeSlot.Initialize(building);
-        _activeSlots.Add(activeSlot);
+        if (building is not ProduceAdvanced advanced) return;
         
-        var sorted = _activeSlots.OrderBy(slot => slot.Item.BuildingData.ID).ToList();
+        MinimoAssignedSlot slot;
+        
+        if (_slotPool.Count > 0)
+        {
+            slot = _slotPool.Dequeue();
+        }
+        else
+        {
+            slot = Instantiate(_slotPrefab, _content);
+            slot.OnItemSelected += OnItemSelected;
+        }
+   
+        slot.gameObject.SetActive(true);
+        slot.Initialize(advanced);
+        _activeSlots.Add(slot);
+        
+        var sorted = _activeSlots
+            .OrderBy(s => s.Item.BuildingData.ID)
+            .ToList();
+        
         for (var i = 0; i < sorted.Count; i++)
         {
             sorted[i].transform.SetSiblingIndex(i);
         }
         
         LayoutRebuilder.ForceRebuildLayoutImmediate(_content);
+    }
+    
+    private void ReleaseSlot(ProduceObject building)
+    {
+        if (building is not ProduceAdvanced) return;
+        
+        var slot = _activeSlots.FirstOrDefault(x => x.Item == building);
+        if (slot == null) return;
+        slot.gameObject.SetActive(false);
+        _activeSlots.Remove(slot);
+        _slotPool.Enqueue(slot);
     }
 
     private void OnItemSelected(InventorySlot<ProduceAdvanced> slot)

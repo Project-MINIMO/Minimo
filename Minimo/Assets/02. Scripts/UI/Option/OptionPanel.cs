@@ -1,15 +1,21 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class OptionPanel : UIBase
 {
-    protected override GameObject Panel => _optionBack;
+    public override bool IsUseBlur => true;
     
     [Header("Buttons")]
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
+    [SerializeField] private Button _restartBtn;
+    
+    [SerializeField] private Toggle _soundOnTog;
+    [SerializeField] private Toggle _soundOffTog;
 
+    /* 
     [Header("Options")]
     [SerializeField] private GameObject _optionBack;
     [SerializeField] private Button[] _optionBtns;
@@ -20,25 +26,45 @@ public class OptionPanel : UIBase
     [SerializeField] private TextMeshProUGUI _gameSettingTMP;
     [SerializeField] private TextMeshProUGUI _accountSettingTMP;
     [SerializeField] private TextMeshProUGUI _serviceCenterTMP;
-
+    
     private OptionBase[] _optionBases;
+        */
+    private SoundManager _soundManager;
 
-    #region Override
+    //#region Override
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
+        
+        _soundManager = App.GetManager<SoundManager>();
+        
+        _soundOnTog.onValueChanged.AddListener((isOn) =>
+        {
+            if (isOn) _soundManager.ToggleMute(false);
+        });
+        _soundOffTog.onValueChanged.AddListener((isOn) =>
+        {
+            if (isOn) _soundManager.ToggleMute(true);
+        });
+        
+        _openBtn.onClick.AddListener(OpenPanel);
+        _closeBtn.onClick.AddListener(ClosePanel);
+        _restartBtn.onClick.AddListener(Restart);
 
+        /*
         _optionBases = GetComponentsInChildren<OptionBase>(true);
 
         SetString();
         SetButtonEvent();
+        */
     }
 
+    /*
     public override void OpenPanel()
     {
-        base.OpenPanel();
-        
-        OnClickOptionBtn(0);
+     base.OpenPanel();
+
+     OnClickOptionBtn(0);
     }
 
     public override void ClosePanel()
@@ -49,6 +75,7 @@ public class OptionPanel : UIBase
     }
     #endregion
 
+ 
     private void SetString()
     {
         var titleData = App.GetData<TitleData>();
@@ -99,5 +126,11 @@ public class OptionPanel : UIBase
         }
 
         App.GetData<SettingData>().SaveToLocal();
+    }
+    */
+
+    private async void Restart()
+    {
+        App.LoadScene(SceneName.Empty);
     }
 }

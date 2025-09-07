@@ -5,6 +5,7 @@ public class ItemSlot : InventorySlot<Item>
     public override bool CanShow() => Item is { Count: > 0 };
     
     [SerializeField] private ItemInfoUpdater _info;
+    [SerializeField] private GameObject[] _slotImgs;
     
     private void OnEnable()
     {
@@ -18,6 +19,11 @@ public class ItemSlot : InventorySlot<Item>
         Item = item;
         Item.OnItemCountChanged += SetCount;
         _info.UpdateItem(item);
+
+        if (item.Level < 4) return;
+        
+        _slotImgs[0].SetActive(false);
+        _slotImgs[(int)item.Property].gameObject.SetActive(true);
     }
 
     private void SetCount()

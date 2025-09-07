@@ -9,9 +9,18 @@ public class InstallChecker : MonoBehaviour
     [SerializeField] private Tilemap _checkTilemap;
     [SerializeField] private Tilemap _installTilemap;
     
-    [SerializeField] private TileBase _groundTile;
-    [SerializeField] private TileBase _waterTile;
-    
+    private Dictionary<TileType, List<TileBase>> _tileGroup = new();
+
+    private void Awake()
+    {
+        _tileGroup = App.GetData<TitleData>().CustomTile
+            .Values
+            .GroupBy(data => data.Type)
+            .ToDictionary(
+                data => data.Key,
+                data => data.Select(tile => tile.Tile).ToList()
+            );
+    }
     public bool CheckCanInstall(BuildingObject gridObject)
     {
         if (gridObject == null || gridObject.BuildingData == null || gridObject.PositionData == null)
@@ -23,9 +32,7 @@ public class InstallChecker : MonoBehaviour
         foreach (var tile in gridObject.PositionData.GroundTilePositions)
         {
             var cellPos = baseCell + new Vector3Int(tile.x, tile.y, 0);
-            var checkTile = _checkTilemap.GetTile(cellPos);
-            var installTile = _installTilemap.GetTile(cellPos);
-            if (checkTile != _groundTile || installTile != null)
+            if (!CheckCanInstall(cellPos, TileType.Ground))
             {
                 return false;
             }
@@ -33,9 +40,7 @@ public class InstallChecker : MonoBehaviour
         foreach (var tile in gridObject.PositionData.WaterTilePositions)
         {
             var cellPos = baseCell + new Vector3Int(tile.x, tile.y, 0);
-            var checkTile = _checkTilemap.GetTile(cellPos);
-            var installTile = _installTilemap.GetTile(cellPos);
-            if (checkTile != _waterTile || installTile != null)
+            if (!CheckCanInstall(cellPos, TileType.Water))
             {
                 return false;
             }
@@ -43,29 +48,19 @@ public class InstallChecker : MonoBehaviour
         return true;
     }
 
-    public bool CheckCanInstall(Vector3Int position)
-    {
-        var checkTile = _checkTilemap.GetTile(position);
-        var installTile = _installTilemap.GetTile(position);
-        
-        return checkTile == _groundTile && installTile == null;
-    }
+    public bool CheckCanInstall(Vector3Int position) => CheckCanInstall(position, TileType.Ground);
     
     public bool CheckCanInstall(Vector3Int position, TileType tileType)
     {
         var checkTile = _checkTilemap.GetTile(position);
         var installTile = _installTilemap.GetTile(position);
         
-        return checkTile == GetCheckTile(tileType) && installTile == null;
+        var typeCheck = _tileGroup[tileType].Any(tile => tile.name == checkTile?.name);
+        var installCheck = installTile == null;
+        
+        return typeCheck && installCheck;
     }
-    
-    private TileBase GetCheckTile(TileType tileType) => tileType switch
-    {
-        TileType.Ground => _groundTile,
-        TileType.Water => _waterTile,
-        _ => null
-    };
-    
+
     public List<Vector3> GetInstallablePositions()
     {
         var positions = new List<Vector3>();

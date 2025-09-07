@@ -36,6 +36,7 @@ public class DataLoader
                 Building      = raw.Building,
                 MaterialItems = ParseMaterials(raw.MaterialItems),
                 ResultItems   = ParseResults(raw.ResultItems),
+                UnlockLevel   = raw.UnlockLevel,
                 Time          = raw.Time,
                 EXP           = raw.EXP
             })

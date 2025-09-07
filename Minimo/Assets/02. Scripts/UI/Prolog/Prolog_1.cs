@@ -1,47 +1,39 @@
 using System.Collections;
-
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Prolog_1 : PrologBase
 {
-    [SerializeField] private Image _image1;
-    [SerializeField] private RectTransform _image2;
-    [SerializeField] private Image _image3;
-    [SerializeField] private RectTransform _image4;
-    [SerializeField] private GameObject _image5;
-    [SerializeField] private Image _image6;
-    [SerializeField] private RectTransform _image7;
+    [SerializeField] private Image _background;
+    [SerializeField] private Image _textBox;
+    [SerializeField] private TextMeshProUGUI _text;
+    [SerializeField] private string[] _strings;
+    [SerializeField] private float _charInterval = 0.05f;
+    [SerializeField] private GameObject _textSkipObj;
     
     protected override IEnumerator ShowProlog()
     {
-        yield return new WaitForSeconds(3.5f);
+        FadeIn(_background, 1f);
+        yield return new WaitForSeconds(3f);
         
-        FadeIn(_image1, 0.5f);
-        yield return new WaitForSeconds(0.5f);
-        
-        ScaleInWithShake(_image2, 0.5f);
-        yield return new WaitForSeconds(1.5f);
-        
-        FadeIn(_image3, 0.5f);
-        yield return new WaitForSeconds(0.5f);
-        
-        ScaleInWithShake(_image4, 0.5f);
-        yield return new WaitForSeconds(0.5f);
-        
-        _image5.SetActive(true);
-        yield return new WaitForSeconds(0.3f);
-        _image5.SetActive(false);
-        yield return new WaitForSeconds(0.3f);
-        _image5.SetActive(true);
+        FadeIn(_textBox, 0.3f);
         yield return new WaitForSeconds(0.3f);
         
-        
-        FadeIn(_image6, 0.5f);
-        yield return new WaitForSeconds(0.5f);
-        
-        ScaleIn(_image7, 0.3f);
-        yield return new WaitForSeconds(1.5f);
+        foreach (var line in _strings)
+        {
+            _text.text = string.Empty;
+            _text.DOKill();
+
+            var duration = line.Length * _charInterval;
+            _text.DOText(line, duration).SetEase(Ease.Linear);
+
+            yield return new WaitForSeconds(duration);
+            _textSkipObj.SetActive(true);
+            yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+            _textSkipObj.SetActive(false);
+        }
         
         EndProlog();
     }

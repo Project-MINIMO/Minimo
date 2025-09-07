@@ -9,7 +9,7 @@ public class QuestConsPanel : QuestInfoPanel
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
-     
+        
         _slots = GetComponentsInChildren<QuestConsSlot>(true).ToList();
         foreach (var slot in _slots)
         {
@@ -19,9 +19,9 @@ public class QuestConsPanel : QuestInfoPanel
         _submissionPanel = manager.GetPanel<QuestSubmissionPanel>();
     }
 
-    public override void OpenPanel()
+    public override void Show(bool isNew)
     {
-        base.OpenPanel();
+        base.Show(isNew);
         
         _infoUpdater.UpdateQuestGroup(SelectedQuest);
         UpdateQuest(SelectedQuest);

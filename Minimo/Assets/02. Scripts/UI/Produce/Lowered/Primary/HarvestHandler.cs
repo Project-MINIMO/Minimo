@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 public class HarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    [SerializeField] private GameObject _hint;
     [SerializeField] private RectTransform _rect;
     [SerializeField] private Image _image;
     
@@ -17,7 +18,7 @@ public class HarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     
     private HashSet<ProducePrimary> _harvestedThisDrag;
 
-    private void Start()
+    private void Awake()
     {
         _targetLayerMask = LayerMask.GetMask("InteractObject");
         _produceManager = App.GetManager<ProduceManager>();
@@ -28,11 +29,22 @@ public class HarvestHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         
         _harvestedThisDrag = new HashSet<ProducePrimary>();
     }
+    
+    private void OnEnable()
+    {
+        _image.raycastTarget = true;
+        _rect.anchoredPosition = _startPosition;
+        _harvestedThisDrag?.Clear();
+        
+        _hint.SetActive(true);
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         _image.raycastTarget = false;
         _harvestedThisDrag.Clear();
+        
+        _hint.SetActive(false);
     }
 
     public void OnDrag(PointerEventData eventData)

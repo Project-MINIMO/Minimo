@@ -12,9 +12,20 @@ public class BlackScreen : MonoBehaviour
     {
         _blackBlur = GetComponent<Image>();
     }
+    
+    private void CheckBlackBlur()
+    {
+        if (_blackBlur == null)
+        {
+            _blackBlur = GetComponent<Image>();
+            return;
+        }
+    }
 
     public void FadeIn(Action onComplete = null)
     {
+        CheckBlackBlur();
+        
         _blackBlur.gameObject.SetActive(true);
 
         _blackBlur.DOKill();
@@ -26,6 +37,8 @@ public class BlackScreen : MonoBehaviour
 
     public void FadeOut(float duration, Action onComplete = null)
     {
+        CheckBlackBlur();
+        
         _blackBlur.DOKill();
         _blackBlur.DOFade(0f, duration).SetEase(Ease.InCubic).OnComplete(() =>
         {
@@ -36,6 +49,14 @@ public class BlackScreen : MonoBehaviour
 
     public void FadeInOut(float duration, Action midAction = null)
     {
+        CheckBlackBlur();
+        
+        if (_blackBlur == null)
+        {
+            Debug.LogError("BlackScreen component is not assigned.");
+            midAction?.Invoke();
+            return;
+        }
         _blackBlur.gameObject.SetActive(true);
 
         _blackBlur.DOKill();
@@ -44,5 +65,11 @@ public class BlackScreen : MonoBehaviour
             midAction?.Invoke();
             FadeOut(duration);
         });
+    }
+    
+    private void OnDestroy()
+    {
+        _blackBlur.DOKill();
+        _blackBlur.gameObject.SetActive(false);
     }
 }

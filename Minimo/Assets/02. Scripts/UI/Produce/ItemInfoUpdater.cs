@@ -9,7 +9,7 @@ public class ItemInfoUpdater : MonoBehaviour
     [SerializeField] private TextMeshProUGUI? _itemDescriptionTMP;
     [SerializeField] private TextMeshProUGUI? _itemCountTMP;
     [SerializeField] private Image? _iconImg;
-
+    
     public void ClearItem()
     {
         _itemNameTMP?.SetText(string.Empty);

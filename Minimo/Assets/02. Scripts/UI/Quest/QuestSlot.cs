@@ -6,20 +6,19 @@ using UnityEngine.UI;
 public class QuestSlot : MonoBehaviour
 {
     public event Action<Quest> OnSlotSelected;
+    public Quest CurrentQuest { get; protected set; }
     
     [SerializeField] protected Button _selectBtn;
     [SerializeField] private QuestInfoUpdater _infoUpdater;
     
-    protected Quest QuestData;
-    
     protected virtual void Awake()
     {
-        _selectBtn.onClick.AddListener(() => OnSlotSelected?.Invoke(QuestData));
+        _selectBtn.onClick.AddListener(() => OnSlotSelected?.Invoke(CurrentQuest));
     }
     
     public virtual void Initialize(Quest data)
     {
-        QuestData = data;
+        CurrentQuest = data;
         _infoUpdater.UpdateQuest(data);
     }
 }

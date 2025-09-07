@@ -6,20 +6,24 @@ using UnityEngine.UI;
 public class QuizSubmissionView : QuestSubmissionView
 {
     [SerializeField] private Button _selectBtn;
+    [SerializeField] private MenuToggleGroup _toggleGroup;
     
     private Item _selectedItem;
     
-    public override void Initialize(QuestManager questManager, TitleData titleData)
+    public override void Initialize(QuestManager questManager, QuestSubmissionPanel submissionPanel, TitleData titleData)
     {
-        base.Initialize(questManager, titleData);
+        base.Initialize(questManager, submissionPanel, titleData);
         
+        _selectBtn.onClick.AddListener(ClearItem);
+    }
+
+    private void Start()
+    {
         var itemSlots = GetComponentsInChildren<ItemSlot>(true).ToList();
         foreach (var slot in itemSlots)
         {
             slot.OnItemSelected += OnItemSelected;
         }
-
-        _selectBtn.onClick.AddListener(ClearItem);
     }
     
     public override void Setup(Quest quest)
@@ -27,6 +31,8 @@ public class QuizSubmissionView : QuestSubmissionView
         base.Setup(quest);
 
         ClearItem();
+        _toggleGroup.Show(true);
+        SubmitBtn.interactable = false;
     }
 
     protected override void Submit()
@@ -34,17 +40,20 @@ public class QuizSubmissionView : QuestSubmissionView
         if (_selectedItem == null) return;
 
         QuestManager.SubmitQuest(_selectedItem);
+        base.Submit();
     }
 
     private void OnItemSelected(InventorySlot<Item> slot)
     {
         _selectedItem = slot.Item;
-        _infoUpdaters[0].UpdateItem(slot.Item);
+        SubmissionSlots[0].Initialize(slot.Item.Icon);
+        SubmitBtn.interactable = true;
     }
 
     private void ClearItem()
     {
         _selectedItem = null;
-        _infoUpdaters[0].ClearItem();
+        SubmissionSlots[0].ClearItem();
+        SubmitBtn.interactable = false;
     }
 }

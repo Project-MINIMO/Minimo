@@ -18,10 +18,10 @@ public class MinimoFilterHandler : InventoryFilterHandler
         {
             [1] = new()
             {
-                new FilterOption(titleData.GetString("STR_MC_FILTER_COMPONENT2_NAME")),
-                new FilterOption(titleData.GetString("STR_MC_FILTER_COMPONENT3_NAME")),
-                new FilterOption(titleData.GetString("STR_MC_FILTER_COMPONENT4_NAME")),
-                new FilterOption(titleData.GetString("STR_MC_FILTER_COMPONENT5_NAME")),
+                new FilterOption(titleData.GetString("STR_MINIMOCENTER_FILTER_COMPONENT2_NAME")),
+                new FilterOption(titleData.GetString("STR_MINIMOCENTER_FILTER_COMPONENT3_NAME")),
+                new FilterOption(titleData.GetString("STR_MINIMOCENTER_FILTER_COMPONENT4_NAME")),
+                new FilterOption(titleData.GetString("STR_MINIMOCENTER_FILTER_COMPONENT5_NAME")),
             }
         };
 

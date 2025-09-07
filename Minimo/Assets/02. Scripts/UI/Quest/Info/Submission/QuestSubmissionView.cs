@@ -4,25 +4,29 @@ using TMPro;
 
 public abstract class QuestSubmissionView : MonoBehaviour
 {
-    [SerializeField] protected ItemInfoUpdater[] _infoUpdaters; 
-    [SerializeField] protected Button _submitBtn;  
+    [SerializeField] protected QuestSubmissionSlot[] SubmissionSlots; 
+    [SerializeField] protected Button SubmitBtn;  
     
     protected QuestManager QuestManager;
     protected Quest Quest;
+    private QuestSubmissionPanel _submissionPanel;
     
-    public virtual void Initialize(QuestManager questManager, TitleData titleData)
+    public virtual void Initialize(QuestManager questManager, QuestSubmissionPanel submissionPanel, TitleData titleData)
     {
         QuestManager = questManager;
+        _submissionPanel = submissionPanel;
 
-        _submitBtn.GetComponentInChildren<TextMeshProUGUI>()
-            .SetText(titleData.GetString("STR_BUTTON_CONFIRM"));
-        _submitBtn.onClick.AddListener(Submit);
+        SubmitBtn.GetComponentInChildren<TextMeshProUGUI>().SetText("제출하기");
+        SubmitBtn.onClick.AddListener(Submit);
     }
 
     public virtual void Setup(Quest quest)
     {
         Quest = quest;
     }
-    
-    protected abstract void Submit();
+
+    protected virtual void Submit()
+    {
+        _submissionPanel.ClosePanel();
+    }
 }

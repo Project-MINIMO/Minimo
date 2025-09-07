@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class MinimoShiftWindow: PopUpWindow
+public class MinimoShiftWindow : PopUpWindow
 {
     public override PopUpType Type() => PopUpType.MinimoShift;
     

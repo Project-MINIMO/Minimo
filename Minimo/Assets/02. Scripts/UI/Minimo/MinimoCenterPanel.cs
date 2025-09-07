@@ -2,53 +2,59 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class ManageMinimoPanel : UIBase
+public class MinimoCenterPanel : UIBase
 {
     public override bool IsUseBlur => true;
+    protected override bool IsUseGuide => true;
             
     [SerializeField] private TextMeshProUGUI _titleTMP;
-    [SerializeField] private ExpandCtrl _expandCtrl;
     [SerializeField] private TextMeshProUGUI _capacityTMP;
     
     [SerializeField] private Button _openBtn;
     [SerializeField] private Button _closeBtn;
     [SerializeField] private Button _assignBtn;
-    
+    [SerializeField] private Button _expandBtn;
+    [SerializeField] private Button _infoBtn;
+
+    private MinimoManager _minimoManager;
     private MinimoProfilePanel _profilePanel;
-    private MinimoAssignedPanel _assignedPanel;
 
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
 
+        _minimoManager = App.GetManager<MinimoManager>();
+        
         _profilePanel = manager.GetPanel<MinimoProfilePanel>();
-        _assignedPanel = manager.GetPanel<MinimoAssignedPanel>();
+        var assignedPanel = manager.GetPanel<MinimoAssignedPanel>();
+        var popUpPanel = manager.GetPanel<PopUpPanel>();
         
         _openBtn.onClick.AddListener(OpenPanel);
         _closeBtn.onClick.AddListener(ClosePanel);
-        _assignBtn.onClick.AddListener(_assignedPanel.OpenPanel);
+        _assignBtn.onClick.AddListener(assignedPanel.OpenPanel);
+        _expandBtn.onClick.AddListener(() => popUpPanel.OpenPanel(PopUpType.MinimoExpand));
+        _infoBtn.onClick.AddListener(ShowGuide);
         
-        _expandCtrl.Initialize("STR_MINIMOCENTER_NAME",
-            "STR_MC_RESIDENCEEXPAND_DESC",
-            "STR_MC_EXPANDSUCCEED_DESC");
-        
-        var slots = GetComponentsInChildren<MinimoSlot>(true);
-        foreach (var slot in slots)
-        {
-            slot.OnItemSelected += OnItemSelected;
-        }
-
         _titleTMP.text = App.GetData<TitleData>().GetString("STR_MINIMOCENTER_NAME");
 
         AccountInfo.Instance.OnMinimoCapacityChanged += OnMinimoCapacityChanged;
         OnMinimoCapacityChanged(AccountInfo.Instance.MinimoCapacity);
     }
-
-    public override void OpenPanel()
+    
+    private void Start()
     {
-        base.OpenPanel();
+        var slots = GetComponentsInChildren<MinimoSlot>(true);
+        foreach (var slot in slots)
+        {
+            slot.OnItemSelected += OnItemSelected;
+        }
+    }
+
+    public override void Show(bool isNew)
+    {
+        base.Show(isNew);
         
-        _expandCtrl.gameObject.SetActive(false);
+        OnMinimoCapacityChanged(AccountInfo.Instance.MinimoCapacity);
     }
 
     private void OnItemSelected(InventorySlot<Minimo> slot)
@@ -58,6 +64,6 @@ public class ManageMinimoPanel : UIBase
 
     private void OnMinimoCapacityChanged(int amount)
     {
-        _capacityTMP.SetText($"{20}/{amount}");
+        _capacityTMP.SetText($"{_minimoManager.ActiveMinimos.Count}/{amount}");
     }
 }
