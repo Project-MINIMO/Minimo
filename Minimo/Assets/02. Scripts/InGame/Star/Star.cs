@@ -17,11 +17,12 @@ public class Star : InteractObject
     private const float ScaleSpeed = 5f;
     private const float MinScale = 0.9f;
     private const float MaxScale = 1.1f;
-    public static float StandardScale = 0.3f;
+    private const float StandardScale = 0.3f;
     private const float RotationSpeed = 30;
     private float _timeOffset = -1;
 
     public static bool IsForeground;
+    public static float ScaleMultiplier = 1;
 
     public void Initialize(StarManager manager, ConstellationPanel constellationPanel)
     {
@@ -56,7 +57,7 @@ public class Star : InteractObject
     {
         if (_timeOffset < 0) return;
         
-        var scale = StandardScale * Mathf.Lerp(MinScale, MaxScale, (Mathf.Sin(Time.time * ScaleSpeed + _timeOffset) + 1f) / 2f);
+        var scale = StandardScale * ScaleMultiplier * Mathf.Lerp(MinScale, MaxScale, (Mathf.Sin(Time.time * ScaleSpeed + _timeOffset) + 1f) / 2f);
         transform.localScale = new Vector3(scale, scale, scale);
     }
 

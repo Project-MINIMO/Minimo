@@ -50,7 +50,7 @@ public class StarTester : MonoBehaviour
     private void Start()
     {
         _starManager = GetComponent<StarManager>();
-        _starScale = Star.StandardScale;
+        _starScale = Star.ScaleMultiplier;
         
         var validSprites = _starSprites.Where(s => s != null).ToArray();
         if (validSprites.Length == 0)
@@ -99,7 +99,7 @@ public class StarTester : MonoBehaviour
     
     public void ApplyScale(float scale)
     {
-        Star.StandardScale = scale;
+        Star.ScaleMultiplier = scale;
     }
     
     public void ApplyLineColor()
