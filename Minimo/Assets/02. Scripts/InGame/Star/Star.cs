@@ -8,7 +8,7 @@ public class Star : InteractObject
     public override bool IsUseDrag => true;
     public Color ActiveColor { get; private set; }
     public static Sprite[] _sprites;
-    [SerializeField] private Color[] _colors;
+    public static Color[] _colors;
     
     private StarManager _manager;
     private ConstellationPanel _constellationPanel;
@@ -23,15 +23,19 @@ public class Star : InteractObject
 
     public static bool IsForeground;
     public static float ScaleMultiplier = 1;
+    
+    private SpriteRenderer _spriteRenderer;
+
+    private void Awake()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
     public void Initialize(StarManager manager, ConstellationPanel constellationPanel)
     {
         _manager = manager;
         _constellationPanel = constellationPanel;
         
-        var randomIndex = Random.Range(0, _sprites.Length);
-        GetComponent<SpriteRenderer>().sprite = _sprites[randomIndex];
-        ActiveColor = _colors[randomIndex];
         transform.DOScale(new Vector3(0.3f, 0.3f, 0.3f), 0.3f).SetEase(Ease.InOutElastic)
             .OnComplete(() =>
             {
@@ -41,16 +45,22 @@ public class Star : InteractObject
                     .SetEase(Ease.Linear)
                     .SetLoops(-1, LoopType.Restart);
             });
-    }
-
-    private void OnEnable()
-    {
+        
         var layerName = IsForeground ? "Village" : "Default";
         var order = IsForeground ? -1 : 1000;
 
         var sr = GetComponent<SpriteRenderer>();
         sr.sortingLayerName = layerName;
         sr.sortingOrder = order;
+        
+        SetRandomSprite();
+    }
+
+    public void SetRandomSprite()
+    {
+        var randomIndex = Random.Range(0, _sprites.Length);
+        _spriteRenderer.sprite = _sprites[randomIndex];
+        ActiveColor = _colors[randomIndex];
     }
 
     private void Update()

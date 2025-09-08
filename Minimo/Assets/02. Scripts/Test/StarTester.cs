@@ -8,6 +8,7 @@ public class StarTester : MonoBehaviour
     [SerializeField] private Material _customMaterial;
     [SerializeField] private Material _baseMaterial;
     [SerializeField] private Sprite[] _starSprites;
+    [SerializeField] private Color[] _starColors;
     
     private float _starScale = 0.3f;
     public float GetScale() => _starScale;
@@ -59,6 +60,8 @@ public class StarTester : MonoBehaviour
             return;
         }
         Star._sprites = _starSprites;
+        
+        Star._colors = _starColors;
     }
 
     private void Update()
@@ -84,17 +87,13 @@ public class StarTester : MonoBehaviour
             return;
         }
         
+        Star._sprites = validSprites;
+        Star._colors = _starColors;
+        
         foreach (var star in _starManager.Stars)
         {
-            if (star == null) continue;
-            var sr = star.GetComponent<SpriteRenderer>();
-            if (sr != null)
-            {
-                sr.sprite = validSprites[Random.Range(0, validSprites.Length)];
-            }
+            star.SetRandomSprite();
         }
-
-        Star._sprites = validSprites;
     }
     
     public void ApplyScale(float scale)
