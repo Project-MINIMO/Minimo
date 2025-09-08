@@ -16,7 +16,7 @@ public class LineObject : MonoBehaviour
     private void Awake()
     {
         _line = GetComponent<LineRenderer>();
-        _line.useWorldSpace = true;
+        _line.useWorldSpace = false;
 
         // 렌더링 문제 방지 설정
         _line.alignment = LineAlignment.TransformZ;
@@ -28,6 +28,37 @@ public class LineObject : MonoBehaviour
         _line.sortingOrder = 10;
 
         _collider = GetComponent<BoxCollider>();
+    }
+    
+    private void LateUpdate()
+    {
+        if (_a == null || _b == null) return;
+
+        // 두 별의 현재 위치
+        var aPos = _a.transform.position;
+        var bPos = _b.transform.position;
+
+        // 라인 오브젝트를 중점으로 이동 + 방향 정렬
+        var dir = bPos - aPos;
+        var mid = (aPos + bPos) * 0.5f;
+
+        transform.position = mid;
+        transform.rotation = Quaternion.LookRotation(Vector3.forward, dir); // 로컬 Y축이 선 방향
+
+        // 로컬 좌표로 라인 포인트 설정
+        var p0 = transform.InverseTransformPoint(aPos);
+        var p2 = transform.InverseTransformPoint(bPos);
+        var p1 = (p0 + p2) * 0.5f;
+
+        _line.positionCount = 3;
+        _line.SetPosition(0, p0);
+        _line.SetPosition(1, p1);
+        _line.SetPosition(2, p2);
+
+        // 콜라이더 길이 갱신(로컬 Y로 길이)
+        var length = dir.magnitude;
+        _collider.size = new Vector3(_collider.size.x, length, _collider.size.z);
+        _collider.center = Vector3.zero;
     }
 
     public void Initialize(Vector3 start, Vector3 end, Color startColor, Color endColor, Star a, Star b, StarManager manager)

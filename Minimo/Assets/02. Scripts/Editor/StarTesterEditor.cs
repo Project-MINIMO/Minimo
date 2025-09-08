@@ -60,6 +60,22 @@ public class StarTesterEditor : Editor
             }
         }
         
+        EditorGUI.BeginChangeCheck();
+        var cw = EditorGUILayout.Toggle("Rotate Clockwise", tester.GetRotateClockwise());
+        if (EditorGUI.EndChangeCheck())
+        {
+            tester.SetRotateClockwise(cw);
+            EditorUtility.SetDirty(tester);
+        }
+        
+        EditorGUI.BeginChangeCheck();
+        var speed = EditorGUILayout.Slider("Rotate Speed", tester.GetRotateSpeed(), 0f, 5f);
+        if (EditorGUI.EndChangeCheck())
+        {
+            tester.SetRotateSpeed(speed);
+            EditorUtility.SetDirty(tester);
+        }
+        
         if (GUI.changed)
         {
             EditorUtility.SetDirty(tester);

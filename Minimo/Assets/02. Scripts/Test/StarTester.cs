@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -28,6 +29,14 @@ public class StarTester : MonoBehaviour
     public Sprite GetLineSprite() => _lineSprite;
     public void SetLineSprite(Sprite s) => _lineSprite = s;
     
+    private bool _rotateClockwise = true;
+    public bool  GetRotateClockwise() => _rotateClockwise;
+    public void  SetRotateClockwise(bool v) => _rotateClockwise = v;
+    
+    private float _rotateSpeed = 0f;
+    public float GetRotateSpeed() => _rotateSpeed;
+    public void  SetRotateSpeed(float v) => _rotateSpeed = Mathf.Max(0f, v);
+    
     private StarManager _starManager;
 
     private void Start()
@@ -42,6 +51,14 @@ public class StarTester : MonoBehaviour
             return;
         }
         Star._sprites = _starSprites;
+    }
+
+    private void Update()
+    {
+        if (_rotateSpeed <= 0f) return;
+
+        var dir = _rotateClockwise ? -1f : 1f;
+        transform.Rotate(0f, 0f, dir * _rotateSpeed * Time.deltaTime);
     }
 
     public void ApplySprites()
