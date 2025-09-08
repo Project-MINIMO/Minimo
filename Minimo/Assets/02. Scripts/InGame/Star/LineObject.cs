@@ -13,6 +13,8 @@ public class LineObject : MonoBehaviour
     private Gradient _baseGradient;
     private AnimationCurve _baseWidthCurve;
     
+    public static bool IsForeground;
+    
     private void Awake()
     {
         _line = GetComponent<LineRenderer>();
@@ -105,6 +107,11 @@ public class LineObject : MonoBehaviour
         _baseWidthCurve = new AnimationCurve(_line.widthCurve.keys);
 
         UpdateCollider(start, end);
+        
+        var layerName = IsForeground ? "Village" : "Default";
+        var order = IsForeground ? -1 : 1000;
+        _line.sortingLayerName = layerName;
+        _line.sortingOrder = order;
     }
 
     private void UpdateCollider(Vector3 start, Vector3 end)

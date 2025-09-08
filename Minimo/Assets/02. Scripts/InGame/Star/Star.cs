@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using DG.Tweening;
+using Random = UnityEngine.Random;
 
 public class Star : InteractObject
 {
@@ -19,6 +21,8 @@ public class Star : InteractObject
     private const float RotationSpeed = 30;
     private float _timeOffset = -1;
 
+    public static bool IsForeground;
+
     public void Initialize(StarManager manager, ConstellationPanel constellationPanel)
     {
         _manager = manager;
@@ -36,6 +40,16 @@ public class Star : InteractObject
                     .SetEase(Ease.Linear)
                     .SetLoops(-1, LoopType.Restart);
             });
+    }
+
+    private void OnEnable()
+    {
+        var layerName = IsForeground ? "Village" : "Default";
+        var order = IsForeground ? -1 : 1000;
+
+        var sr = GetComponent<SpriteRenderer>();
+        sr.sortingLayerName = layerName;
+        sr.sortingOrder = order;
     }
 
     private void Update()

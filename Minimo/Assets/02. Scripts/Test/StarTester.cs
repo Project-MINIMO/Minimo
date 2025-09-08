@@ -37,6 +37,14 @@ public class StarTester : MonoBehaviour
     public float GetRotateSpeed() => _rotateSpeed;
     public void  SetRotateSpeed(float v) => _rotateSpeed = Mathf.Max(0f, v);
     
+    private bool _isForeground;
+    public bool GetIsForeground() => _isForeground;
+    public void SetIsForeground(bool v)
+    {
+        _isForeground = v;
+        ApplyLayerSettings();
+    }
+    
     private StarManager _starManager;
 
     private void Start()
@@ -139,5 +147,38 @@ public class StarTester : MonoBehaviour
             _customMaterial.SetTexture("_MainTex", tex);
 
         if (tex != null) tex.wrapMode = TextureWrapMode.Repeat;
+    }
+    
+    public void ApplyLayerSettings()
+    {
+        if (_starManager == null) return;
+
+        var layerName = _isForeground ? "Village" : "Default";
+        var order = _isForeground ? -1 : 1000;
+        
+        Star.IsForeground = _isForeground;
+        LineObject.IsForeground = _isForeground;
+        
+        foreach (var star in _starManager.Stars)
+        {
+            if (star == null) continue;
+            var sr = star.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.sortingLayerName = layerName;
+                sr.sortingOrder = order;
+            }
+        }
+
+        foreach (var line in _starManager.Lines)
+        {
+            if (line == null) continue;
+            var lr = line.GetComponent<LineRenderer>();
+            if (lr != null)
+            {
+                lr.sortingLayerName = layerName;
+                lr.sortingOrder = order;
+            }
+        }
     }
 }
