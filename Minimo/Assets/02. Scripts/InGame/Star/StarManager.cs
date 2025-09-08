@@ -54,9 +54,10 @@ public class StarManager : ManagerBase
         AccountInfo.Instance.Level.OnLevelUp += OnLevelUp;
         OnLevelUp(AccountInfo.Instance.Level.Count);
     }
-
+    
     private void OnLevelUp(int level)
     {
+        /*
         for (var i = 0; i < level - _prevLevel; i++)
         {
             var newStar = Instantiate(_starObj,
@@ -69,6 +70,7 @@ public class StarManager : ManagerBase
         }
 
         _prevLevel = level;
+        */
     }
 
     public void UpdateConnections(Star draggedStar, Vector3 position)
