@@ -32,6 +32,8 @@ public enum NotifyType
     
     DeleteBuildingFailProduce,
     DeleteBuildingFailMinimo,
+    
+    StarsLimit,
 }
 
 public enum QuestState

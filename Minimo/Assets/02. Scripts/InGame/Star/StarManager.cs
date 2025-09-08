@@ -39,11 +39,13 @@ public class StarManager : ManagerBase
     public List<Star> Stars { get; } = new();
     private readonly Dictionary<StarPair, LineObject> _activeLines = new();
     private readonly Queue<LineObject> _linePool = new();
+    private readonly Queue<Star> _starPool = new();  
 
     private ConstellationPanel _constellationPanel;
     private IndicatorPanel _indicatorPanel;
 
     private int _prevLevel;
+    private bool _addStarMode;
 
     private void Start()
     {
@@ -130,5 +132,70 @@ public class StarManager : ManagerBase
             line.gameObject.SetActive(false);
             _linePool.Enqueue(line);
         }
+    }
+
+    public void ToggleAddStarMode(bool isActive)
+    {
+        _addStarMode = isActive;
+    }
+
+    private void Update()
+    {
+        if (!_addStarMode) return;
+        
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            var worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            worldPos.z = 0f;
+            CreateOrReuseStar(worldPos);
+        }
+    }
+    
+    private void CreateOrReuseStar(Vector3 pos)
+    {
+        if (Stars.Count >= 100)
+        {
+            App.Notification(NotifyType.StarsLimit);
+            return;
+        }
+        
+        Star star;
+        if (_starPool.Count > 0)
+        {
+            star = _starPool.Dequeue();
+            star.gameObject.SetActive(true);
+            star.transform.position = pos;
+        }
+        else
+        {
+            star = Instantiate(_starObj, pos, Quaternion.identity, transform);
+        }
+
+        star.Initialize(this, _constellationPanel);
+        Stars.Add(star);
+    }
+
+    public void ResetStars()
+    {
+        foreach (var star in Stars)
+        {
+            if (star != null)
+            {
+                star.gameObject.SetActive(false);
+                _starPool.Enqueue(star);
+            }
+        }
+        Stars.Clear();
+
+        foreach (var kv in _activeLines)
+        {
+            var line = kv.Value;
+            if (line != null)
+            {
+                line.gameObject.SetActive(false);
+                _linePool.Enqueue(line);
+            }
+        }
+        _activeLines.Clear();
     }
 }

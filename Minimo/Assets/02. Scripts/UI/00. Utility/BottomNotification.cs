@@ -52,6 +52,8 @@ public class BottomNotification : MonoBehaviour
             
             [NotifyType.DeleteBuildingFailProduce] = "생산을 완료해 주세요.",
             [NotifyType.DeleteBuildingFailMinimo] = "미니모를 해제해 주세요.",
+            
+            [NotifyType.StarsLimit] = "별 100개 넘었음^^",
         };
         
         Reset();
