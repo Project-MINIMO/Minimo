@@ -37,6 +37,7 @@ public class StarManager : ManagerBase
 
     public bool IsConnected => _activeLines.Count > 0;
     public List<Star> Stars { get; } = new();
+    public List<LineObject> Lines { get; } = new();
     private readonly Dictionary<StarPair, LineObject> _activeLines = new();
     private readonly Queue<LineObject> _linePool = new();
     private readonly Queue<Star> _starPool = new();  
@@ -101,9 +102,17 @@ public class StarManager : ManagerBase
 
                 if (!_activeLines.ContainsKey(pair))
                 {
-                    var lineObj = _linePool.Count > 0
-                        ? _linePool.Dequeue()
-                        : Instantiate(_lineObjectPrefab, _lineParent);
+                    LineObject lineObj;
+
+                    if (_linePool.Count > 0)
+                    {
+                        lineObj = _linePool.Dequeue();
+                    }
+                    else
+                    {
+                        lineObj = Instantiate(_lineObjectPrefab, _lineParent);
+                        Lines.Add(lineObj);
+                    }
 
                     lineObj.gameObject.SetActive(true);
 

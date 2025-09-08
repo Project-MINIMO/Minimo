@@ -4,16 +4,44 @@ using Random = UnityEngine.Random;
 
 public class StarTester : MonoBehaviour
 {
+    [SerializeField] private Material _customMaterial;
+    [SerializeField] private Material _baseMaterial;
     [SerializeField] private Sprite[] _starSprites;
     
     private float _starScale = 0.3f;
+    public float GetScale() => _starScale;
+    public void SetScale(float scale) => _starScale = scale;
+    
+    private Color _lineColor = Color.white;
+    public Color GetLineColor() => _lineColor;
+    public void SetLineColor(Color c) => _lineColor = c;
+    
+    private float _lineWidth = 1f;
+    public float GetLineWidth() => _lineWidth;
+    public void SetLineWidth(float w) => _lineWidth = w;
+    
+    private bool _useCustomMaterial = false;
+    public bool  GetUseCustomMaterial() => _useCustomMaterial;
+    public void  SetUseCustomMaterial(bool v) => _useCustomMaterial = v;
+    
+    private Sprite _lineSprite;
+    public Sprite GetLineSprite() => _lineSprite;
+    public void SetLineSprite(Sprite s) => _lineSprite = s;
     
     private StarManager _starManager;
 
     private void Start()
     {
         _starManager = GetComponent<StarManager>();
-        _starScale = 0.3f;
+        _starScale = Star.StandardScale;
+        
+        var validSprites = _starSprites.Where(s => s != null).ToArray();
+        if (validSprites.Length == 0)
+        {
+            Debug.LogWarning("유효한 스프라이트가 없습니다.");
+            return;
+        }
+        Star._sprites = _starSprites;
     }
 
     public void ApplySprites()
@@ -40,19 +68,59 @@ public class StarTester : MonoBehaviour
                 sr.sprite = validSprites[Random.Range(0, validSprites.Length)];
             }
         }
+
+        Star._sprites = validSprites;
     }
     
     public void ApplyScale(float scale)
     {
-        if (_starManager == null) return;
-
-        foreach (var star in _starManager.Stars)
+        Star.StandardScale = scale;
+    }
+    
+    public void ApplyLineColor()
+    {
+        LineObject.LineColor = _lineColor;
+        
+        foreach (var line in _starManager.Lines)
         {
-            if (star == null) continue;
-            star.StandardScale = scale;
+            if (line == null) continue;
+            line.ApplyLineColorMultiplier(_lineColor);
+        }
+    }
+    
+    public void ApplyLineWidth()
+    {
+        LineObject.LineWidth = _lineWidth;
+        
+        foreach (var line in _starManager.Lines)
+        {
+            if (line == null) continue;
+            line.ApplyLineWidth(_lineWidth);
+        }
+    }
+    
+    public void ApplyLineMaterialMode()
+    {
+        var matToApply = _useCustomMaterial ? _customMaterial : _baseMaterial;
+        
+        foreach (var line in _starManager.Lines)
+        {
+            if (line == null) continue;
+            line.ApplyLineMaterial(matToApply);
         }
     }
 
-    public float GetScale() => _starScale;
-    public void SetScale(float scale) => _starScale = scale;
+    public void ApplyLineSpriteToMaterial()
+    {
+        if (!_useCustomMaterial) return;
+        
+        var tex = _lineSprite ? _lineSprite.texture : null;
+        
+        if (_customMaterial.HasProperty("_BaseMap"))
+            _customMaterial.SetTexture("_BaseMap", tex);
+        if (_customMaterial.HasProperty("_MainTex"))
+            _customMaterial.SetTexture("_MainTex", tex);
+
+        if (tex != null) tex.wrapMode = TextureWrapMode.Repeat;
+    }
 }

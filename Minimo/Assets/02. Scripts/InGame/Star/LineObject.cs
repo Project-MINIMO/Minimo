@@ -7,7 +7,12 @@ public class LineObject : MonoBehaviour
     private BoxCollider _collider;
     private Star _a, _b;
     private StarManager _manager;
-
+    
+    public static Color LineColor = Color.white;
+    public static float LineWidth = 1f;
+    private Gradient _baseGradient;
+    private AnimationCurve _baseWidthCurve;
+    
     private void Awake()
     {
         _line = GetComponent<LineRenderer>();
@@ -45,9 +50,9 @@ public class LineObject : MonoBehaviour
         Gradient gradient = new Gradient();
         gradient.SetKeys(
             new GradientColorKey[] {
-                new GradientColorKey(startColor, 0f),
-                new GradientColorKey(startColor, 0.5f),
-                new GradientColorKey(endColor, 1f)
+                new GradientColorKey(startColor * LineColor, 0f),
+                new GradientColorKey(startColor * LineColor, 0.5f),
+                new GradientColorKey(endColor * LineColor, 1f)
             },
             new GradientAlphaKey[] {
                 new GradientAlphaKey(0f, 0f),    // 시작: 투명
@@ -56,15 +61,17 @@ public class LineObject : MonoBehaviour
             }
         );
         _line.colorGradient = gradient;
+        _baseGradient = _line.colorGradient;
 
         // -----------------------------
         // 굵기 곡선 설정 (중앙이 더 두껍게)
         // -----------------------------
         _line.widthCurve = new AnimationCurve(
-            new Keyframe(0f, 0.001f),
-            new Keyframe(0.5f, 0.02f),
-            new Keyframe(1f, 0.001f)
+            new Keyframe(0f, 0.001f * LineWidth),
+            new Keyframe(0.5f, 0.02f * LineWidth),
+            new Keyframe(1f, 0.001f * LineWidth)
         );
+        _baseWidthCurve = new AnimationCurve(_line.widthCurve.keys);
 
         UpdateCollider(start, end);
     }
@@ -92,4 +99,40 @@ public class LineObject : MonoBehaviour
     }
 
     public bool Contains(Star s) => _a == s || _b == s;
+    
+    public void ApplyLineColorMultiplier(Color mul)
+    {
+        if (_line == null) return;
+
+        var baseKeys = _baseGradient.colorKeys;
+        var newKeys = new GradientColorKey[baseKeys.Length];
+        for (var i = 0; i < baseKeys.Length; i++)
+        {
+            var c = baseKeys[i].color;
+            newKeys[i] = new GradientColorKey(new Color(c.r * mul.r, c.g * mul.g, c.b * mul.b, c.a * mul.a), baseKeys[i].time);
+        }
+        var newGrad = new Gradient();
+        newGrad.SetKeys(newKeys, _baseGradient.alphaKeys);
+        _line.colorGradient = newGrad;
+    }
+    
+    public void ApplyLineWidth(float mul)
+    {
+        if (_line == null || _baseWidthCurve == null) return;
+        
+        var keys = _baseWidthCurve.keys;
+        for (var i = 0; i < keys.Length; i++)
+        {
+            keys[i].value *= mul;
+        }
+
+        var newCurve = new AnimationCurve(keys);
+        _line.widthCurve = newCurve;
+    }
+    
+    public void ApplyLineMaterial(Material mat)
+    {
+        if (_line == null) return;
+        _line.sharedMaterial = mat;
+    }
 }

@@ -14,16 +14,51 @@ public class StarTesterEditor : Editor
             tester.ApplySprites();
         }
         
-        EditorGUILayout.Space();
-        
         var newScale = EditorGUILayout.Slider("Star Scale", tester.GetScale(), 0.1f, 5f);
         if (!Mathf.Approximately(newScale, tester.GetScale()))
         {
             tester.SetScale(newScale);
             tester.ApplyScale(newScale);
         }
+        
+        EditorGUI.BeginChangeCheck();
+        var newColor = EditorGUILayout.ColorField("Line Color (Multiply)", tester.GetLineColor());
+        if (EditorGUI.EndChangeCheck())
+        {
+            tester.SetLineColor(newColor);
+            tester.ApplyLineColor();
+            EditorUtility.SetDirty(tester);
+        }
+        
+        EditorGUI.BeginChangeCheck();
+        var newWidth = EditorGUILayout.Slider("Line Width Multiplier", tester.GetLineWidth(), 0.1f, 5f);
+        if (EditorGUI.EndChangeCheck())
+        {
+            tester.SetLineWidth(newWidth);
+            tester.ApplyLineWidth();
+            EditorUtility.SetDirty(tester);
+        }
+        
+        EditorGUI.BeginChangeCheck();
+        bool useMat = EditorGUILayout.Toggle("Use Custom Material", tester.GetUseCustomMaterial());
+        if (EditorGUI.EndChangeCheck())
+        {
+            tester.SetUseCustomMaterial(useMat);
+            tester.ApplyLineMaterialMode();
+            EditorUtility.SetDirty(tester);
+        }
 
-        EditorGUILayout.Space();
+        if (tester.GetUseCustomMaterial())
+        {
+            EditorGUI.BeginChangeCheck();
+            var newSprite = (Sprite)EditorGUILayout.ObjectField("Line Sprite (BaseMap)", tester.GetLineSprite(), typeof(Sprite), false);
+            if (EditorGUI.EndChangeCheck())
+            {
+                tester.SetLineSprite(newSprite);
+                tester.ApplyLineSpriteToMaterial();
+                EditorUtility.SetDirty(tester);
+            }
+        }
         
         if (GUI.changed)
         {

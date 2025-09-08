@@ -5,7 +5,7 @@ public class Star : InteractObject
 {
     public override bool IsUseDrag => true;
     public Color ActiveColor { get; private set; }
-    [SerializeField] private Sprite[] _sprites;
+    public static Sprite[] _sprites;
     [SerializeField] private Color[] _colors;
     
     private StarManager _manager;
@@ -15,7 +15,7 @@ public class Star : InteractObject
     private const float ScaleSpeed = 5f;
     private const float MinScale = 0.9f;
     private const float MaxScale = 1.1f;
-    public float StandardScale = 0.3f;
+    public static float StandardScale = 0.3f;
     private const float RotationSpeed = 30;
     private float _timeOffset = -1;
 
