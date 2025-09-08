@@ -15,7 +15,7 @@ public class Star : InteractObject
     private const float ScaleSpeed = 5f;
     private const float MinScale = 0.9f;
     private const float MaxScale = 1.1f;
-    private const float StandardScale = 0.3f;
+    public float StandardScale = 0.3f;
     private const float RotationSpeed = 30;
     private float _timeOffset = -1;
 
