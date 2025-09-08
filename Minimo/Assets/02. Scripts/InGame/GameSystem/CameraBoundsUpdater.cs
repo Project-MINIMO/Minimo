@@ -17,11 +17,12 @@ public class CameraBoundsUpdater : MonoBehaviour
     {
         _collider = GetComponent<BoxCollider2D>();
         
-        CalculateBounds();
+        //CalculateBounds();
     }
 
     public void CalculateBounds()
     {
+        /*
         _tilemap.CompressBounds();
         
         _localBounds = _tilemap.localBounds;
@@ -30,6 +31,7 @@ public class CameraBoundsUpdater : MonoBehaviour
         
         _collider.offset = _localBounds.center;
         _collider.size = sizeWithMargin;
+        */
     }
 
     public Vector3 GetRandomPoint(Vector3 origin, float radius)
