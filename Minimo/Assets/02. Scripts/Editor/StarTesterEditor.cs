@@ -29,6 +29,12 @@ public class StarTesterEditor : Editor
                 tester.SetScale(newScale);
                 tester.ApplyScale(newScale);
             }
+            
+            var newAmount = EditorGUILayout.IntSlider("별 최대 개수", StarManager.MaxCount, 0, 400);
+            if (!Mathf.Approximately(newAmount, StarManager.MaxCount))
+            {
+                StarManager.MaxCount = newAmount;
+            }
         }
         EditorGUILayout.EndVertical();
         

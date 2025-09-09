@@ -48,6 +48,8 @@ public class StarManager : ManagerBase
     private int _prevLevel;
     private bool _addStarMode;
 
+    public static int MaxCount = 200;
+
     private void Start()
     {
         var uiManager = App.GetManager<UIManager>();
@@ -162,7 +164,7 @@ public class StarManager : ManagerBase
     
     private void CreateOrReuseStar(Vector3 pos)
     {
-        if (Stars.Count >= 100)
+        if (Stars.Count >= MaxCount)
         {
             App.Notification(NotifyType.StarsLimit);
             return;
