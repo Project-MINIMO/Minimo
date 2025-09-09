@@ -16,7 +16,6 @@ public class TutorialStep_13: TutorialStep
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
         _dialogueBox.ShowQuest();
         _animator = _chiefMinimo.GetComponentInChildren<Animator>(true);
-        _visitMinimo = _spawner.SpawnTutoriMinimo();
     }
     
     private void OnClickedChief()
@@ -29,11 +28,13 @@ public class TutorialStep_13: TutorialStep
     
     private IEnumerator ConversationSequence()
     {
-        yield return new WaitForSeconds(4);
+        _visitMinimo = _spawner.SpawnTutoriMinimo();
+        
+        yield return new WaitForSeconds(2);
         
         _focusPanel.FocusOn(_visitMinimo.transform.position + Vector3.up * 0.5f,
             targetZoom: 1,
-            duration: 1.5f,
+            duration: 1f,
             onComplete: null,
             closeOnComplete: false);
         
