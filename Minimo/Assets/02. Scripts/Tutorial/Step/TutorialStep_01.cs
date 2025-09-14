@@ -132,6 +132,7 @@ public class TutorialStep_01 : TutorialStep
         _confirmBtnObj.SetActive(false);
         
         CompleteStep();
+        _tilePanel.ClosePanel();
         TutorialManager.IsUseInput = false;
     }
 

@@ -32,7 +32,7 @@ public class TutorialStep_13: TutorialStep
     {
         _visitMinimo = _spawner.SpawnTutoriMinimo();
         
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(3f);
         
         _focusPanel.FocusOn(_visitMinimo.transform.position + Vector3.up * 0.5f,
             targetZoom: 1,
@@ -40,7 +40,7 @@ public class TutorialStep_13: TutorialStep
             onComplete: null,
             closeOnComplete: false);
         
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         
         _focusPanel.FocusOn(_chiefMinimo.transform.position + Vector3.up * 0.5f,
             targetZoom: 1,
