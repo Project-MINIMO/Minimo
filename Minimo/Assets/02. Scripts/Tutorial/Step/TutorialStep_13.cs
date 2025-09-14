@@ -32,7 +32,7 @@ public class TutorialStep_13: TutorialStep
     {
         _visitMinimo = _spawner.SpawnTutoriMinimo();
         
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(2.5f);
         
         _focusPanel.FocusOn(_visitMinimo.transform.position + Vector3.up * 0.5f,
             targetZoom: 1,
@@ -73,6 +73,7 @@ public class TutorialStep_13: TutorialStep
     
     private IEnumerator ProgressQuest()
     {
+        _dialogueBox.Show("저 친구가 원하는 물건을 제작하여 건네주게.");
         yield return new WaitUntil(() => _visitMinimo.CurrentState == VisitMinimoState.Hide);
         
         _dialogueBox.Show("고맙네. 이제 우리를 도와 마을을 재건해주게.");

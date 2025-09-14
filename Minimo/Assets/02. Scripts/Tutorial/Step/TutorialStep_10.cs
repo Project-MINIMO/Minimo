@@ -56,10 +56,13 @@ public class TutorialStep_10 : TutorialStep
     
     private IEnumerator ProgressQuest()
     {
+        _dialogueBox.Show("반죽 제조기도 배치해주게.");
         yield return new WaitUntil(() => _produceManager.CurrentObject != null 
                                          && _produceManager.CurrentObject.BuildingData.ID == 2);
+        _dialogueBox.Show("음식을 만들 반죽을 만들어주게나.");
         yield return new WaitUntil(() => _secondaryPanel.activeSelf);
         _secondaryGuide.SetActive(true);
+        _dialogueBox.Hide();
      
         CompleteStep();
     }

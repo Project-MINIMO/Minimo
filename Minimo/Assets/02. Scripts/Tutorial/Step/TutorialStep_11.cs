@@ -53,10 +53,13 @@ public class TutorialStep_11 : TutorialStep
     
     private IEnumerator ProgressQuest()
     {
+        _dialogueBox.Show("소원별을 드래그해 서로 이어 주게.");
+        yield return new WaitForSeconds(1);
         _levelPanel.FocusStar();
         _indicatorHandlers.SetActive(true);
         
         yield return new WaitUntil(() => _starManager.IsConnected);
+        _dialogueBox.Hide();
      
         CompleteStep();
     }

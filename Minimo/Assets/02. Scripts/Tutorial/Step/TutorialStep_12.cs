@@ -56,8 +56,9 @@ public class TutorialStep_12: TutorialStep
     
     private IEnumerator ProgressQuest()
     {
+        _dialogueBox.Show("얼른 떠도는 미니모를 클릭해 마을로 불러들이게.");
         yield return new WaitUntil(() => _minimoObject.CurrentState == MinimoState.Idle);
-     
+        _dialogueBox.Hide();
         CompleteStep();
     }
   

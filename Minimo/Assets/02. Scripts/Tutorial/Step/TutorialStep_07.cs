@@ -7,6 +7,7 @@ public class TutorialStep_07 : TutorialStep
     [SerializeField] private GameObject _primaryPanel;
     [SerializeField] private SpriteRenderer _highlight;
     [SerializeField] private SpriteRenderer _highlight2;
+    [SerializeField] private TutorialDialogue _dialogueBox;
     
     private Item _wheatItem;
     
@@ -18,6 +19,7 @@ public class TutorialStep_07 : TutorialStep
     protected override void OnStart()
     {
         StartCoroutine(ProgressQuest());
+        _dialogueBox.Show("밭에 별곡을 심고, 다시 수확해주게.");
     }
    
     private IEnumerator ProgressQuest()
@@ -35,6 +37,7 @@ public class TutorialStep_07 : TutorialStep
         _highlight2.gameObject.SetActive(false);
         
         yield return new WaitUntil(() => _wheatItem.Count >= 3);
+        _dialogueBox.Hide();
         
         CompleteStep();
     }

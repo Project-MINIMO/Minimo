@@ -9,6 +9,7 @@ public class TutorialStep_05 : TutorialStep
     [SerializeField] private GameObject _primaryPanel;
     [SerializeField] private RectTransform _handIcon;
     [SerializeField] private SpriteRenderer _highlight;
+    [SerializeField] private TutorialDialogue _dialogueBox;
     private Vector2 _startPos = new(5, 201);
     private Vector2 _endPos = new(40, -82);
     
@@ -40,6 +41,7 @@ public class TutorialStep_05 : TutorialStep
     protected override void OnStart()
     {
         StartCoroutine(ProgressQuest());
+        _dialogueBox.Show("밭에 있는 작물을 수확해보게");
     }
    
     private IEnumerator ProgressQuest()
@@ -67,6 +69,7 @@ public class TutorialStep_05 : TutorialStep
         
         _farmObject.StartHarvest();
         _farmObject2.StartHarvest();
+        _dialogueBox.Hide();
         
         CompleteStep();
     }
