@@ -14,6 +14,7 @@ public class TutorialStep_04 : TutorialStep
     protected override void OnStart()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
+        _dialogueBox.onClick += OnClickedChief;
         _dialogueBox.ShowQuest();
         _animator = _chiefMinimo.GetComponentInChildren<Animator>(true);
     }
@@ -21,6 +22,7 @@ public class TutorialStep_04 : TutorialStep
     private void OnClickedChief()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick -= OnClickedChief;
+        _dialogueBox.onClick -= OnClickedChief;
         _dialogueBox.Hide();
         
         _focusPanel.FocusOn(_chiefMinimo.transform.position + Vector3.up * 0.5f,
@@ -48,6 +50,7 @@ public class TutorialStep_04 : TutorialStep
             "우리 미니모들이 사람들의 소원을 이룰 수 있도록 도와주게.",
             "그러면 우리도 자네의 로켓 수리를 도와주겠네.",
             "고맙네. 우선 밭에서 작물을 수확해주게.");
+        
         _animator.SetBool("IsTalk", false);
         _tutorialStep_06.MoveChief();
         

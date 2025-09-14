@@ -32,12 +32,14 @@ public class TutorialStep_03 : TutorialStep
     protected override void OnStart()
     {
         _passOutMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
+        _dialogueBox.onClick += OnClickedChief;
         _dialogueBox.ShowQuest();
     }
     
     private void OnClickedChief()
     {
         _passOutMinimo.GetComponent<TutorialInteractable>().onClick -= OnClickedChief;
+        _dialogueBox.onClick -= OnClickedChief;
         _dialogueBox.Hide();
         
         _focusPanel.FocusOn(_passOutMinimo.transform.position + Vector3.up * 0.5f,

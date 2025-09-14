@@ -4,7 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class VisitMinimoObject : MonoBehaviour
+public class VisitMinimoObject : InteractObject
 {
     public VisitMinimoFSM FSM { get; private set; }
     public ProduceObject Target { get; private set; }
@@ -124,6 +124,16 @@ public class VisitMinimoObject : MonoBehaviour
         else
         {
             App.Notification(NotifyType.ItemLack);
+        }
+    }
+
+    public override void OnLongPress() { }
+
+    public override void OnClickUp()
+    {
+        if (_requiredItemObj.activeSelf)
+        {
+            GiveItem();
         }
     }
 }

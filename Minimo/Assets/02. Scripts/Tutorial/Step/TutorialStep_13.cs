@@ -14,6 +14,7 @@ public class TutorialStep_13: TutorialStep
     protected override void OnStart()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
+        _dialogueBox.onClick += OnClickedChief;
         _dialogueBox.ShowQuest();
         _animator = _chiefMinimo.GetComponentInChildren<Animator>(true);
     }
@@ -21,6 +22,7 @@ public class TutorialStep_13: TutorialStep
     private void OnClickedChief()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick -= OnClickedChief;
+        _dialogueBox.onClick -= OnClickedChief;
         _dialogueBox.Hide();
         
         StartCoroutine(ConversationSequence());
@@ -30,7 +32,7 @@ public class TutorialStep_13: TutorialStep
     {
         _visitMinimo = _spawner.SpawnTutoriMinimo();
         
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3f);
         
         _focusPanel.FocusOn(_visitMinimo.transform.position + Vector3.up * 0.5f,
             targetZoom: 1,
@@ -38,7 +40,7 @@ public class TutorialStep_13: TutorialStep
             onComplete: null,
             closeOnComplete: false);
         
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         
         _focusPanel.FocusOn(_chiefMinimo.transform.position + Vector3.up * 0.5f,
             targetZoom: 1,
@@ -71,6 +73,7 @@ public class TutorialStep_13: TutorialStep
     
     private IEnumerator ProgressQuest()
     {
+        _dialogueBox.Show("저 친구가 원하는 물건을 제작하여 건네주게.");
         yield return new WaitUntil(() => _visitMinimo.CurrentState == VisitMinimoState.Hide);
         
         _dialogueBox.Show("고맙네. 이제 우리를 도와 마을을 재건해주게.");

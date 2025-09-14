@@ -14,6 +14,7 @@ public class TutorialStep_12: TutorialStep
     protected override void OnStart()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
+        _dialogueBox.onClick += OnClickedChief;
         _dialogueBox.ShowQuest();
         _animator = _chiefMinimo.GetComponentInChildren<Animator>(true);
         _minimoObject = _minimoSpawner.SpawnTutorialSwinMinimo();
@@ -22,6 +23,7 @@ public class TutorialStep_12: TutorialStep
     private void OnClickedChief()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick -= OnClickedChief;
+        _dialogueBox.onClick -= OnClickedChief;
         _dialogueBox.Hide();
         
         _focusPanel.FocusOn(_chiefMinimo.transform.position + Vector3.up * 0.5f,
@@ -54,8 +56,9 @@ public class TutorialStep_12: TutorialStep
     
     private IEnumerator ProgressQuest()
     {
+        _dialogueBox.Show("얼른 떠도는 미니모를 클릭해 마을로 불러들이게.");
         yield return new WaitUntil(() => _minimoObject.CurrentState == MinimoState.Idle);
-     
+        _dialogueBox.Hide();
         CompleteStep();
     }
   

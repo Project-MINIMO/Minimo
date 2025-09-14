@@ -6,7 +6,7 @@ public class TutorialStep_10 : TutorialStep
     [SerializeField] private GameObject _chiefMinimo;
     [SerializeField] private TutorialDialogue _dialogueBox;
     [SerializeField] private FocusPanel _focusPanel;
-    [SerializeField] private ProduceManager _produceManager;
+    [SerializeField] private EditManager _produceManager;
     [SerializeField] private GameObject _secondaryPanel;
     [SerializeField] private GameObject _secondaryGuide;
     
@@ -15,6 +15,7 @@ public class TutorialStep_10 : TutorialStep
     protected override void OnStart()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
+        _dialogueBox.onClick += OnClickedChief;
         _dialogueBox.ShowQuest();
         _animator = _chiefMinimo.GetComponentInChildren<Animator>(true);
     }
@@ -22,6 +23,7 @@ public class TutorialStep_10 : TutorialStep
     private void OnClickedChief()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick -= OnClickedChief;
+        _dialogueBox.onClick -= OnClickedChief;
         _dialogueBox.Hide();
         
         _focusPanel.FocusOn(_chiefMinimo.transform.position + Vector3.up * 0.5f,
@@ -54,10 +56,13 @@ public class TutorialStep_10 : TutorialStep
     
     private IEnumerator ProgressQuest()
     {
-        yield return new WaitUntil(() => _produceManager.CurrentObject != null 
-                                         && _produceManager.CurrentObject.BuildingData.ID == 2);
+        _dialogueBox.Show("반죽 제조기도 배치해주게.");
+        yield return new WaitUntil(() => _produceManager.CurrentEditObject != null 
+                                         && _produceManager.CurrentEditObject.BuildingData.ID == 2);
+        _dialogueBox.Show("음식을 만들 반죽을 만들어주게나.");
         yield return new WaitUntil(() => _secondaryPanel.activeSelf);
         _secondaryGuide.SetActive(true);
+        _dialogueBox.Hide();
      
         CompleteStep();
     }

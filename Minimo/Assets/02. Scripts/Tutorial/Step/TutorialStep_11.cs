@@ -16,6 +16,7 @@ public class TutorialStep_11 : TutorialStep
     protected override void OnStart()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
+        _dialogueBox.onClick += OnClickedChief;
         _dialogueBox.ShowQuest();
         _animator = _chiefMinimo.GetComponentInChildren<Animator>(true);
     }
@@ -23,6 +24,7 @@ public class TutorialStep_11 : TutorialStep
     private void OnClickedChief()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick -= OnClickedChief;
+        _dialogueBox.onClick -= OnClickedChief;
         _dialogueBox.Hide();
         
         _focusPanel.FocusOn(_chiefMinimo.transform.position + Vector3.up * 0.5f,
@@ -51,10 +53,13 @@ public class TutorialStep_11 : TutorialStep
     
     private IEnumerator ProgressQuest()
     {
+        _dialogueBox.Show("소원별을 드래그해 서로 이어 주게.");
+        yield return new WaitForSeconds(1);
         _levelPanel.FocusStar();
         _indicatorHandlers.SetActive(true);
         
         yield return new WaitUntil(() => _starManager.IsConnected);
+        _dialogueBox.Hide();
      
         CompleteStep();
     }
