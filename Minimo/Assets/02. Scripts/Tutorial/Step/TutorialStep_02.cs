@@ -41,6 +41,7 @@ public class TutorialStep_02 : TutorialStep
         _tileBtnHighlightObj.SetActive(false);
         
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
+        _dialogueBox.onClick += OnClickedChief;
         _chiefMinimoText.text = "......";
         _confirmBtn.onClick.AddListener(() => _isConfirmed = true);
     }
@@ -60,6 +61,7 @@ public class TutorialStep_02 : TutorialStep
     private IEnumerator ConversationSequence()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick -= OnClickedChief;
+        _dialogueBox.onClick -= OnClickedChief;
         //chiefminimo dorotate로 세우기
         _chiefMinimoTextObj.SetActive(false);
         

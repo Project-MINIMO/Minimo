@@ -36,6 +36,7 @@ public class TutorialStep_01 : TutorialStep
         _tileBtnHighlightObj.SetActive(false);
         _dialogueBox.ShowQuest();
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
+        _dialogueBox.onClick += OnClickedChief;
         _confirmBtn.onClick.AddListener(() => _isConfirmed = true);
         _animator = _chiefMinimo.GetComponentInChildren<Animator>(true);
         _animator.SetBool("IsLay", true);
@@ -44,6 +45,7 @@ public class TutorialStep_01 : TutorialStep
     private void OnClickedChief()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick -= OnClickedChief;
+        _dialogueBox.onClick -= OnClickedChief;
         _dialogueBox.Hide();
         
         _focusPanel.FocusOn(_chiefMinimo.transform.position + Vector3.up * 0.5f,

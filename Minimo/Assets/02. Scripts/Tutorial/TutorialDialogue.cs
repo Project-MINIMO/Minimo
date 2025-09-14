@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 
@@ -10,12 +12,16 @@ public class TutorialDialogue : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _text2;
     [SerializeField] private GameObject _panel;
     [SerializeField] private GameObject _questPanel;
+    [SerializeField] private Button _questBtn;
     [SerializeField] private float _charInterval = 0.05f;
+    
+    public event Action onClick;
     
     private void Awake()
     {
         _panel.SetActive(false);
         _questPanel.SetActive(false);
+        _questBtn.onClick.AddListener(() => onClick?.Invoke());
     }
 
     public void ShowQuest()

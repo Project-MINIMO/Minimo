@@ -86,6 +86,7 @@ public class TutorialStep_06 : TutorialStep
     protected override void OnStart()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick += OnClickedChief;
+        _dialogueBox.onClick += OnClickedChief;
         StopCoroutine(_moveCoroutine);
         _animator.SetBool("IsWalk", false);
         _animator.speed = 1;
@@ -166,6 +167,7 @@ public class TutorialStep_06 : TutorialStep
     private void OnClickedChief()
     {
         _chiefMinimo.GetComponent<TutorialInteractable>().onClick -= OnClickedChief;
+        _dialogueBox.onClick -= OnClickedChief;
         StopCoroutine(_dialogueCoroutine);
         _dialogueBox.Hide();
         _animator.SetBool("IsWalk", false);
