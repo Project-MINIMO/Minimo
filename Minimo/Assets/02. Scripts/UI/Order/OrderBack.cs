@@ -34,10 +34,21 @@ public class OrderBack : MonoBehaviour
         {
             _currentSlot.SetItem(_currentItem);
             var count = OrderManager.Instance.OrderItems.Count(x => x == _currentItem.ID);
-            for (var i = 0; i < _quantity - count; i++) 
+            if (count > _quantity)
             {
-                OrderManager.Instance.OrderItems.Add(_currentItem.ID);
+                for (var i = 0; i < count - _quantity; i++) 
+                {
+                    OrderManager.Instance.RemoveOrder(_currentItem.ID);
+                }
             }
+            else if (count < _quantity)
+            {
+                for (var i = 0; i < _quantity - count; i++) 
+                {
+                    OrderManager.Instance.AddOrder(_currentItem.ID);
+                }
+            }
+            OrderManager.Instance.InvokeOrderChanged();
             _inventoryBack.SetActive(false);
             gameObject.SetActive(false);
         });
