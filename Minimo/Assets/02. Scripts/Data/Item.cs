@@ -9,6 +9,8 @@ public class Item : IQuestClearTarget, IQuestRewardTarget
     public string Name { get; }
     public int Count { get; private set; }
     public Sprite Icon { get; }
+    public int BuildingCode { get; private set; }
+    public int[] MaterialCodes { get; private set; }
     
     public readonly int ID;
     public readonly string Code;
@@ -41,4 +43,7 @@ public class Item : IQuestClearTarget, IQuestRewardTarget
         Count = Mathf.Clamp(Count, 0, int.MaxValue);
         OnItemCountChanged?.Invoke();
     }
+    
+    public void SetBuildingID(int buildingID) => BuildingCode = buildingID;
+    public void SetMaterialCodes(int[] materialCodes) => MaterialCodes = materialCodes;
 }

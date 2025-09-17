@@ -345,6 +345,14 @@ public class TitleData : DataBase
             .Values
             .GroupBy(data => data.Building)
             .ToDictionary(data => data.Key, data => data.ToList());
+
+        foreach (var produce in Produce.Values)
+        {
+            var itemID = produce.ResultItems[0].ID;
+            var builingID = Building.Values.FirstOrDefault(x => x.Code == produce.Building);
+            if (builingID != null) Item[itemID].SetBuildingID(builingID.ID);
+            Item[itemID].SetMaterialCodes(produce.MaterialItems.Select(x => x.ID).ToArray());
+        }
     }
 
     #region StringData
