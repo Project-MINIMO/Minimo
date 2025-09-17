@@ -38,7 +38,7 @@ public class QuaternaryPanel : ElevatedPanel
     {
         base.OpenPanel();
 
-        ClearItems();
+        ClearItems(null);
         _produceObject.OnMaxSlotCountChanged += CheckCanPlant;
         _produceObject.OnMinimoAssigned += OnMinimoAssigned;
     }
@@ -101,7 +101,7 @@ public class QuaternaryPanel : ElevatedPanel
         }
     }
 
-    private void ClearItems()
+    private void ClearItems(ProduceTask task)
     {
         for (var i = 0; i < _selectedItems.Length; i++)
         {

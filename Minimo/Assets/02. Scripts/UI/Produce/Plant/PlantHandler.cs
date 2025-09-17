@@ -143,7 +143,7 @@ public class PlantHandler : MonoBehaviour
             if (component.CurrentState is not ProduceState.Idle) return;
             
             _produceManager.RequestPlant(component, _currentOption,
-                onSuccess: () => _plantedThisDrag.Add(component),
+                onSuccess: task => _plantedThisDrag.Add(component),
                 onFailed: result =>
                 {
                     if (result == NotifyType.MissMinimo) App.Notification(result);

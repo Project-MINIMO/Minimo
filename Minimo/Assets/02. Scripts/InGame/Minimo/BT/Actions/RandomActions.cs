@@ -1,5 +1,21 @@
 using UnityEngine;
 
+public class GetMinimoIdleIndex : ActionNode
+{
+    private readonly MinimoObject _minimo;
+
+    public GetMinimoIdleIndex(Blackboard blackboard) : base(blackboard)
+    {
+        _minimo = blackboard.Agent.GetComponent<MinimoObject>();
+    }
+    
+    public override NodeStatus Tick()
+    {
+        Blackboard.RandomActionIndex = _minimo.Energy >= 40 ? 0 : 1;
+        
+        return NodeStatus.Failure;
+    }
+}
 public class GetRandomActionIndex : ActionNode
 {
     private readonly int _randomMax;
@@ -8,6 +24,7 @@ public class GetRandomActionIndex : ActionNode
     {
         _randomMax = randomMax;
     }
+    
     public override NodeStatus Tick()
     {
         Blackboard.RandomActionIndex = Random.Range(0, _randomMax);

@@ -8,5 +8,7 @@ public class MinimoFSM : FSM<MinimoObject, MinimoState>
         AddState(MinimoState.Acquire, new MinimoAcquireState(owner));
         AddState(MinimoState.Idle, new MinimoIdleState(owner));
         AddState(MinimoState.Work, new MinimoWorkState(owner));
+        AddState(MinimoState.Order, new MinimoOrderState(owner));
+        AddState(MinimoState.Harvest, new MinimoHarvestState(owner));
     }
 }

@@ -13,7 +13,7 @@ public class PlantService
     public void TryPlant(
         ProduceObject target,
         ProduceData option,
-        Action onSuccess,
+        Action<ProduceTask> onSuccess,
         Action<NotifyType> onFailed)
     {
         var preCheck = target.CheckPlantCondition(option);
@@ -63,11 +63,11 @@ public class PlantService
         return list;
     }
     
-    private void CreateTask(ProduceObject obj, ProduceData option, Action onSuccess)
+    private void CreateTask(ProduceObject obj, ProduceData option, Action<ProduceTask> onSuccess)
     {
         ConsumeMaterials(option.MaterialItems);
-        obj.CreateTask(option);
-        onSuccess?.Invoke();
+        var task = obj.CreateTask(option);
+        onSuccess?.Invoke(task);
     }
 
     private void ConsumeMaterials(ProduceMaterial[] materials)

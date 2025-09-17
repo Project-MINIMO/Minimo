@@ -1,6 +1,7 @@
 using System;
 
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MinimoObject : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class MinimoObject : MonoBehaviour
     public MinimoState CurrentState { get; private set; } = MinimoState.None;
     public bool IsClicked;
     public int MinimoIndex { get; private set; }
+    public float Energy = 100f;
+    [SerializeField] private Image _fillImg;
     
     public event Action<MinimoObject> OnAcquired;
     public event Action<MinimoObject> OnExpired;
@@ -38,6 +41,7 @@ public class MinimoObject : MonoBehaviour
     private void Update()
     {
         _fsm.Update();
+        _fillImg.fillAmount = Energy / 100f;
     }
     
     public void Acquire()

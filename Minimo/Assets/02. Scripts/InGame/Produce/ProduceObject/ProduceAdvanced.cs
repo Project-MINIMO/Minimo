@@ -63,7 +63,7 @@ public abstract class ProduceAdvanced : ProduceObject
         
         AssignedMinimo.OnLevelChanged += HandleMinimoLevelChanged;
         AssignedMinimo.AssignTo(this);
-        _minimoManager.OnMinimoAssigned(AssignedMinimo);
+        //_minimoManager.OnMinimoAssigned(AssignedMinimo);
         
         ApplyAllAbilities(minimo);
         OnMinimoAssigned?.Invoke(minimo);
@@ -74,7 +74,7 @@ public abstract class ProduceAdvanced : ProduceObject
         if (AssignedMinimo == null) return;
         
         AssignedMinimo.OnLevelChanged -= HandleMinimoLevelChanged;
-        _minimoManager.OnMinimoUnassigned(AssignedMinimo);
+        //_minimoManager.OnMinimoUnassigned(AssignedMinimo);
         AssignedMinimo.Unassign();
         
         ResetRatios();

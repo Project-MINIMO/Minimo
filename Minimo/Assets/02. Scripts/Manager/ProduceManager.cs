@@ -103,15 +103,15 @@ public class ProduceManager : ManagerBase
     public void RequestPlant(
         ProduceObject target, 
         ProduceData option, 
-        Action onSuccess = null, 
+        Action<ProduceTask> onSuccess = null, 
         Action<NotifyType> onFailed = null)
     {
         _plantService.TryPlant(
             target,
             option,
-            onSuccess: () =>
+            onSuccess: task =>
             {
-                onSuccess?.Invoke();
+                onSuccess?.Invoke(task);
             },
             onFailed: reason =>
             {
@@ -122,7 +122,7 @@ public class ProduceManager : ManagerBase
     
     public void RequestPlant(
         ProduceData option, 
-        Action onSuccess = null, 
+        Action<ProduceTask> onSuccess = null, 
         Action<NotifyType> onFailed = null)
     {
         if (CurrentObject == null) return;
@@ -132,7 +132,7 @@ public class ProduceManager : ManagerBase
 
     public void RequestPlant(
         Item[] materials, 
-        Action onSuccess = null, 
+        Action<ProduceTask> onSuccess = null, 
         Action<NotifyType> onFailed = null)
     {
         if (CurrentObject == null) return;

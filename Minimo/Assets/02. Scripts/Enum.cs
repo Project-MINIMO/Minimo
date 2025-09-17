@@ -55,6 +55,8 @@ public enum MinimoState
     Acquire,
     Idle,
     Work,
+    Order,
+    Harvest,
     None,
 }
 

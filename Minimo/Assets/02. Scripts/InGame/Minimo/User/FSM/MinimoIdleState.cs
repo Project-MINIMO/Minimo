@@ -15,14 +15,13 @@ public class MinimoIdleState : State<MinimoObject>
         var idleSequence = new SelectorNode
         (
             blackboard,
-            new GetRandomActionIndex(blackboard, 2),
+            new GetMinimoIdleIndex(blackboard),
             new SequenceNode
             (
                 blackboard,
                 new IsEqualIndex(blackboard, 0),
                 new FindRestPositionAction(blackboard),
-                new MoveAction(blackboard),
-                new LayDownAction(blackboard)
+                new MoveAction(blackboard)
             ),
             new SequenceNode
             (

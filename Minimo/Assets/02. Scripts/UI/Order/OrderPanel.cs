@@ -57,6 +57,7 @@ public class OrderPanel : UIBase
         if (slot.Item != null)
         {
             _orderBack.Initialize(slot);
+            _inventoryBack.SetActive(false);
         }
         else
         {

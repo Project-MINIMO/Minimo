@@ -55,6 +55,12 @@ public class MinimoAcquireHandler : InteractObject
                 _popUpPanel.OpenPanel(PopUpType.MinimoAcquire, this);
                 StartCoroutine(WaitForPopUpClosed());
                 break;
+            
+            case MinimoState.Idle:
+            case MinimoState.Order:
+            case MinimoState.Harvest:
+                _minimoObject.Energy += 2;
+                break;
         }
     }
     
@@ -107,9 +113,6 @@ public class MinimoAcquireHandler : InteractObject
         
         _minimoObject.ApplyState(MinimoState.Acquire);
         _minimoManager.ActiveMinimos.Add(_minimoObject.Data);
-
-        GetComponent<Collider2D>().enabled = false;
-        enabled = false;
     }
     
     private IEnumerator WaitForPopUpClosed()

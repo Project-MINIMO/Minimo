@@ -72,6 +72,43 @@ public class FindWorkPositionAction : ActionNode
         return NodeStatus.Success;
     }
 }
+
+public class FindOrderPositionAction : ActionNode
+{
+    private readonly PathManager _pathManager;
+
+    public FindOrderPositionAction(Blackboard blackboard) : base(blackboard)
+    {
+        _pathManager = App.GetManager<PathManager>();
+    }
+
+    public override NodeStatus Tick()
+    {
+        if (OrderManager.Instance.CurrentOrderSpot == null) return NodeStatus.Failure;
+        
+        var path = _pathManager.GetPath(
+            Blackboard.Agent.transform.position, 
+            OrderManager.Instance.CurrentOrderSpot.transform.position
+        );
+
+        if (path is { Count: > 0 })
+        {
+            Blackboard.Path = path;
+            Blackboard.Speed = 2;
+            return NodeStatus.Success;
+        }
+        else
+        {
+            var targetPos = _pathManager.GetTileWorldPosition(OrderManager.Instance.CurrentOrderSpot.transform.position);
+            Blackboard.Path = new()
+            {
+                targetPos.Item2
+            };
+            Blackboard.Agent.transform.position = targetPos.Item1;
+            return NodeStatus.Success;
+        }
+    }
+}
 #endregion
 
 #region Stray
@@ -210,3 +247,117 @@ public class FindSpaceshipPositionAction : ActionNode
     }
 }
 #endregion
+
+public class OrderAction : ActionNode
+{
+    private float _lastTime;
+    private bool _shouldReset = true;
+    private readonly MinimoObject _minimo;
+    
+    public OrderAction(Blackboard blackboard) : base(blackboard)
+    {
+        _minimo = blackboard.Agent.GetComponent<MinimoObject>();
+    }
+    
+    public override void Reset()
+    {
+        _shouldReset = true;
+    }
+
+    public override NodeStatus Tick()
+    {
+        if (OrderManager.Instance.CurrentOrderSpot == null) return NodeStatus.Failure;
+        
+        if (_shouldReset)
+        {
+            _shouldReset = false;
+            _lastTime = Time.time;
+        }
+        
+        if (Time.time - _lastTime >= 1f) 
+        {
+            _lastTime = Time.time;
+            _minimo.Energy -= 0.5f;
+        }
+        
+        if (_minimo.Energy < 0)
+        {
+            Exit();
+            return NodeStatus.Failure;
+        }
+        
+        if (OrderManager.Instance.CurrentOrderSpot.CheckPlantCondition(OrderManager.Instance.CurrentOrderOption) == NotifyType.Success)
+        {
+            Exit();
+            OrderManager.Instance.Order();
+            _minimo.ApplyState(MinimoState.Idle);
+            return NodeStatus.Success;
+        }
+        else
+        {
+            return NodeStatus.Running;
+        }
+    }
+    
+    private void Exit()
+    {
+        _shouldReset = true;
+    }
+}
+
+public class HarvestAction : ActionNode
+{
+    private float _lastTime;
+    private bool _shouldReset = true;
+    private readonly MinimoObject _minimo;
+    
+    public HarvestAction(Blackboard blackboard) : base(blackboard)
+    {
+        _minimo = blackboard.Agent.GetComponent<MinimoObject>();
+    }
+    
+    public override void Reset()
+    {
+        _shouldReset = true;
+    }
+
+    public override NodeStatus Tick()
+    {
+        if (OrderManager.Instance.CurrentOrderSpot == null) return NodeStatus.Failure;
+        
+        if (_shouldReset)
+        {
+            _shouldReset = false;
+            _lastTime = Time.time;
+        }
+        
+        if (Time.time - _lastTime >= 1f) 
+        {
+            _lastTime = Time.time;
+            _minimo.Energy -= 0.5f;
+        }
+        
+        if (_minimo.Energy < 0)
+        {
+            Exit();
+            return NodeStatus.Failure;
+        }
+        
+        if (AccountInfo.Instance.CanKeepItem(0))
+        {
+            Exit();
+            OrderManager.Instance.Harvest();
+            _minimo.ApplyState(MinimoState.Idle);
+            return NodeStatus.Success;
+        }
+        else
+        {
+            return NodeStatus.Running;
+        }
+    }
+    
+    private void Exit()
+    {
+        _shouldReset = true;
+    }
+}
