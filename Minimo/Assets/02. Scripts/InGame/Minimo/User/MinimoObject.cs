@@ -10,6 +10,11 @@ public class MinimoObject : MonoBehaviour
     public bool IsClicked;
     public int MinimoIndex { get; private set; }
     public float Energy = 100f;
+    public float MaxEnergy = 100f;
+    public float RestEnergy = 1;
+    public float OrderEnergy = 0.5f;
+    public float HarvestEnergy = 0.5f;
+    
     [SerializeField] private Image _fillImg;
     
     public event Action<MinimoObject> OnAcquired;
@@ -41,7 +46,7 @@ public class MinimoObject : MonoBehaviour
     private void Update()
     {
         _fsm.Update();
-        _fillImg.fillAmount = Energy / 100f;
+        _fillImg.fillAmount = Energy / MaxEnergy;
     }
     
     public void Acquire()

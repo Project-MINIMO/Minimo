@@ -23,7 +23,25 @@ public class OrderSlot : MonoBehaviour
         _orderTMP.gameObject.SetActive(false);
         _processTMP.gameObject.SetActive(false);
     }
-    
+
+    private void OnEnable()
+    {
+        if (Item != null)
+        {
+            _itemInfo.UpdateItem(Item);
+            var i = 0;
+            for (; i < Item.MaterialCodes.Length; i++)
+            {
+                _materialInfos[i].gameObject.SetActive(true);
+                _materialInfos[i].UpdateItem(Item.MaterialCodes[i]);
+            }
+            for (; i < _materialInfos.Length; i++)
+            {
+                _materialInfos[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
     public void SetItem(Item item)
     {
         Item = item;

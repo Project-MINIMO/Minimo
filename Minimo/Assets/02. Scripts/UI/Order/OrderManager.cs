@@ -27,6 +27,7 @@ public class OrderManager : Singleton<OrderManager>
     public ProduceData CurrentOrderOption { get; private set; }
     
     private OrderState _currentState = OrderState.None;
+    private int _currentIndex = 0;
 
     private void Start()
     {
@@ -55,7 +56,8 @@ public class OrderManager : Singleton<OrderManager>
     private bool TryStartOrder()
     {
         if (OrderItems.Count == 0) return false;
-        
+        _currentIndex = GetOrderableIndex();
+        if (_currentIndex == -1) return false;
         CurrentOrderSpot = GetOrderSpot();
         if(CurrentOrderSpot == null) return false;
         
@@ -73,9 +75,35 @@ public class OrderManager : Singleton<OrderManager>
         return true;
     }
 
+    private int GetOrderableIndex()
+    {
+        for (var i = 0; i < OrderItems.Count; i++)
+        {
+            if (IsOrderable(i))
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+    
+    private bool IsOrderable(int index)
+    {
+        var item = AccountInfo.Instance.Items[OrderItems[index]];
+        foreach (var material in item.MaterialCodes)
+        {
+            var materialItem = AccountInfo.Instance.Items[material];
+            if (materialItem.Count == 0) return false;
+        }
+
+        return true;
+    }
+
     private ProduceObject GetOrderSpot()
     {
         var spots = _editManager.ActiveProduces
+            .Where(x => x.BuildingData.ID == AccountInfo.Instance.Items[OrderItems[0]].BuildingCode)
             .Where(x => x.AllTasks.Count < x.MaxSlotCount)
             .ToList();
         if (!spots.Any()) return null;

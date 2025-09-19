@@ -314,7 +314,7 @@ public class MoveOrderAction : ActionNode
         if (Time.time - _lastTime >= 1f) 
         {
             _lastTime = Time.time;
-            _minimo.Energy -= 0.5f;
+            _minimo.Energy -= _minimo.CurrentState == MinimoState.Order ? _minimo.OrderEnergy : _minimo.HarvestEnergy;
         }
 
         if (_minimo.Energy < 0)

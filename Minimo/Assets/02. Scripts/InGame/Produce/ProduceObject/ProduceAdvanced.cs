@@ -103,23 +103,23 @@ public abstract class ProduceAdvanced : ProduceObject
         ApplyExpRatio(0);
     }
     
+    /*
     public override NotifyType CheckPlantCondition(ProduceData option)
     {
         var result = base.CheckPlantCondition(option);
         if (result == NotifyType.Success)
         {
-            /*
             if (AssignedMinimo == null)
             {
                 return _minimoManager.AssignNearestMinimo(this) 
                     ? NotifyType.Success 
                     : NotifyType.MissMinimo;
             }
-            */
         }
         
         return result;
     }
+    */
 
     public override ProduceTask CreateTask(ProduceData option)
     {

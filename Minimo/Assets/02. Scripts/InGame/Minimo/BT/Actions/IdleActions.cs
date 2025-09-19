@@ -71,10 +71,10 @@ public class SitAction : ActionNode
             Blackboard.Animator.SetBool(_isSit, true);
         }
 
-        if (Time.time - _lastTime >= 1f) 
+        if (Time.time - _lastTime >= 1f && _minimo.Energy < _minimo.MaxEnergy)
         {
             _lastTime = Time.time;
-            _minimo.Energy += 1;
+            _minimo.Energy += _minimo.RestEnergy;
         }
         
         if (Time.time - _startTime >= _duration)
