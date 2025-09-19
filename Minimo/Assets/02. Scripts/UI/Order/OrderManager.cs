@@ -10,20 +10,20 @@ public class OrderManager : Singleton<OrderManager>
     {
         None,
         Ordering,
-        Waiting,
-        Completed
     }
     
     public event Action OnOrderChanged;
     
-    public List<int> OrderItems = new();
-    public List<int> ProcessItems = new();
+    public List<(Item item, int amount)> OrderItems = new();
+    public int ProcessCount;
+    public Item ProcessItem;
+    public List<ProduceObject> CompletedSpots = new();
     
     private ProduceManager _produceManager;
     private EditManager _editManager;
     private MinimoManager _minimoManager;
-    
-    public ProduceObject CurrentOrderSpot { get; private set; }
+    private TitleData _titleData;
+
     public ProduceData CurrentOrderOption { get; private set; }
     
     private OrderState _currentState = OrderState.None;
@@ -34,6 +34,7 @@ public class OrderManager : Singleton<OrderManager>
         _produceManager = App.GetManager<ProduceManager>();
         _editManager = App.GetManager<EditManager>();
         _minimoManager = App.GetManager<MinimoManager>();
+        _titleData = App.GetData<TitleData>();
     }
 
     private void Update()
@@ -41,37 +42,34 @@ public class OrderManager : Singleton<OrderManager>
         switch (_currentState)
         {
             case OrderState.None:
-                if (TryStartOrder()) _currentState = OrderState.Waiting;
+                if (TryStartOrder()) _currentState = OrderState.Ordering;
                 break;
-
-            case OrderState.Waiting:
-                return;
             
-            case OrderState.Completed:
-                if (TryStartHarvest()) _currentState = OrderState.Waiting;
+            case OrderState.Ordering:
+                TryContinueOrder();
+                TryContinueHarvest();
                 break;
         }
+    }
+    
+    public int GetAmount(Item item)
+    {
+        var entry = OrderItems.FirstOrDefault(x => x.item == item);
+        return entry.item != null ? entry.amount : 0;
     }
     
     private bool TryStartOrder()
     {
         if (OrderItems.Count == 0) return false;
+
         _currentIndex = GetOrderableIndex();
         if (_currentIndex == -1) return false;
-        CurrentOrderSpot = GetOrderSpot();
-        if(CurrentOrderSpot == null) return false;
-        
-        CurrentOrderOption = CurrentOrderSpot.ProduceData
-            .FirstOrDefault(x => x.ResultItems[0].ID == OrderItems[_currentIndex]);
-        
-        var minimo = GetNearestMinimo();
-        if (minimo == null)
-        {
-            CurrentOrderSpot = null;
-            CurrentOrderOption = null;
-            return false;
-        }
-        minimo.ApplyState(MinimoState.Order);
+
+        CurrentOrderOption = _titleData.Produce.Values
+            .FirstOrDefault(x => x.ResultItems[0].ID == OrderItems[_currentIndex].Item1.ID);
+        if (CurrentOrderOption == null) return false;
+        ProcessItem = OrderItems[_currentIndex].Item1;
+        _currentState = OrderState.Ordering;
         return true;
     }
 
@@ -90,7 +88,7 @@ public class OrderManager : Singleton<OrderManager>
     
     private bool IsOrderable(int index)
     {
-        var item = AccountInfo.Instance.Items[OrderItems[index]];
+        var item = OrderItems[index].Item1;
         foreach (var material in item.MaterialCodes)
         {
             var materialItem = AccountInfo.Instance.Items[material];
@@ -99,20 +97,8 @@ public class OrderManager : Singleton<OrderManager>
 
         return true;
     }
-
-    private ProduceObject GetOrderSpot()
-    {
-        var spots = _editManager.ActiveProduces
-            .Where(x => x.BuildingData.ID == AccountInfo.Instance.Items[OrderItems[_currentIndex]].BuildingCode)
-            .Where(x => x.AllTasks.Count < x.MaxSlotCount)
-            .ToList();
-        if (!spots.Any()) return null;
-        
-        var idleSpot = spots.FirstOrDefault(x => x.CurrentState == ProduceState.Idle);
-        return idleSpot != null ? idleSpot : spots[0];
-    }
     
-    private MinimoObject GetNearestMinimo()
+    private MinimoObject GetNearestMinimo(Vector3 position)
     {
         var healthyMinimos = _minimoManager.ActiveMinimos
             .Where(x => x.Agent.Energy >= 40)
@@ -124,7 +110,7 @@ public class OrderManager : Singleton<OrderManager>
         var minDistance = float.MaxValue;
         foreach (var minimo in healthyMinimos)
         {
-            var dist = Vector3.Distance(minimo.transform.position, CurrentOrderSpot.transform.position);
+            var dist = Vector3.Distance(minimo.transform.position, position);
             if (dist < minDistance)
             {
                 minDistance = dist;
@@ -134,72 +120,120 @@ public class OrderManager : Singleton<OrderManager>
         return closest;
     }
     
-    private bool TryStartHarvest()
+    private void TryContinueOrder()
     {
-        if (ProcessItems.Count == 0) return false;
+        if (!IsOrderable(_currentIndex)) return;
+        if (OrderItems[_currentIndex].amount <= 0) return;
         
-        var minimo = GetNearestMinimo();
+        var spots = _editManager.ActiveProduces
+            .Where(x => x.BuildingData.ID == OrderItems[_currentIndex].Item1.BuildingCode)
+            .Where(x => x.AllTasks.Count < x.MaxSlotCount)
+            .ToList();
+
+        if (!spots.Any())
+        {
+            return;
+        }
+        
+        foreach (var spot in spots)
+        {
+            var minimo = GetNearestMinimo(spot.transform.position);
+            if (minimo == null)
+            {
+                continue;
+            }
+            minimo.ApplyState(MinimoState.Order);
+        }
+
+        OnOrderChanged?.Invoke();
+    }
+
+    private void TryContinueHarvest()
+    {
+        if (CompletedSpots.Count == 0) return;
+        foreach (var spot in CompletedSpots)
+        {
+            if (ProcessCount == 0) break;
+            TryStartHarvest(spot);
+        }
+    }
+    
+    public void Order(ProduceObject spot)
+    {
+        _produceManager.RequestPlant(spot, CurrentOrderOption, OnSuccessOrder);
+        ProcessCount++;
+        
+        var newAmount = OrderItems[_currentIndex].amount - 1;
+        if (newAmount > 0)
+        {
+            OrderItems[_currentIndex] = (OrderItems[_currentIndex].item, newAmount);
+        }
+        else
+        {
+            OrderItems.RemoveAt(_currentIndex);
+        }
+
+        OnOrderChanged?.Invoke();
+    }
+    
+    private void OnSuccessOrder(ProduceTask task)
+    {
+        task.OnCompleted += OnCompleted;
+    }
+    
+    private void OnCompleted(ProduceObject produceObject)
+    {
+        CompletedSpots.Add(produceObject);
+    }
+
+    private bool TryStartHarvest(ProduceObject produceObject)
+    {
+        if (ProcessCount == 0) return false;
+        
+        var minimo = GetNearestMinimo(produceObject.transform.position);
         if (minimo == null) return false;
         
         minimo.ApplyState(MinimoState.Harvest);
         return true;
     }
 
-    public void AddOrder(int itemId)
+    public void Harvest(ProduceObject spot)
     {
-        OrderItems.Add(itemId);
-    }
-    
-    public void RemoveOrder(int itemId)
-    {
-        OrderItems.Remove(itemId);
-    }
-    
-    public void InvokeOrderChanged() => OnOrderChanged?.Invoke();
-
-    public void Order()
-    {
-        _produceManager.RequestPlant(CurrentOrderSpot, CurrentOrderOption, OnSuccessOrder);
-        ProcessItems.Add(OrderItems[_currentIndex]);
-        OrderItems.RemoveAt(_currentIndex);
-        
+        _produceManager.Harvest(spot);
+        ProcessCount--;
+        CompletedSpots.Remove(spot);
         OnOrderChanged?.Invoke();
     }
     
-    private void OnSuccessOrder(ProduceTask task)
+    public void AddOrder(Item item, int amount)
     {
-        task.OnStateChanged += OnStateChanged;
-    }
-    
-    private void OnStateChanged(ITaskState state)
-    {
-        if (state == CompletedState.Instance)
+        var index = OrderItems.FindIndex(x => x.item == item);
+        if (index >= 0)
         {
-            _currentState = OrderState.Completed;
+            OrderItems[index] = (item, OrderItems[index].amount + amount);
+        }
+        else
+        {
+            OrderItems.Add((item, amount));
         }
     }
     
-    public void FailOrder()
+    public void RemoveOrder(Item item, int amount)
     {
-        CurrentOrderSpot = null;
-        CurrentOrderOption = null;
-        _currentState = OrderState.None;
+        var index = OrderItems.FindIndex(x => x.item == item);
+        if (index >= 0)
+        {
+            var newAmount = OrderItems[index].amount - amount;
+            if (newAmount > 0)
+            {
+                OrderItems[index] = (item, newAmount);
+            }
+            else
+            {
+                OrderItems.RemoveAt(index);
+            }
+        }
     }
-
-    public void Harvest()
-    {
-        _produceManager.Harvest(CurrentOrderSpot);
-        ProcessItems.RemoveAt(0);
-        
-        CurrentOrderSpot = null;
-        CurrentOrderOption = null;
-        _currentState = OrderState.None;
-        
-        OnOrderChanged?.Invoke();
-    }
-
-    public void FailHarvest()
-    {
-        _currentState = OrderState.Completed;
-    }
+    
+    public void InvokeOrderChanged() => OnOrderChanged?.Invoke();
 }

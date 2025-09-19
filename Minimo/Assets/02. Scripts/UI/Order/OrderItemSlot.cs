@@ -1,10 +1,11 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class OrderItemSlot : InventorySlot<Item>
 {
-    public override bool CanShow() => _building.Count > 0 && !OrderManager.Instance.OrderItems.Contains(Item.ID);
+    public override bool CanShow() => _building.Count > 0 && !OrderManager.Instance.OrderItems.Exists(x => x.item != Item);
     
     [SerializeField] private ItemInfoUpdater _info;
     [SerializeField] private GameObject[] _slotImgs;
