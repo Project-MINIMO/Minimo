@@ -62,7 +62,7 @@ public class OrderManager : Singleton<OrderManager>
         if(CurrentOrderSpot == null) return false;
         
         CurrentOrderOption = CurrentOrderSpot.ProduceData
-            .FirstOrDefault(x => x.ResultItems[0].ID == OrderItems[0]);
+            .FirstOrDefault(x => x.ResultItems[0].ID == OrderItems[_currentIndex]);
         
         var minimo = GetNearestMinimo();
         if (minimo == null)
@@ -103,7 +103,7 @@ public class OrderManager : Singleton<OrderManager>
     private ProduceObject GetOrderSpot()
     {
         var spots = _editManager.ActiveProduces
-            .Where(x => x.BuildingData.ID == AccountInfo.Instance.Items[OrderItems[0]].BuildingCode)
+            .Where(x => x.BuildingData.ID == AccountInfo.Instance.Items[OrderItems[_currentIndex]].BuildingCode)
             .Where(x => x.AllTasks.Count < x.MaxSlotCount)
             .ToList();
         if (!spots.Any()) return null;
@@ -160,8 +160,8 @@ public class OrderManager : Singleton<OrderManager>
     public void Order()
     {
         _produceManager.RequestPlant(CurrentOrderSpot, CurrentOrderOption, OnSuccessOrder);
-        ProcessItems.Add(OrderItems[0]);
-        OrderItems.RemoveAt(0);
+        ProcessItems.Add(OrderItems[_currentIndex]);
+        OrderItems.RemoveAt(_currentIndex);
         
         OnOrderChanged?.Invoke();
     }
