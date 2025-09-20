@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TradeMinimoSlot : MonoBehaviour
 {
+    public event Action<MinimoRequest> OnSlotSelected;
     [SerializeField] private ItemInfoUpdater _itemInfo;
     [SerializeField] private Button _saleBtn;
     [SerializeField] private GameObject _specialMark;
@@ -12,7 +14,7 @@ public class TradeMinimoSlot : MonoBehaviour
 
     private void Start()
     {
-        _saleBtn.onClick.AddListener(() => TradeManager.Instance.Serve(_currentRequest));
+        _saleBtn.onClick.AddListener(() => OnSlotSelected?.Invoke(_currentRequest));
     }
 
     public void Initialize(MinimoRequest request)
