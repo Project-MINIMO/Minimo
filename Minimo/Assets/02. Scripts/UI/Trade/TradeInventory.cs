@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class OrderInventory : Inventory<Item>
+public class TradeInventory : Inventory<Item>
 {
     private void OnEnable()
     {
