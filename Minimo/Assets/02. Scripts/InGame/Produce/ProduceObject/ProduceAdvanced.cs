@@ -44,6 +44,7 @@ public abstract class ProduceAdvanced : ProduceObject
         _globalTimeReduction = _minimoManager.GlobalTimeReduction.Value;
     }
     
+    /*
     protected override void Update()
     {
         if (AssignedMinimo != null)
@@ -51,6 +52,7 @@ public abstract class ProduceAdvanced : ProduceObject
             base.Update();
         }
     }
+    */
 
     public void PlaceMinimo(Minimo minimo)
     {
