@@ -45,13 +45,5 @@ public class Item : IQuestClearTarget, IQuestRewardTarget
     }
     
     public void SetBuildingID(int buildingID) => BuildingCode = buildingID;
-    public void SetMaterialCodes(int[] materialCodes)
-    {
-        if (Level == 1)
-        {
-            materialCodes = Array.Empty<int>();
-        }
-        
-        MaterialCodes = materialCodes;
-    }
+    public void SetMaterialCodes(int[] materialCodes) => MaterialCodes = materialCodes;
 }

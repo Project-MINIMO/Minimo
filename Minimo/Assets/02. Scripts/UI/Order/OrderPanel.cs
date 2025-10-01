@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -46,7 +45,7 @@ public class OrderPanel : UIBase
     {
         if (_selectedSlot == null) return;
         if (slot.Item == null) return;
-        if (OrderManager.Instance.OrderItems.Any(x => x.item != slot.Item)) return;
+        if (OrderManager.Instance.OrderItems.Contains(slot.Item.ID)) return;
         
         _orderBack.Initialize(slot.Item, _selectedSlot);
     }

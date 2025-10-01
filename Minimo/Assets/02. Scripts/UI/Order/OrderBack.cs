@@ -33,14 +33,20 @@ public class OrderBack : MonoBehaviour
         _confirmBtn.onClick.AddListener(() =>
         {
             _currentSlot.SetItem(_currentItem);
-            var count = OrderManager.Instance.GetAmount(_currentItem);
+            var count = OrderManager.Instance.OrderItems.Count(x => x == _currentItem.ID);
             if (count > _quantity)
             {
-                OrderManager.Instance.RemoveOrder(_currentItem, count - _quantity);
+                for (var i = 0; i < count - _quantity; i++) 
+                {
+                    OrderManager.Instance.RemoveOrder(_currentItem.ID);
+                }
             }
             else if (count < _quantity)
             {
-                OrderManager.Instance.AddOrder(_currentItem, _quantity - count);
+                for (var i = 0; i < _quantity - count; i++) 
+                {
+                    OrderManager.Instance.AddOrder(_currentItem.ID);
+                }
             }
             OrderManager.Instance.InvokeOrderChanged();
             _inventoryBack.SetActive(false);
