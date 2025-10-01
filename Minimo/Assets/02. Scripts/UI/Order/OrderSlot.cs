@@ -8,7 +8,7 @@ public class OrderSlot : MonoBehaviour
 {
     public event Action<OrderSlot> OnSlotSelected;
     public Item Item { get; private set; }
-    public int Amount => OrderManager.Instance.OrderItems.Count(x => x == Item.ID);
+    public int Amount => OrderManager.Instance.GetAmount(Item);
     
     [SerializeField] private Button _slotBtn;
     [SerializeField] private ItemInfoUpdater _itemInfo;

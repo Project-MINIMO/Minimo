@@ -11,12 +11,14 @@ public class ProduceTask
     public ITaskState CurrentState { get; private set; }
     
     public event Action<ITaskState> OnStateChanged;
+    public event Action<ProduceObject> OnCompleted;
     public event Action<float> OnRemainTimeChanged;
     
     public float RemainTime => Mathf.Max(0, ModifiedTime - ElapsedTime);
     public float ModifiedTime => _isModifiedDirty ? RecalculateModifiedTime() : _modifiedTime;
     public float ElapsedTime;
     public Transform ProduceTransform;
+    public ProduceObject ProduceObject => ProduceTransform.GetComponent<ProduceObject>();
     
     private readonly float _maxReducedTime;
     private readonly float _baseTime;
@@ -63,6 +65,7 @@ public class ProduceTask
         CurrentState.OnEnter(this);
 
         OnStateChanged?.Invoke(newState);
+        if (newState is CompletedState) OnCompleted?.Invoke(ProduceObject);
     }
 
     public void ChangeStateWithoutNotify(ITaskState newState)
@@ -71,6 +74,7 @@ public class ProduceTask
         CurrentState.OnEnter(this);
 
         OnStateChanged?.Invoke(newState);
+        if (newState is CompletedState) OnCompleted?.Invoke(ProduceObject);
     }
     
     private float RecalculateModifiedTime()
